@@ -76,7 +76,7 @@ pytest tests/test_manytofew.py
 
 ## License
 
-Research use only. See LICENSE.
+CC BY-NC 4.0 — free for non-commercial research and educational use. See [LICENSE](LICENSE).
 
 ## Status
 
