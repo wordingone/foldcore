@@ -2,6 +2,8 @@
 
 A codebook-based learning system that processes data in a single pass with no backpropagation, no replay buffer, and no separate training/inference phases.
 
+**This is active research with known structural problems. We are looking for aggressive, constructive review.** If you can identify what this system actually is (or isn't), where the math breaks down, or whether any of this is genuinely new — we want to hear it. See [Known Issues](#known-issues) and [Open Questions](#open-questions).
+
 ## What It Does
 
 FoldCore maintains a growing set of prototype vectors on the unit hypersphere. When input arrives:
@@ -95,6 +97,17 @@ CC BY-NC 4.0 — free for non-commercial research and educational use. See [LICE
 4. Is per-prototype confidence (`kappa` in `atomic_fold.py`) genuinely novel, or is it a mixture model with online EM?
 5. Can the birth/scale/compression lifecycle (spawn→grow→merge) be demonstrated as a formal system property on real data?
 
+## How to Contribute
+
+The most valuable contribution is honest analysis. Run the code, read the math, and tell us what's wrong.
+
+- **Identify prior art.** If this is a known technique under a different name, say so with a citation.
+- **Break the benchmarks.** If the reported numbers don't reproduce, or if a simpler baseline matches them, that's important.
+- **Answer the open questions.** Especially #1 (novelty) and #4 (kappa vs online EM).
+- **Propose experiments.** What test would distinguish this from existing prototype-based methods?
+
+Open an issue or submit a PR. Blunt feedback is preferred over polite encouragement.
+
 ## Status
 
-Active research. The architecture is evolving. Accuracy lags gradient-based continual learning methods. Contributions, critique, and analysis are welcome — especially on the open questions above.
+Active research with significant unresolved problems. The architecture is evolving. Accuracy lags gradient-based continual learning methods.
