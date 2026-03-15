@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [none — Step 136. Deep result: for fixed features, optimal CL system is pure memory (k-NN). Computation only needed at raw sensory level.]
+TESTING: [none — Step 137. 40 experiments mapped the boundary. Non-backprop CL = k-NN. Feature discovery is the open problem.]
 
 STEPS 130-136 ARC:
   Coherence-guided feature discovery: works on synthetic XOR (rank 1/4950 at d=100)
