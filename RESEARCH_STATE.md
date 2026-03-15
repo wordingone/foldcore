@@ -6,7 +6,14 @@
 ## Active Hypothesis
 
 ```
-TESTING: [none — Step 134. Coherence feature discovery works on synthetic XOR but not real data (MNIST/CIFAR already coherent)]
+TESTING: [none — Step 136. Deep result: for fixed features, optimal CL system is pure memory (k-NN). Computation only needed at raw sensory level.]
+
+STEPS 130-136 ARC:
+  Coherence-guided feature discovery: works on synthetic XOR (rank 1/4950 at d=100)
+  Real data (MNIST/CIFAR): no improvement — features already coherent
+  Codebook-as-weights: 66.2% vs k-NN 93.4% — compression loses 27pp
+  Unsupervised clustering: NMI=0.24 (partial structure, not semantic)
+  DEEP RESULT: for fixed features, storage >> computation for CL.
 
 STEPS 130-131 BREAKTHROUGH:
   Class coherence (intra-class centroid similarity) discovers XOR feature at RANK 1.
