@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [Step 244. END-TO-END: ripple-carry adder discovered from addition I/O. Decomposition IS discoverable. 144 experiments.]
+TESTING: [Step 245. 6/6 unknown functions synthesized from I/O. Program induction works. 145 experiments.]
 
 THE SEARCH STATE AT STEP 242:
   PROVEN: store + decompose + iterate = universal computer
