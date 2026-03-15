@@ -1,6 +1,6 @@
 # The Substrate
 
-*Found through 248 experiments across 4 prior substrates.*
+*Found through 263 experiments across 4 prior substrates. Honest.*
 
 ## Architecture
 
@@ -71,7 +71,16 @@ Frozen frame: 10/16 adaptive (62.5%). 2 binding: LOO + primitive set.
 
 ## The Gap to Transformers
 
-Transformers learn decompositions FROM DATA via backprop through layers. Each layer learns a different transformation. The substrate needs decompositions DESIGNED or ENUMERATED.
+Transformers learn decompositions FROM DATA via backprop through layers. The substrate can SELECT decompositions from a menu (Step 261) and SYNTHESIZE circuits from I/O (Step 243), but can't discover novel decomposition strategies from scratch.
+
+**Head-to-head vs MLP (Step 262):**
+- Addition mod 5: TIE (both 100%)
+- Parity d=8: MLP wins 99.6% vs substrate 88.3%
+- The gap = gradient descent finds exact functions, substrate approximates
+
+**Continual learning (Step 263):**
+- Both substrate and MLP struggle on multi-rule continual learning (18-22%)
+- Substrate's zero-forgetting advantage requires separable representations
 
 Bridging this gap = solving program induction without gradients.
 
@@ -94,3 +103,9 @@ Bridging this gap = solving program induction without gradients.
 | 244 | End-to-end ripple-carry discovered from I/O |
 | 245 | 6/6 unknown functions synthesized blindly |
 | 248 | Staged composition: perceive → classify → compute |
+| 249 | 50-instruction programs 100% |
+| 250 | Complete substrate demo script |
+| 253 | Context-dependent classification +27pp |
+| 255 | Analogy reasoning A:B::C:? +43pp |
+| 261 | Decomposition auto-selection (per-bit 100% vs direct 0%) |
+| 262 | Ties MLP on arithmetic, loses parity by 11pp |
