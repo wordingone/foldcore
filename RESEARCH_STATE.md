@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [Step 197. Layered composition = deep features without backprop. Template set no longer frozen. 97 experiments.]
+TESTING: [Step 198. Full substrate: layered features + iteration = 100% Fibonacci at 50 steps. 98 experiments.]
 
 STEP 193 TEMPLATE ABLATION:
   Parity: mod2 +20.3pp, abs +18.0pp, cos +9.0pp, sign 0pp
