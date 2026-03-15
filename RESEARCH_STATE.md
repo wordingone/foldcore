@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [none — Steps 119-121: S1 sequential interleaving IS the anti-forgetting mechanism (+1.5pp, confirmed)]
+TESTING: [none — Steps 119-127 complete. k-NN fully characterized. Feature discovery is the frontier.]
 
 STEPS 119-124 KEY FINDINGS:
   Sequential S1 eval (interleaved train/eval): 39.7% AA, ~0.1pp fgt (+1.5pp, -11.6pp fgt)
