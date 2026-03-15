@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [Step 261. Decomposition SELECTION works (per-bit 100% vs direct 0%). 160 experiments. 40 to 300.]
+TESTING: [Step 262. Substrate TIES MLP on add-mod-5. MLP wins parity by 11pp. 161 experiments. 39 to 300.]
 
 THE SEARCH STATE AT STEP 242:
   PROVEN: store + decompose + iterate = universal computer
