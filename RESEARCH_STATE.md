@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [Step 198. Full substrate: layered features + iteration = 100% Fibonacci at 50 steps. 98 experiments.]
+TESTING: [Step 199. Comprehensive: parity +20pp, XOR +13pp, multi-rule +3pp. MNIST 0pp (correct). 99 experiments.]
 
 STEP 193 TEMPLATE ABLATION:
   Parity: mod2 +20.3pp, abs +18.0pp, cos +9.0pp, sign 0pp
