@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [none — Step 170. Comprehensive validation: XOR +15.8pp, parity +9.0pp, multi-rule +3.1pp. 70 experiments. Stage 4 passed.]
+TESTING: [none — Step 171. Stage 5 (topology): vacuous — feature augmentation subsumes it. Stage 4 is the active frontier.]
 
 CONSTITUTIONAL ASSESSMENT (Step 158):
   Stage 1 (Autonomous Computation): PASS
