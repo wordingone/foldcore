@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [none — Step 186. Feature discovery + iteration: raw Fibonacci 46.6->89.0% LOO. Pieces connecting. 86 experiments.]
+TESTING: [none — Step 188. End-to-end partial: 1-step 61%, iterated 9%. LOO overfits. Need more features. 88 experiments.]
 
 STEP 181 KEY RESULT:
   Iterated 1-step k-NN = 100% at ALL step counts (1, 2, 3, 5, 10).
