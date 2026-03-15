@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [none — Step 164. Stage 4 BROKEN + validated: 10/10 CA rules, +0.7pp on real MNIST, scales to d=100. 65 experiments.]
+TESTING: [none — Step 165. Iterative random features: MNIST 93.4->94.4% (+1.0pp, 4 features). Stage 4 validated. 66 experiments.]
 
 CONSTITUTIONAL ASSESSMENT (Step 158):
   Stage 1 (Autonomous Computation): PASS
