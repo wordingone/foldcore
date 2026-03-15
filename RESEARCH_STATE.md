@@ -11,7 +11,7 @@ PROVES IF: 86.8% accuracy holds or improves at (a,b) ∈ 1..100 AND works on at 
 DISPROVES IF: Accuracy degrades significantly with range OR fails on all non-periodic functions
 STEP: 297 (next — scaling and generalization)
 
-**BREAKTHROUGH (Step 296):** Per-class sorted top-K distances as representation. LOO on a%b: 86.8% (up from 5% 1-NN, 41.8% previous best). The Lipschitz ceiling breaks in distribution space. Readout change only — sort instead of sum. The fold's existing matching step computes the features.
+**Step 296-297 finding:** Per-class distribution matching achieves 86.8% LOO (in-distribution) but 18% OOD (random chance). The mechanism is interpolation via symmetric neighborhood structure, not computation. The Lipschitz ceiling breaks for interpolation but not extrapolation. The gap between interpolation and computation is the real wall.
 ```
 
 ## Operational Test for the Atomic Substrate
@@ -111,4 +111,5 @@ Candidates that survive constraint filtering. Ordered by promise.
 | 293 | AMR fold (disagreement spawn) | **KILLED** — 45.5% vs 41.8% plain. Near-full spawn (383/400). For non-Lipschitz functions, entire space has mixed classes → no smooth regions to coarsen. | C19: AMR requires mostly-Lipschitz function; fully non-Lipschitz degenerates to store-everything |
 | 294 | LVQ fold (chain emergence) | **KILLED** — 21.8% vs 41.8%. Spawn too restrictive (1 vec/class/b). LVQ repel hurts in one-hot space. Fundamental tradeoff: chain formation requires same-class proximity, classification requires within-class resolution. | C20: chain formation and classification resolution trade off in same codebook |
 | 295 | Dynamical system fold (basin sculpting) | **KILLED** — chain acc 19.2% vs 1-NN 100%. Stepping stones create correct 1-NN regions but chains route to wrong same-class attractors. NN iteration strictly degrades accuracy. | C21: NN chain following adds noise for non-Lipschitz functions; 1-step is strictly better |
-| 296 | Per-class distribution matching | **STRONG PASS** — 86.8% LOO on a%b (K=5). Up from 5% (1-NN) and 41.8% (prev best). 100% for b=3. Lipschitz ceiling broken in distribution space. | BREAKTHROUGH: sort-instead-of-sum readout breaks the ceiling |
+| 296 | Per-class distribution matching | **PASS (in-distribution only)** — 86.8% LOO on a%b (K=5). Up from 5%. But Step 297 OOD: 18% (random chance). Mechanism is interpolation, not computation. Symmetric neighborhoods required. | Distribution readout breaks ceiling for interpolation; OOD fails from one-sided neighborhoods |
+| 297 | OOD test for distribution matching | **KILLED** — 18% OOD (= 1/b = random chance). Symmetric neighborhood assumption breaks at training boundary. In-distribution only. | C22: distribution matching requires bidirectional neighborhoods; OOD degrades to chance |
