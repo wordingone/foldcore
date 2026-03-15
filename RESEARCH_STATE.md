@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [Step 252. Complete demo published. Auto-discovery works (depth-limited). 152 experiments. 48 to 300.]
+TESTING: [Step 253. Context-dependent 100% (+27pp). Auto-discovery, programs, context all work. 153 experiments.]
 
 THE SEARCH STATE AT STEP 242:
   PROVEN: store + decompose + iterate = universal computer
