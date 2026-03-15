@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [Step 242. Feature discovery can't learn algorithmic structure (carry chain). Decomposition must be designed. 142 experiments.]
+TESTING: [Step 243. PROGRAM SYNTHESIS discovers full adder from I/O. XOR(cin,XOR(a,b))=sum found. 143 experiments.]
 
 THE SEARCH STATE AT STEP 242:
   PROVEN: store + decompose + iterate = universal computer
