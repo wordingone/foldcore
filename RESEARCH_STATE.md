@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [Step 276. 2^10=1024. SIX composition levels. Fibonacci+GCD+Primality+Power. 178 exps. 22 to 300.]
+TESTING: [Step 277. MOD_POW 100%. 2^16 mod 97=61. SEVEN levels. RSA primitives. 179 exps. 21 to 300.]
 
 THE SEARCH STATE AT STEP 242:
   PROVEN: store + decompose + iterate = universal computer
