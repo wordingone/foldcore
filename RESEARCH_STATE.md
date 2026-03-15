@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [none — Step 181. ITERATED k-NN closes the computation gap: 100% at 10 steps (direct: 69.7%). 81 experiments.]
+TESTING: [none — Step 182. 9/10 CA rules perfectly iterated to 10 steps. Computation via self-application. 82 experiments.]
 
 STEP 181 KEY RESULT:
   Iterated 1-step k-NN = 100% at ALL step counts (1, 2, 3, 5, 10).
