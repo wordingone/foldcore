@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [Step 262. Substrate TIES MLP on add-mod-5. MLP wins parity by 11pp. 161 experiments. 39 to 300.]
+TESTING: [Step 263. vs MLP: ties arithmetic, loses parity, CL hard for both. 162 experiments. 38 to 300.]
 
 THE SEARCH STATE AT STEP 242:
   PROVEN: store + decompose + iterate = universal computer
