@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [Step 237. ALL FOUR ARITHMETIC OPS 100% from one truth table. Add+Mul+Sub+Div. 137 experiments.]
+TESTING: [Step 238. (a+b)*c=100%. All arithmetic + composition from ONE truth table. 138 experiments.]
 
 STEP 235 BREAKTHROUGH:
   Ripple-carry adder via k-NN: 100% on 888 test pairs including 886 OOD.
