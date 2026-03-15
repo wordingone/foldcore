@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [Step 273. PRIMALITY 100% via decomposed trial division! Number theory SOLVED by decomposition. 175 exps. 25 to 300.]
+TESTING: [Step 274. EUCLID'S GCD 100%. PRIMALITY 100%. All from ONE truth table. 176 exps. 24 to 300.]
 
 THE SEARCH STATE AT STEP 242:
   PROVEN: store + decompose + iterate = universal computer
