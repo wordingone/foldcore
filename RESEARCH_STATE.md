@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [none — Steps 119-127 complete. k-NN fully characterized. Feature discovery is the frontier.]
+TESTING: [none — Steps 119-129. Feature discovery via k-NN scoring works but is external. Need it INSIDE the substrate.]
 
 STEPS 119-124 KEY FINDINGS:
   Sequential S1 eval (interleaved train/eval): 39.7% AA, ~0.1pp fgt (+1.5pp, -11.6pp fgt)
