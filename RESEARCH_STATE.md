@@ -6,7 +6,17 @@
 ## Active Hypothesis
 
 ```
-TESTING: [none — Step 171. Stage 5 (topology): vacuous — feature augmentation subsumes it. Stage 4 is the active frontier.]
+TESTING: [none — Step 173. Stage 6 PASSES: LOO selects L2 over cosine for parity (+12.1pp). Functional form is adaptive.]
+
+CONSTITUTIONAL PROGRESS (updated Step 173):
+  Stage 1: PASS (autonomous computation)
+  Stage 2: PASS (margin/LOO signal from cosine)
+  Stage 3: VACUOUS (k fixed, not binding)
+  Stage 4: PASS (random cosine features, selected by LOO)
+  Stage 5: VACUOUS (flat topology, subsumed by features)
+  Stage 6: PASS (L2 vs cosine vs L1 selected by LOO)
+  Stage 7: NOT STARTED (representation as modifiable data)
+  Stage 8: NOT REACHED
 
 CONSTITUTIONAL ASSESSMENT (Step 158):
   Stage 1 (Autonomous Computation): PASS
