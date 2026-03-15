@@ -6,11 +6,11 @@
 ## Active Hypothesis
 
 ```
-TESTING: Spawn-as-Classification — remove spawn threshold, always append, does top-k still work?
-PROVES IF: always-spawn AA ≥ threshold-spawn AA - 2pp (threshold is just compression, not discriminative)
-DISPROVES IF: always-spawn < threshold-spawn - 2pp (spawn decision is load-bearing)
-ABANDON BY: Step 111
-STEP: 109 (pending — Eli restarting)
+TESTING: Retrieval-Induced Learning — contrastive updates in top-k neighborhood during retrieval
+PROVES IF: AA > 95.4% (raw-pixel k-NN baseline from Step 110)
+DISPROVES IF: AA ≤ 95.4% (representation already optimal, adaptation can't improve it)
+ABANDON BY: Step 113
+STEP: 111 (pending — Eli restarting)
 
 S1 VALIDATED:
   P-MNIST:   91.9% AA, self-supervised delta=-0.5pp, mislabel ~8%
