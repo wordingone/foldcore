@@ -6,7 +6,30 @@
 ## Active Hypothesis
 
 ```
-TESTING: [Step 241. Sequential+conditional programs 100%. Loops via iteration proven (CA/sort). 141 experiments. Continuing to 300.]
+TESTING: [Step 242. Feature discovery can't learn algorithmic structure (carry chain). Decomposition must be designed. 142 experiments.]
+
+THE SEARCH STATE AT STEP 242:
+  PROVEN: store + decompose + iterate = universal computer
+    - All 4 arithmetic ops from 1 truth table (8 entries)
+    - Program execution with conditionals
+    - OOD via decomposition (255+255=510, 19*19=361)
+    - CA simulation (100 steps), FSM simulation, sorting (93%)
+
+  IDENTIFIED CEILINGS:
+    - Feature discovery: helps in-distribution, not OOD (Steps 111-134)
+    - OOD without decomposition: 0% (Step 225, 232)
+    - OOD WITH decomposition: 100% (Step 235-237)
+    - Decomposition itself: must be designed, can't be discovered (Step 242)
+
+  REMAINING FROZEN FRAME:
+    - LOO scoring (constitutionally required)
+    - Decomposition strategy (the intelligence)
+    - Primitive operations (cos, mod2 — partially collapsed)
+
+  THE GAP TO TRANSFORMERS:
+    - Transformers learn the decomposition FROM DATA (via backprop through layers)
+    - Our substrate needs the decomposition DESIGNED
+    - Bridging this = solving the meta-learning problem
 
 STEP 235 BREAKTHROUGH:
   Ripple-carry adder via k-NN: 100% on 888 test pairs including 886 OOD.
