@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [none — Step 175. Stage 7 PARTIALLY BROKEN: multi-template + LOO iteration reaches 98.4% on parity (76.2% base). 75 experiments.]
+TESTING: [none — Step 176. Frozen frame 7/15 adaptive (47%). Honest: NOT Stage 8, between 6-7. Binding: template menu, k, LOO.]
 
 CONSTITUTIONAL PROGRESS (updated Step 175):
   Stage 1: PASS
