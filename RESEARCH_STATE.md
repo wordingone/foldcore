@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [Step 194. LOO ranks templates at rho=0.90. Template choice is adaptive via LOO, not frozen. 94 experiments.]
+TESTING: [Step 195. Iteration count adaptive via target matching. 95 experiments. Approaching Step 200.]
 
 STEP 193 TEMPLATE ABLATION:
   Parity: mod2 +20.3pp, abs +18.0pp, cos +9.0pp, sign 0pp
