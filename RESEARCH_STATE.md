@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [Step 235. OOD CEILING BROKEN. Decomposed addition: 100% on 8-bit (0-255), trained on 3-bit primitives only. 135 experiments.]
+TESTING: [Step 236. ADD + MUL both 100% OOD. Decomposition = OOD generalization. 136 experiments.]
 
 STEP 235 BREAKTHROUGH:
   Ripple-carry adder via k-NN: 100% on 888 test pairs including 886 OOD.
