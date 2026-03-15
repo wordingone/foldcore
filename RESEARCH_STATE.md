@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [none — Step 147. Margin-guided substrate validated on rule tasks (parity 75->100%, multi-rule 97->99.6%). No effect on MNIST/CIFAR (already optimized). Domain = structured rule discovery.]
+TESTING: [none — Step 149. Margin-guided substrate works for single-task rule discovery. Fails at continual multi-task rule discovery (cross-task interference in feature selection).]
 
 STEPS 144-147 ARC:
   Step 144: Margin discovers cos(sum*pi)=parity. 75.4% -> 100.0%. BREAKTHROUGH.
