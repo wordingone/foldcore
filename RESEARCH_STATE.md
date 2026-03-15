@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [none — Step 176. Frozen frame 7/15 adaptive (47%). Honest: NOT Stage 8, between 6-7. Binding: template menu, k, LOO.]
+TESTING: [none — Step 177. Template menu is USEFUL frozen frame (compositional search worse). 77 experiments. Substrate characterized.]
 
 CONSTITUTIONAL PROGRESS (updated Step 175):
   Stage 1: PASS
