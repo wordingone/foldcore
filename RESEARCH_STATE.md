@@ -6,7 +6,15 @@
 ## Active Hypothesis
 
 ```
-TESTING: [none — Step 157. 7/10 CA rules perfectly discovered. 60 experiments. Time for constitutional assessment.]
+TESTING: [none — Step 160. Stage 4 wall confirmed: greedy feature search can't discover joint interactions (XOR needs dims 0+2 simultaneously). 61 experiments.]
+
+CONSTITUTIONAL ASSESSMENT (Step 158):
+  Stage 1 (Autonomous Computation): PASS
+  Stage 2 (Self-Generated Adaptation): PASS — margin signal is Principle-II compliant
+  Stage 3 (Adaptation Rate Adapts): VACUOUS — same as Living Seed
+  Stage 4 (Structural Constants Adaptive): BLOCKED — feature candidate space is code, not data
+  Stages 5-8: NOT STARTED
+  FROZEN FRAME MINIMUM: same 6/8 wall as Living Seed. Architectural.
 
 STEPS 144-147 ARC:
   Step 144: Margin discovers cos(sum*pi)=parity. 75.4% -> 100.0%. BREAKTHROUGH.
