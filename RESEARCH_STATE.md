@@ -6,11 +6,12 @@
 ## Active Hypothesis
 
 ```
-TESTING: [none — defining structural test before next candidate]
-PROVES IF: Candidate passes S1 (single function, no train/eval branch) AND accuracy > 56.7%
-DISPROVES IF: Candidate has separate train/eval code paths OR accuracy ≤ 30%
-ABANDON BY: [not set]
-STEP: 106 (next)
+TESTING: Per-class distribution matching — does it generalize to larger ranges and other non-Lipschitz functions?
+PROVES IF: 86.8% accuracy holds or improves at (a,b) ∈ 1..100 AND works on at least one other non-Lipschitz function
+DISPROVES IF: Accuracy degrades significantly with range OR fails on all non-periodic functions
+STEP: 297 (next — scaling and generalization)
+
+**BREAKTHROUGH (Step 296):** Per-class sorted top-K distances as representation. LOO on a%b: 86.8% (up from 5% 1-NN, 41.8% previous best). The Lipschitz ceiling breaks in distribution space. Readout change only — sort instead of sum. The fold's existing matching step computes the features.
 ```
 
 ## Operational Test for the Atomic Substrate
@@ -99,3 +100,15 @@ Candidates that survive constraint filtering. Ordered by promise.
 | 99 | Top-K Class Vote | **PASSES** — top-k(3) 91.8% vs 1-NN 86.8% (+5.0pp). 0.0pp forgetting. 8597 vectors. | — (push harder) |
 | 100 | Top-K on CIFAR-100 | **PASSES readout** — top-k(5) 38.3% vs 1-NN 32.3% (+6.1pp). FAILS forgetting (11.6pp). sp=0.95 needed for ResNet features. | C13: spawn threshold is feature-space dependent |
 | 101 | Spawn-only (lr=0) CIFAR+MNIST | **DISPROVED** — lr=0 identical to lr=0.001. Forgetting is class-incremental interference, not update drift. | C14: CIFAR-100 forgetting is class competition, not codebook corruption |
+| 286 | a%b encoding comparison | Extended vocab. Best LOO: 49% (thermometer+augment). Discontinuous stripes defeat k-NN. | C15b: k-NN discovers Lipschitz functions only |
+| 288 | a-b subtraction | LOO: 0%. Oblique level sets — not L2-locally-consistent. | (confirms C15b) |
+| 289 | Collatz | LOO: 0%. Two-branch structure undiscoverable. | (confirms C15b) |
+| 289b | Curriculum transfer 1..10→1..20 | Transfer HURTS: 24.2% vs 41.8% direct. Sub-problem must be a step in solution path. | C16: curriculum only helps when sub-problem IS a solution step |
+| 290 | Kill criterion | **KILLED** — emergent step discovery via k-NN for non-Lipschitz functions. Precise boundary established. | Arc closed |
+| 291 | Adaptive spawn threshold | **KILLED** — 84.1% vs 91.8% (-7.7pp). Undercoverage spiral: mean+1σ self-calibrates downward. | C17: spawn criterion needs global coverage signal, not local distance |
+| 291b | Iterative depth (soft blending) | **KILLED** — depth=5: -3.9pp. Weighted avg of neighbors converges to centroid, destroys discriminability. | C18: soft blending destroys Voronoi discontinuities; hard selection preserves them |
+| 292 | Composition search (a%b) | **WEAK PASS** — correct 3-step decomposition scores 100%, top-ranked. IO landscape discriminates. 36K programs in 5.6s. | Verification works; discovery is the open problem |
+| 293 | AMR fold (disagreement spawn) | **KILLED** — 45.5% vs 41.8% plain. Near-full spawn (383/400). For non-Lipschitz functions, entire space has mixed classes → no smooth regions to coarsen. | C19: AMR requires mostly-Lipschitz function; fully non-Lipschitz degenerates to store-everything |
+| 294 | LVQ fold (chain emergence) | **KILLED** — 21.8% vs 41.8%. Spawn too restrictive (1 vec/class/b). LVQ repel hurts in one-hot space. Fundamental tradeoff: chain formation requires same-class proximity, classification requires within-class resolution. | C20: chain formation and classification resolution trade off in same codebook |
+| 295 | Dynamical system fold (basin sculpting) | **KILLED** — chain acc 19.2% vs 1-NN 100%. Stepping stones create correct 1-NN regions but chains route to wrong same-class attractors. NN iteration strictly degrades accuracy. | C21: NN chain following adds noise for non-Lipschitz functions; 1-step is strictly better |
+| 296 | Per-class distribution matching | **STRONG PASS** — 86.8% LOO on a%b (K=5). Up from 5% (1-NN) and 41.8% (prev best). 100% for b=3. Lipschitz ceiling broken in distribution space. | BREAKTHROUGH: sort-instead-of-sum readout breaks the ceiling |
