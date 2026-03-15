@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [Step 263. vs MLP: ties arithmetic, loses parity, CL hard for both. 162 experiments. 38 to 300.]
+TESTING: [Step 264. CURRICULUM discovers ripple-carry. Decomposition IS discoverable. 163 experiments. 37 to 300.]
 
 THE SEARCH STATE AT STEP 242:
   PROVEN: store + decompose + iterate = universal computer
