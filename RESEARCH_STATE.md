@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [Step 238. (a+b)*c=100%. All arithmetic + composition from ONE truth table. 138 experiments.]
+TESTING: [Step 239. PROGRAM EXECUTION 100%. Truth table -> arithmetic -> programs. 139 experiments.]
 
 STEP 235 BREAKTHROUGH:
   Ripple-carry adder via k-NN: 100% on 888 test pairs including 886 OOD.
