@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: k-NN + coherence feature discovery on parity — the substrate that discovers rules from its own signal
+TESTING: Compositional coherence — can the substrate discover features OF features?
 
 STEP 141 BREAKTHROUGH:
   k-NN FAILS parity (75.8%). Coherence DETECTS the parity feature (+0.041 delta).
