@@ -62,6 +62,24 @@ Research oscillates between BREADTH (explore directions) and DEPTH (sit with one
 
 **Enforcement**: every 20 experiments, explicitly classify the current phase (breadth or depth) and measure whether the oscillation is damping.
 
+## Autonomous Research Loop (inspired by Karpathy's autoresearch)
+
+The research loop runs autonomously. One question, one metric, keep/discard.
+
+**Structure:**
+1. State the question (one sentence)
+2. State the metric (binary or scalar, measurable in one experiment)
+3. Design an experiment that tests the question
+4. Run it
+5. If metric improved: KEEP (commit, advance)
+6. If metric equal or worse: DISCARD (revert approach, try different angle)
+7. Log result in RESEARCH_STATE.md
+8. NEVER STOP. If stuck, try harder — different encoding, different task, different decomposition. The loop runs until the question is answered or killed.
+
+**The metric for emergent decomposition**: "Did the substrate discover an algorithmic step from I/O that iterates to correct OOD results?" Measured as: OOD accuracy of iterated discovered step.
+
+**Simplicity criterion**: if two approaches achieve the same OOD accuracy, prefer the one with less human-designed structure. Removing human design and maintaining accuracy IS the goal.
+
 ## The Pattern That Caused Stagnation (Eigenform Arc)
 
 1. Find interesting algebraic property
