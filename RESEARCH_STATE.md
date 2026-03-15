@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [Step 215. Reversal +22pp, Sort/Copy/Shift 0pp. Position transforms yes, value comparisons no. 115 experiments.]
+TESTING: [Step 218. Parity scaling: d=12 +65.8pp sweet spot. Mod arithmetic +38pp. Sort 0pp. 118 experiments. Toward 300.]
 
 STEP 193 TEMPLATE ABLATION:
   Parity: mod2 +20.3pp, abs +18.0pp, cos +9.0pp, sign 0pp
