@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: Coherence-guided feature discovery — integrated, +8.8pp on XOR. Testing on real data next.
+TESTING: [none — Step 134. Coherence feature discovery works on synthetic XOR but not real data (MNIST/CIFAR already coherent)]
 
 STEPS 130-131 BREAKTHROUGH:
   Class coherence (intra-class centroid similarity) discovers XOR feature at RANK 1.
