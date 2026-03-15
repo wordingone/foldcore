@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [none — Step 185. Iterated k-NN universal with right encoding: CA 100 steps, Fibonacci 20 steps. Representation is the frozen frame. 85 experiments.]
+TESTING: [none — Step 186. Feature discovery + iteration: raw Fibonacci 46.6->89.0% LOO. Pieces connecting. 86 experiments.]
 
 STEP 181 KEY RESULT:
   Iterated 1-step k-NN = 100% at ALL step counts (1, 2, 3, 5, 10).
