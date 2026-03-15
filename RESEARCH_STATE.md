@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [Step 232. OOD structural to k-NN (encoding-independent). In-dist mastered. 132 experiments.]
+TESTING: [Step 233. Iterated sort 39%. Iteration needs perfect 1-step. Scale limit identified. 133 experiments.]
 
 COMPREHENSIVE DOMAIN COVERAGE (Steps 97-232):
   MASTERED (in-distribution, 95%+):
