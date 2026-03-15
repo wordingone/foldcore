@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: Coherence-guided feature discovery — can class coherence scoring find discriminative features INSIDE the substrate?
+TESTING: Coherence-guided feature discovery — integrated, +8.8pp on XOR. Testing on real data next.
 
 STEPS 130-131 BREAKTHROUGH:
   Class coherence (intra-class centroid similarity) discovers XOR feature at RANK 1.
