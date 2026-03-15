@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [Step 195. Iteration count adaptive via target matching. 95 experiments. Approaching Step 200.]
+TESTING: [Step 196. Frozen frame 9/15 (60%) adaptive. 3 binding frozen: LOO, template set, f(wx+b). 96 experiments.]
 
 STEP 193 TEMPLATE ABLATION:
   Parity: mod2 +20.3pp, abs +18.0pp, cos +9.0pp, sign 0pp
