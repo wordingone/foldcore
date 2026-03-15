@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [Step 224. ALL arithmetic: add +47pp, mul +27pp, sub +36pp, max +49pp, abs_diff +38pp. 124 experiments.]
+TESTING: [Step 225. OOD FAILS: 100% in-dist, 0-36% OOD. Pattern matching, not abstract rules. CEILING IDENTIFIED. 125 experiments.]
 
 STEP 193 TEMPLATE ABLATION:
   Parity: mod2 +20.3pp, abs +18.0pp, cos +9.0pp, sign 0pp
