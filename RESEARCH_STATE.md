@@ -6,11 +6,22 @@
 ## Active Hypothesis
 
 ```
-TESTING: [none — defining structural test before next candidate]
-PROVES IF: Candidate passes S1 (single function, no train/eval branch) AND accuracy > 56.7%
-DISPROVES IF: Candidate has separate train/eval code paths OR accuracy ≤ 30%
-ABANDON BY: [not set]
-STEP: 106 (next)
+TESTING: Spawn-as-Classification — remove spawn threshold, always append, does top-k still work?
+PROVES IF: always-spawn AA ≥ threshold-spawn AA - 2pp (threshold is just compression, not discriminative)
+DISPROVES IF: always-spawn < threshold-spawn - 2pp (spawn decision is load-bearing)
+ABANDON BY: Step 111
+STEP: 109 (pending — Eli restarting)
+
+S1 VALIDATED:
+  P-MNIST:   91.9% AA, self-supervised delta=-0.5pp, mislabel ~8%
+  CIFAR-100: 38.3% AA, self-supervised delta=-0.4pp, mislabel ~62%
+  One function process(state, input, label?) — no train/eval branch.
+
+STEP 108 ABLATION:
+  lr=0 (no competitive learning): 91.9% — NOT load-bearing, remove it
+  1-NN (no top-k): 86.2% — load-bearing, -5.7pp
+  No spawn: 17.4% — CRITICAL, -74.5pp
+  MINIMAL SYSTEM: spawn + top-k. Two operations.
 ```
 
 ## Operational Test for the Atomic Substrate
