@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [none — mechanism space mapped. k-NN is the irreducible core. Next arc: learned representations]
+TESTING: [none — Step 119 MAJOR FINDING: S1 eval eliminates CIFAR-100 forgetting (11.7pp→0.1pp)]
 PROVES IF: [not set]
 DISPROVES IF: [not set]
 ABANDON BY: [not set]
