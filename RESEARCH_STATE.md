@@ -6,7 +6,13 @@
 ## Active Hypothesis
 
 ```
-TESTING: [none — Step 180. Multi-step CA: 100% at 1-3 steps, 67% at 10 steps. k-NN stores but doesn't COMPUTE. 80 experiments.]
+TESTING: [none — Step 181. ITERATED k-NN closes the computation gap: 100% at 10 steps (direct: 69.7%). 81 experiments.]
+
+STEP 181 KEY RESULT:
+  Iterated 1-step k-NN = 100% at ALL step counts (1, 2, 3, 5, 10).
+  Direct N-step prediction degrades: 90% at 5 steps, 70% at 10 steps.
+  THE COMPUTATION GAP IS CLOSED. Self-application of the 1-step rule
+  composes computation from storage. The system COMPUTES by reusing itself.
 
 STEP 180 DEEP FINDING:
   k-NN perfectly memorizes 1-3 step CA evolution but can't predict 5+ steps.
