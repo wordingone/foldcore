@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [none — Step 155. Self-improving substrate validated: parity, multi-rule, noise robust, CA Rule 110. 58 experiments.]
+TESTING: [none — Step 156. Substrate discovers 6/10 CA rules blindly (100% on Rule 110). 59 experiments.]
 
 STEPS 144-147 ARC:
   Step 144: Margin discovers cos(sum*pi)=parity. 75.4% -> 100.0%. BREAKTHROUGH.
