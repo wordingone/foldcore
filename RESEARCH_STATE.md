@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [Step 264. CURRICULUM discovers ripple-carry. Decomposition IS discoverable. 163 experiments. 37 to 300.]
+TESTING: [Step 265. Curriculum discovers MUL from ADD+AND. 5 composition levels from I/O. 164 experiments. 36 to 300.]
 
 THE SEARCH STATE AT STEP 242:
   PROVEN: store + decompose + iterate = universal computer
