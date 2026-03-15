@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [none — Step 177. Template menu is USEFUL frozen frame (compositional search worse). 77 experiments. Substrate characterized.]
+TESTING: [none — Step 178. Substrate characterized across all domains. 78 experiments. Session winding toward summary.]
 
 CONSTITUTIONAL PROGRESS (updated Step 175):
   Stage 1: PASS
