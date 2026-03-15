@@ -6,7 +6,7 @@
 ## Active Hypothesis
 
 ```
-TESTING: [Step 265. Curriculum discovers MUL from ADD+AND. 5 composition levels from I/O. 164 experiments. 36 to 300.]
+TESTING: [Step 266. CARRY auto-discovered as output bit. Full auto-discovery pipeline. 165 experiments. 35 to 300.]
 
 THE SEARCH STATE AT STEP 242:
   PROVEN: store + decompose + iterate = universal computer
