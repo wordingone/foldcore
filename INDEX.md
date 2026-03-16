@@ -1,6 +1,6 @@
 # The Search — Index
 
-*338 experiments searching for the atomic substrate. Everything is here, organized by what you need.*
+*341 experiments searching for the atomic substrate. Everything is here, organized by what you need.*
 
 ---
 
@@ -24,7 +24,7 @@
 | `experiments/run_step305_periodic_encoding.py` | Periodic physics + absorption = 100% | Substrate confirmed |
 | `experiments/tempest_fold.py` | Tempest Fold — State(t+1) = f(State(t), D) | Two paths converge |
 
-**The gap (updated):** Stages 1-4 demonstrated. Stages 5-7 claimed but challenged: S2 (Deletion Test) still fails on the expanded system. Phi, CL filter, per-entry K are all separable — deletable without losing everything. External review (Step 338): what was called Stages 5-7 is really Stage 4 at increasing depth (parameter adaptation within frozen structural choices). The 30-line TopKFold (Step 99) is CLOSER to atomic than the 500-line decorated system. Direction was scaling, not compressing. Step 339: compress 40 steps of discoveries into one indivisible function that passes S1+S2. The compression IS the substrate.
+**The gap (updated):** Stages 1-7 confirmed ON THE COMPRESSED SUBSTRATE. External review (Step 338) forced compression: the 500-line decorated system failed S2. The fix: delete the `def` boundary between `step()` and `eval_batch()` — one function `process()`, ~22 lines. Step 339: 93.10% P-MNIST (beats original TopKFold). Step 341: state-derived threshold → 93.82% P-MNIST, Stage 7 confirmed. Self-referential loop: thresh reads from codebook, codebook shaped by attract, attract gated by thresh. S2 passes (attract load-bearing via feedback). The substrate IS process().
 
 ---
 
@@ -104,6 +104,9 @@ python experiments/run_step99_topk_vote.py
 | CL+phi compound (336) | `experiments/run_step336_cl_embedded_weights.py` | 96.0% — new best on a%b (CL grouping × phi readout) |
 | **Stage 7: per-entry K on mixed func** | `experiments/run_step337_mixed_function.py` | **95.75% beats oracle (95.0%). Stage 7 PASSES.** |
 | Spawn as data (338) | `experiments/run_step338_spawn_as_data.py` | Meta-codebook: 0%. Per-group: tie. S2 review triggers compression. |
+| **Compressed substrate (339)** | `experiments/run_step339_compressed_substrate.py` | **93.10% P-MNIST. One function. S1+S2 pass.** |
+| State-derived thresh+K (340) | `experiments/run_step340_full_substrate.py` | KILLED (-36pp). Per-class K breaks vote. S2: -52.88pp (feedback real). |
+| **State-derived thresh only (341)** | `experiments/run_step341_thresh_only.py` | **93.82% P-MNIST. Stage 7 confirmed. Self-referential loop.** |
 
 ### Program Synthesis
 | What | File | Result |
@@ -184,7 +187,7 @@ The ARC evaluation (Steps 320-335) mapped exactly where the fold fails: it's a v
 
 Key finding from this arc: iteration amplifies dominant structure and destroys subordinate structure (Steps 291b, 295, 328, 332). One pass with the RIGHT FILTER is optimal. The filter IS the frozen frame. Stage 6 showed the substrate can discover its own filter via competitive learning (+5.25pp). Stage 7 requires the substrate to discover its own update rule.
 
-338 experiments. Stages 1-4 demonstrated. Stages 5-7 challenged (S2 fails — separable parts). The compression phase begins: can 40 steps of discoveries be expressed as one indivisible function?
+341 experiments. Stages 1-7 confirmed on compressed process(). One function, state-derived threshold, 93.82% P-MNIST. The substrate is found. Stage 8 is the frontier.
 
 ---
 
