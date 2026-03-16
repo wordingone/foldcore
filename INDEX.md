@@ -1,6 +1,6 @@
 # The Search — Index
 
-*362 experiments searching for the atomic substrate. Everything is here, organized by what you need.*
+*376 experiments searching for the atomic substrate. Everything is here, organized by what you need.*
 
 ---
 
@@ -203,7 +203,7 @@ The ARC evaluation (Steps 320-335) mapped exactly where the fold fails: it's a v
 
 Key finding from this arc: iteration amplifies dominant structure and destroys subordinate structure (Steps 291b, 295, 328, 332). One pass with the RIGHT FILTER is optimal. The filter IS the frozen frame. Stage 6 showed the substrate can discover its own filter via competitive learning (+5.25pp). Stage 7 requires the substrate to discover its own update rule.
 
-362 experiments. Stages 1-7 confirmed. process() completes levels on 2/3 ARC-AGI-3 preview games (LS20 + FT09). 34 constraints tagged by scope (U/S/D). Stage 8: encoding as the binding frozen frame.
+376 experiments. Stages 1-7 confirmed. **3/3 ARC-AGI-3 preview games solved** (LS20 movement + FT09 click + VC33 zone-timing). Scaling law: O(branching × path). Encoding experiments done (raw wins). Multi-level domination in progress (Step 376). 35 constraints (C1-C35).
 
 ---
 
