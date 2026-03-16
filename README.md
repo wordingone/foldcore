@@ -2,7 +2,7 @@
 
 **Recursive self-improvement through monotonic frozen frame reduction.**
 
-This repository documents an ongoing search for the atomic substrate -- a single operation where memory, learning, inference, and perception are the same thing. It spans 313 experiments across 27+ sessions, four substrate architectures, 88 constraints, and 78+ knowledge entries.
+This repository documents an ongoing search for the atomic substrate -- a single operation where memory, learning, inference, and perception are the same thing. It spans 315 experiments across 27+ sessions, four substrate architectures, 88 constraints, and 78+ knowledge entries.
 
 The search follows a [constitution](CONSTITUTION.md): five principles and eight stages that define the path to recursive self-improvement architecture-independently, with empirical tests at each step.
 
@@ -108,10 +108,17 @@ Key insight: same-class inputs have **identical** per-class distance distributio
 - The substrate discovers b-grouping (R²=0.858) and k=0 importance (+4.4pp). It cannot discover phi itself (Steps 306-312, all killed).
 - The encoding IS the physics. The substrate operates within prescribed physics, improving it by +4.4pp.
 
+```
+Step 315 automated loop (grow + refine, 1 turn):
+
+  Baseline:           86.8%  LOO,  16.7% OOD
+  After grow+refine:  94.4%  LOO,  48.5% OOD   <-- automated, no human in the loop
+```
+
 ```bash
+python experiments/auto_loop.py                     # The automated loop (88.0%)
 python experiments/run_step308_phi_weighted.py      # Substrate's 91.2% (learned w)
 python experiments/run_step296_dist_matching.py     # Human's 86.8% (phi baseline)
-python experiments/run_step313_loop_turn2.py        # Loop turn 2 (87.2%, prescribed)
 ```
 
 ---

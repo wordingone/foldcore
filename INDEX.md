@@ -1,6 +1,6 @@
 # The Search — Index
 
-*313 experiments searching for the atomic substrate. Everything is here, organized by what you need.*
+*315 experiments searching for the atomic substrate. Everything is here, organized by what you need.*
 
 ---
 
@@ -23,7 +23,7 @@
 | `experiments/run_step305_periodic_encoding.py` | Periodic physics + absorption = 100% | Substrate confirmed |
 | `experiments/tempest_fold.py` | Tempest Fold — State(t+1) = f(State(t), D) | Two paths converge |
 
-**The gap (updated):** The Lipschitz ceiling is broken (Step 296: 86.8%, Step 305: 100%). The equation is found: f = absorb. The frontier is: can the substrate discover its own physics (distance function)?
+**The gap (updated):** The Lipschitz ceiling is broken. The automated grow+refine loop achieves 94.4% LOO + 48.5% OOD in one turn — no human in the loop. The equation is found: f = absorb. Stages 1-4 demonstrated. The frontier: can the loop run more turns without over-growing?
 
 ---
 
@@ -76,6 +76,8 @@ python experiments/run_step99_topk_vote.py
 | Recursive absorption (311) | `experiments/run_step311_recursive_absorb.py` | **KILLED** — residuals diverge, depth hurts |
 | Self-scoped partition (312) | `experiments/run_step312_scoped_match.py` | **KILLED** — 56.5% b-match too noisy for phi |
 | Loop turn 2: prescribed weights (313) | `experiments/run_step313_loop_turn2.py` | **+0.5pp** — substrate's k=0 discovery prescribed as exp(-k) → 87.2% |
+| Per-b weight specialization (314) | — | Stage 4: 107/190 b-pairs diverse. k=0 weight increases with b. |
+| **Grow + refine loop (315)** | — | **94.4% LOO + 48.5% OOD** — one automated turn exceeds all manual results |
 
 ### Program Synthesis
 | What | File | Result |
