@@ -33,57 +33,17 @@ The compressed substrate -- with novelty-seeking exploration (argmin class vote)
 
 Major AI labs score near zero on ARC-AGI-3. The substrate completed levels using one 22-line function with no reward shaping, no planning module, and no game-specific code.
 
-### Continual Learning -- Historical (Step 99)
-**91.8% average accuracy, 0.0pp forgetting, 30 lines, no backprop.**
+### Continual Learning (Step 99 -> Step 342)
 
-A competitive-learning codebook that solves Permuted-MNIST (10 sequential tasks) in 20 seconds with structural zero forgetting. No gradient descent, no replay buffer, no regularization. 8,597 prototype vectors on the unit hypersphere, classified by top-k cosine vote.
+The compressed substrate achieves 91.20% on Permuted-MNIST with 0.00pp forgetting. Historical TopKFold (Step 99) scored 91.8% with two separate functions. The compressed process() (Step 342) merges them into one function and adds self-derived adaptation, while maintaining comparable accuracy.
 
-```
-Permuted-MNIST, 10 tasks, d=384, 6K train / 10K test per task:
+<details>
+<summary>Historical: TopKFold code (Step 99, superseded by process())</summary>
 
-  k=1 (1-NN):   86.8% AA,  0.0pp forgetting
-  k=3 (top-k):  91.8% AA,  0.0pp forgetting   <-- +5.0pp from readout alone
-  k=5 (top-k):  91.5% AA,  0.0pp forgetting
+The original two-function system: `step()` for learning, `eval_batch()` for inference. 91.8% AA. Superseded by compressed `process()` which merges both into one function (Steps 339-342).
 
-  Codebook: 8,597 vectors. Runtime: ~20 seconds. No backprop.
-```
-
-The complete system is `experiments/foldcore-steps/run_step99_topk_vote.py`. The core class is 30 lines:
-
-```python
-class TopKFold:
-    def __init__(self, d, lr=0.01, spawn_thresh=0.7):
-        self.V = torch.empty(0, d, device=DEVICE)
-        self.labels = torch.empty(0, dtype=torch.long, device=DEVICE)
-        self.lr, self.spawn_thresh, self.d = lr, spawn_thresh, d
-
-    def step(self, r, label):
-        r = F.normalize(r, dim=0)
-        if self.V.shape[0] == 0 or (self.V @ r).max().item() < self.spawn_thresh:
-            self.V = torch.cat([self.V, r.unsqueeze(0)])
-            self.labels = torch.cat([self.labels, torch.tensor([label], device=DEVICE)])
-            return
-        sims = self.V @ r
-        winner = sims.argmax().item()
-        self.V[winner] = F.normalize(
-            self.V[winner] + self.lr * (r - self.V[winner]), dim=0)
-
-    def eval_batch(self, R, k_vals):
-        R = F.normalize(R, dim=1)
-        sims = R @ self.V.T
-        n, n_cls = len(R), int(self.labels.max().item()) + 1
-        results = {}
-        for k in k_vals:
-            scores = torch.zeros(n, n_cls, device=DEVICE)
-            for c in range(n_cls):
-                mask = (self.labels == c)
-                if mask.sum() == 0: continue
-                class_sims = sims[:, mask]
-                k_eff = min(k, class_sims.shape[1])
-                scores[:, c] = class_sims.topk(k_eff, dim=1).values.sum(dim=1)
-            results[k] = scores.argmax(dim=1).cpu()
-        return results
-```
+Code: `experiments/foldcore-steps/run_step99_topk_vote.py`
+</details>
 
 ### Running it
 
