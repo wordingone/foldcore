@@ -6,10 +6,95 @@
 ## Active Hypothesis
 
 ```
-TESTING: Apply fold + phi + automated loop to ARC-AGI 2
-The failure map across hundreds of diverse tasks IS the next research data.
-Flat vector, dumb encoding, same fold. Failures reveal which frozen frames to thaw.
-STEP: 320 (next session)
+RESULT: Step 320 — ARC-AGI baseline with flat encoding. 1000 tasks.
+  1-NN: 45% avg pixel acc (10% random). 4 solved. 125 >80%.
+  Top-K phi: HURTS (-4.2pp). Per-class distributions are noise in 904-dim flat space.
+  Inflation warning: 45% is mostly unchanged background cells. Changed-cell acc TBD.
+Step 321 (Eli): Cross-reference taxonomy x failure map. Changed-cell acc = 24% (32.6pp inflation).
+  Root cause: 900/904 dims identical per example. 1-NN matches position, ignores content.
+Step 322: Local patch (5x5, 39 dims). Changed-cell 24%->39.6% (+15.6pp). 12 solved.
+Steps 323-325 (Eli): Feature ceiling. 7x7, example retrieval, object features all HURT vs 5x5.
+Step 326 (Eli): Rule extraction KILLED. Only 5/1000 tasks have extractable color rules.
+Step 327 (Eli): SUBSTRATE APPLIED — phi + loop on local patch codebook.
+  phi: -2.8pp changed-cell (HURTS). Loop: -0.01pp (nothing). Substrate contributes ~0 on ARC.
+  Root cause: phi requires class-correlated distance structure. ARC doesn't have it.
+  Same-output-color cells don't cluster in feature space. Phi adds noise.
+FINDING: Phi works on tasks with LOCAL CONSISTENCY (same patch → same output).
+  Phi kills tasks with GLOBAL CONTEXT (same patch → different output depending on neighbors).
+  5 phi-only solves, 5 phi-kills. The split is the specification, not a vague failure.
+Step 328: Recursive phi (global codebook). KILLED 0/5. Identical patches → identical phi at all levels.
+Step 329a: Spatial phi (neighbor aggregation). KILLED 1/5. 240-dim kills k-NN at ARC scale (5 solved vs 12).
+ARC ARC COMPLETE. Constraints extracted:
+  C23: Phi needs class-correlated distance structure in codebook
+  C24: k-NN in >40 dims needs >>500 codebook entries (curse of dimensionality)
+  C25: Global context and dimensionality curse are coupled at ARC scale
+  C26: Local consistency determines phi's sign (helps on 5 tasks, kills 5 others)
+Substrate specification sharpened: sweet spot is 100+ examples/class with structured distances.
+ARC was fuel — constraints tighten what the substrate IS and ISN'T.
+Step 330 (Eli): Automated loop on P-MNIST. KILLED. +0.0pp. Dense codebook (8597 vectors) has
+  uniform k-importance. Loop weight learning requires sparse codebook with k-index asymmetry.
+  Loop is a%b-specific. Stage 2 self-adaptation does NOT generalize across domains.
+Step 331: Self-discovered clustering + local metric on a%b. 88.25% vs 91.2% target. KILLED on accuracy.
+  BUT: R²=0.997 — substrate discovers b-groups from phi space alone. STAGE 5 CONFIRMED.
+  Per-cluster weights add nothing — every cluster learns same k=0-dominant profile.
+  Stage 6 does not emerge: metric is globally simple on a%b, no local structure to exploit.
+Step 332: Recursive phi on a%b. 42.25% vs 86.75%. KILLED.
+  phi_2 amplifies b-grouping (95% same-b NN) and destroys a-class target signal.
+  Same-b filter in phi_1 is LOAD-BEARING — removes dominant confound to expose target.
+  C27: Iteration amplifies dominant eigenvalues; target info in smaller eigenvalues gets destroyed.
+  C28: Prescribed filters (same-b) are the frozen frame. Substrate can't discover filters via recursion.
+  Pattern: ALL iteration in the substrate amplifies dominant structure (291b, 295, 328, 332).
+  One pass with the RIGHT FILTER is optimal. More passes amplify the wrong thing.
+Step 333: CL filter discovery on a%b. **92.00% vs 86.75% prescribed (+5.25pp). STAGE 6 PASSES.**
+  Competitive learning discovers spatial-proximity grouping (26.3% b-purity — NOT b-groups).
+  Discovered filter BEATS prescribed same-b AND loop weights (91.2%).
+  Filter arises from computation dynamics (Principle II). Genuinely different from birth form.
+  Stage 6: functional form (filter) becomes adaptive via competitive learning.
+Step 334 (Eli): ARC constraint map — 1000 tasks classified by capability gap.
+  CONDITIONAL: 418 (41.8%), SIZE_CHANGE: 293 (29.3%), SYMMETRY: 123 (12.3%),
+  OBJECT_IDENTITY: 99 (9.9%), PATTERN_COMPLETE: 46 (4.6%), SPATIAL_TRANSFORM: 12 (1.2%).
+  SPATIAL_TRANSFORM = exactly our 12 solved tasks. Fold captures rotation/flip only.
+Step 335: CL filter on ARC object-identity tasks. KILLED (+0.04pp = noise).
+  Identical patches → same CL group → can't distinguish objects.
+  Object identity needs graph algorithms (CC labels), not feature-space clustering.
+  Stage 6 works where encoding encodes relevant grouping (a%b). Fails where it doesn't (ARC objects).
+ARC ceiling: 12 tasks (spatial transforms). Everything else requires capabilities beyond vector matching.
+Step 336: CL embedded per-entry weights. Per-entry weights -0.25pp (KILLED for Stage 7).
+  BUT: CL filter + phi (baseline) = 96.00% — NEW BEST on a%b.
+  CL grouping (+5.25pp) × phi within groups (+4pp) compound. Two mechanisms combining.
+  Stage 7 blocked: too few examples per CL group for stable per-entry weights.
+Step 337: Mixed-function problem. Per-entry K: 95.75% beats oracle (95.0%).
+  Called Stage 7 — but external review challenges this (see below).
+Step 338: Spawn as data. B1: 0% catastrophic. B2: 93.75% tie. No improvement.
+
+EXTERNAL REVIEW — CRITICAL CORRECTION:
+  S2 (Deletion Test) STILL FAILS on the current system. Phi, CL filter, per-entry K
+  are all deletable without losing everything. Everything since Step 296 is SCAFFOLDING.
+  What I called Stages 5-7 is Stage 4 at increasing depth — parameter adaptation within
+  frozen structural choices (match, update, spawn, readout = 4 frozen operations).
+  The 30-line TopKFold (Step 99, 91.8%) is CLOSER to atomic than the 500-line system.
+  Direction was SCALING, not COMPRESSING. Birth → scale → compression. Still in scale.
+  CORRECTION: go back to the 30-line core. Make THAT self-modifying. One function. S1+S2.
+Step 339: Compressed substrate — process() refactor. P-MNIST 93.10% (PASS, beats TopKFold 91.8%).
+  a%b: 4% (FAIL — cosine on [a,b] doesn't capture modular structure. Distance metric = encoding = physics.)
+  S2: class vote load-bearing (-82.5pp). Attract NOT load-bearing (-0.72pp). S2 partial.
+  Finding: the substrate may be simpler than expected — spawn + class vote. Attract is compression, not computation.
+Step 340: State-derived thresh + per-class K. KILLED (-36pp P-MNIST). Per-class K collapsed class vote.
+  BUT S2 passes: attract load-bearing (-52.88pp) via feedback loop. State-derived thresh is real.
+Step 341: State-derived thresh ONLY (fixed K=3). **93.82% P-MNIST. STAGE 7 CONFIRMED.**
+  +0.72pp over fixed thresh. S2: attract load-bearing (-1.89pp). Feedback loop materializes.
+  Thresh reads from V → V shaped by attract → attract gated by thresh. Self-referential.
+  One function. ~22 lines. All stages 1-7 hold simultaneously.
+Step 342: ALL 7 STAGES VERIFIED on compressed substrate.
+  Stage 2 fix: target=prediction always. Stage 3: alpha=1-sim. Stage 5: 3 seeds, 0.07pp variance.
+  91.20% AA, 0pp forgetting. No lr hyperparameter. Attract load-bearing (-7.90pp).
+  Cost of Stage 2 compliance: -2.6pp (self-directed attracts occasionally wrong).
+  One function. ~22 lines. All 7 stages hold simultaneously.
+ARC-AGI-3 (Steps 343-357): Stage 8 diagnostic.
+  Level 1 completed (Step 353, pure argmin, 26218 steps, 38600 codebook entries).
+  Adaptive exploration (Steps 355-357): ALL KILLED. Representation too uniform for any signal.
+  FINDING: encoding IS the binding frozen frame. Stage 8 = making encoding adaptive.
+STEP: 358
 ```
 
 ## Session 2026-03-15 Summary (Steps 291-319)
@@ -64,25 +149,45 @@ The readout and spawning are validated. The atomic substrate question remains op
 
 ## Constraint List
 
-Hard-won from 96 experiments. Every candidate must pass ALL constraints before implementation.
+Hard-won from 362 experiments. Scope: U=universal, S=substrate-specific, D=domain-specific.
 
-| # | Constraint | Source | Type |
-|---|---|---|---|
-| C1 | Read and write must be one operation | Step 72 | structural |
-| C2 | Must not reduce to Hopfield/softmax-attention-only | Step 73 | novelty |
-| C3 | Must not require separate memory + generation systems | Architecture autopsy | structural |
-| C4 | Must not rely on matrix composition through long chains | Steps 86-96 | empirical |
-| C5 | Must achieve structural zero forgetting | Step 65 | requirement |
-| C6 | Must work on dense embeddings without per-dataset tuning | Steps 63, 66 | empirical |
-| C7 | Must beat 1-NN readout over same codebook | Steps 65-71 | requirement |
-| C8 | Current hardware, no external API | Jun | requirement |
-| C9 | Minimal — expressible in <100 lines | Jun | requirement |
-| C10 | Not a combination of known techniques | Jun | requirement |
-| C11 | Readout signal factors must not anti-correlate (e.g. attn×displacement) | Step 97 | empirical |
-| C12 | Readout must be input-conditional, not static vector property (coherence, density) | Step 98 | empirical |
-| C13 | Spawn threshold must be calibrated per feature space (cosine range varies) | Step 100 | empirical |
-| C14 | CIFAR-100 forgetting is class-incremental interference, not codebook drift | Step 101 | empirical |
-| C15 | Sum-all aggregation fails when class size >> effective neighbors; only sparse selection (top-k) preserves signal | Step 102 | empirical |
+| # | Constraint | Source | Type | Scope |
+|---|---|---|---|---|
+| C1 | Read and write must be one operation | Step 72 | structural | U |
+| C2 | Must not reduce to Hopfield/softmax-attention-only | Step 73 | novelty | U |
+| C3 | Must not require separate memory + generation systems | Architecture autopsy | structural | U |
+| C4 | Must not rely on matrix composition through long chains | Steps 86-96 | empirical | S |
+| C5 | Must achieve structural zero forgetting | Step 65 | requirement | U |
+| C6 | Must work on dense embeddings without per-dataset tuning | Steps 63, 66 | empirical | U |
+| C7 | Must beat 1-NN readout over same codebook | Steps 65-71 | requirement | S |
+| C8 | Current hardware, no external API | Jun | requirement | U |
+| C9 | Minimal — expressible in <100 lines | Jun | requirement | U |
+| C10 | Not a combination of known techniques | Jun | requirement | U |
+| C11 | Readout signal factors must not anti-correlate | Step 97 | empirical | S |
+| C12 | Readout must be input-conditional, not static vector property | Step 98 | empirical | U |
+| C13 | Spawn threshold must be calibrated per feature space | Step 100 | empirical | S |
+| C14 | CIFAR-100 forgetting is class-incremental interference, not codebook drift | Step 101 | empirical | S |
+| C15 | Sum-all aggregation fails; only sparse selection (top-k) preserves signal | Step 102 | empirical | U |
+| C15b | k-NN discovers Lipschitz functions only | Step 286 | theoretical | U |
+| C16 | Curriculum transfer only helps when sub-problem IS a solution step | Step 289b | empirical | U |
+| C17 | Spawn criterion needs global coverage signal, not local distance | Step 291 | empirical | S |
+| C18 | Soft blending destroys Voronoi discontinuities; hard selection preserves them | Step 291b | empirical | U |
+| C19 | AMR requires mostly-Lipschitz function | Step 293 | empirical | U |
+| C20 | Chain formation and classification resolution trade off in same codebook | Step 294 | empirical | S |
+| C21 | NN chain following adds noise for non-Lipschitz; 1-step strictly better | Step 295 | theoretical | U |
+| C22 | Distribution matching requires bidirectional neighborhoods; OOD degrades at boundary | Step 297 | empirical | S |
+| C23 | Phi needs class-correlated distance structure in codebook | Steps 320, 327 | empirical | S |
+| C24 | k-NN in >40 dims needs >>500 codebook entries (curse of dimensionality) | Steps 323-329 | empirical | U |
+| C25 | Global context and dimensionality curse are coupled | Steps 328-329 | empirical | U |
+| C26 | Phi's sign determined by local consistency (same patch → same output = help) | Step 327 | empirical | S |
+| C27 | Iteration amplifies dominant eigenvalues; target in smaller eigenvalues destroyed | Steps 291b-332 | theoretical | U |
+| C28 | Substrate can't discover filters via recursion (amplifies dominance) | Step 332 | empirical | S |
+| C29 | Loop weight learning requires k-index asymmetry (sparse codebook) | Step 330 | empirical | S |
+| C30 | Stage 2 compliance costs ~2.6pp (self-directed attracts occasionally wrong) | Step 342 | empirical | S |
+| C31 | Always-attract compression kills novelty-seeking exploration | Steps 355-357 | empirical | S |
+| C32 | Encoding resolution is binding frozen frame for interactive games | Step 350 | empirical | U |
+| C33 | Interactive games need different action representations per game type | Steps 360-361 | empirical | U |
+| C34 | VC33: deterministic loop, click position has zero visual effect at 16x16 | Step 362 | empirical | D |
 
 ## Candidate Queue
 
@@ -143,3 +248,4 @@ Candidates that survive constraint filtering. Ordered by promise.
 | 301 | Atomic operation (S1-compliant) | **S1 ACHIEVED** — 62.8% OOD. One operation: match→predict→update→spawn. Label as data. 100% for multi-point classes (b≤10). Single-point classes can't detect period (no same-class neighbor). Gap to 95.2% = cross-class inference cost. | S1 works. Single-point coverage is the remaining gap. |
 | 302 | Phi scaling + floor(a/b) generalization | Phi scales: 93.3% at 1..50. Generalizes to floor(a/b). Advantage tracks non-Lipschitz density. | Phi is general, not a%b-specific |
 | 303 | Atomic absorb (S2 attempt) | **KILLED** — 26% accuracy. Codebook collapse (395/400→5 vectors). Label signal washed out by blending. Spawn threshold still separable. | S2 not achievable in this implementation. Concept sound, encoding wrong. |
+| 320 | ARC-AGI flat baseline | 45% pixel acc (10% random). 4/1000 solved. Top-K phi HURTS (-4.2pp). 45% is inflated by unchanged background cells. | C23: phi requires encoding that preserves class-relevant structure; flat vector in high-dim is noise for per-class distributions |
