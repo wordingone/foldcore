@@ -382,3 +382,4 @@ The most valuable contribution is blunt analysis. Run the code, read the math, t
 ---
 
 *The destination defines the path. Each step either shrinks the frozen frame or it is not a step.*
+
