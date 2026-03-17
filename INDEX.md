@@ -200,9 +200,25 @@ python experiments/run_step99_topk_vote.py
 
 Phase 1 proved: process() (LVQ) satisfies R1, R2 (partial), R5, R6 but fails R3 (operations hardcoded) and R4 (no self-testing). The "stage progression" was self-assessed and inflated.
 
-Phase 2 has produced three substrates that satisfy R1-R6 structurally (SelfRef, TapeMachine, ExprSubstrate). None can match LVQ's behavioral performance (91% P-MNIST, Level 1 on LS20). The gap: R1-R6 structural compliance does not imply useful computation.
+**Honest status: "6/6 R1-R6" was narrative, not result.** An R3 audit (see `R3_AUDIT.md`) reveals ALL Phase 2 substrates have 5-10 unjustified frozen elements. None pass the benchmark gate (P-MNIST >25% or LS20 Level 1).
 
-**The binding constraint discovered in Phase 2: U20 (local continuity).** The substrate must be locally continuous in its input-action mapping. Similar inputs must produce similar outputs. Cosine similarity provides this for free. Non-vector substrates (tape, tree) do not have it and must create it.
+### Phase 2 Substrates
+
+| Substrate | Data Structure | R3 Audit (U) | Disc (d=32) | LS20 unique | Benchmark |
+|-----------|---------------|-------------|-------------|-------------|-----------|
+| SelfRef | Codebook (vectors) | **10 U** | 94% | 1125 | 0 levels |
+| TapeMachine | Integer tape | **10 U** | 35% | -- | untested |
+| ExprSubstrate | Expression tree | **8 U** | degenerate | -- | a%b: 46% = prior |
+| TemporalPrediction | Prediction matrix | **4 U** | 88% | **1536** | 0 levels |
+| TemporalPred (reduced) | Prediction matrix | **1 U** | 88% | -- | testing |
+
+### Key Findings
+
+**U20 (local continuity):** The substrate must map similar inputs to similar outputs. Cosine provides this for free. Hash violates it. Random splits violate it. Matrix multiplication (temporal prediction) provides it via continuity.
+
+**R3 x U20 tension:** R3 requires self-modifying operations (no hardcoded metric). U20 requires local continuity. Cosine gives U20, fails R3. Trees give R3, fail U20. Prediction matrices partially address both (fewest unjustified frozen elements + natural continuity).
+
+**Benchmark gate:** Structural R1-R6 tests are necessary but not sufficient. Every substrate must pass P-MNIST >25% in 5K steps OR LS20 Level 1 in 50K steps to be taken seriously.
 
 The constraint map (U1-U20 + I1-I9) IS the specification for the next substrate.
 
