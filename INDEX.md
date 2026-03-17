@@ -204,21 +204,24 @@ Phase 1 proved: process() (LVQ) satisfies R1, R2 (partial), R5, R6 but fails R3 
 
 ### Phase 2 Substrates
 
-| Substrate | Data Structure | R3 Audit (U) | Disc (d=32) | LS20 unique | Benchmark |
-|-----------|---------------|-------------|-------------|-------------|-----------|
-| SelfRef | Codebook (vectors) | **10 U** | 94% | 1125 | 0 levels |
-| TapeMachine | Integer tape | **10 U** | 35% | -- | untested |
-| ExprSubstrate | Expression tree | **8 U** | degenerate | -- | a%b: 46% = prior |
-| TemporalPrediction | Prediction matrix | **4 U** | 88% | **1536** | 0 levels |
-| TemporalPred (reduced) | Prediction matrix | **1 U** | 88% | -- | testing |
+| Substrate | Data Structure | R3 Audit (U) | Status | Kill reason |
+|-----------|---------------|-------------|--------|-------------|
+| SelfRef | Codebook (vectors) | **10 U** | Active | Best disc (94%), 0 levels. Cosine frozen (R3). |
+| TapeMachine | Integer tape | **10 U** | **KILLED** | Hash violates U20. 35% disc (near-random). |
+| ExprSubstrate | Expression tree | **8 U** | **KILLED** | U21: scoring rewards noise diversity, not signal. a%b = 46% trivial prior. |
+| TemporalPrediction | Prediction matrix | **4 U** | **KILLED** | U22: LMS converges → W freezes → exploration dies. 4 variants all killed. unique=1536 was timer-inflated. |
 
 ### Key Findings
 
-**U20 (local continuity):** The substrate must map similar inputs to similar outputs. Cosine provides this for free. Hash violates it. Random splits violate it. Matrix multiplication (temporal prediction) provides it via continuity.
+**U20 (local continuity):** The substrate must map similar inputs to similar outputs. Cosine provides this for free. Hash violates it. Random splits violate it.
 
-**R3 x U20 tension:** R3 requires self-modifying operations (no hardcoded metric). U20 requires local continuity. Cosine gives U20, fails R3. Trees give R3, fail U20. Prediction matrices partially address both (fewest unjustified frozen elements + natural continuity).
+**U21 (diversity scoring is degenerate):** Fitness functions that reward output diversity without input similarity cannot distinguish signal-aligned from noise-aligned splits. Kills GP-based feature selection under R1.
 
-**Benchmark gate:** Structural R1-R6 tests are necessary but not sufficient. Every substrate must pass P-MNIST >25% in 5K steps OR LS20 Level 1 in 50K steps to be taken seriously.
+**U22 (convergence kills exploration):** Fixed-size prediction state converges when pred_err → 0. Convergence freezes the learning rule. Growth (codebook spawning) prevents convergence by destabilizing the model. This is why LVQ navigates with the same 16x16 avgpool that temporal prediction fails on — the timer isn't the wall, the absence of growth is.
+
+**R3 x navigation tension:** Cosine equalization enables navigation (LVQ: Level 1 at 26K) but is frozen (R3 fails). Prediction enables near-minimal frozen frame (1 U) but can't navigate (LMS converges on timer). No substrate satisfies both.
+
+**Benchmark gate:** P-MNIST >25% in 5K steps OR LS20 Level 1 in 50K steps. No Phase 2 substrate passes. SelfRef is the only active candidate.
 
 The constraint map (U1-U20 + I1-I9) IS the specification for the next substrate.
 

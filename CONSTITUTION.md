@@ -120,6 +120,7 @@ The deletion test (S2 from operational tests). If you can remove a component and
 3. **Name your prior art.** If the mechanism has a name in the literature (LVQ, GNG, k-NN, competitive learning), use that name. "Atomic substrate" is not a name — it's a claim.
 4. **The reviewer's test:** Can an external reviewer reproduce the claimed capability from the code alone, without reading the constitution or the narrative? If not, the capability is in the narrative, not the code.
 5. **Distinguish exploration from intelligence.** Stochastic coverage that eventually stumbles onto success is not intelligence. State this honestly in every result.
+6. **R3 audits must account for emergent interactions, not just frozen elements.** Enumerating frozen elements misses load-bearing properties that arise from their coupling. A substrate can have few frozen elements while destroying emergent properties by splitting what should stay coupled (U13). The audit question is not only "what's frozen?" but "what coupling survives?"
 
 
 ---
