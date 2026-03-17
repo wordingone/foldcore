@@ -12,7 +12,7 @@ Script: scripts/run_step405_recursive.py
 import time, logging, numpy as np, torch, torch.nn.functional as F
 logging.getLogger().setLevel(logging.WARNING)
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
-CB_CAP = 1000; THRESH_INT = 100; MAX_DEPTH = 8; THRESH_SPLIT = 0.999
+CB_CAP = 1000; THRESH_INT = 100; MAX_DEPTH = 5; THRESH_SPLIT = 0.999
 WARMUP = 1000
 
 class LevelCB:
