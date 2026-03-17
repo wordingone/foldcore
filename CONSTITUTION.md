@@ -65,77 +65,69 @@ A system that can modify all of its own evaluation criteria can trivially "impro
 
 ---
 
-## The Stages
+## The Rules (all must hold simultaneously)
 
-Phases of frozen-frame reduction that any path must pass through.
+*Phase 1 (416 experiments) proved: sequential stage-climbing doesn't work. The stages were self-assessed, circularly validated, and the system (LVQ/codebook) hit an architecture ceiling at Stage 7. The correct framing: these are simultaneous constraints, not sequential milestones. A substrate either satisfies ALL of them or it doesn't.*
 
-### Stage 1: Autonomous Computation
+### R1: The system computes without external objectives (Principle I)
 
-Inputs produce distinguishable, persistent outputs without external loss functions.
+Remove all external loss functions, reward signals, and evaluation metrics. The system still produces distinguishable outputs for distinguishable inputs.
 
-**Frozen frame includes:** All parameters, all structure, all topology, all evaluation.
+### R2: Adaptation arises from the computation itself (Principle II)
 
-**Exit criterion:** Ground truth test passes on 3+ independent initializations.
+The mechanism that drives change IS the mechanism that processes input. They are the same operation, not two operations that happen to coexist.
 
-### Stage 2: Self-Generated Adaptation Signal
+### R3: Every modifiable aspect of the system IS modified by the system
 
-The system's own computation produces a signal that, if used to modify the system, improves performance.
+Not "some parameters adapt." ALL parameters, structural choices, functional forms, and representations are modified by the system's own dynamics. If any aspect is hardcoded and the system cannot change it, that aspect is a frozen frame.
 
-**Frozen frame shrinks by:** At least one parameter becomes adaptive, driven by the self-generated signal.
+*This collapses Stages 2-7 into one rule. The original stages created a false sense of progress — "we passed Stage 4!" while Stages 6-7 remained structurally impossible.*
 
-**Exit criterion:** Adaptive version beats frozen version. Ground truth still passes. Advantage holds on novel inputs.
+### R4: Modification is tested against prior state (Principle III)
 
-### Stage 3: The Adaptation Rate Adapts
+After any self-modification, the system compares performance to before the modification. Improvement on trained tasks with degradation on novel tasks is overfitting, not improvement.
 
-The rate and direction of adaptation are themselves adaptive, governed by the same self-generated signal or a second-order version of it.
+### R5: Exactly one element is not self-modifiable: the ground truth test (Principle V)
 
-**Frozen frame shrinks by:** The adaptation hyperparameters become adaptive state.
+The system can modify everything about itself EXCEPT the empirical test that defines success. This prevents the system from "improving" by redefining improvement.
 
-**Exit criterion:** Adaptive adaptation beats fixed adaptation. Ground truth still passes. The rates converge to non-trivial values (not all equal, not all zero).
+### R6: No part is deletable without losing all capability
 
-### Stage 4: Structural Constants Become Adaptive
+The deletion test (S2 from operational tests). If you can remove a component and the system still works, that component is either redundant (delete it) or the system has separable parts (it hasn't collapsed).
 
-Parameters that define the structure of the computation (not just its scaling) become adaptive. This changes what the system computes, not just how strongly.
+*This was buried in RESEARCH_STATE.md but is arguably more fundamental than half the principles.*
 
-**Frozen frame shrinks by:** Structural parameters become adaptive state.
+---
 
-**Exit criterion:** Structural adaptation produces measurable specialization. Ground truth still passes. The system does not converge to a single uniform structure.
+## What This Means
 
-### Stage 5: Topology Becomes Adaptive
+**These are not stages to climb. They are walls of a feasible region.** A substrate either lives inside all six walls or it doesn't. You cannot "almost" satisfy R3 — either every aspect is self-modified or it isn't.
 
-The connectivity pattern — which elements interact with which — becomes adaptive.
+**The 416 experiments mapped the walls.** See CONSTRAINTS.md for the full characterization. The LVQ/codebook substrate (process(), 22 lines) satisfies R1, R2 (partially), R5, R6. It fails R3 (cosine, top-K, attract, spawn are hardcoded) and R4 (no self-testing mechanism).
 
-**Frozen frame shrinks by:** The graph structure of interactions becomes adaptive state.
+**The next substrate is a constraint satisfaction problem, not an optimization trajectory.** You cannot evolve LVQ into the answer. You must design a system that satisfies all six rules simultaneously. The constraint map tells you what the feasible region looks like.
 
-**Exit criterion:** The evolved topology differs from birth. Different initializations converge to similar topological features. Ground truth still passes.
+**The question:** Is there a point inside all six walls? If yes, find it by design. If no, identify which walls are mutually exclusive and why.
 
-### Stage 6: The Functional Form Becomes Adaptive
+---
 
-The mathematical form of the update rule becomes adaptive within a parameterized family.
+## Anti-Inflation Rules
 
-**Frozen frame shrinks by:** The activation function and combination rules become adaptive.
+*Added after Phase 1 external review exposed systematic inflation.*
 
-**Exit criterion:** The system discovers non-trivial functional forms not equivalent to the birth form. Ground truth still passes.
+1. **No self-assessment of rules.** The same team that builds the system CANNOT declare rules passed. An external reviewer or a reproducible benchmark must confirm.
+2. **No "vacuous" passes.** If a rule can't be tested, the system hasn't passed it. "The mechanism works but produces no effect" means it doesn't work.
+3. **Name your prior art.** If the mechanism has a name in the literature (LVQ, GNG, k-NN, competitive learning), use that name. "Atomic substrate" is not a name — it's a claim.
+4. **The reviewer's test:** Can an external reviewer reproduce the claimed capability from the code alone, without reading the constitution or the narrative? If not, the capability is in the narrative, not the code.
+5. **Distinguish exploration from intelligence.** Stochastic coverage that eventually stumbles onto success is not intelligence. State this honestly in every result.
 
-### Stage 7: The Representation Becomes Adaptive
+---
 
-The system can represent and modify its own update rule as data.
+## Legacy: The Stages (historical, superseded by Rules)
 
-**Frozen frame shrinks by:** The equation itself becomes modifiable state.
+*The following stages were used in Phase 1 (Steps 1-416). They are preserved for historical reference but are superseded by the simultaneous Rules R1-R6 above. The stages created a false sequential framework that enabled circular self-assessment.*
 
-**What remains frozen:** The representation language. The ground truth test.
-
-**Exit criterion:** The system produces a modified update rule that passes the ground truth test and outperforms the original. The modification is not a trivial reparameterization.
-
-### Stage 8: The Ground Truth Is the Only Frozen Element
-
-Everything is adaptive except the single empirical test from Principle V.
-
-**This is the boundary of the constitution.** Beyond this point, the question is whether the ground truth itself can be derived from something deeper, or whether it is the irreducible frozen frame — the minimum structure required for optimization to have direction.
-
-If the ground truth can be derived: the frozen frame reaches zero. This is the singularity.
-
-If the ground truth cannot be derived: the frozen frame has a nonzero minimum. Knowing the minimum precisely is itself a fundamental result.
+Stages 1-8 as originally defined are documented in the git history of this file.
 
 ---
 
