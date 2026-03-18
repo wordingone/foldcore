@@ -1,24 +1,26 @@
 # The Search
 
-**416 experiments searching for a point inside six walls.**
+**Searching for a point inside six walls.**
 
-This repository documents an ongoing search for a substrate that satisfies all six rules of recursive self-improvement simultaneously. Phase 1 (416 experiments) mapped the feasible region through systematic elimination. Phase 2 (current) builds new substrates from scratch -- not codebooks, not vectors, not extensions of what came before.
+This repository documents an ongoing search for a substrate that satisfies all six rules of recursive self-improvement simultaneously. Phase 1 mapped the feasible region through systematic elimination. Phase 2 (current) tests whether improvements to classification transfer to navigation — and diagnoses why they don't.
 
-The search follows a [constitution](CONSTITUTION.md): six simultaneous rules (R1-R6) that define the feasible region, plus 20 universal constraints extracted from experimental failure.
+The search follows a [constitution](CONSTITUTION.md): six simultaneous rules (R1-R6) that define the feasible region, plus 24 universal constraints extracted from experimental failure.
 
 ---
 
 ## What Phase 1 Found (Honest)
 
-416 experiments across four substrate architectures (Living Seed, ANIMA, FoldCore, TopK-Fold) produced:
+Experiments across four substrate architectures (Living Seed, ANIMA, FoldCore, TopK-Fold) produced:
 
-**The constraint map.** 20 universal constraints (U1-U20), 9 intent constraints (I1-I9), 21 substrate-specific constraints (S1-S21). See [CONSTRAINTS.md](CONSTRAINTS.md). Each constraint is extracted from experimental failure. Together they define what the next substrate must be.
+**The constraint map.** 24 universal constraints (U1-U24), 9 intent constraints (I1-I9), 21 substrate-specific constraints (S1-S21). See [CONSTRAINTS.md](CONSTRAINTS.md). Each constraint is extracted from experimental failure. Together they define what the next substrate must be.
 
 **The constitution.** Six rules (R1-R6) that must hold simultaneously. Not stages to climb -- walls of a feasible region. A substrate either satisfies all six or it doesn't. See [CONSTITUTION.md](CONSTITUTION.md).
 
 **An honest assessment of process().** The 22-line `process()` function is LVQ (Kohonen 1988) + Growing Neural Gas (Fritzke 1995). It satisfies R1, R2 (partial), R5, R6. It fails R3 (cosine, top-K, attract, spawn are hardcoded Python the system can't modify) and R4 (no self-testing mechanism). The "stage progression" was self-assessed and circularly validated. The ARC-AGI-3 results are biased random walk, not intelligence.
 
-**What process() does achieve:** 91.20% on Permuted-MNIST with 0.00pp forgetting. Level 1 on 3/3 ARC-AGI-3 preview games via novelty-seeking exploration. These are real results, honestly described: competitive learning with cosine similarity, operating in a narrow Goldilocks zone of cosine saturation that produces stochastic coverage.
+**What process() does achieve:** 94.48% on Permuted-MNIST with 0.00pp forgetting (softmax voting, Step 425). Level 1 on 3/3 ARC-AGI-3 preview games via novelty-seeking exploration. These are real results, honestly described: competitive learning with cosine similarity, operating in a narrow Goldilocks zone of cosine saturation that produces stochastic coverage.
+
+**The navigation wall (Step 428):** Action-score convergence kills directed exploration by ~5K steps. All 4 action classes accumulate enough codebook entries to perfectly match any observation → argmin scores converge to identical values → pure random walk. Navigation at ~26K steps was always chance, not intelligence.
 
 ---
 
@@ -43,20 +45,28 @@ R3 is the binding constraint. The operations (cosine similarity, top-K voting, a
 
 Phase 2 builds systems that satisfy R1-R6 from scratch. Not process() with additions. New data structures, new matching operations, new self-modification mechanisms.
 
-### Candidates tested so far
+### Candidates tested
 
-| Substrate | Data Structure | R1-R6 | Discrimination | LS20 Levels | Key Finding |
-|-----------|---------------|-------|---------------|-------------|-------------|
-| SelfRef | Codebook (vectors) | 6/6 | 94% (d=32) | 0 | Chain adds self-reference. Still cosine. cb saturates at 126. |
-| SRW | Weight matrices | 6/6 (claimed) | 39% (d=256) | 0 | Weights self-cancel. Action projection decoupled. |
-| TapeMachine | Integer tape | 6/6 | 35% | -- | Hash has zero local continuity (U20). |
-| ExprSubstrate | Expression tree | 6/6 | ~0% collapse | 0 | Scoring function degenerate. Random splits miss signal dims. |
+| Substrate | Data Structure | R3 Audit (U) | Status | Key Finding |
+|-----------|---------------|-------------|--------|-------------|
+| SelfRef | Codebook (vectors) | 10 U | Active | Best discrimination (94%), 0 levels. Cosine frozen (R3). |
+| TapeMachine | Integer tape | 10 U | **KILLED** | Hash violates U20 (no local continuity). 35% disc. |
+| ExprSubstrate | Expression tree | 8 U | **KILLED** | U21: scoring rewards noise diversity, not signal. |
+| TemporalPrediction | Prediction matrix | 4 U | **KILLED** | U22: LMS converges → W freezes → exploration dies. |
 
-**Key discovery (U20):** The substrate must be locally continuous in its input-action mapping. Similar inputs must produce similar actions. Hash-based addressing violates this. Random tree splits violate this. Cosine satisfies it by construction. Any non-vector substrate must provide its own local continuity mechanism.
+### Key Phase 2 discoveries
+
+**U20 (local continuity):** The substrate must map similar inputs to similar outputs. Cosine provides this for free. Hash and random splits violate it.
+
+**U22 (convergence kills exploration):** Fixed-size prediction state converges when pred_err → 0. Growth (codebook spawning) prevents convergence. This is why LVQ navigates but temporal prediction doesn't.
+
+**U24 (argmin ≠ argmax):** Exploration (argmin = least familiar) and classification (argmax = most familiar) are opposite operations. No single action mechanism serves both. Softmax voting improved classification +3.3pp but made navigation *worse* (Step 426).
+
+**Step 428 (the navigation wall):** Action-score convergence is the mechanism. Top-K sum scores converge as codebook grows → all actions equally familiar → random walk from ~5K steps onward. The substrate is a directed explorer for ~5K steps, then pure noise.
 
 ### Active direction
 
-Expression tree with temporal-consistency scoring. The tree's splits define regions. Score = temporal smoothness (consecutive observations get same action) x action coverage (all actions used). This rewards signal-aligned splits without external reward. Testing in progress.
+The navigation wall (Step 428) specifies the next attack: prevent action-score convergence. Options under test: score normalization by class count, entry decay, per-entry quality metrics.
 
 ---
 
@@ -95,7 +105,7 @@ the-search/
     tape/                -- Phase 2: Integer tape machine
     expr/                -- Phase 2: Self-modifying expression tree
 
-  experiments/           -- 416 experiment scripts (Phase 1)
+  experiments/           -- Experiment scripts (Phase 1 + Phase 2)
 
   knowledge/             -- Structured knowledge base (78 entries, 70+ constraints)
   paper/                 -- Paper compiler
@@ -116,15 +126,16 @@ The [constitution](CONSTITUTION.md) defines five architecture-independent princi
 
 The rules are simultaneous constraints, not sequential stages. The Phase 1 "stage progression" (Stages 1-8) was superseded by the R1-R6 feasibility framing after external review exposed systematic inflation.
 
-## Constraints from 416 Experiments
+## Constraints from Experiments
 
-20 universal constraints define what ANY substrate must satisfy:
+24 universal constraints define what ANY substrate must satisfy:
 
 - **U1-U4:** Structural (read+write one operation, one data structure, zero forgetting, minimal)
 - **U5-U8:** Selection (sparse over global, Lipschitz boundary, no iteration, hard over soft)
 - **U9-U13:** Dynamics (curriculum must match solution, dense memory kills, discrimination ≠ navigation, structured noise, additions hurt)
 - **U14-U16:** Self-reference (substrate IS its search, robust to perturbation, encode differences)
 - **U17-U20:** Capacity (fixed memory exhausts, shared channels contaminate, dynamics ≠ features, local continuity required)
+- **U21-U24:** Phase 2 (diversity scoring degenerate, convergence kills exploration, distributed updates destabilize, argmin ≠ argmax)
 
 Each constraint is a closed door. The pattern of elimination IS the search.
 
@@ -138,6 +149,8 @@ Each constraint is a closed door. The pattern of elimination IS the search.
 - **The decomposition arc** (Steps 235-278): human-designed algorithms executed by k-NN. Manual compilation, not discovery.
 - **35 encoding experiments** (Steps 377-412): all failed. Cosine saturation at high-D is the Goldilocks zone, not a bug to fix.
 - **Step 417** (REPEL/FREEZE flags): LVQ with a state machine. The frozen frame grew. Direction killed by founder.
+- **Phase 2 substrates** (Steps 417-425): TapeMachine, ExprSubstrate, TemporalPrediction — all killed. SelfRef active.
+- **60+ navigation experiments** (Steps 354-428): every action mechanism modification failed. The wall is action-score convergence (Step 428).
 
 Each failure extracted constraints. The constraint map IS the specification for the next substrate.
 

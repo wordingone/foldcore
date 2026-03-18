@@ -1,6 +1,6 @@
 # The Search — Index
 
-*416 experiments searching for the atomic substrate. Everything is here, organized by what you need.*
+*Searching for the atomic substrate. Everything is here, organized by what you need.*
 
 ---
 
@@ -124,6 +124,19 @@ python experiments/run_step99_topk_vote.py
 | Progressive deepening (352) | `experiments/run_step352_progressive.py` | Exploit degenerates (argmax = popularity). 0 levels. |
 | **Pure novelty 50K (353)** | `experiments/run_step353_pure_novelty.py` | **LEVEL 1 COMPLETED at step 26218. First game level solved.** |
 
+### Phase 2: Navigation Gate + Scoring (Steps 417-428)
+| What | File | Result |
+|------|------|--------|
+| Constraint validation (417) | `experiments/run_step417_constraint_validation.py` | KILLED — REPEL/FREEZE = LVQ + state machine. Frozen frame grew. |
+| ReadIsWrite family (418-418g) | `experiments/run_step418*.py` | 91.84% P-MNIST (tau=0.01), R2 by construction. Distributed update costs 2.6pp. |
+| Encoding discovery (419) | `experiments/run_step419_encoding_discovery.py` | Centering is narrow U (5.5% without at 16x16). |
+| Pooling ablation (420) | `experiments/run_step420_pool_ab.py` | Mean pooling forced (I). 85% diff without. |
+| ReadIsWrite verified (421b) | `experiments/run_step421b_reproduce.py` | 91.84% ± 0.08pp, 4 seeds, 0pp forgetting. |
+| ReadIsWrite on FT09 (424) | `experiments/run_step424_riw_ft09.py` | KILLED — entry convergence with 69 classes. |
+| **Softmax voting (425)** | `experiments/run_step425_softmax_vote.py` | **94.48% P-MNIST, 0pp forgetting. +3.3pp over baseline.** |
+| Softmax on LS20 nav (426) | `experiments/run_step426_softmax_nav.py` | KILLED — 0/3 seeds navigated. Dom collapsed to 41-45%. |
+| **Score diagnostic (428)** | `experiments/run_step428_score_diagnostic.py` | **Navigation wall: action scores converge 150x by 30K. Random walk from ~5K.** |
+
 ### Program Synthesis
 | What | File | Result |
 |------|------|--------|
@@ -133,7 +146,7 @@ python experiments/run_step99_topk_vote.py
 ### Theoretical Framework
 | What | File |
 |------|------|
-| Constitution (5 principles, 8 stages) | `CONSTITUTION.md` |
+| Constitution (5 principles, 6 rules) | `CONSTITUTION.md` |
 | Substrate architecture + honest limits | `SUBSTRATE.md` |
 | Research methodology (damped oscillation) | `research/RESEARCH_DISCIPLINE.md` |
 | Four separations diagnosis | `research/WHAT_THE_FAILURES_TEACH.md` |
@@ -155,12 +168,12 @@ python experiments/run_step99_topk_vote.py
 | ANIMA (W+I dynamics) | `substrates/anima/` | Closed — Stage 2 vacuous |
 | FoldCore (codebook) | `substrates/foldcore/` | Frozen — baseline system |
 | Eigenform (matrix dynamics) | `substrates/eigenfold/` | Closed — all applied tests failed |
-| TopK Fold (self-improving) | `substrates/topk-fold/` | Phase 1 — LVQ baseline (91.20% P-MNIST) |
+| TopK Fold (self-improving) | `substrates/topk-fold/` | Phase 1 — LVQ baseline (94.48% P-MNIST with softmax voting) |
 | WorldModel (genesis) | `substrates/worldmodel/` | Historical |
 | Tempest (Rust, physics) | `tempest/` | Historical — informed the thesis |
-| **SelfRef (chain)** | `substrates/selfref/` | **Phase 2 — 6/6 R1-R6. Still cosine. cb saturates.** |
-| **TapeMachine (integers)** | `substrates/tape/` | **Phase 2 — 6/6 R1-R6. No vectors. Fails U20 (no local continuity).** |
-| **ExprSubstrate (tree)** | `substrates/expr/` | **Phase 2 — 6/6 R1-R6. No vectors. Natural feature selection. Scoring WIP.** |
+| **SelfRef (chain)** | `substrates/selfref/` | **Phase 2 — Active. Best discrimination (94%), 0 levels.** |
+| **TapeMachine (integers)** | `substrates/tape/` | **Phase 2 — KILLED. Fails U20 (no local continuity).** |
+| **ExprSubstrate (tree)** | `substrates/expr/` | **Phase 2 — KILLED. U21: scoring rewards noise, not signal.** |
 
 ---
 
