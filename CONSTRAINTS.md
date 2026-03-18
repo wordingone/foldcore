@@ -1,64 +1,98 @@
 # Constraints — Comprehensive Extraction from Experiments
 
-*Every constraint below is extracted from experimental failure. Classification:*
-- **U (Universal)**: Required by ANY substrate for recursive self-improvement
-- **S (Substrate-specific)**: Specific to LVQ/codebook/cosine-based substrates
-- **I (Intent)**: What CAPABILITY the constraint reveals is missing — maps to what ARC-AGI-3 tests, not its engineering
-- **E (Engineering)**: Implementation detail of current system — NOT carried forward
+*Revised 2026-03-18 session 2. Major restructure: task requirements first, honest universality reclassification.*
+
+*455 experiments across 6 architecture families (codebook 435, reservoir 8, graph 8, LSH 4, kd-tree 1, CA 3). The constraint map was previously biased toward codebook — 26 "universal" constraints extracted primarily from one family. This revision reclassifies based on cross-family evidence.*
+
+**Classification:**
+- **Task Requirement**: What the TASK demands of any substrate (derived from successes AND failures across families)
+- **U (Validated Universal)**: Confirmed by 2+ architecturally distinct families
+- **P (Provisional)**: Single-family evidence — hypothesis to test, not law to enforce
+- **S (Substrate-specific)**: Specific to LVQ/codebook/cosine-based substrates (includes 6 former U-constraints reclassified with contradicting evidence)
+- **I (Intent)**: What CAPABILITY the constraint reveals is missing
+- **E (Engineering)**: Implementation detail — NOT carried forward
 
 ---
 
-## Universal Constraints (apply to any next substrate)
+## Task Requirements
 
-| # | Constraint | What it means for the NEXT substrate | Source |
+*Added 2026-03-18 session 2. The task is the oracle. Architecture is the variable. These requirements are derived from what ALL successful and failed substrates tell us about the tasks themselves, not about any particular architecture.*
+
+### Navigation (LS20, FT09, VC33)
+
+Every navigation experiment since Step 442 uses the same graph + edge-count mechanism. The only variable is the observation-to-node mapping. Results partition perfectly by three mapping properties:
+
+| Property | Required? | Evidence |
+|---|---|---|
+| **Deterministic** (same obs → same node) | YES | Reservoir fails (temporal inconsistency, Step 448). All successes are deterministic. |
+| **Locally continuous** (nearby obs → same node) | YES | Grid graph fails (0/3 at 30K, Steps 446-447). LSH succeeds (3/10, Step 453). PCA grid worse than random (539 vs 1869 cells). |
+| **Persistent** (nodes don't get destroyed) | YES | kd-tree fails (splits destroy edges, Step 452). LSH/codebook cells are permanent → navigate. |
+
+**Navigation also requires a non-convergent exploration mechanism.** If action selection converges (codebook score convergence U25, prediction error convergence U22), exploration dies. Edge-count-based selection (least-taken action from current node) does not converge — counts grow monotonically, maintaining signal.
+
+### Classification (P-MNIST)
+
+Classification requires external labels. Step 432: self-labels = 9.8% (chance), external labels = 94.48%. Confirmed for both codebook and graph substrate (Step 444b: 93.34% with labels, 10.1% without). No substrate has achieved R1-compliant classification. This is an honest admission, not a constraint to work around.
+
+### Both Tasks
+
+The task is interactive (unknown environment, no separate training phase). Any substrate must learn online — not because read/write must be "one operation" (LSH separates them and navigates), but because the task doesn't offer a training set.
+
+---
+
+## Validated Universal Constraints (confirmed by 2+ architecturally distinct families)
+
+| # | Constraint | Evidence across families | Source |
 |---|---|---|---|
-| U1 | Read and write must be one operation | No separate "learn" and "infer" modes. The same operation that reads also writes. | C1, Step 72 |
-| U2 | Must not require separate memory + generation | One data structure serves all roles (memory, model, encoding, policy) | C3 |
-| U3 | Structural zero forgetting | Learning new things must not degrade old knowledge. Architecturally, not by replay. | C5, Step 65 |
-| U4 | Minimal description | The substrate must be expressible in minimal code. Complexity = frozen frames. | C9 |
-| U5 | Sparse selection over global aggregation | Averaging over all stored knowledge destroys signal. Selection preserves it. | C15, Step 102 |
-| U6 | Similarity-based discovery finds only locally-consistent functions | Any substrate using local similarity will fail on globally-structured problems without additional structure. | C15b, Step 286 |
-| U7 | Iteration amplifies dominant features, destroys minority features | Recursive application of the same operation converges to the dominant eigenvector, losing everything else. | C27 |
-| U8 | Hard selection over soft blending | Soft averaging destroys the boundaries that encode structure. Hard selection preserves discontinuities. | C18, Step 291b |
-| U9 | Curriculum only helps when sub-problems are actual solution steps | Transfer from irrelevant sub-problems hurts. The decomposition must match the solution path. | C16, Step 289b |
-| U10 | Dense state memory kills exploration | If the substrate memorizes every state, novelty vanishes and exploration stalls. Must forget or abstract. | C40, Step 389 |
-| U11 | Discrimination ≠ navigation | Telling states apart is necessary but not sufficient. The substrate must also choose actions that REACH unseen states. | Steps 388-390 |
-| U12 | The substrate works via structured noise | Exploration requires noise (randomness in action selection). Too much noise = random walk. Too little = exploitation trap. The operating zone is narrow. | Steps 408-412, session insight |
-| U13 | Additions hurt | Every mechanism added to a working substrate either doesn't help or actively degrades. The substrate resists modification. | Steps 343-376, 412 |
-| U14 | The substrate IS its search procedure | The process of finding the substrate (spawn hypotheses, test, select, refine) is structurally identical to the substrate itself. Fixed point. | Session insight, Step 409 |
-| U15 | The substrate must be robust to perturbation | If 5 "minor" implementation changes each independently kill the system, it's brittle, not atomic. The next substrate must degrade gracefully, not catastrophically. | Step 414 failure analysis, Eli's S21 |
-| U16 | The substrate must encode DIFFERENCES from expectation | Centering (subtracting the mean) is load-bearing because it converts absolute states to deviations. The substrate must represent what's SURPRISING, not what IS. | Step 414 centered_enc analysis |
-| U17 | Fixed-capacity memory exhausts exploration | Any substrate with a hard memory limit will eventually run out of novelty. Must grow, forget, or abstract — not just cap. | S16, all capped-codebook experiments |
-| U18 | Shared action channels contaminate multi-hypothesis systems | If multiple hypotheses (encodings, strategies) share one action stream, actions chosen by hypothesis A corrupt hypothesis B's learning. Sequential commitment or isolated channels needed. | Steps 413-413b, Eli's S15 analysis |
-| U19 | Dynamics and features are independent frozen frames | Healthy codebook dynamics (growth rate, spawn/attract ratio) can be achieved at any dimensionality via metric tuning. But dynamics don't create features. Features require encoding that maps observations to action-relevant structure. Both needed. | Step 416 (p=0.75: good dynamics, no features) |
-| U20 | The substrate must be locally continuous in its input-action mapping | Similar inputs must produce similar (or at least consistent) actions. This is the Lipschitz constraint applied to the substrate ITSELF. Without it: no spatial coherence, no navigation, no stable behavior. Hash-based addressing violates this (nearby inputs hash to different cells). Random tree splits violate this (nearby inputs diverge at every branch). Cosine satisfies this by construction. Any non-vector substrate must provide its own local continuity mechanism. | Phase 2 Step 417+ (TapeMachine 35% disc, ExprSubstrate 94% collapse, SelfRef 94% disc) |
-| U21 | Fitness functions that reward output diversity without input similarity collapse on structured signal | ExprSubstrate's scoring (diversity x consistency) rewards any split that produces diverse outputs, regardless of whether the split aligns with input structure. On a%b (where feature selection matters most): 46% accuracy = trivial prior (label 0 is 46% of data). Signal dim fraction = 6.9% (chance = 6.2%). The tree splits on noise dims near threshold 0 (appearing diverse during training) but collapses to 1 action on clean evaluation. Without a similarity metric in the state (like SelfRef's cosine), the scoring function cannot distinguish signal-aligned from noise-aligned splits. This kills genetic programming approaches to feature selection under R1. | Phase 2: ExprSubstrate on a%b, 5 seeds. 46% = prior. 0 feature selection. Noise-dependent diversity collapse confirmed. |
-| U22 | Fixed-size state that minimizes prediction error converges, and convergence kills exploration | LMS prediction on a shared matrix W converges when pred_err → 0. Any mechanism that stabilizes action selection makes the environment stationary → prediction becomes trivially easy → pred_err → 0 → update = outer(0, prev) = 0 → W freezes → action locks → exploration dies. Growth (codebook spawning, tree expansion) prevents convergence by continuously destabilizing the learned model. The baseline TemporalPrediction survived only because timer-driven action variability kept the environment non-stationary — but this variability was navigation-irrelevant. Row-normalized read: W froze at step 5K, pred_err=0.0000, action locked to 0 for 49620/50000 steps. PredictPersist: unique=1232 at 50K (< baseline 1536 at 10K). Per-action W: unique=991, pred_err=0.07. Every variant that stabilized actions triggered convergence collapse. LVQ avoids this because codebook growth prevents convergence — there is always a new entry disrupting dynamics. | Phase 2: TemporalPrediction family (4 variants, all killed). Row-norm decisive: unique=453 at 50K, W frozen from step 5K. |
-| U23 | Distributed updates destabilize inter-entry similarity structure | Updating ALL codebook entries every step (soft attention + distributed error correction) pushes entries toward each observation, making max inter-entry similarity approach 1.0. Gram-based spawn thresholds saturate at 1.0 → 99% spawn rate → codebook explosion. Winner-take-all update preserves codebook structure because non-winners don't move. Error-based spawn (||error|| > median) partially mitigates (50% spawn) but doesn't improve navigation. The distributed update is COMPATIBLE with argmin exploration (hybrid 418f: unique=3248 at 10K with half the codebook) but doesn't add directional signal — same random walk, more efficient. Prior art: Nadaraya-Watson estimator, soft competitive learning. | Step 418 series (6 variants). 418a: Gram explosion (99% spawn). 418e: error spawn works (50%) but no exploration. 418f: hybrid matches baseline at half codebook but same random walk. |
-| U24 | Exploration (argmin) and exploitation (argmax) are opposite operations | argmin class scoring picks the least familiar action class → novelty-seeking exploration. argmax picks the most familiar → correct classification. No single action mechanism serves both. A substrate that explores via argmin gets 0% classification accuracy. A substrate that classifies via argmax doesn't explore. The benchmark gate (P-MNIST >25% OR LS20 Level 1) uses OR precisely because one substrate cannot pass both with the same action selection. ReadIsWrite with softmax vote: 88.2% P-MNIST, 0 navigation. ReadIsWrite with argmin: 3248 unique exploration, 0% classification. | Step 418g: 0% accuracy with argmin on P-MNIST. 418b-d: 88% with softmax vote. 418e-f: exploration with argmin/reconstruction. |
-| U25 | Score convergence and exploration bias are coupled in argmin/top-K systems | Argmin picks the lowest-scoring class. With raw scores, large classes score high → argmin avoids → explores. ANY normalization (count^p for p>0) penalizes large classes → their scores drop → argmin picks them → positive feedback → one class dominates. The transition is binary (p=0 vs p>0), not gradual. No scoring formula fixes the navigation wall. Navigation speed is determined by encoding quality (FT09: 82 steps with right encoding vs LS20: 26K with generic encoding, 300x). | Steps 426-430: softmax hurts (426), full norm inverts (429), fractional norm (p=0.25/0.5/0.75) all collapse to dom=100% (430). 60 prior action experiments (354-416) also failed. |
-| U26 | Self-generated labels compound errors in similarity-weighted voting | When labels influence future labeling AND label quality depends on voting accuracy, a positive feedback loop drives accuracy to chance. Softmax voting concentrates weight on nearest entries; if those entries have wrong labels (from earlier wrong predictions), the next prediction is wrong, generating another wrong label. The error is self-reinforcing. Step 432: self-labels = 9.8% (below 10% chance on 10 classes). The entire 94.48% classification depends on external labels (84.68pp gap). Navigation is immune because actions are self-generated and don't need to be "correct" — any action produces useful state. Classification requires correct labels or the voting degenerates. | Step 432: external labels = 94.48%, self-labels = 9.8%. Error compounds through softmax voting. Navigation (LS20) unaffected — actions are self-generated. |
+| U3 | Structural zero forgetting | Codebook: growth-only (no entries deleted). Graph: edges accumulate. LSH: cells permanent, edges accumulate. All successful substrates are growth-only or persistent. | C5, Step 65 |
+| U7 | Iteration amplifies dominant features | Codebook: recursive composition → dominant eigenvector (Step 405). Reservoir: Hebbian dynamics → rank-1 collapse (Steps 438-439). Mathematical property of iterative systems. | C27 |
+| U11 | Discrimination ≠ navigation | Task-level truth. Codebook at 64x64: balanced actions, 0 levels (Steps 388-390). Graph with random walk: discriminates but doesn't reliably navigate (Steps 449-451). Confirmed across all families. | Steps 388-390, 449-451 |
+| U20 | Local continuity in input-action mapping | Grid graph: no local continuity → 0/3 (Steps 446-447). LSH: locality-preserving hash → 3/10 (Step 453). TapeMachine: 35% disc → fails. ExprSubstrate: 94% collapse → fails. Codebook: cosine provides it by construction. The strongest cross-family constraint — 5 families tested, clean partition. | Phase 2 Steps 417-453 |
+| U22 | Convergence kills exploration | Codebook: score convergence → random walk after ~5K steps (Step 428). TemporalPrediction: pred_err → 0 → W frozen → action locked (Step 437d+). Two architecturally distinct confirmations. Mathematical: any convergent adaptation makes the environment stationary → trivially predictable → no learning signal. | Steps 428, 437d, Phase 2 |
+| U24 | Exploration and exploitation are opposite operations | Mathematical fact: argmin (least familiar) explores, argmax (most familiar) classifies. No single mechanism serves both. Codebook: argmin = 0% classification (Step 418g). Graph/LSH: edge-count argmin explores but can't classify. Architecture-independent. | Steps 418, 444b |
 
-### Universality Assessment (post-audit Finding 5)
+### Design Requirements (from Jun, not from experiments)
 
-*External audit (2026-03-18) identified that all U-constraints were extracted from codebook-family architectures. Constraints below are assessed for multi-architecture support.*
+| # | Constraint | Note |
+|---|---|---|
+| U4 | Minimal description | Jun's requirement. Complexity = frozen frames. Not experimentally derived, but valid as a design principle. |
 
-**Strong U (supported by 2+ architecturally distinct substrates):**
-U5, U7, U8 (codebook + temporal prediction), U10 (codebook + tape), U11 (codebook at multiple resolutions), U20 (codebook + tape + expression tree), U22 (codebook + temporal prediction — both killed by convergence)
+---
 
-**Moderate U (information-theoretic or mathematical argument, not just empirical):**
-U1, U2, U3, U4, U14, U15, U16 — these follow from first principles (R1-R6 requirements, information theory) rather than single-architecture evidence
+## Provisional Constraints (single-family evidence — hypotheses to test, NOT laws to enforce)
 
-**Provisional U (tested on codebook family only — may be S-class):**
-- U9 (curriculum): Tested only on codebook. Curriculum learning in neural networks shows different patterns.
-- U12 (structured noise): The Goldilocks zone may be cosine-specific, not universal.
-- U13 (additions hurt): Tested by adding to a codebook. In other architectures, additions (residual connections, skip connections) help.
-- U17 (fixed memory): True for codebooks. A system that compresses or abstracts might not exhaust.
-- U19 (dynamics ≠ features): Tested on codebook at different dimensionalities. Other architectures couple these differently.
-- U23 (distributed updates): Tested on codebook Gram structure. Transformers use distributed attention updates successfully.
-- U25 (score/bias coupling): Specific to argmin/top-K systems.
+*These were extracted from codebook experiments only. They may be universal, codebook-specific, or wrong. Each needs testing against non-codebook families before being used to narrow the feasible region. The codebook got 435 experiments; reservoir got 8; LSH got 4. This asymmetry means most "universal" claims are really "true for codebooks, untested elsewhere."*
 
-*Provisional constraints should be confirmed on non-codebook architectures before being used to narrow the feasible region. Overconstrained specification risks declaring the region empty when it's the constraints that are wrong.*
+| # | Constraint | Status | Why provisional |
+|---|---|---|---|
+| U2 | No separate memory + generation | Untested | LSH has separate components (hash function + edge counts) and navigates. The claim may be too strong — coupled components may suffice. |
+| U5 | Sparse selection over global aggregation | Partial | Navigation needs point selection (one action). But reservoir uses global dynamics and fails for rank-1 collapse, not global aggregation per se. Causal link unproven. |
+| U8 | Hard selection over soft blending | Partial | Codebook: soft blending → centroid convergence. Both graph + LSH use hard selection. But neural networks use soft operations successfully. May be navigation-specific, not universal. |
+| U9 | Curriculum transfer | Codebook-only | Tested only on codebook curriculum. Neural network curriculum shows different patterns. |
+| U10 | Dense memory kills exploration | Codebook-only | Codebook at 64x64 memorized 8276/8320 states → no novelty. But the issue may be the encoding (4096D cosine saturation), not memory density. Graph also grows indefinitely and navigates. |
+| U12 | Structured noise / Goldilocks zone | Codebook-only | The narrow operating zone is cosine-specific (F.normalize + centered_enc creates the right noise level). LSH has noise through hash collisions — a completely different mechanism. The TASK requires exploration noise, but the mechanism is family-specific. |
+| U13 | Additions hurt | Partial | Confirmed for codebook (Steps 343-376) and reservoir (438-439). But both were at their capability ceiling. In neural networks, additions (residual connections, attention) help enormously. May be ceiling-specific, not universal. |
+| U14 | Substrate IS its search procedure | Meta-insight | Observation about the codebook's self-similar structure. Interesting philosophically. Not a testable constraint for future substrates. |
+| U15 | Robust to perturbation | Design practice | Good engineering. Codebook is brittle (5 independent kill switches, Step 414). LSH seems more robust (works across random seeds). But calling this a "constraint from experiments" overstates — it's a design requirement. |
+| U18 | Shared action channels contaminate | Codebook-only | Steps 413-413b tested multi-resolution codebook sharing one action stream. Untested on non-codebook multi-hypothesis systems. |
+| U19 | Dynamics ≠ features | Codebook-only | Step 416 (p=0.75): good codebook dynamics, no features at 64x64. Other architectures couple dynamics and features differently. |
+| U21 | Diversity fitness collapses | ExprSubstrate-only | One experiment on ExprSubstrate. Too thin to generalize. |
+| U26 | Self-generated labels compound errors | Partial | Codebook: 9.8% self-labels vs 94.48% external (Step 432). Graph: 10.1% vs 93.34% (Step 444b). Both use nearest-neighbor voting. A genuinely different classifier might not have this problem. Confirmed for NN-voting family, not universal. |
+
+---
+
+## Reclassified: Former U-constraints now S-class
+
+*These were labeled "Universal" but are contradicted by non-codebook evidence. They are codebook/cosine-specific properties, not task requirements.*
+
+| Former # | Constraint | Why reclassified | Contradicting evidence |
+|---|---|---|---|
+| ~~U1~~ → S22 | Read and write must be one operation | LSH separates hash-read and edge-write. Graph separates node-lookup and edge-update. Both navigate. | LSH: 4/10 at 50K (Step 454). The TASK requires online learning, not one-operation — a weaker claim. |
+| ~~U6~~ → S23 | Similarity-based discovery finds only Lipschitz functions | This is a mathematical property of k-NN, which is codebook-specific. LSH doesn't use k-NN. Graph uses edge counts. | Irrelevant to non-codebook families. |
+| ~~U16~~ → S24 | Must encode differences from expectation | Centering prevents cosine saturation in high-D codebooks. LSH navigates on RAW (uncentered) observations hashed through random hyperplanes. | LSH Step 453: no centering, still navigates. Centering is a cosine-space requirement. |
+| ~~U17~~ → S25 | Fixed-capacity memory exhausts exploration | LSH has FIXED capacity (1024 cells) and navigates 4/10 at 50K. The codebook needs unbounded growth because its exploration depends on spawning. LSH exploration depends on edge-count diversity, not growth. | LSH Step 454: 1024 fixed cells, 4/10. Directly contradicts. |
+| ~~U23~~ → S26 | Distributed updates destabilize similarity structure | Specific to codebook Gram matrix structure. Updating all entries pushes them toward each observation. Neural networks use distributed updates (backprop) successfully. Edge-based systems don't have this problem. | Codebook-specific mechanism. Step 418 series. |
+| ~~U25~~ → S27 | Score convergence and exploration bias are coupled | Specific to argmin/top-K scoring on class counts. Edge-count-based action selection (graph/LSH) doesn't suffer this — edge counts grow monotonically, maintaining relative differences. | Graph/LSH navigate without top-K scoring. Steps 426-430 are codebook-specific. |
 
 ---
 
