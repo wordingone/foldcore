@@ -121,6 +121,8 @@ The deletion test (S2 from operational tests). If you can remove a component and
 4. **The reviewer's test:** Can an external reviewer reproduce the claimed capability from the code alone, without reading the constitution or the narrative? If not, the capability is in the narrative, not the code.
 5. **Distinguish exploration from intelligence.** Stochastic coverage that eventually stumbles onto success is not intelligence. State this honestly in every result.
 6. **R3 audits must account for emergent interactions, not just frozen elements.** Enumerating frozen elements misses load-bearing properties that arise from their coupling. A substrate can have few frozen elements while destroying emergent properties by splitting what should stay coupled (U13). The audit question is not only "what's frozen?" but "what coupling survives?"
+7. **R3 audits include the entire system.** The encoding pipeline (pooling, normalization, centering, action mapping) is part of the frozen frame. A "22-line substrate" that requires avgpool16 + centered_enc + F.normalize to function is not a 22-line system. Audit everything between raw input and action output.
+8. **Forced ≠ unjustified.** An element where every alternative is killed by a universal constraint is Irreducible, not Unjustified. The audit question is not "does the system choose this?" but "could it be different?" If the constraint map leaves no viable alternative, the element is mathematically necessary. See R3_AUDIT.md encoding compilation for method.
 
 
 ---
