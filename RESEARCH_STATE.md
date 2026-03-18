@@ -313,5 +313,5 @@ Autonomous loop: 23 iterations, 18 experiments overnight. Two headline results:
 |---|---|---|---|
 | 432 | Labeled vs unlabeled | **84.68pp gap.** Self-labels = 9.8% (chance). Entire classification depends on external labels. | Finding 1 confirmed — far more severe than predicted. |
 | 433 | Cross-domain survival | **0.0pp contamination.** P-MNIST survives LS20 exposure. But LS20 suppressed (unique=262 vs 3300+). One-directional. | Finding 9 — unique contribution. Codebook partitions by domain geometry. |
-| 434 | Random walk baseline | RUNNING | Finding 3 — expected vs observed completion time. |
-| 435 | EWC + replay comparison | QUEUED | Finding 2 — head-to-head CL comparison. |
+| 434 | Random walk baseline | Random walk: 40% at 50K. Substrate: 60% at 26K. ~2x faster. Step tracking needed (434b). | Finding 3 — substrate IS faster than random, but modestly. |
+| 435 | EWC + replay comparison | **EWC=9.8%, Replay=10.3%.** Both at chance under single-pass. Substrate: 94.48%. | Finding 2 — substrate wins under single-pass constraint. Multi-epoch would favor gradient methods. |
