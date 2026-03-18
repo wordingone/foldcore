@@ -121,6 +121,13 @@ All committed and pushed to github.com/wordingone/the-search.
 **Actions:** Sent Eli Step 419 (centering detection via codebook health monitoring on LS20).
 **This tests the encoding compilation directly.** If it works, the meta-protocol for encoding discovery is validated on a second element (after resolution in Step 414).
 
+**Results:** FAIL — selected raw (wrong). 2x threshold too aggressive at 16x16. Centering adds only 5.5% more growth at 256 dims. But raw still explored well (unique=3106, dom=26%).
+
+**Key finding:** Centering is NOT load-bearing at 16x16. Step 385b showed it's critical at 64x64 (cb freezes at 8) but at 16x16 the signal-to-noise is already sufficient. The encoding compilation needs correction: centering is resolution-dependent.
+
+**Updated encoding compilation:**
+- E4 (Centering): **NOT FORCED at 16x16.** Raw encoding gives comparable exploration (3106 vs 3312 unique). Only critical at higher dimensions where cosine saturates without DC removal.
+
 ## Iteration 7 (2026-03-18 ~03:49 UTC)
 
 **The Question:** Does the hybrid (distributed + argmin) improve CLASSIFICATION over either parent?
