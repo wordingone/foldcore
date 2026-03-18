@@ -114,6 +114,13 @@ One temperature can't optimize all three. Separating them (sharp for classificat
 
 All committed and pushed to github.com/wordingone/the-search.
 
+## Iteration 12 (2026-03-18 ~04:36 UTC)
+
+**The Question:** Can the substrate DISCOVER centering from its own codebook health?
+**Hypothesis:** 500 steps without centering → cb freezes. 500 steps with → cb grows. The substrate detects the difference and selects centering. Encoding element moves U → M.
+**Actions:** Sent Eli Step 419 (centering detection via codebook health monitoring on LS20).
+**This tests the encoding compilation directly.** If it works, the meta-protocol for encoding discovery is validated on a second element (after resolution in Step 414).
+
 ## Iteration 7 (2026-03-18 ~03:49 UTC)
 
 **The Question:** Does the hybrid (distributed + argmin) improve CLASSIFICATION over either parent?
