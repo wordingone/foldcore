@@ -75,12 +75,11 @@ class CompressedFoldBase:
         return 1.0 - float(sim)
 
     def _get_action(self, sims, n_cls):
-        scores = torch.zeros(n_cls, device=self.device)
-        for c in range(n_cls):
-            mask = (self.labels == c)
-            if mask.sum() == 0: continue
-            cs = sims[mask]
-            scores[c] = cs.topk(min(self.k, len(cs))).values.sum()
+        cls_ids = torch.arange(n_cls, device=self.device).unsqueeze(1)
+        one_hot = (self.labels.unsqueeze(0) == cls_ids).float()
+        masked = sims.unsqueeze(0) * one_hot + (1 - one_hot) * (-1e9)
+        topk_k = min(self.k, masked.shape[1])
+        scores = masked.topk(topk_k, dim=1).values.sum(dim=1)
         return scores.argmin().item()
 
     def _force_add(self, x, label):
