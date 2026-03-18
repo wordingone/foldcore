@@ -367,18 +367,22 @@ Evidence:
 | E1 | Resolution (16×16 vs others) | **M** | Step 414: sequential dedication 64→32→16→8. Game selects 16x16 by navigation success. Discoverable through interaction. |
 | E2 | Flattening (2D → 1D) | **I** | Forced by substrate's matmul (V @ x requires 1D vectors). |
 | E3 | F.normalize | **I** | Same as substrate #3. Forced by U7 + U20. |
-| E4 | Centering (subtract V.mean()) | **M/U** | VALUE is V-derived (M). DECISION to center is frozen (U). Without centering: codebook freezes at cb=8 (Step 385b). Discoverable: substrate can detect codebook freeze in <100 steps and select centering by self-monitoring codebook health. |
-| E5 | Pooling type (mean vs max) | **narrow U** | Mean pooling and max pooling both viable. Not tested head-to-head. Discoverable by same self-monitoring protocol as E4. |
+| E4 | Centering (subtract V.mean()) | **narrow U** | Step 419: NOT load-bearing at 16x16 (cb=473 without vs 499 with, 5.5% diff). Load-bearing at 64x64 (Step 385b: cb=8 without). Resolution-dependent. Raw encoding gives unique=3106 vs 3312 with centering — marginal. |
+| E5 | Pooling type (mean vs max) | **I** | Step 420: mean=3386 unique, max=521. 85% diff. FORCED = mean. Max pooling preserves brightest pixel per block (timer/score region), destroying spatial structure. |
 | E6 | Action representation | **M** | Step 361: click-space discovered for FT09. Step 375: zone-mapping for VC33. Game-specific but discoverable through sequential elimination of action encodings. |
 
 ### Encoding Compilation Summary
 
-**Score: 2 I, 2 M (discovered), 1 M/U (discoverable), 1 narrow U**
+**Score: 3 I, 2 M, 1 narrow U** *(updated with Steps 419-420 empirical results)*
 
-The encoding's frozen frame is smaller than expected because most elements are DISCOVERABLE through interaction:
-- Resolution: discovered by playing at each scale (Step 414)
-- Centering: discoverable by monitoring codebook health (cb growth, thresh stability)
-- Action representation: discoverable by trying action encodings sequentially
+| Element | Pre-empirical | Post-empirical | Evidence |
+|---------|--------------|----------------|----------|
+| Resolution | M | **M** | Step 414: discoverable |
+| Flattening | I | **I** | Forced by matmul |
+| F.normalize | I | **I** | Forced by U7+U20 |
+| Centering | M/U | **narrow U** | Step 419: 5.5% diff at 16x16, not load-bearing |
+| Pooling type | narrow U | **I** | Step 420: 85% diff, mean forced |
+| Action repr | M | **M** | Discoverable per game |
 
 ### The Meta-Protocol
 
