@@ -191,6 +191,10 @@ The 2 remaining U: tau (temperature) and spawn threshold. Both potentially V-der
 
 **ReadIsWrite final R3: 3 M, 8 I, 2 U.** This is the floor. tau and spawn_thresh cannot be V-derived without cost.
 
+**Step 424:** FT09 click-space. unique=14, 0 levels. Catastrophic. 69 seeded entries converge under distributed update → argmin over identical entries = stuck. Labels prevent this on P-MNIST; navigation has no labels. U23 sharpened: distributed updates cause entry convergence when entries start similar.
+
+**ReadIsWrite verdict (final):** Classifier YES (91.84%, R2). Navigator NO (all encodings, all taus). The equation from WHAT_THE_FAILURES_TEACH collapses two of four separations (train/inference, storage/readout) but the collapsed form is classification-only. Navigation requires the separations that winner-take-all provides.
+
 ## Iteration 7 (2026-03-18 ~03:49 UTC)
 
 **The Question:** Does the hybrid (distributed + argmin) improve CLASSIFICATION over either parent?
