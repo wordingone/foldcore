@@ -12,7 +12,8 @@ CURRENT SYSTEM: process(x, label=None). ~22 lines. LVQ + growing codebook.
   - Top-K per-class vote for classification
   - Self-generated targets (prediction as label)
   - State-derived threshold (median NN distance)
-  - 91.20% P-MNIST AA, 0pp forgetting (not competitive with replay-based CL methods)
+  - 94.48% P-MNIST AA, 0pp forgetting (softmax voting, Step 425)
+  - Previous: 91.20% with top-K scoring (not competitive with replay-based CL methods)
 
 HONEST ASSESSMENT (per external review + Jun's confirmation):
   - Mechanisms are NOT novel (LVQ + GNG from 1988/1995)
@@ -284,3 +285,21 @@ Skip proven-dead resolutions (64x64, 32x32). 16x16 with exact baseline config fi
 The search (35 experiments) compressed to 2 resolution trials. Stage 8 via gameplay feedback.
 
 Open question: how does the search compress FURTHER into the substrate?
+
+**Session 2026-03-17/18 Summary (Steps 417-425):**
+Autonomous loop: 23 iterations, 18 experiments overnight. Two headline results:
+- Step 425 (CONFIRMED, 10 tasks): softmax voting (tau=0.01) on process_novelty = 94.48%, 0.00pp forget.
+  Ablation: winner-take-all + softmax scoring = best. Distributed update costs 2.6pp.
+- Step 421 (VERIFIED, 4 seeds): ReadIsWrite tau=0.01 = 91.84% ± 0.08pp. R2 by construction.
+- ReadIsWrite's distributed update HURT vs softmax-only (94.48% → 91.84%).
+- Encoding compilation confirmed: resolution(M), flatten(I), normalize(I), center(narrow U), pool(I), action(M).
+- Navigation unsolved by ALL substrates. Random walk at ~26K steps.
+- Steps 426-427 QUEUED: softmax voting + ReadIsWrite on LS20 navigation (the reviewer's gate question).
+- U23-U24 added to CONSTRAINTS.md.
+
+| Step | Candidate | Result | Constraint extracted |
+|---|---|---|---|
+| 425 | Softmax voting (tau=0.01) | **94.48%** — +3.3pp over baseline. 0.00pp forgetting. 10 tasks confirmed. | Scoring mechanism > update rule |
+| 421 | ReadIsWrite (tau=0.01) | 91.84% — R2 by construction. Distributed update costs 2.6pp. | U23: distributed updates destabilize |
+| 426 | Softmax on LS20 nav | RUNNING — does improved scoring help navigation? | — |
+| 427 | ReadIsWrite on LS20 nav | QUEUED — does smaller frozen frame navigate? | — |
