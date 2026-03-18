@@ -60,3 +60,13 @@ ReadIsWrite summary:
 **Kill criteria:** spawn>90% OR unique<200 OR dom>80% → KILL
 **Actions:** Sent Eli Step 418e (error-based spawn on LS20, 10K steps)
 **Key measurement:** Does spawn rate DECREASE over time? (self-limiting growth)
+**Results:** spawn=45%, unique=429, dom=78%, 0 levels. Passes kill criteria but exploration DEAD.
+output.argmax() is deterministic → same state → same action → loop. Spawn rate INCREASING not decreasing.
+Error-based spawn WORKS (no explosion). Action selection is the bottleneck, not spawn.
+
+## Iteration 6 (2026-03-18 ~03:39 UTC)
+
+**The Question:** Can ReadIsWrite's distributed update coexist with argmin exploration?
+**Hypothesis:** Hybrid = ReadIsWrite update + argmin scoring + error spawn. If unique>1000 & dom<50%, the combination works.
+**Kill criteria:** unique<500 OR dom>70% OR spawn>80%
+**Actions:** Sent Eli Step 418f (hybrid on LS20, 10K steps)
