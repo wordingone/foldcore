@@ -156,30 +156,82 @@ The task is interactive (unknown environment, no separate training phase). Any s
 
 ---
 
-## The Gap (what the next substrate must close)
+## The State of the Search (455 experiments, 6 families)
 
-The 414 experiments prove: LVQ/codebook with cosine similarity is NOT the atomic substrate. It is a well-known algorithm (LVQ 1988, Growing Neural Gas 1995) that works within a narrow operating range (the Goldilocks zone) and requires prescribed encoding to reach that range.
+*Revised 2026-03-18 session 2. Framed by task requirements, not architecture gaps.*
 
-**What the next substrate must have that LVQ doesn't:**
-1. **Self-modifying metric** (I2, I8): the comparison operation adapts based on what works, not hardcoded cosine
-2. **Representation discovery** (I1): the state encoding emerges from interaction, not from prescribed preprocessing
-3. **Purposeful exploration** (I6, I9): strategic hypothesis testing, not stochastic coverage
-4. **Temporal reasoning** (I4): sequence-aware, not just state-aware
-5. **Transfer** (I5): knowledge carries across episodes/tasks
-6. **Richer communication** (I7): expressive output, not just one integer
+### What's Solved
 
-The constraint map is the specification. The next substrate is defined by what passes ALL of these simultaneously.
+**The navigation mechanism is understood.** Graph + edge-count action selection (pick least-taken action from current node). Confirmed across codebook and LSH families. The mechanism is architecture-independent — any mapping that satisfies the three properties feeds into it.
+
+**The three mapping properties are validated.** Deterministic + locally continuous + persistent. Predicts navigation success/failure with 100% accuracy across all 6 tested families. This is the strongest empirical finding in the project.
+
+**Two working mappings exist:** codebook (cosine similarity — 6/10 at 50K, banned) and LSH (random hyperplanes — 4/10 at 50K, legal). Both satisfy all three mapping properties through different mechanisms.
+
+### What's Open
+
+1. **R3 (self-modification):** No substrate self-modifies its mapping. Codebook attract is prescribed. LSH hyperplanes are fixed. The mapping IS the frozen frame. Making it adaptive without reintroducing banned mechanisms is the core open problem.
+
+2. **Cross-game generality:** LSH degenerates on FT09 (1 cell, Step 455). k=10 too coarse. The codebook's adaptive density (attract concentrates entries where observations cluster) handles this automatically. Property 3 (adaptive density) is NOT needed for single-game navigation but IS needed for cross-game generality.
+
+3. **R1-compliant classification:** No substrate classifies without external labels. Codebook: 9.8% self-labels vs 94.48% external (Step 432). Graph: 10.1% vs 93.34% (Step 444b). This is an honest admission — classification under R1 remains unsolved.
+
+4. **Purposeful exploration (I6, I9):** All successful navigation is stochastic coverage with argmin bias. Not intelligence. Strategic hypothesis testing remains absent.
+
+5. **Temporal reasoning (I4):** No substrate handles temporal structure. Reservoir was the natural candidate but rank-1 collapse killed it in 8 experiments (with codebook-biased metrics — deserves revisit with family-appropriate evaluation).
+
+6. **Transfer (I5) and richer communication (I7):** Untested beyond single-level navigation.
+
+### What's Changed Since Phase 1 Assessment
+
+- "The next substrate is defined by what passes ALL constraints simultaneously" → **Constraint map was biased.** 6 former U-constraints reclassified to S-class. 13 marked provisional. The feasible region is LARGER than we thought — the constraints were overconstrained by codebook assumptions.
+- "LVQ is not the atomic substrate" → **The graph + edge mechanism may be.** It's the constant across all navigation successes. The mapping is the variable.
+- "Self-modifying metric is needed" → **Yes, but the metric is the MAPPING, not cosine.** R3 requires adaptive mapping. Cosine is one mechanism (banned). Others unexplored.
 
 ---
 
-## Builder's Notes (from running Steps 413-416)
+## Kill Criteria Framework
 
-**S21 should be U-class.** The substrate's behavior is extremely sensitive to implementation details. Five "minor" differences from the baseline each independently kill the system. This isn't LVQ-specific — any substrate with tight operating margins will have this property. The real constraint: **the substrate must be robust to perturbation, not brittle to implementation detail.**
+*Added 2026-03-18 session 2. Separates universal benchmarks from family-specific diagnostics.*
 
-**Centering is doing more than advertised.** centered_enc doesn't just "prevent saturation." It makes the codebook into a differential encoding — each vector represents deviation from the mean. Without it, all resolutions fail. With it, 16x16 works. This suggests the substrate needs to encode DIFFERENCES from expectation, not absolute states. Potentially U-class.
+### Universal Benchmarks (same for ALL families)
 
-**The uncapped codebook is the exploration engine.** Every capped run failed. The baseline needs to grow past 10K entries to find a level at 26K steps. The codebook IS the exploration — each new entry is a hypothesis about what's novel. Capping = capping exploration budget. S16 might be U-class: **any substrate with fixed-capacity memory will eventually exhaust its exploration.**
+| Benchmark | Success criterion | Failure criterion |
+|---|---|---|
+| LS20 Navigation | Level 1 reached | 0 levels at 50K steps (10 seeds) |
+| FT09 Navigation | Level 1 reached | 0 levels at 50K steps |
+| P-MNIST Classification | >25% AA (above chance), 0pp forgetting | <15% AA or >5pp forgetting |
+| Cross-domain | Navigate after classification exposure | Navigation suppressed after cross-domain |
 
-**Rotation between configurations poisons all of them (S15).** When codebooks learn from actions chosen by a different resolution's policy, they accumulate incoherent experience. This is broader than LVQ: any multi-hypothesis system where hypotheses share an action channel will have this contamination problem. Sequential dedication (each hypothesis gets full commitment) works. Potentially U-class.
+### Family-Specific Diagnostics (different thermometer per patient)
 
-**p=0.75 at 4096D ≈ p=1.0 at 256D in dynamics.** Partial normalization creates the same codebook growth pattern and sim statistics as full cosine at lower dimensionality. But no level found. The Goldilocks zone is necessary but not sufficient — you also need the right encoding to map visual states to action-relevant features. Partial normalization creates the dynamics; avgpool creates the features. Both are needed.
+| Family | Health indicators | Death modes |
+|---|---|---|
+| Codebook (LVQ) | thresh (0.85-0.95), cb_size (growing), dom (<50%), sim_stats | Thresh saturation (1.0), action collapse (dom>90%), Goldilocks zone exit |
+| Reservoir (ESN) | trajectory rank (>10), spectral radius stability, action diversity | Rank-1 collapse, W saturation, action lock |
+| Graph (cosine nodes) | node count (growing), edge density, unique cells/step | Edge reset, node explosion, cosine-mediated (may inherit codebook death modes) |
+| LSH Graph | occupied cells / total cells, edge count growth, hash collision rate | Cell degeneration (1 cell, Step 455), hash collision saturation |
+| kd-tree | leaf count, split stability, edge persistence | Edge destruction on split (Step 452) |
+
+### Meta-Rules (universal)
+
+- **Minimum 20 experiments before killing a family.** Codebook got 435. Reservoir got 8. This asymmetry is not acceptable. A family killed in <20 experiments was killed by insufficient exploration, not by evidence.
+- **3 consecutive structural failures = one death mode confirmed, not family dead.** Document the death mode. Try a different approach within the family.
+- **Kill criteria must be written in the family's own diagnostic language.** "thresh=1.0" means nothing for a reservoir. "rank=1" means nothing for a codebook.
+- **The benchmark is universal. The explanation of why it fails is family-specific.**
+
+---
+
+## Builder's Notes (revised 2026-03-18 session 2)
+
+*Original notes from Steps 413-416, updated with cross-family evidence. Some claims were reclassified.*
+
+**~~S21 should be U-class.~~** Reclassified as provisional U15. True for codebook (5 independent kill switches). LSH seems more robust (works across random seeds, different k values). Robustness may be inversely correlated with operating-range narrowness, not a universal property.
+
+**~~Centering is doing more than advertised — potentially U-class.~~** **Reclassified to S24.** LSH navigates on raw (uncentered) observations (Step 453). Centering prevents cosine saturation — a codebook-specific problem. The deeper truth may be that the mapping needs local continuity (U20), and centering is one way codebooks achieve it. But it's not the only way.
+
+**~~Uncapped codebook is the exploration engine — S16 might be U-class.~~** **Reclassified to S25.** LSH navigates with FIXED 1024 cells (Step 454). The codebook needs unbounded growth because its exploration mechanism depends on spawning novelty. LSH's exploration depends on edge-count diversity in persistent cells, not growth. Growth is a codebook exploration mechanism, not a universal requirement.
+
+**Rotation between configurations poisons all of them (S15).** Remains provisional U18. Untested on non-codebook multi-hypothesis systems. The principle (shared action channels contaminate) seems likely to generalize, but evidence is single-family.
+
+**p=0.75 at 4096D ≈ p=1.0 at 256D.** Codebook-specific (S19). Dynamics can be tuned independently of features. Not relevant to non-codebook families.
