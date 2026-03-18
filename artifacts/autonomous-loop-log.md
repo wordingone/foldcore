@@ -43,4 +43,12 @@
 **The Question:** "What do I need to be true that I haven't run?"
 Need to know: does ReadIsWrite preserve accuracy across tasks? The distributed update shifts ALL entries on every step — task 2 observations will push task 1 entries. This might cause catastrophic forgetting.
 **Prediction:** forgetting > 5pp. The distributed update is the opposite of what protects memories.
-**Status:** Waiting for Eli's 418d result. No new spec to send.
+**Results:** Step 418d: 87.78% avg across 10 tasks, 0.40pp max forgetting. PASS BOTH criteria.
+**Prediction was WRONG:** predicted >5pp forgetting, got 0.4pp. Distributed update is naturally anti-forgetting.
+
+ReadIsWrite summary:
+- P-MNIST 1 task: 88.23% (frozen eval)
+- P-MNIST 10 tasks CL: 87.78% avg, 0.13pp avg forgetting
+- R1-R6: 6/6 (R2 by construction)
+- Navigation: FAILS (Gram explosion, Step 418a)
+- Prior art: Nadaraya-Watson + soft competitive learning (anti-inflation rule 3)
