@@ -344,3 +344,6 @@ The codebook family is fully mapped. Phase 2b explores the temporal dual: self-m
 | 441 | Sparse reservoir (10% W) | — | 43% | rank=251 (SOLVED). But unique=221 — rank ≠ useful computation. Sparsity prevents eigenvector collapse but doesn't produce exploration. |
 | 442 | **Graph substrate** (10K) | — | **25%** | **unique=3379 (MATCHES codebook). dom=25% (perfectly uniform).** First non-codebook to reach codebook-level exploration. 30K/3-seed run pending. |
 | **442b** | **Graph substrate (30K, 3 seeds)** | — | **25%** | **LEVEL 1 at step 25738 (seed 1). First non-codebook navigation. 1/3 seeds (33%). Perpetual frontier confirmed — graph grows into new level. U25 dissolved.** |
+| 443 | Graph reliability (10 seeds, 30K) | — | 25% | 2/10 at 30K. Both wins at ~25.7K (coverage threshold). Needs 50K comparison. |
+| 444a | Graph on FT09 | — | — | DEAD. Threshold mismatch — 32 states collapse to 1 node at 0.99. Fixable. |
+| 444b | Graph on P-MNIST | 93.34% (labels), 10.1% (no labels) | — | 1-NN via 5000 nodes. Same label dependency as codebook (U26). |
