@@ -305,7 +305,7 @@ Autonomous loop: 23 iterations, 18 experiments overnight. Two headline results:
 | 427 | ReadIsWrite on LS20 nav | Deferred — 426 killed, deprioritized for diagnostic | — |
 | 428 | Score diagnostic | **THE WALL** — gap 0.0745→0.0005 (150x). All actions converge to score 3.0. Random walk from ~5K steps. | Action-score convergence IS the navigation wall |
 | 429 | Normalized scoring | **KILLED** — gap preserved (0.78) but dom=100%. Division inverts argmin bias. | Convergence and exploration bias are COUPLED in top-K |
-| 430 | Fractional normalization | RUNNING — p in [0.25, 0.5, 0.75]. Does a sweet spot exist? | — |
+| 430 | Fractional normalization | **ALL COLLAPSE.** p=0.25/0.5/0.75 all → dom=100%. Tension is binary (p=0 vs p>0). No sweet spot. | U25: score convergence and exploration bias are coupled |
 
 ## Post-Audit Experiments (2026-03-18)
 
