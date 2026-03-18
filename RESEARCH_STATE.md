@@ -347,3 +347,4 @@ The codebook family is fully mapped. Phase 2b explores the temporal dual: self-m
 | 443 | Graph reliability (10 seeds, 30K) | — | 25% | 2/10 at 30K. Both wins at ~25.7K (coverage threshold). Needs 50K comparison. |
 | 444a | Graph on FT09 | — | — | DEAD. Threshold mismatch — 32 states collapse to 1 node at 0.99. Fixable. |
 | 444b | Graph on P-MNIST | 93.34% (labels), 10.1% (no labels) | — | 1-NN via 5000 nodes. Same label dependency as codebook (U26). |
+| 445 | Graph 50K reliability (10 seeds) | — | 25% | 3/10 at 50K. Steps=[25708, 25738, 44020]. Codebook: 6/10, median 19K. Graph: half reliability, no fast seeds, systematic not bimodal. |
