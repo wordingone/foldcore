@@ -306,3 +306,12 @@ Autonomous loop: 23 iterations, 18 experiments overnight. Two headline results:
 | 428 | Score diagnostic | **THE WALL** — gap 0.0745→0.0005 (150x). All actions converge to score 3.0. Random walk from ~5K steps. | Action-score convergence IS the navigation wall |
 | 429 | Normalized scoring | **KILLED** — gap preserved (0.78) but dom=100%. Division inverts argmin bias. | Convergence and exploration bias are COUPLED in top-K |
 | 430 | Fractional normalization | RUNNING — p in [0.25, 0.5, 0.75]. Does a sweet spot exist? | — |
+
+## Post-Audit Experiments (2026-03-18)
+
+| Step | Experiment | Result | Finding |
+|---|---|---|---|
+| 432 | Labeled vs unlabeled | **84.68pp gap.** Self-labels = 9.8% (chance). Entire classification depends on external labels. | Finding 1 confirmed — far more severe than predicted. |
+| 433 | Cross-domain survival | **0.0pp contamination.** P-MNIST survives LS20 exposure. But LS20 suppressed (unique=262 vs 3300+). One-directional. | Finding 9 — unique contribution. Codebook partitions by domain geometry. |
+| 434 | Random walk baseline | RUNNING | Finding 3 — expected vs observed completion time. |
+| 435 | EWC + replay comparison | QUEUED | Finding 2 — head-to-head CL comparison. |
