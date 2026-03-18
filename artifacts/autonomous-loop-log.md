@@ -172,6 +172,13 @@ ReadIsWrite at tau=0.01 is the first Phase 2 substrate to beat the baseline on P
 
 Anti-inflation rule 4: PASS. External reviewer can reproduce from code alone.
 
+**Step 422:** tau=0.01 hybrid on LS20 = 3335 unique (vs 3248 at tau=0.1). Same random walk. Tau doesn't matter for navigation.
+
+**tau=0.01 is the canonical ReadIsWrite configuration.** Strictly better or equal across all tested dimensions:
+- Classification: 91.84% (tau=0.01) vs 87.78% (tau=0.1)
+- Forgetting: 0.02pp vs 0.40pp
+- Navigation: 3335 vs 3248 unique (tie)
+
 ## Iteration 7 (2026-03-18 ~03:49 UTC)
 
 **The Question:** Does the hybrid (distributed + argmin) improve CLASSIFICATION over either parent?
