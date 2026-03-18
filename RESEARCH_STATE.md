@@ -24,7 +24,7 @@ HONEST ASSESSMENT (per external review + Jun's confirmation):
 
 WHAT WAS FOUND (genuine contributions):
   - The constitution: testable framework for recursive self-improvement (architecture-independent)
-  - The constraint map: 24 universal + 9 intent constraints from experiments (see CONSTRAINTS.md)
+  - The constraint map: 26 universal (7 provisional) + 9 intent constraints from experiments (see CONSTRAINTS.md)
   - The noise insight: stochastic coverage via cosine saturation IS the exploration engine
   - Dynamics ≠ features: healthy codebook dynamics achievable at any dim (p=0.75), but features require encoding
   - Fixed point: the research procedure IS structurally identical to the algorithm it found
@@ -348,3 +348,6 @@ The codebook family is fully mapped. Phase 2b explores the temporal dual: self-m
 | 444a | Graph on FT09 | — | — | DEAD. Threshold mismatch — 32 states collapse to 1 node at 0.99. Fixable. |
 | 444b | Graph on P-MNIST | 93.34% (labels), 10.1% (no labels) | — | 1-NN via 5000 nodes. Same label dependency as codebook (U26). |
 | 445 | Graph 50K reliability (10 seeds) | — | 25% | 3/10 at 50K. Steps=[25708, 25738, 44020]. Codebook: 6/10, median 19K. Graph: half reliability, no fast seeds, systematic not bimodal. |
+| **446** | **Grid graph (no cosine)** — random proj→8D, percentile bins, fixed cells | — | **25%** | 0/3 at 10K. Dynamics healthy (dom=25%, unique=1544, kill criteria not hit). Edge mechanism intact without cosine nodes. |
+| 446b | Grid graph 30K | — | 25% | **0/3 at 30K.** unique=1869, edges=6200. Cosine graph navigated at same timescale (25.7K). Grid has similar node count (~1877 vs ~1984) but doesn't navigate. Data-aligned partitioning may be load-bearing. |
+| 447 | PCA grid graph (data-aligned projection) | — | — | RUNNING. Tests whether data-aligned projection (PCA warmup) recovers cosine graph's navigation quality. If 0/3 → adaptive placement is necessary (not just alignment). |
