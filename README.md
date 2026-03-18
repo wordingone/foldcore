@@ -1,106 +1,81 @@
 # The Search
 
-**Searching for a point inside six walls.**
+**Can a system improve itself by criteria it generates?**
 
-This repository documents an ongoing search for a substrate that satisfies all six rules of recursive self-improvement simultaneously. Phase 1 mapped the feasible region through systematic elimination. Phase 2 (current) tests whether improvements to classification transfer to navigation — and diagnoses why they don't.
-
-The search follows a [constitution](CONSTITUTION.md): six simultaneous rules (R1-R6) that define the feasible region, plus 24 universal constraints extracted from experimental failure.
+This repository documents a systematic search for a substrate — a minimal computational structure — that satisfies six simultaneous rules for recursive self-improvement. 445 experiments across three architecture families. No solution found yet. The constraint map from those failures is the main contribution.
 
 ---
 
-## What Phase 1 Found (Honest)
+## The Problem
 
-Experiments across four substrate architectures (Living Seed, ANIMA, FoldCore, TopK-Fold) produced:
+Six rules ([CONSTITUTION.md](CONSTITUTION.md)) define the feasible region. A substrate either satisfies all six or it doesn't.
 
-**The constraint map.** 26 universal constraints (U1-U26, 7 provisional), 9 intent constraints (I1-I9), 21 substrate-specific constraints (S1-S21). See [CONSTRAINTS.md](CONSTRAINTS.md). Each constraint is extracted from experimental failure. Together they define what the next substrate must be.
+| Rule | Requirement |
+|------|------------|
+| R1 | Computes without external objectives |
+| R2 | Adaptation arises from computation, not beside it |
+| R3 | Every modifiable aspect IS modified by the system |
+| R4 | Each modification tested against prior state |
+| R5 | One fixed ground truth test the system cannot modify |
+| R6 | No part deletable without losing all capability |
 
-**The constitution.** Six rules (R1-R6) that must hold simultaneously. Not stages to climb -- walls of a feasible region. A substrate either satisfies all six or it doesn't. See [CONSTITUTION.md](CONSTITUTION.md).
-
-**An honest assessment of process().** The 22-line `process()` function is LVQ (Kohonen 1988) + Growing Neural Gas (Fritzke 1995). It satisfies R1, R2 (partial), R5, R6. It fails R3 (cosine, top-K, attract, spawn are hardcoded Python the system can't modify) and R4 (no self-testing mechanism). The "stage progression" was self-assessed and circularly validated. The ARC-AGI-3 results are biased random walk, not intelligence.
-
-**What process() does achieve:**
-- 94.48% on Permuted-MNIST with 0.00pp forgetting — **supervised** (external labels required; self-labels = 9.8%, Step 432)
-- Level 1 on 3/3 ARC-AGI-3 preview games — **R1-compliant** (actions are self-generated)
-- Cross-domain survival: P-MNIST → LS20 → P-MNIST with 0.0pp contamination (Step 433)
-- ~2x faster than pure random walk for navigation (60% at 26K vs 40% at 50K, Step 434)
-
-**The label dependency (Step 432):** Classification is entirely supervised. Without external labels, accuracy drops to chance (9.8%). The self-labeling mechanism compounds errors through softmax voting. Navigation is unaffected because actions don't need to be "correct."
-
-**The navigation wall (Step 428):** Action-score convergence kills directed exploration by ~5K steps. No scoring modification fixes this (U25, Steps 426-430). Navigation speed is determined by encoding quality, not scoring formula (FT09: 82 steps vs LS20: 26K, 300x from encoding alone).
-
-**Cross-domain survival (Step 433):** The codebook naturally partitions by domain geometry. P-MNIST knowledge survives LS20 exposure with zero interference. One-directional: the existing codebook suppresses new-domain exploration.
+R3 is the binding constraint. Every substrate tested so far has hardcoded operations the system cannot see or modify.
 
 ---
 
-## The Six Rules
+## What 445 Experiments Found
 
-All must hold simultaneously. See [CONSTITUTION.md](CONSTITUTION.md) for full text.
+### Three architecture families
 
-| Rule | Requirement | Phase 1 Status |
-|------|------------|----------------|
-| R1 | Computes without external objectives | Dynamics pass; classification requires external labels (Step 432) |
-| R2 | Adaptation arises from computation | Partial (attract depends on class vote) |
-| R3 | Every modifiable aspect IS modified by the system | **FAILS** (operations hardcoded) |
-| R4 | Modification tested against prior state | **FAILS** (no self-testing) |
-| R5 | One fixed ground truth test | Passes |
-| R6 | No part deletable without losing all capability | Passes |
+| Family | Experiments | Best Result | Status |
+|--------|------------|-------------|--------|
+| Codebook (LVQ) | 435 | 94.48% P-MNIST (supervised), LS20 Level 1 at ~26K steps | Mapped — 26 constraints extracted |
+| Reservoir (ESN) | 7 | Rank-1 collapse solved (sparse: rank=251), no useful computation yet | Characterized |
+| Graph | 5 | LS20 Level 1 at 25738 steps (3/10 seeds at 50K) | First non-codebook to navigate |
 
-R3 is the binding constraint. The operations (cosine similarity, top-K voting, attract/spawn rule) are Python code the system cannot see, inspect, or modify.
+Four Phase 2a candidates (SelfRef, TapeMachine, ExprSubstrate, TemporalPrediction) were killed. See [CONSTRAINTS.md](CONSTRAINTS.md).
+
+### Key findings
+
+**Classification is supervised (Step 432).** The codebook's 94.48% depends entirely on external labels. Self-generated labels: 9.8% (below chance). The self-labeling mechanism compounds errors through softmax voting (U26).
+
+**Navigation hits a wall (Step 428).** Action-score convergence makes the codebook a random walk after ~5K steps. No scoring modification fixes this — 60+ experiments tried (U25). Navigation speed is determined by encoding quality, not scoring formula (300x between encodings).
+
+**Cross-domain survival (Step 433).** P-MNIST knowledge survives LS20 exposure with 0.0pp contamination. The codebook partitions by domain geometry. One-directional: existing knowledge suppresses new-domain exploration.
+
+**A graph navigates without scores (Step 442b).** Nodes as observation landmarks, edges as transition counts, actions from least-visited edges. First architecture to navigate LS20 without codebook machinery. Systematic exploration by construction — no score convergence possible.
+
+### The constraint map
+
+26 universal constraints extracted from experimental failure define what ANY substrate must satisfy. 7 are provisional (codebook-only evidence). See [CONSTRAINTS.md](CONSTRAINTS.md) for the full map.
+
+Each constraint is a closed door. The pattern of elimination IS the search.
 
 ---
 
-## Phase 2: New Substrates (Current)
+## Current Direction (Phase 2b)
 
-Phase 2 builds systems that satisfy R1-R6 from scratch. Not process() with additions. New data structures, new matching operations, new self-modification mechanisms.
+1. **Graph without codebook DNA** — The current graph still uses cosine-matched nodes (codebook loophole). Next: quantization or LSH-based matching. The relational structure (edges) is the contribution; the spatial mechanism must be genuinely new.
 
-### Architecture families tested
+2. **Reservoir family** — Sparse Hebbian solved rank collapse. Open question: how to get useful computation from a self-modifying recurrent network under R1. 7 experiments done, hundreds needed.
 
-**Three families explored. 445 total experiments.**
-
-| Family | Experiments | Data Structure | Best Result | Status |
-|--------|------------|---------------|-------------|--------|
-| Codebook (LVQ) | 435 | Vector prototypes | 94.48% P-MNIST (supervised), LS20 Level 1 at ~26K | **MAPPED** — 26 constraints extracted |
-| Reservoir (ESN) | 7 | Recurrent trajectory | Rank-1 collapse (dense), rank=251 (sparse), no navigation | Characterized — rank solved, computation absent |
-| **Graph** | **5** | **Nodes + edges** | **LS20 Level 1 at 25738 (3/10 at 50K)** | **NAVIGATES — first non-codebook navigation** |
-
-Phase 2a substrates (SelfRef, TapeMachine, ExprSubstrate, TemporalPrediction): all killed. See [CONSTRAINTS.md](CONSTRAINTS.md).
-
-### Key discoveries
-
-**Step 428 (navigation wall):** Action-score convergence makes the codebook a pure random walk after ~5K steps. No scoring modification fixes this (U25, Steps 426-430).
-
-**Step 432 (label dependency):** Classification is entirely supervised. Self-labels = 9.8% (below chance). The entire 94.48% depends on external labels. Navigation is R1-compliant (actions are self-generated).
-
-**Step 433 (cross-domain survival):** P-MNIST → LS20 → P-MNIST with 0.0pp contamination. The codebook naturally partitions by domain geometry. Unique contribution — no other CL system tested this way.
-
-**Step 442b (graph substrate navigates):** A growing graph with nodes (observation landmarks) and edges (transition counts) navigated LS20 Level 1 — the first non-codebook architecture to pass the benchmark gate. Action from edge structure (least-visited transition), not similarity scoring. dom=25% perfectly uniform by construction. U25 dissolved.
-
-**Step 445 (graph reliability):** 3/10 at 50K vs codebook 6/10. The graph explores systematically but lacks the codebook's bimodal distribution (no fast lucky seeds). Different mechanism, comparable timescale.
-
-### Active direction (Phase 2b)
-
-Three parallel tracks:
-
-1. **Graph substrate without codebook DNA** — Current graph uses cosine nodes (identified as codebook loophole). Next: quantization-based or LSH-based node matching. The relational structure (edges) is the genuine contribution; the spatial mechanism needs to be non-codebook.
-
-2. **Reservoir family** — Sparse reservoir solved rank-1 collapse (rank=251). The open question: how to get a self-modifying recurrent network to produce useful computation under R1 (no external objective). 7 experiments, hundreds more needed.
-
-3. **Impossibility direction** — 445 experiments of failed attempts to satisfy R1-R6 simultaneously. Is there a mathematical proof that the feasible region is empty? U24 + U25 + U26 prove partial incompatibilities. Formalizing these into a theorem would be a genuine theoretical contribution.
+3. **Impossibility direction** — 445 experiments of systematic failure. Can U24 + U25 + U26 be formalized into a proof that the feasible region is empty?
 
 ---
 
 ## Running It
 
 ```bash
-# Phase 1: the LVQ baseline
 pip install torch torchvision numpy
-python experiments/run_step250_complete_substrate.py    # Complete demo (~30s)
+
+# Phase 1: the LVQ baseline
+python experiments/run_step250_complete_substrate.py       # Complete demo (~30s)
 python experiments/foldcore-steps/run_step99_topk_vote.py  # P-MNIST benchmark
 
-# Phase 2: new substrates
-python substrates/selfref/test_selfref.py              # Self-referential codebook
-python substrates/tape/test_tape.py                     # Integer tape machine
-python substrates/expr/test_expr.py                     # Expression tree
+# Phase 2 experiments
+python experiments/run_step442_graph_substrate.py           # Graph substrate
+python experiments/run_step441_sparse_reservoir.py          # Sparse reservoir
+python experiments/run_step432_labeled_vs_self.py           # Label dependency test
 ```
 
 ---
@@ -109,71 +84,28 @@ python substrates/expr/test_expr.py                     # Expression tree
 
 ```
 the-search/
-  CONSTITUTION.md        -- 5 principles + 6 rules (R1-R6). The feasible region.
-  CONSTRAINTS.md         -- U1-U20, I1-I9, S1-S21. The experimental record.
-  RESEARCH_STATE.md      -- Full experiment log and honest assessment.
-  INDEX.md               -- File-by-file index of all experiments.
+  CONSTITUTION.md        -- 5 principles + 6 rules (R1-R6)
+  CONSTRAINTS.md         -- U1-U26, I1-I9, S1-S21
+  RESEARCH_STATE.md      -- Full experiment log
+  INDEX.md               -- File-by-file index
 
   substrates/            -- All substrate implementations
-    living-seed/         -- Phase 1: Living Seed (Sessions 1-17) [CLOSED]
-    anima/               -- Phase 1: ANIMA (Sessions 18-23) [CLOSED]
-    foldcore/            -- Phase 1: Codebook baseline
-    eigenfold/           -- Phase 1: Matrix codebook [CLOSED]
-    topk-fold/           -- Phase 1: The 91.8% system (LVQ + top-K)
-    selfref/             -- Phase 2: Self-referential codebook chain
-    tape/                -- Phase 2: Integer tape machine
-    expr/                -- Phase 2: Self-modifying expression tree
+    foldcore/            -- Codebook baseline (LVQ + GNG)
+    topk-fold/           -- Phase 1 peak (94.48% P-MNIST)
+    living-seed/         -- Phase 1: Sessions 1-17 [closed]
+    anima/               -- Phase 1: Sessions 18-23 [closed]
+    eigenfold/           -- Phase 1: Matrix codebook [closed]
+    selfref/             -- Phase 2a: Self-referential [killed]
+    tape/                -- Phase 2a: Integer tape [killed]
+    expr/                -- Phase 2a: Expression tree [killed]
+    temporal/            -- Phase 2a: Temporal prediction [killed]
 
-  experiments/           -- Experiment scripts (Phase 1 + Phase 2)
-
-  knowledge/             -- Structured knowledge base (78 entries, 70+ constraints)
+  experiments/           -- 445 experiment scripts
+  knowledge/             -- Structured knowledge base
+  audits/                -- External audit reports
   paper/                 -- Paper compiler
-  research/              -- Framework documentation
-  tempest/               -- Tempest substrate (Rust, historical)
   tests/                 -- Unit tests
 ```
-
-## The Constitution
-
-The [constitution](CONSTITUTION.md) defines five architecture-independent principles and six rules:
-
-1. **Computation must exist without external objectives** (R1)
-2. **Adaptation must arise from computation, not beside it** (R2)
-3. **Each modification must be tested against what came before** (R4)
-4. **The frozen frame must be minimal** (R3 + R6)
-5. **There must be one ground truth the system cannot modify** (R5)
-
-The rules are simultaneous constraints, not sequential stages. The Phase 1 "stage progression" (Stages 1-8) was superseded by the R1-R6 feasibility framing after external review exposed systematic inflation.
-
-## Constraints from Experiments
-
-26 universal constraints (7 provisional, see [universality assessment](CONSTRAINTS.md)) define what ANY substrate must satisfy:
-
-- **U1-U4:** Structural (read+write one operation, one data structure, zero forgetting, minimal)
-- **U5-U8:** Selection (sparse over global, Lipschitz boundary, no iteration, hard over soft)
-- **U9-U13:** Dynamics (curriculum must match solution, dense memory kills, discrimination ≠ navigation, structured noise, additions hurt)
-- **U14-U16:** Self-reference (substrate IS its search, robust to perturbation, encode differences)
-- **U17-U20:** Capacity (fixed memory exhausts, shared channels contaminate, dynamics ≠ features, local continuity required)
-- **U21-U26:** Phase 2 (diversity scoring degenerate, convergence kills exploration, distributed updates destabilize, argmin ≠ argmax, score/bias coupling, self-label error compounding)
-
-Each constraint is a closed door. The pattern of elimination IS the search.
-
----
-
-## What Failed and Why It Matters
-
-- **The Living Seed** (Sessions 1-17): architecture ceiling at 6/8 frozen elements. The equation is hardcoded Python.
-- **ANIMA** (Sessions 18-23): all parameters either non-binding or non-adaptable. Stage 3 ceiling.
-- **Eigenform arc** (17 experiments): algebraically interesting, zero applied capability.
-- **The decomposition arc** (Steps 235-278): human-designed algorithms executed by k-NN. Manual compilation, not discovery.
-- **35 encoding experiments** (Steps 377-412): all failed. Cosine saturation at high-D is the Goldilocks zone, not a bug to fix.
-- **Step 417** (REPEL/FREEZE flags): LVQ with a state machine. The frozen frame grew. Direction killed by founder.
-- **Phase 2 substrates** (Steps 417-425): TapeMachine, ExprSubstrate, TemporalPrediction — all killed. SelfRef active.
-- **60+ navigation experiments** (Steps 354-428): every action mechanism modification failed. The wall is action-score convergence (Step 428).
-
-Each failure extracted constraints. The constraint map IS the specification for the next substrate.
-
----
 
 ## Requirements
 
