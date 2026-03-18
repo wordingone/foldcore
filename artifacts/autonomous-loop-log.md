@@ -70,3 +70,7 @@ Error-based spawn WORKS (no explosion). Action selection is the bottleneck, not 
 **Hypothesis:** Hybrid = ReadIsWrite update + argmin scoring + error spawn. If unique>1000 & dom<50%, the combination works.
 **Kill criteria:** unique<500 OR dom>70% OR spawn>80%
 **Actions:** Sent Eli Step 418f (hybrid on LS20, 10K steps)
+**Results:** unique=3248, dom=28%, cb=4929, spawn=49%. ALL PASS. EXTENDING to 30K.
+Spawn rate DECELERATING (44→54→55→49→44). First self-limiting ReadIsWrite variant.
+Matches process_novelty exploration (3248 vs 3312) with HALF codebook (4929 vs 8054).
+30K extension running — watching for Level 1 step count.
