@@ -187,6 +187,10 @@ Fewer frozen elements AND better performance. R2 by construction converts 3-5 el
 
 The 2 remaining U: tau (temperature) and spawn threshold. Both potentially V-derivable.
 
+**Step 423:** V-derived tau (1/sqrt(cb_size)) = 91.03%. Below fixed tau=0.01 (91.84%). The shifting temperature causes train/eval mismatch → 0.68pp forgetting. tau stays U.
+
+**ReadIsWrite final R3: 3 M, 8 I, 2 U.** This is the floor. tau and spawn_thresh cannot be V-derived without cost.
+
 ## Iteration 7 (2026-03-18 ~03:49 UTC)
 
 **The Question:** Does the hybrid (distributed + argmin) improve CLASSIFICATION over either parent?
