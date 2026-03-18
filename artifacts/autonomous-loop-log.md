@@ -74,3 +74,14 @@ Error-based spawn WORKS (no explosion). Action selection is the bottleneck, not 
 Spawn rate DECELERATING (44→54→55→49→44). First self-limiting ReadIsWrite variant.
 Matches process_novelty exploration (3248 vs 3312) with HALF codebook (4929 vs 8054).
 30K extension running — watching for Level 1 step count.
+**30K result:** 0 levels. unique=4346, dom=28%, cb=15001. Explores but same random walk. Distributed update doesn't add directional signal. Spawn rate locked at 50% (median split by definition).
+
+## Step 418 Series Summary
+
+ReadIsWrite is a CLASSIFIER, not a NAVIGATOR:
+- Classification: 88.2% P-MNIST, 0.4pp forgetting, R2 by construction
+- Navigation: 0 levels across 6 variants. Gram explodes (418a), argmax loops (418e), hybrid random-walks (418f)
+
+The equation from WHAT_THE_FAILURES_TEACH works for what it was designed for (classification) but doesn't solve navigation. The four separations CAN be collapsed for classification but the collapsed form doesn't navigate.
+
+For Jun when he wakes: ReadIsWrite is a genuine Phase 2 classification candidate (88.2%, near-zero forgetting, R2 by construction). It does NOT navigate. The 3.4pp gap to baseline is in per-step learning quality, not architecture. Navigation remains unsolved.
