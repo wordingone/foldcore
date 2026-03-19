@@ -178,48 +178,117 @@ The system oscillates: U7 drives toward dominant mode $\to$ U17 growth disrupts 
 
 ### 4.2 Irredundant Growth
 
-Every new component covers unique territory (Propositions 1-4).
-
-[From BIRTH.md Formalization 2, Section 2.2]
+U3 + U17 + R6 together require that the system adds new components indefinitely (U17), never removes them (U3), and every component is necessary (R6). Therefore every new component covers unique territory. Combined with U20 (Lipschitz mapping), this means nodes are well-separated — the system builds an increasingly detailed, non-redundant map of the observation space. Growth rate is coupled to the observation distribution: the environment gates growth through the action-observation loop.
 
 ### 4.3 The Self-Observation Requirement
 
-**Theorem 2:** In finite environments, U17 + R6 + R1 require self-observation.
+**Theorem 2:** In a finite environment, U17 + R6 + R1 require self-observation.
 
-[From BIRTH.md Formalization 3 — the central result]
+*Proof:* (1) U17 + R6 require infinitely many irredundant components. (2) In a finite environment, irredundant components from external observations are bounded — once every reachable state has a node, further nodes are redundant; edge-count growth is also redundant ($N(c,a,n) = 10^6$ vs $10^6+1$ does not change $g$). R6 is violated. (3) After external information is exhausted, irredundant growth must come from elsewhere. (4) By R1, $f_s(x)$ depends only on $s$ and $x$. (5) Since $x$ provides no new irredundant information, the only source is $s$ itself. $f$ must extract structure from $s$ not explicitly stored — temporal patterns, graph properties, meta-state. This is self-observation. $\square$
+
+**Implication:** The current graph + argmin system exits the feasible region after exploration saturates. The Level 2 failure (Section 5.2) is a feasibility violation, not a strategy failure.
+
+**Relationship to prior work:** Curiosity-driven exploration (Pathak et al., 2017) proposes self-observation as a design choice. We derive it as a mathematical necessity. The R6 mechanism — irredundancy killing degenerate growth — has no analog in the curiosity literature, which adds intrinsic reward (violating R1) rather than requiring every component to be functionally necessary.
 
 ### 4.4 Fixed-Point Conjecture
 
-The minimal self-observing substrate is a fixed point of F. Conjectured, not proven.
-
-[From BIRTH.md Formalization 3, Section 3.4]
+**Conjecture (not proven):** The minimal self-observing substrate is a fixed point of $F$. Applying the system to its own state trajectory reproduces the system's dynamics. This would terminate the potential infinite regress of self-observation (processing state → new state → processing new state → ...). Related to autopoiesis (Maturana & Varela, 1972): the network produces the components that produce the network. Difference: autopoiesis maintains structure; our system grows (U17). Status: open.
 
 ## 5. Experimental Evidence
 
 ### 5.1 Navigation (505 experiments)
 
 All 3 ARC-AGI-3 games solved at Level 1:
-- LS20: LSH or k-means, 4 actions, argmin. 9/10 at 120K steps.
-- FT09: k-means, 69 actions (64 grid + 5 simple), argmin. 3/3. (Step 503)
-- VC33: k-means, 3 actions (zone discovery), argmin. 3/3. (Step 505)
 
-Unifying mechanism: graph + edge-count argmin + correct action decomposition.
+| Game | Mechanism | Result | Steps |
+|---|---|---|---|
+| LS20 Level 1 | LSH k=12 + centered_enc + avgpool16, 4 actions, argmin | 10/10 at 200K; 9/10 at 120K | 471 (easy seed) to 137K (hard seed) |
+| FT09 | k-means n=300, 69 actions (64 click grid + 5 simple), argmin | 3/3 at 50K | 157, 2035, 3840 |
+| VC33 | k-means n=50, 3 actions (zone discovery), argmin | 3/3 at 30K | 18, 82, 144 |
+
+**Unifying mechanism:** graph + edge-count argmin + correct action decomposition. The mapping (observation → node) and action space decomposition are the variables. The graph + argmin is the constant across all winning configurations.
+
+**Action space finding:** The native API presents 6 actions (FT09) and 1 action (VC33). The effective action space is 69 and 3 respectively. The mismatch between API-visible actions and effective actions was the key unsolved problem from Steps 467-502. Zone discovery (Step 505) and grid-click expansion (Step 503) resolve it.
+
+**Apparent ceiling resolved:** The 6/10 ceiling at 50K on LS20 (Steps 459-483) was a step budget artifact. Hard seeds need 35K-115K steps vs 5-20K for easy seeds. Step 484 confirmed 10/10 at 200K. The 6/10 figure should not be cited as a fundamental limit.
+
+**Encoding requirements:** centered_enc (x − mean(x)) is load-bearing across 2 families (codebook: prevents cosine saturation; LSH: prevents hash concentration). avgpool16 (64×64 → 16×16 = 256D) is required for LS20 — raw 4096D with k=16 gives 1/5 vs 6/10 for avgpool16 (Step 466).
 
 ### 5.2 Level 2 Failure as Feasibility Violation
 
-259-cell plateau (Steps 486-492). Edge counts grow (U17 formally satisfied) but each marginal count is functionally redundant (R6 violated). The system exits the feasible region after exploration saturates.
+LS20 Level 2 is the only unsolved problem. Two families confirm identical behavior:
+- LSH k=12: 259-cell plateau, 0/N Level 2 at 1M steps (Steps 486-492)
+- L2 k-means n=300: 286-cell plateau, 0/3 Level 2 (Step 493)
+
+The plateau is structural: all edge manipulations reduce coverage below the pure argmin baseline (argmin=259 > decay=241 > death-avoidance=227 > death-seeking=196). The reward region is not in the ~280-290 reachable state region. This is a game topology constraint, not a mechanism failure.
+
+Relationship to Section 4: Edge counts grow (U17 formally satisfied) but each marginal count is redundant in the high-visit region (R6 violated). The system satisfies U17 locally but cannot satisfy R6 globally once the reachable region saturates. Level 2 requires strategic exploration (I6/I9) — a capability not yet tested.
 
 ### 5.3 Architecture Family Summary
 
-[9 families, kill reasons, experiment counts — from CONSTRAINTS.md]
+9 families tested across 505 experiments. Count as of Step 505.
+
+| Family | Experiments | Navigation result | Kill reason |
+|---|---|---|---|
+| Codebook / LVQ | ~435 | LS20 Level 1 won (Step 82). FT09 won (~Step 83, 69 click classes). VC33 won (Step 375, 3 zones). Level 2 never solved. | Reached capability ceiling. Codebook ban 2026-03-18 (Jun's directive). S-class constraints (cosine-specific). Note: Step 375 VC33 win used handcrafted timer encoding (row 0 pixel count) — game-specific, not general. General zone mechanism confirmed by Step 505. |
+| Reservoir | ~20 | 0/N. Steps 438-465. | Rank-1 collapse (U7). Temporal inconsistency = local continuity failure (U20). Cells don't map nearby observations to the same node. |
+| Grid graph | 8 | 0/N. Steps 446-451. | No local continuity: grid topology is arbitrary, not observation-derived. Direct U20 violation. |
+| LSH | ~30 | LS20: 10/10 at 200K (Step 484). FT09/VC33: topology gap confirmed (Steps 495-498). | Not killed. Action space limitation confirmed (Steps 495-498). Requires 69-action expansion for FT09. |
+| kd-tree | 1 | 0/N. Step 452. | Node splits destroy edges (persistence violated, U3). Immediate kill. |
+| Cellular automata | 3 | 0/N. Steps 449-451. | Degenerate mapping: single attractor state, no cell diversity. Immediate kill. |
+| LLM | 1 | 0/1. Step 462. | Action collapse: 100% ACTION1, no exploration. Preliminary result (n=1). |
+| L2 k-means | ~9 | LS20: 5/10 at 50K (Step 475), comparable to LSH. FT09: 3/3 (Step 503). VC33: 3/3 (Step 505). | Not killed. Active family. Zone discovery + argmin is general mechanism. |
+| Bloom filter | 1 | 0/10. Step 494. | No edge memory: observation→cell without edge state = near-random walk. Confirms graph mechanism is load-bearing. |
+
+**Cross-family findings:**
+- Local continuity (U20) is the strongest kill criterion: 4 families fail cleanly on this axis (grid graph, CA, reservoir, kd-tree).
+- centered_enc is load-bearing in 2 families (codebook, LSH) for different failure modes — confirmed universal (U16).
+- Graph + edge-count argmin is the constant across all winning navigation configurations. No family has won without it.
+- Classification: **R1-compliant classification is unsolved.** Step 432 (codebook) achieves 94.48% and Step 444b (graph) achieves 93.34% — but both receive ground-truth labels on every training step (supervised NNC). Without external labels, accuracy drops to chance (~10%). The R1 constraint (no external objective) and the classification task are fundamentally incompatible with all tested architectures. These numbers are supervised baselines confirming the mapping quality, not evidence of self-organized classification.
 
 ## 6. Degrees of Freedom
 
-[Enumerated from birth derivation — these become the next experiment phase]
+The formalization identifies what the constraints REQUIRE but also what they leave UNDETERMINED. These degrees of freedom define the experiment space for the next phase.
+
+| # | Degree of Freedom | What's constrained | What's free | Source |
+|---|---|---|---|---|
+| 1 | Growth function $\phi$ | Must be monotonic, unbounded (U17) | What grows — nodes, edges, meta-state, or something else | Sec 3.2 |
+| 2 | Oscillation period | System cannot converge (Thm 1) | How quickly growth disrupts the dominant mode | Sec 4.1 |
+| 3 | Meta-rule $F$ | Must be non-constant (R3), time-invariant (U1), minimal (R6) | The specific form of compare-select-store | Sec 3.2 |
+| 4 | Growth-rule coupling | Growth changes the update rule (R3) | Local vs global: does a new node change nearby rules or all rules? | Sec 3.3 |
+| 5 | Metric $d_X$ on observations | Must make $\pi$ Lipschitz (U20); can refine but not rearrange (T3) | Which metric: L2, cosine, learned, adaptive | Sec 3.3 |
+| 6 | Partition resolution | Nodes must be well-separated (Prop 2) | How many nodes: determined by spawn threshold vs observation distribution | Sec 3.3 |
+| 7 | Growth mechanism | Structure only grows (U3), without bound (U17) | Spawn-on-novelty vs implicit edge accumulation vs other | Sec 3.3 |
+| 8 | Self-observation target | Must extract irredundant structure from $s$ (Thm 2) | What to extract: temporal patterns, graph properties, meta-state | Sec 4.3 |
+| 9 | Self-observation → rule modification | New structure must change $f$ (R3) | How: does detecting stuckness change exploration? Does cycle detection trigger avoidance? | Sec 4.3 |
+| 10 | Fixed-point structure | Conjectured to exist (Sec 4.4) | What invariant is preserved under self-observation | Sec 4.4 |
+| 11 | Exploration/exploitation resolution | $g_{nav} \neq g_{class}$ (U11), no mode switch (U1) | State-dependent behavior: what state feature triggers the switch? | Sec 3.4 |
+
+**The central experimental question (DoF 8-9):** What specific self-observation mechanism produces irredundant growth after exploration saturates? This is the next experiment phase.
 
 ## 7. Discussion
 
-[To be written]
+### What is proven
+
+1. The system has no fixed point (Theorem 1). Self-modification is necessary.
+2. In finite environments, the system must process its own state (Theorem 2). Self-observation is required.
+3. The current graph + argmin mechanism exits the feasible region after exploration saturates.
+
+### What is conjectured
+
+4. The minimal self-observing substrate is a fixed point of $F$ (Section 4.4).
+5. The oscillation between U7 (convergence) and U17 (growth) is a limit cycle, not chaos.
+
+### What is open
+
+6. Whether the full feasible region (R1-R6 + all validated U-constraints) is non-empty.
+7. What self-observation mechanism satisfies R6 (irredundancy) in practice.
+8. Whether R3 in the strong sense (active modification of operations) is achievable without infinite regress.
+9. How to resolve U11 + U24 + U1 (incompatible tasks, no mode switch) in a single system.
+
+### Honest assessment
+
+The feasible region for Level 1 navigation is occupied — graph + argmin + correct action decomposition satisfies R1, R2, U1, U3, U17, U20 and solves all three games. But this system fails R3 (operations are fixed), R4 (no self-testing), and exits the feasible region at Level 2 (R6 violation). The full R1-R6 region remains unoccupied. Whether it contains a point is the open question this paper frames but does not answer.
 
 ## References
 
