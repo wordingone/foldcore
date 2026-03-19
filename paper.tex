@@ -147,7 +147,28 @@ LVQ + growing codebook. Well-characterized in the literature. Our
 contribution is not the architecture --- it's the constraint map
 extracted from systematic testing.
 
-\subsubsection{2.5 Continual learning and catastrophic
+\subsubsection{2.5 Graph-based exploration for
+ARC-AGI-3}\label{graph-based-exploration-for-arc-agi-3}
+
+Rudakov et al.~(2025) independently developed a training-free
+graph-based exploration method for ARC-AGI-3, ranking 3rd on the private
+leaderboard (30/52 levels across 6 games). Their method uses
+connected-component segmentation for frame encoding, hierarchical action
+prioritization (5 tiers by visual salience), and BFS path planning to
+frontier states. Key parallels: (1) graph-structured state tracking with
+hash-based node identity --- equivalent to our \(\pi: X \to N\); (2)
+click-space as expanded action space (4,096 actions for click games) ---
+same finding as our Steps 503/505; (3) frontier-directed exploration ---
+this IS the purposeful exploration (I6/I9) we identified as the Level 2
+bottleneck, and they implemented it successfully. Key differences: their
+method is training-free (no learning, no self-modification) and assumes
+deterministic, fully observable environments. It satisfies R1 but not R3
+--- the graph accumulates but the exploration strategy is fixed. Their
+limitation (``exhaustive exploration becomes computationally
+intractable'' at higher levels) aligns with our Theorem 2: without
+self-observation, exploration saturates.
+
+\subsubsection{2.6 Continual learning and catastrophic
 forgetting}\label{continual-learning-and-catastrophic-forgetting}
 
 McCloskey \& Cohen (1989) identified catastrophic forgetting --- neural
