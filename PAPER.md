@@ -8,11 +8,11 @@ date: 2026-03-19
 
 ## Abstract
 
-We formalize six rules (R1-R6) for recursive self-improvement as mathematical conditions on a state-update function $f: S \times X \to S$ and derive necessary properties of any system satisfying all six simultaneously. From 505 experiments across 9 architecture families on ARC-AGI-3 interactive games, we extract 26 constraints and prove: (1) no satisfying system has a fixed point — self-modification is necessary, not optional; (2) in finite environments, the system must process its own internal state to maintain irredundant growth (the self-observation requirement); (3) the feasible region is non-empty for Level 1 navigation but currently unoccupied for the full constraint set including R3 (self-modification of operations). Whether a substrate exists inside all six walls remains open. The contribution is the walls themselves.
+We formalize six rules (R1-R6) for recursive self-improvement as mathematical conditions on a state-update function $f: S \times X \to S$ and derive necessary properties of any system satisfying all six simultaneously. From 525+ experiments across 10 architecture families on ARC-AGI-3 interactive games, we extract 26 constraints and prove: (1) no satisfying system has a fixed point — self-modification is necessary, not optional; (2) in finite environments, the system must process its own internal state to maintain irredundant growth (the self-observation requirement); (3) the feasible region is non-empty for Level 1 navigation but currently unoccupied for the full constraint set including R3 (self-modification of operations). Whether a substrate exists inside all six walls remains open. The contribution is the walls themselves.
 
 ## 1. Introduction
 
-505 experiments across 9 architecture families (codebook/LVQ, reservoir, graph, LSH, kd-tree, cellular automata, LLM, L2 k-means, Bloom filter) tested substrates for navigation and classification in ARC-AGI-3 interactive games. All experiments used the same evaluation framework (R1-R6) and constraint map (U1-U26).
+525+ experiments across 10 architecture families (codebook/LVQ, LSH, L2 k-means, reservoir, graph, connected-component, Bloom filter, kd-tree, cellular automata, LLM) tested substrates for navigation and classification on ARC-AGI-3 interactive games and a cross-domain chain benchmark (CIFAR-100 → ARC-AGI-3 → CIFAR-100). All experiments used the same evaluation framework (R1-R6) and constraint map.
 
 The experiments carved a feasible region — the set of systems that satisfy all constraints simultaneously. This paper formalizes the constraints mathematically, derives necessary properties of the feasible region, and states honestly what is proven vs conjectured vs open.
 
@@ -81,7 +81,7 @@ Dynamics: s_{t+1} = F(s_t)(x_t), a_t = g(s_t).
 - **U20:** $\pi: X \to N$ is Lipschitz: $d_N(\pi(x_1), \pi(x_2)) \leq L \cdot d_X(x_1, x_2)$.
 - **R6:** For every component $c \in \text{components}(S_t)$, the restricted state $S_t \setminus \{c\}$ fails the ground truth test $G$.
 
-**Propositions (proven in BIRTH.md, to be cleaned):**
+**Propositions:**
 1. U3 + U17 + R6 $\Rightarrow$ irredundant growth (every new component covers unique territory).
 2. U20 + irredundancy $\Rightarrow$ well-separated nodes (Voronoi cells partition $X$ without unnecessary overlap).
 3. Growth rate is coupled to observation distribution (environment gates growth).
@@ -113,7 +113,7 @@ Dynamics: s_{t+1} = F(s_t)(x_t), a_t = g(s_t).
 
 Specifically: $g_{explore} = \text{argmin}_a \sum_n E(c, a, n)$ (least-tried action) and $g_{exploit} = \text{argmax}_a \text{score}(s, a)$ (highest-confidence action). These select opposite actions when the least-explored action is also the least-confident.
 
-**Relationship to prior work:** This is the standard RL tradeoff. Not novel. Our contribution is empirical confirmation across 505 experiments that no single $g$ produces both good navigation and good classification (Steps 418, 432, 444b).
+**Relationship to prior work:** This is the standard RL tradeoff. Not novel. Our contribution is empirical confirmation across 525+ experiments that no single $g$ produces both good navigation and good classification (Steps 418, 432, 444b).
 
 #### U11: Discrimination and navigation require incompatible action selection
 
@@ -250,7 +250,7 @@ The decomposition into compare-select-store is the STRUCTURE of $F$. The specifi
 
 ## 5. Experimental Evidence
 
-### 5.1 Navigation (505 experiments)
+### 5.1 Navigation (525+ experiments)
 
 All 3 ARC-AGI-3 games solved at Level 1:
 
@@ -280,7 +280,7 @@ Relationship to Section 4: Edge counts grow (U17 formally satisfied) but each ma
 
 ### 5.3 Architecture Family Summary
 
-9 families tested across 505 experiments. Count as of Step 505.
+10 families tested across 525+ experiments.
 
 | Family | Experiments | Navigation result | Kill reason |
 |---|---|---|---|
@@ -300,7 +300,7 @@ Relationship to Section 4: Edge counts grow (U17 formally satisfied) but each ma
 - Graph + edge-count argmin is the constant across all winning navigation configurations. No family has won without it.
 - Classification: **R1-compliant classification is unsolved.** Step 432 (codebook) achieves 94.48% and Step 444b (graph) achieves 93.34% — but both receive ground-truth labels on every training step (supervised NNC). Without external labels, accuracy drops to chance (~10%). The R1 constraint (no external objective) and the classification task are fundamentally incompatible with all tested architectures. These numbers are supervised baselines confirming the mapping quality, not evidence of self-organized classification.
 
-### 5.4 The Chain Benchmark (planned)
+### 5.4 The Chain Benchmark
 
 The experiments in Sections 5.1-5.3 test single benchmarks in isolation. The real test is the **chain**: a sequence of heterogeneous benchmarks with one continuous state and no reset.
 
