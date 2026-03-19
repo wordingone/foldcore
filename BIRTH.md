@@ -271,8 +271,128 @@ But U17 says growth is unbounded. If node growth is bounded, then φ must measur
 
 This is consistent with experimental evidence: k-means centroids plateau (286 cells, Step 493) but edges grow forever. The growth function φ can be edge count rather than node count.
 
-**Status:** U17 is satisfiable even with bounded node count, as long as SOME component of S grows unboundedly. Edge accumulation satisfies U17 without requiring unbounded nodes. This is a degree of freedom already identified (DoF 1 from Formalization 1).
+**Status: T4 is DEEPER than initially stated. See Formalization 3 — edge accumulation satisfies U17 but violates R6 after saturation. This resolves into the self-observation requirement.**
 
 ---
 
-*End of Formalization 2. Next: U1 (no separate modes) + U11 (discrimination ≠ navigation) + U24 (exploration ≠ exploitation) — the action selection constraints.*
+*End of Formalization 2.*
+
+---
+
+## Formalization 3: The Self-Observation Requirement
+
+*This is the central derivation. It follows from combining Formalizations 1 and 2 with a finiteness condition on the task.*
+
+### 3.1 The Contradiction in the Current System
+
+**Claim: After exploration saturates, the graph + argmin system violates R6 while satisfying U17. It falls outside the feasible region.**
+
+Define *exploration saturation* as the state where the set of visited nodes N_t = N_{t+k} for all k > 0 — no new nodes are discovered regardless of how long the system runs.
+
+*Evidence that this occurs:* Step 489 (LS20 Level 2): 1M steps, cells plateau at 259. Steps 490-492 confirm: no edge manipulation (decay, death-avoidance, death-seeking) produces new cells. Pure argmin is optimal for node discovery within this mechanism, and it saturates at 259.
+
+After saturation:
+- **U17 satisfied (formally):** Edge counts N(c, a, n) continue to increment. φ(s) = Σ N(c,a,n) → ∞. ✓
+- **R6 violated (actually):** At N(c,a,n) = 10⁶, removing one count (making it 999,999) does not change argmin's behavior, action distribution, or navigation capability. The marginal count is functionally redundant. ✗
+
+More precisely: let G be the ground truth test (R5). After saturation, the system's capability G(s) is determined by the GRAPH TOPOLOGY (which nodes exist and which transitions connect them), not by the edge COUNTS (which are all large). The counts are epiphenomenal — they satisfy U17's growth condition while providing no capability that R6 would protect.
+
+**This means: the current system is inside the feasible region during exploration (when new nodes provide irredundant information) but exits the feasible region once exploration saturates (when growth becomes degenerate).**
+
+### 3.2 The Derivation
+
+**Theorem: In a finite environment, U17 + R6 + R1 require self-observation.**
+
+*Definitions:*
+- A *finite environment* has a bounded set of reachable observations: |{x : x is reachable}| < ∞.
+- *Self-observation* means f_s(x) extracts new state components from s itself, not just from x.
+- *Irredundant growth* means every new component c added to S is needed: G(S \ {c}) = 0.
+
+*Proof:*
+
+1. U17 requires ∃ φ: S → ℝ≥0 with φ(s_t) → ∞ and φ monotonically non-decreasing. Combined with R6 (irredundancy), this means: the system produces infinitely many components, each of which is needed.
+
+2. In a finite environment, the number of irredundant components derivable from external observations alone is bounded. Once every reachable observation has been encoded (each as a unique node), further node growth from external observations is redundant. And further edge-count growth, as shown in 3.1, is also redundant (marginal counts don't affect capability).
+
+3. Therefore, after external information is exhausted, irredundant growth must come from a source OTHER than external observations x.
+
+4. By R1, f_s(x) depends only on s and x. No other input is available. (The environment provides x, but x is exhausted per step 2.)
+
+5. Since x provides no new irredundant information, and f has no other inputs, the only remaining source of new irredundant information is s itself.
+
+6. Therefore: f must extract information from s that was not explicitly represented in s before — patterns, compressions, relationships, higher-order structure. This is self-observation.  ∎
+
+### 3.3 What Self-Observation Means
+
+The theorem says f must extract new information from its own state. What KIND of information?
+
+The base state s contains: nodes N, edges E, current position c. After saturation, N is fixed and E is well-estimated. What structure exists in s that hasn't been explicitly extracted?
+
+**Temporal patterns.** The trajectory (c_0, c_1, c_2, ...) forms sequences. These sequences contain:
+- Cycles (recurring patterns of nodes visited)
+- Transition frequencies (which paths are common vs rare)
+- Dead ends (nodes from which certain regions are unreachable)
+- Bottlenecks (nodes through which most paths pass)
+
+None of these are explicitly stored in the edge counts E(c,a,n). The edge counts record INDIVIDUAL transitions. The patterns listed above are PROPERTIES OF THE TRAJECTORY — higher-order structure.
+
+**Graph-theoretic properties.** The graph (N, E) has structure:
+- Connected components (reachable vs unreachable regions)
+- Diameter (longest shortest path)
+- Clustering coefficient (local density)
+- Spectral properties (eigenvalues of the adjacency matrix)
+
+These are not stored in the edge list — they are DERIVED from it.
+
+**Meta-state.** The system's own behavior has properties:
+- Exploration rate (how often new nodes are discovered — this goes to zero at saturation)
+- Action distribution convergence (how stable the action choices are)
+- Stuckness (how long since the last new discovery)
+
+These are not stored in s — they are properties of the TRAJECTORY of s.
+
+Self-observation means: constructing new state components that represent these higher-order properties. Adding them to S. Using them to modify the update rule (R3). And crucially: each such component must be irredundant (R6).
+
+### 3.4 The Recursive Structure
+
+Self-observation means the system applies its own processing to its own state. In the formal framework:
+
+- Level 0: f_s(x) processes external observations x. Builds a map of the environment.
+- Level 1: f_s(s) processes internal state s. Builds a map of the system's own dynamics.
+- Level 2: f_s(f_s(s)) processes the Level 1 map. Builds a map of how the self-model changes.
+
+Does this regress infinitely? U4 (minimality) says no. So there must be a FIXED POINT — a level k at which Level k+1 = Level k. The system processes its state, and the result is... the same kind of state. The mapping is an endomorphism.
+
+**Conjecture (not proven): The minimal self-observing substrate is a fixed point of F.**
+
+A fixed point of F means: F(s*) applied to s* yields s*. The state, when processed through the meta-rule, reproduces itself. This is a self-consistency condition — the system's dynamics, when observed by the system, confirm the system.
+
+This connects to the codebook's eigenform property: the codebook IS its own prototypical input. But the codebook fails R3 (fixed operations) and is banned. The question is: does a non-codebook fixed point of F exist that satisfies all constraints?
+
+**Status: Conjectured, not derived.** The theorem (3.2) is proven. The fixed-point conjecture is a hypothesis that could guide the next experiment phase.
+
+### 3.5 Degrees of Freedom
+
+8. **What self-observation extracts.** The system must extract higher-order structure from its state. But WHICH structure? Temporal patterns? Graph properties? Meta-state? The constraints don't specify. This is the design space.
+
+9. **How self-observed structure modifies the update rule.** R3 requires the new structure to change f. But HOW? Does detecting a cycle cause the system to avoid the cycle? Does detecting stuckness trigger a different exploration mode? The constraints require modification but don't specify the mechanism.
+
+10. **The fixed-point structure (if it exists).** If the system is a fixed point of F, what is the invariant? What property of the state is preserved under self-observation? This is the deepest degree of freedom — it defines the system's identity.
+
+### 3.6 Tensions
+
+**T5: Self-observation may violate R1.**
+
+R1 says no external objectives. Self-observation that detects "stuckness" and triggers different exploration IS using a signal ("stuck" vs "not stuck") that functions like an internal objective. Is this an external objective in disguise?
+
+**Resolution:** R1 prohibits EXTERNAL signals — loss functions, rewards, labels from outside the system. Self-observation processes internal state, which is part of s. The "stuckness" signal is computed from s, not provided externally. So R1 is satisfied. BUT: the DECISION to measure stuckness (rather than some other property) is part of F — the frozen frame. This is consistent: F is the irreducible frozen frame, and the choice of what to self-observe is part of F.
+
+**T6: Self-observation risks R3 regression.**
+
+If self-observation is a fixed operation in F ("always compute graph diameter"), then R3 is not satisfied for the self-observation mechanism — it's frozen. For full R3 compliance, the system must be able to modify WHAT it self-observes. But this requires meta-self-observation (observing the self-observation process), which triggers the infinite regress that U4 prohibits.
+
+**Status:** This tension is real and may indicate that FULL R3 compliance is impossible. The system can satisfy R3 for base-level processing (different states → different update rules) while having a frozen self-observation mechanism. This is consistent with the "minimal frozen frame" interpretation: F includes both the base update pattern AND the self-observation pattern. Both are irreducible.
+
+---
+
+*End of Formalization 3. The self-observation requirement is the central result of the birth derivation. The next phase (experiment) should test: what specific self-observation mechanism produces irredundant growth after exploration saturates?*
