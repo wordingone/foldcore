@@ -30,15 +30,13 @@ Every navigation experiment since Step 442 uses the same graph + edge-count mech
 
 **Navigation also requires a non-convergent exploration mechanism.** Edge-count argmin converges LOCALLY (per-cell ratios approach true visit distribution). Steps 489-492 confirm empirically: at 1M steps on Level 2, cells plateau at 259/4096 — agent cycles forever. Convergence is real but only matters when the reward is beyond the reachable set.
 
-**The 6/10 → 10/10 finding (Steps 484-485):** The apparent 6/10 ceiling on LS20 Level 1 was a STEP BUDGET ARTIFACT. All seeds navigate given sufficient steps (5K-150K). At 200K budget, reliability is effectively 100%. The mechanism is universal for Level 1.
+**The 6/10 → 9/10 finding (Steps 484-485):** The apparent 6/10 ceiling on LS20 Level 1 was a STEP BUDGET ARTIFACT. Hard seeds navigate at 35K-115K vs easy seeds at 5-20K. Step 485: 9/10 at 120K. Step 484: 4/4 hard seeds navigate at 200K (tested separately). Projected 10/10 with sufficient budget but not measured in a single run.
 
-**Smart exploration KILLS navigation (Steps 477-482):** Every "intelligent" action selection strategy (softmax, UCB1, destination novelty, prediction error) performs WORSE than pure argmin. Argmin works because it provides UNIFORM coverage without chasing any signal. Smart strategies create local feedback loops — interesting states attract more visits nearby, trapping the agent.
+**Smart exploration vs uniform exploration (Steps 477-482):** Every TARGETED action selection strategy (destination novelty 1/10, prediction error 0/10, softmax 2/3) performs WORSE than pure argmin. UCB1 degenerates to argmin in practice. One UNIFORM strategy — global cell novelty (Step 482) — MATCHES argmin at 6/10 with complementary seed coverage, suggesting ensemble could reach 8-9/10. Smart (signal-chasing) = worse. Uniform (coverage-maximizing) = comparable.
 
-**Level 2 physical gap (Steps 486-492):** Level 2's reward is in a region disconnected from the ~259 reachable states. Every edge manipulation (decay, death-avoidance, death-seeking) makes coverage WORSE: argmin(259) > decay(241) > death-avoid(227) > death-seek(196). Pure random walk is the optimal exploration for this mechanism. Level 2 requires purposeful exploration (I6/I9).
+**Level 2 physical gap (Steps 486-492):** Level 2's reward is in a region disconnected from the ~259 reachable states. Edge manipulation in any direction reduces coverage vs pure argmin. Ordering: argmin(259) > decay(241-243) > death-avoid(227) > death-seek(196). Death-seeking is worst because resets destroy accumulated exploration depth. Pure argmin's uniform pressure is optimal. Level 2 requires purposeful exploration (I6/I9).
 
-**Deaths = exploration (Step 491):** Death-causing actions open new states. Penalizing them retreats the agent to a safe, smaller region. Risky paths are the only paths to many cells.
-
-**LLM benchmark (Step 462):** 0/3 models (haiku/sonnet/opus) navigated LS20. LLMs have local continuity + persistence but LACK systematic exploration. Intelligence without exploration = exploitation. The atomic substrate needs BOTH exploration (argmin) AND intelligence (LLM-level reasoning).
+**LLM benchmark (Step 462) — PRELIMINARY, n=1:** 1/1 clean test (haiku on LS20) failed — action collapse (100% ACTION1, 97 steps). 2 tainted results excluded: sonnet cheated (read codebase, uninterpretable), opus tested on FT09 (a game broken for all mechanisms). Insufficient sample for strong claims. HYPOTHESIS: LLMs lack systematic exploration mechanism. Needs repeat with proper isolation before treating as confirmed finding.
 
 **Cross-game (Steps 467-469, 476):** FT09 has 32 visual states, VC33 has 50. Both degenerate for LSH AND k-means — the games are "frozen" (no visual variation from random actions). Cross-game generality requires games where random actions produce visual feedback. LS20 is the only navigable ARC-AGI-3 preview game.
 
