@@ -334,13 +334,30 @@ The encoding (avgpool16 + centered) contains class signal: NMI=0.42 at threshold
 
 Domain-adaptive threshold (Step 513) auto-calibrates for ARC (median=0.308, matching optimal fixed) but fails for CIFAR — local density in sparse 256D does not reflect class structure. The encoding, not the threshold mechanism, is the bottleneck for classification.
 
-#### 5.4.3 Cross-Family Chain Replication (Step 522)
+#### 5.4.3 Cross-Family Chain Replication (Steps 515-525)
 
-K-means graph (L2 centroids, no attract, no cosine) with LS20-fitted centroids tested on FT09 and VC33 (Step 522). FT09 achieves 3/3 but degenerately: all frames collapse to 1/300 centroids, and wins occur via round-robin action exploration (50K steps / 69 actions). VC33 0/3. LS20 1/3.
+**Negative transfer is universal** (Step 515): K-means with CIFAR-fitted centroids fails on LS20 (3/300 cells) — same collapse as codebook Step 506. Not mechanism-specific.
 
-**Finding:** The codebook's online attract update is load-bearing for cross-game transfer. Frozen k-means centroids cannot adapt to new game domains. Dynamic growth (Steps 507-508) creates game-specific centroids because attract keeps centroids in navigation-relevant regions — this is mechanism-dependent, not geometry-dependent.
+**LSH chain corrected** (Steps 516, 523): Single-seed Step 516 (WIN@1116) was an outlier. Multi-seed Step 523 reveals LS20 0/3 — CIFAR edges on actions 0-3 contaminate LS20's 4 directional actions. Action-scope isolation works only for expanded action spaces (FT09: 69 actions, 3/3; VC33: 3 zones, 3/3) but not for baseline LS20.
 
-**Non-codebook experiment count:** 55 (vs 435 codebook). Ongoing scale-up targets 400 non-codebook experiments to balance the evidence base.
+**Frozen k-means collapses** (Step 522): All FT09/VC33 frames map to 1/300 centroids. FT09 3/3 is round-robin exploitability, not transfer.
+
+#### 5.4.4 Algorithm Invariance (Steps 521, 524, 525)
+
+Four representations of the same algorithm tested on LS20:
+
+| Representation | Step | Result | Mechanism |
+|----------------|------|--------|-----------|
+| LSH graph (edge dict) | 459 | 6/10 | argmin over edge visit counts |
+| Hebbian weights (matrix W) | 524 | 5/5 (1 trajectory) | argmin(W.T @ x) ≈ soft edge-count |
+| Markov tensor (T[c,a,c']) | 525 | 8/10 | argmin(sum_j T[c,a,j]) = identical |
+| N-gram (history buffer) | 521 | 4/5 (N=20) | falls back to edge-count argmin |
+
+All converge to **argmin over visit frequency**: the least-visited action from the current state. Whether visit frequency is stored as edge counts, accumulated weight vectors, transition tensors, or n-gram histories, the resulting behavior is the same algorithm. The mechanism is the invariant; the data structure is a degree of freedom.
+
+This reduces the search space: new representations are unlikely to produce new algorithms unless they introduce a qualitatively different action-selection rule (not argmin over accumulated state).
+
+**Non-codebook experiment count:** ~67 (vs ~435 codebook). Ongoing scale-up.
 
 ## 6. Degrees of Freedom
 
