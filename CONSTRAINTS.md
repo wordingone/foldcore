@@ -34,11 +34,13 @@ Every navigation experiment since Step 442 uses the same graph + edge-count mech
 
 **Smart exploration vs uniform exploration (Steps 477-482):** Every TARGETED action selection strategy (destination novelty 1/10, prediction error 0/10, softmax 2/3) performs WORSE than pure argmin. UCB1 degenerates to argmin in practice. One UNIFORM strategy — global cell novelty (Step 482) — MATCHES argmin at 6/10 with complementary seed coverage, suggesting ensemble could reach 8-9/10. Smart (signal-chasing) = worse. Uniform (coverage-maximizing) = comparable.
 
-**Level 2 physical gap (Steps 486-492):** Level 2's reward is in a region disconnected from the ~259 reachable states. Edge manipulation in any direction reduces coverage vs pure argmin. Ordering: argmin(259) > decay(241-243) > death-avoid(227) > death-seek(196). Death-seeking is worst because resets destroy accumulated exploration depth. Pure argmin's uniform pressure is optimal. Level 2 requires purposeful exploration (I6/I9).
+**Level 2 physical gap (Steps 486-493, 2 families):** Level 2's reward is in a region disconnected from the reachable states. Confirmed across LSH (259 cells, Step 489) and L2 k-means (286 cells, Step 493). Both plateau regardless of budget. Edge manipulation in any direction reduces coverage vs pure argmin. Ordering: argmin(259) > decay(241-243) > death-avoid(227) > death-seek(196). Level 2 requires purposeful exploration (I6/I9) — not a better mapping.
 
 **LLM benchmark (Step 462) — PRELIMINARY, n=1:** 1/1 clean test (haiku on LS20) failed — action collapse (100% ACTION1, 97 steps). 2 tainted results excluded: sonnet cheated (read codebase, uninterpretable), opus tested on FT09 (a game broken for all mechanisms). Insufficient sample for strong claims. HYPOTHESIS: LLMs lack systematic exploration mechanism. Needs repeat with proper isolation before treating as confirmed finding.
 
-**Cross-game (Steps 467-469, 476):** FT09 has 32 visual states, VC33 has 50. Both degenerate for LSH AND k-means — the games are "frozen" (no visual variation from random actions). Cross-game generality requires games where random actions produce visual feedback. LS20 is the only navigable ARC-AGI-3 preview game.
+**Cross-game — OPEN PROBLEM, not closed (Steps 467-469, 476):** FT09 has 32 visual states, VC33 has 50. Both degenerate for LSH AND k-means using avgpool16 + centered_enc — but codebook with PRESCRIBED encodings solved both (FT09: 69-class click at step 82, VC33: 3-zone at step 283). The games are not "frozen" — our encodings are blind to them. FT09 requires click-region actions (I3), VC33 requires timing (I4). These are the harder unsolved problems. No non-codebook substrate has passed either game. 493 experiments, 0 solutions without prescribed game knowledge.
+
+**Step 493 confirms Level 2 gap across families:** L2 k-means (286 cells) confirms LSH (259 cells) — both plateau, both 0/N Level 2. Growing centroids don't help. The reachable region is topologically bounded regardless of mapping architecture.
 
 **Honest framing:** Local continuity + persistence explain ALL observed Level 1 navigation failures. Level 2 failures are explained by the SPATIAL DISCONNECT between reachable states and reward — a game topology problem, not a mechanism property. The mapping properties are necessary but not sufficient for multi-level navigation.
 
@@ -172,9 +174,9 @@ The task is interactive (unknown environment, no separate training phase). Any s
 
 ---
 
-## The State of the Search (455 experiments, 6 families)
+## The State of the Search (493 experiments, 8 families)
 
-*Revised 2026-03-18 session 2. Framed by task requirements, not architecture gaps.*
+*Revised 2026-03-18 session 3. Updated with Steps 456-493. FT09/VC33 reframed as open problems.*
 
 ### What's Solved
 
@@ -182,13 +184,13 @@ The task is interactive (unknown environment, no separate training phase). Any s
 
 **The three mapping properties are validated.** Deterministic + locally continuous + persistent. Predicts navigation success/failure with 100% accuracy across all 6 tested families. This is the strongest empirical finding in the project.
 
-**Two working mappings exist:** codebook (cosine similarity — 6/10 at 50K, banned) and LSH (random hyperplanes — 4/10 at 50K, legal). Both satisfy all three mapping properties through different mechanisms.
+**Three working mappings exist for LS20:** codebook (cosine — 6/10 at 50K, banned), LSH (random hyperplanes — 9/10 at 120K), L2 k-means (5/10 at 50K, 3/3 Level 1 at 200K). All satisfy the three mapping properties through different mechanisms. **But ALL only work on LS20.** Zero non-codebook solutions exist for FT09 or VC33.
 
 ### What's Open
 
 1. **R3 (self-modification):** No substrate self-modifies its mapping. Codebook attract is prescribed. LSH hyperplanes are fixed. The mapping IS the frozen frame. Making it adaptive without reintroducing banned mechanisms is the core open problem.
 
-2. **Cross-game generality:** LSH degenerates on FT09 (1 cell, Step 455). k=10 too coarse. The codebook's adaptive density (attract concentrates entries where observations cluster) handles this automatically. Property 3 (adaptive density) is NOT needed for single-game navigation but IS needed for cross-game generality.
+2. **FT09 and VC33 — the REAL test:** No non-codebook substrate has navigated either game. FT09 requires discovering click-region actions from raw pixels (I3). VC33 requires temporal reasoning — WHEN to act, not WHERE (I4). These aren't frozen games — they're games that expose what LS20 hides: the need for action space discovery and temporal structure. Codebook solved both only with PRESCRIBED encodings (69-class click for FT09, 3-zone for VC33). The substrate must discover these encodings autonomously.
 
 3. **R1-compliant classification:** No substrate classifies without external labels. Codebook: 9.8% self-labels vs 94.48% external (Step 432). Graph: 10.1% vs 93.34% (Step 444b). This is an honest admission — classification under R1 remains unsolved.
 
