@@ -2,7 +2,7 @@
 
 *Revised 2026-03-18 session 2. Major restructure: task requirements first, honest universality reclassification.*
 
-*525+ experiments across 10 architecture families (codebook ~435, LSH ~55, L2 k-means ~25, reservoir ~20, graph 8, CA 3, Bloom filter 2, connected-component 1, LLM 1, kd-tree 1). Codebook experiments banned 2026-03-18 — non-codebook scale-up ongoing (target: 400). Chain benchmark (CIFAR-100 → ARC-AGI-3 → CIFAR-100) introduced 2026-03-19, yielding cross-domain findings (negative transfer, action-scope isolation, threshold tension).*
+*544+ experiments across 12 architecture families (codebook ~435, LSH ~65, L2 k-means ~25, reservoir ~20, Hebbian 3, SplitTree 5, Recode 3, graph 8, n-gram 1, CA 3, Bloom 2, CC 1, LLM 1, kd-tree 1). Codebook banned 2026-03-18. Chain benchmark introduced 2026-03-19. Key session findings: algorithm invariance (argmin IS the mechanism across 5 representations), self-refinement expands reachable set (Recode 5/5 L1, 1267 cells), centering tension (required for navigation, kills domain separation), noisy TV universal (targeted exploration kills navigation).*
 
 **Classification:**
 - **Task Requirement**: What the TASK demands of any substrate (derived from successes AND failures across families)
@@ -28,13 +28,17 @@ Every navigation experiment since Step 442 uses the same graph + edge-count mech
 | **Locally continuous** (nearby obs → same node) | YES | Grid graph fails (0/3, Steps 446-447). LSH succeeds (3/10, Step 453). PCA grid worse than random (539 vs 1869 cells). Reservoir fails (history-dependent mapping, Step 448). CA fails (degenerate mapping, Steps 449-451). 4 families fail on this axis — the strongest evidence. |
 | **Persistent** (nodes don't get destroyed) | YES | kd-tree fails (splits destroy edges, Step 452). LSH/codebook cells are permanent → navigate. |
 
-**Navigation also requires a non-convergent exploration mechanism.** Edge-count argmin converges LOCALLY (per-cell ratios approach true visit distribution). Steps 489-492 confirm empirically: at 1M steps on Level 2, cells plateau at 259/4096 — agent cycles forever. Convergence is real but only matters when the reward is beyond the reachable set.
+**Algorithm invariance (Steps 521, 524, 525, 542).** The action-selection mechanism IS argmin over visit frequency, regardless of representation. Tested across 5 representations: edge dict (LSH), weight matrix (Hebbian), transition tensor (Markov), n-gram history, and self-refining tree (Recode). All produce equivalent navigation. The mechanism is the invariant; the data structure is a degree of freedom.
 
-**The 6/10 → 9/10 finding (Steps 484-485):** The apparent 6/10 ceiling on LS20 Level 1 was a STEP BUDGET ARTIFACT. Hard seeds navigate at 35K-115K vs easy seeds at 5-20K. Step 485: 9/10 at 120K. Step 484: 4/4 hard seeds navigate at 200K (tested separately). Projected 10/10 with sufficient budget but not measured in a single run.
+**Non-convergent exploration.** Edge-count argmin converges LOCALLY (per-cell ratios approach true visit distribution). But the reachable set continues growing sublinearly: 259 cells at 50K → 439 at 740K → ~450 asymptote at k=12 (Steps 528-529). The prior "259 ceiling" was a TIME LIMIT, not topology. At k=16, reachable set expands to 1094 cells at 200K (Step 531). With self-refinement (Recode, Step 542): 1267 cells at 500K — self-discovered partitioning expands the reachable set beyond the fixed-mapping plateau.
 
-**Smart exploration vs uniform exploration (Steps 477-482):** Every TARGETED action selection strategy (destination novelty 1/10, prediction error 0/10, softmax 2/3) performs WORSE than pure argmin. UCB1 degenerates to argmin in practice. One UNIFORM strategy — global cell novelty (Step 482) — MATCHES argmin at 6/10 with complementary seed coverage, suggesting ensemble could reach 8-9/10. Smart (signal-chasing) = worse. Uniform (coverage-maximizing) = comparable.
+**Self-refinement expands reachable set (Step 542, Recode).** LSH k=16 + passive self-refinement from transition statistics = 5/5 L1 on LS20. The observation→cell mapping is self-modified: when a cell contains observations that lead to different transition outcomes, the substrate learns a hyperplane that separates them. 1267 cells vs 440 LSH-only baseline. This is the first substrate where the mapping improves from its own dynamics AND navigation succeeds.
 
-**Level 2 physical gap (Steps 486-493, 2 families):** Level 2's reward is in a region disconnected from the reachable states. Confirmed across LSH (259 cells, Step 489) and L2 k-means (286 cells, Step 493). Both plateau regardless of budget. Edge manipulation in any direction reduces coverage vs pure argmin. Ordering: argmin(259) > decay(241-243) > death-avoid(227) > death-seek(196). Level 2 requires purposeful exploration (I6/I9) — not a better mapping.
+**The 6/10 → 9/10 → 5/5 progression:** 6/10 at k=12, 50K (Step 459) was BUDGET-DEPENDENT. 9/10 at k=12, 120K (Step 485). 3/3 at k=16, 200K (Step 531). **5/5 at k=16 + self-refinement, 500K (Step 542, Recode).** Navigation reliability scales with k, budget, and mapping quality.
+
+**Targeted exploration kills navigation (Steps 477-482, 539-541).** Every TARGETED action selection strategy performs WORSE than pure argmin. Destination novelty 1/10, prediction error 0/10, softmax 2/3, entropy-seeking 0/3 (noisy TV problem — Burda et al. 2018). UCB1 degenerates to argmin. Entropy-seeking drives the agent into lethal states because death transitions have maximum irreducible entropy. **6 independent strategies tested, all worse than argmin.** This is the noisy TV problem applied to navigation: targeted exploration finds noise (death), not signal (reward).
+
+**Level 2 reward disconnect (Steps 486-493, 528-529, 532).** Level 2's reward is in a region the agent hasn't reached at 740K steps with 439 cells (k=12) or at 500K with 1149 cells (k=16). The reachable set keeps growing slowly but L2 remains disconnected. Edge manipulation, death avoidance/seeking, stochastic edge exploitation, and finer partitioning all fail to reach L2. Level 2 requires purposeful exploration (I6/I9) — not a better mapping or more budget.
 
 **LLM benchmark (Step 462) — PRELIMINARY, n=1:** 1/1 clean test (haiku on LS20) failed — action collapse (100% ACTION1, 97 steps). 2 tainted results excluded: sonnet cheated (read codebase, uninterpretable), opus tested on FT09 (a game broken for all mechanisms). Insufficient sample for strong claims. HYPOTHESIS: LLMs lack systematic exploration mechanism. Needs repeat with proper isolation before treating as confirmed finding.
 
@@ -46,13 +50,17 @@ Every navigation experiment since Step 442 uses the same graph + edge-count mech
 
 **ALL 3 GAMES LEVEL 1 SOLVED.** Unifying mechanism across 505 experiments: graph + edge-count argmin + correct action decomposition. The mapping (how observations become nodes) and the action space (how actions are decomposed) are the VARIABLES. The graph + argmin is the CONSTANT. LS20 needs 4 directional actions. FT09 needs 69 (64 grid + 5 simple). VC33 needs 3 (zone discovery). All prescribed. The frontier is: can the substrate DISCOVER the right action decomposition autonomously (I3)?
 
-**Step 493 confirms Level 2 gap across families:** L2 k-means (286 cells) confirms LSH (259 cells) — both plateau, both 0/N Level 2. Growing centroids don't help. The reachable region is topologically bounded regardless of mapping architecture.
+**Level 2 gap confirmed across 4 families:** Codebook, LSH (259→439 cells), k-means (286 cells), and Recode (1267 cells) all fail Level 2. The reachable set grows sublinearly but never includes L2 reward. Growing the mapping (more cells, finer partition, self-refinement) does not unlock L2.
 
-**Honest framing:** Local continuity + persistence explain ALL observed Level 1 navigation failures. Level 2 failures are explained by the SPATIAL DISCONNECT between reachable states and reward — a game topology problem, not a mechanism property. The mapping properties are necessary but not sufficient for multi-level navigation.
+**Centering tension (Steps 543-544).** Centered encoding is REQUIRED for navigation (uncentered: 62 cells, 0/5 — Step 544). But centering kills domain separation for the chain (CIFAR and LS20 hash to shared nodes — Step 543). This is a structural constraint: the encoding that enables navigation prevents cross-domain survival. Unresolved.
+
+**Honest framing:** Local continuity + persistence explain ALL Level 1 navigation failures. Level 2 failures are explained by the REWARD DISCONNECT — the game topology places L2 beyond the argmin-reachable frontier regardless of mapping architecture, partition granularity, or budget. The mapping properties are necessary for L1 but not sufficient for L2.
 
 ### Classification (P-MNIST)
 
-Classification requires external labels. Step 432: self-labels = 9.8% (chance), external labels = 94.48%. Confirmed for both codebook and graph substrate (Step 444b: 93.34% with labels, 10.1% without). No substrate has achieved R1-compliant classification. This is an honest admission, not a constraint to work around.
+Classification requires external labels. Step 432: self-labels = 9.8% (chance), external labels = 94.48%. Confirmed across codebook and graph (Step 444b). No substrate has achieved R1-compliant classification.
+
+**Encoding HAS class signal (Steps 510, 526).** avgpool16+centered 256D produces NMI=0.48 with LSH k=12 random hyperplanes (Step 526) — better than codebook NMI=0.42 at same granularity. The partition method doesn't determine class structure — the encoding does. But no mechanism extracts this signal without external labels. The wall is the label, not the encoding.
 
 ### Both Tasks
 
