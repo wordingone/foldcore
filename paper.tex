@@ -147,26 +147,346 @@ frame)
 
 Dynamics: s\_\{t+1\} = F(s\_t)(x\_t), a\_t = g(s\_t).
 
-\subsubsection{3.2 Structural Rules (R1-R6) as Conditions on
-F}\label{structural-rules-r1-r6-as-conditions-on-f}
+\subsubsection{3.2 Structural Rules (R1-R3) and the Core
+Tension}\label{structural-rules-r1-r3-and-the-core-tension}
 
-{[}From BIRTH.md Formalization 1 --- to be migrated and refined with
-literature citations{]}
+\textbf{Prior work:} R1 (no external objectives) is the standard
+unsupervised/self-supervised setting. R2 (adaptation from computation)
+rules out external optimizers --- related to Hebbian learning (Hebb,
+1949) where adaptation is local and intrinsic. R3 (self-modification) is
+formalized by Schmidhuber (2003) as the Gödel machine's self-referential
+property, though his version requires a proof searcher we do not.
+
+\textbf{Our formalization:}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{R1:} \(f_s(x)\) depends only on \(s\) and \(x\). No external
+  signal \(L\) enters. The substrate is a closed dynamical system over
+  \(S\) given input stream \(X\).
+\item
+  \textbf{R2:} All parameters \(\Theta(f) \subseteq S\). The only
+  mechanism modifying \(\Theta\) is \(f\) itself. No gradient
+  \(\nabla L\), no external optimizer. The map \(t \mapsto s_t\) is
+  generated entirely by iterating \(f\).
+\item
+  \textbf{R3:} \(F: S \to (X \to S)\) is non-constant.
+  \(\exists s_1 \neq s_2\) such that \(F(s_1) \neq F(s_2)\) as functions
+  on \(X\). The update rule depends on the state, not just the data.
+\end{itemize}
+
+\textbf{Core Tension (Theorem 1):} R3 + U7 (dominant amplification) +
+U22 (convergence kills exploration) produce convergence pressure. U17
+(unbounded growth) prevents convergence. Proof: if \(s_t \to s^*\), then
+\(\phi(s^*) < \infty\), contradicting U17. Therefore the system has no
+fixed point. Self-modification is necessary --- growth perpetually
+disrupts the dominant mode.
+
+\textbf{Relationship to prior work:} The no-fixed-point result is a
+consequence of combining standard dynamical systems theory (spectral
+convergence) with the growth axiom (U17). The individual pieces are
+known; the combination producing perpetual non-convergence appears to be
+our derivation. Closest prior work: Schmidhuber's ``asymptotically
+optimal'' self-improvement, which converges --- our system provably
+doesn't.
+
+\textbf{Tensions:} - T1: U7 assumes stationarity that R3 breaks. May
+need reformulation as ``locally amplifies largest-variance component''
+(instantaneous, not asymptotic). - T2: R3 is ambiguous between
+``actively modifies operations'' and ``operations responsive to state.''
+Strong vs weak interpretation.
 
 \subsubsection{3.3 Growth Topology (U3, U17, U20,
 R6)}\label{growth-topology-u3-u17-u20-r6}
 
-{[}From BIRTH.md Formalization 2 --- to be migrated and refined{]}
+\textbf{Prior work:} U3 (zero forgetting) is the catastrophic forgetting
+constraint from continual learning (McCloskey \& Cohen, 1989; French,
+1999). U20 (local continuity) is Lipschitz continuity of the mapping ---
+standard in topology-preserving embeddings (Kohonen, 1988; van der
+Maaten \& Hinton, 2008 for t-SNE). R6 (no deletable parts) relates to
+minimal sufficient statistics (Fisher, 1922).
+
+\textbf{Our formalization:}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{U3:} \(S_t \subseteq S_{t+1}\) (structural inclusion ---
+  components added, never removed). Values may change; skeleton only
+  grows.
+\item
+  \textbf{U17:} \(\exists \phi: S \to \mathbb{R}_{\geq 0}\)
+  monotonically non-decreasing, with
+  \(\lim_{t \to \infty} \phi(s_t) = \infty\).
+\item
+  \textbf{U20:} \(\pi: X \to N\) is Lipschitz:
+  \(d_N(\pi(x_1), \pi(x_2)) \leq L \cdot d_X(x_1, x_2)\).
+\item
+  \textbf{R6:} For every component \(c \in \text{components}(S_t)\), the
+  restricted state \(S_t \setminus \{c\}\) fails the ground truth test
+  \(G\).
+\end{itemize}
+
+\textbf{Propositions (proven in BIRTH.md, to be cleaned):} 1. U3 + U17 +
+R6 \(\Rightarrow\) irredundant growth (every new component covers unique
+territory). 2. U20 + irredundancy \(\Rightarrow\) well-separated nodes
+(Voronoi cells partition \(X\) without unnecessary overlap). 3. Growth
+rate is coupled to observation distribution (environment gates growth).
+4. U20 constrains node topology to inherit from \(X\) (connected
+observations \(\to\) connected nodes).
+
+\textbf{Relationship to prior work:} The individual constraints are
+known (catastrophic forgetting, Lipschitz continuity, minimal
+sufficiency). The combination producing ``irredundant growth'' --- where
+every new component is both unique and necessary --- appears to be our
+synthesis.
+
+\textbf{Tension T3:} R3 (self-modifying metric) + U20 (continuous
+mapping) = metric can REFINE (increase resolution) but cannot REARRANGE
+(swap what's near/far). This constrains the space of allowed
+self-modifications.
+
+\textbf{Tension T4:} Finite observation space + irredundant growth =
+node count is bounded. U17 must be satisfied by something other than
+nodes (edges, in practice). But edge-count growth after node saturation
+violates R6 (marginal counts are redundant). This leads to Theorem 2
+(Section 4.3).
+
+\subsubsection{3.4 Action Selection Constraints (U1, U11,
+U24)}\label{action-selection-constraints-u1-u11-u24}
+
+\paragraph{U1: No separate learning and inference
+modes}\label{u1-no-separate-learning-and-inference-modes}
+
+\textbf{Prior work:} Online continual learning (OCL) formalizes exactly
+this constraint. Aljundi et al.~(CVPR 2019, ``Task-Free Continual
+Learning'') define systems that learn from a single-pass data stream
+with no task boundaries. The broader OCL literature (survey:
+arXiv:2501.04897) emphasizes ``real-time adaptation under stringent
+constraints on data usage.'' Our U1 is equivalent to the OCL setting.
+
+\textbf{Our formalization:} \(F\) is time-invariant. The same meta-rule
+\(F: S \to (X \to S)\) applies at every timestep. There is no mode
+variable \(m \in \{train, infer\}\) that changes \(F\)'s behavior.
+Formally: the system's dynamics are a single autonomous dynamical
+system, not a switched system.
+
+\textbf{Relationship to prior work:} Equivalent to OCL's single-pass
+constraint. Not novel --- properly attributed.
+
+\textbf{Implications:} Combined with R3 (self-modification), U1 says:
+the system modifies itself using the SAME function it uses to process
+input. There is no separate training phase where the system is allowed
+to self-modify more aggressively. This rules out any architecture with
+explicit ``learning rate schedules'' or ``warmup phases'' unless these
+are derived from the state itself (which would make them R3-compliant).
+
+\paragraph{U24: Exploration and exploitation are opposite
+operations}\label{u24-exploration-and-exploitation-are-opposite-operations}
+
+\textbf{Prior work:} The exploration-exploitation tradeoff is
+foundational in RL (Sutton \& Barto, 2018). The formal impossibility of
+a single mechanism optimizing both simultaneously is well-established in
+multi-armed bandit theory (Auer et al., 2002; Lai \& Robbins, 1985).
+Recent work (arXiv:2508.01287, 2025) suggests exploration can emerge
+from pure exploitation under specific conditions (repeating tasks, long
+horizons).
+
+\textbf{Our formalization:} Let \(g_{explore}: S \to A\) maximize
+coverage (minimize revisitation) and \(g_{exploit}: S \to A\) maximize
+classification accuracy. Then \(g_{explore} \neq g_{exploit}\) in
+general.
+
+Specifically: \(g_{explore} = \text{argmin}_a \sum_n E(c, a, n)\)
+(least-tried action) and
+\(g_{exploit} = \text{argmax}_a \text{score}(s, a)\) (highest-confidence
+action). These select opposite actions when the least-explored action is
+also the least-confident.
+
+\textbf{Relationship to prior work:} This is the standard RL tradeoff.
+Not novel. Our contribution is empirical confirmation across 505
+experiments that no single \(g\) produces both good navigation and good
+classification (Steps 418, 432, 444b).
+
+\paragraph{U11: Discrimination and navigation require incompatible
+action
+selection}\label{u11-discrimination-and-navigation-require-incompatible-action-selection}
+
+\textbf{Prior work:} No direct formal precedent found. The RL literature
+treats navigation and classification as different TASKS but doesn't
+formalize them as requiring incompatible mechanisms within the same
+system. The closest work is multi-objective RL, where Pareto-optimal
+policies for conflicting objectives are studied (Roijers et al., 2013).
+
+\textbf{Our formalization:} Navigation requires
+\(g_{nav}(s) = \text{argmin}_a \text{count}(s, a)\) --- the action that
+maximizes coverage. Classification requires
+\(g_{class}(s) = \text{argmax}_a \text{score}(s, a, \text{label})\) ---
+the action (label assignment) that maximizes match confidence. These are
+not just ``different'' --- they are NEGATIONS of each other (argmin vs
+argmax over the same scoring function applied to the same state).
+
+\textbf{Relationship to prior work:} The specific finding --- that
+argmin produces 0\% classification (Step 418g) and argmax produces 0\%
+navigation --- appears to be our empirical contribution, not previously
+formalized as a constraint. However, the underlying principle
+(coverage-maximizing and accuracy-maximizing objectives conflict) is a
+special case of multi-objective optimization theory.
+
+\textbf{Implications:} A system satisfying R1-R6 must handle BOTH tasks
+(navigation and classification). Since they require opposite \(g\), the
+system needs either: (a) a mechanism to SWITCH between \(g_{nav}\) and
+\(g_{class}\) based on context --- but U1 forbids mode switching; or (b)
+a single \(g\) that somehow serves both objectives simultaneously ---
+but U24 says this is impossible. This creates a genuine tension.
+
+\textbf{Degree of freedom 11:} How does the system resolve the U1 + U11
++ U24 tension? One possibility: \(g\) depends on \(s\) (which it must,
+by R3), and the STATE determines whether the system's behavior is more
+exploratory or more exploitative. This is not mode switching (the
+function \(g\) is the same) --- it's state-dependent behavior. The
+system explores when its state indicates uncertainty, and exploits when
+its state indicates confidence. This is known in the RL literature as
+Bayesian exploration (Ghavamzadeh et al., 2015).
+
+\subsubsection{3.5 Remaining Structural Rules (R4-R6) and Validated
+Constraints (U7, U16,
+U22)}\label{remaining-structural-rules-r4-r6-and-validated-constraints-u7-u16-u22}
+
+\paragraph{R4: Modification tested against prior
+state}\label{r4-modification-tested-against-prior-state}
+
+\textbf{Prior work:} Regression testing in software engineering
+(Rothermel \& Harrold, 1996). In RL, policy improvement is tested
+against the previous policy (Kakade \& Langford, 2002, conservative
+policy iteration). In self-adaptive systems, runtime testing validates
+adaptations against pre-adaptation behavior (Fredericks et al., 2018).
+The formal requirement that a self-modifying system must self-evaluate
+is implicit in Schmidhuber's Gödel machine (the proof must show the
+rewrite improves expected utility).
+
+\textbf{Our formalization:} After each modification
+\(s_{t+1} = f_{s_t}(x_t)\), there exists an evaluation
+\(V: S \times S \times X^* \to \{better, worse, same\}\) applied by
+\(f\) itself (not externally) to novel inputs \(X^*\). \(V\) is part of
+\(F\) (frozen).
+
+\textbf{Relationship to prior work:} Equivalent to conservative policy
+iteration's requirement. The novelty, if any, is requiring \(V\) to be
+part of \(f\)'s dynamics (R2 compliance) rather than an external
+evaluator. This is the same distinction we make for R1.
+
+\paragraph{R5: One fixed ground truth}\label{r5-one-fixed-ground-truth}
+
+\textbf{Prior work:} In formal verification, the specification is the
+fixed point against which the system is tested. In Schmidhuber's Gödel
+machine, the utility function is the fixed external criterion. In
+evolution, fitness is determined by the environment (fixed, external).
+The idea that a self-modifying system needs at least one invariant is
+well-established --- without it, the system can trivially ``improve'' by
+redefining improvement.
+
+\textbf{Our formalization:} \(\exists!\) \(G: S \to \{0, 1\}\) (ground
+truth test) such that \(G \notin S\) --- the system cannot modify \(G\).
+\(G\) is part of \(F\).
+
+\textbf{Relationship to prior work:} Standard. Not novel.
+
+\paragraph{R6: No deletable parts
+(minimality)}\label{r6-no-deletable-parts-minimality}
+
+\textbf{Prior work:} Minimal realizations in control theory (Kalman,
+1963) --- a state-space representation with no redundant states. Minimal
+sufficient statistics (Fisher, 1922). Minimal dynamical systems in
+topological dynamics --- a system where every orbit is dense
+(Scholarpedia). Our R6 is closest to Kalman's minimal realization: no
+state can be removed without losing input-output behavior.
+
+\textbf{Our formalization:} For every component
+\(c \in \text{components}(S_t)\): \(G(S_t \setminus \{c\}) = 0\). Every
+element is load-bearing.
+
+\textbf{Relationship to prior work:} Equivalent to Kalman's
+observability + controllability condition in linear systems. For
+nonlinear growing systems, we are not aware of a standard formalization.
+The combination with U17 (unbounded growth) is non-standard --- Kalman
+minimality assumes fixed dimension.
+
+\paragraph{U7: Iterated application amplifies dominant
+features}\label{u7-iterated-application-amplifies-dominant-features}
+
+\textbf{Prior work:} Power iteration (von Mises, 1929). In linear
+systems, repeated application of a matrix amplifies the dominant
+eigenvector. In neural networks, repeated weight application leads to
+mode collapse (vanishing/exploding gradients, Bengio et al., 1994). In
+recurrent networks, the issue is well-studied as the echo state property
+(Jaeger, 2001).
+
+\textbf{Our formalization:} For linearization \(Df\) of \(f\) around any
+trajectory point:
+\(\|f^n(s, \cdot) - \lambda_1^n v_1 v_1^T f(s, \cdot)\| \to 0\) as
+\(n \to \infty\), where \(\lambda_1, v_1\) are the dominant
+eigenvalue/eigenvector.
+
+\textbf{Relationship to prior work:} This IS power iteration. Known
+since 1929. Our contribution is observing it empirically across
+architectures (codebook Step 405, reservoir Steps 438-439) and noting
+its interaction with R3 and U17 (Theorem 1).
+
+\paragraph{U16: Input must encode differences from
+expectation}\label{u16-input-must-encode-differences-from-expectation}
+
+\textbf{Prior work:} Mean subtraction / centering is standard
+preprocessing in machine learning (LeCun et al., 1998, ``Efficient
+BackProp''). In neuroscience, predictive coding (Rao \& Ballard, 1999)
+formalizes the idea that neural systems encode prediction errors, not
+raw stimuli. Whitening (decorrelation + unit variance) extends
+centering.
+
+\textbf{Our formalization:} The observation \(x\) is preprocessed as
+\(x - \mathbb{E}[x]\) before \(f_s\) processes it. In our framework,
+centering is part of \(F\) --- it's frozen, load-bearing, and confirmed
+across 2 families (codebook Step 414, LSH Step 453).
+
+\textbf{Relationship to prior work:} Centering is standard (LeCun 1998).
+The specific finding that it's load-bearing for TWO architecturally
+distinct families (codebook: prevents cosine saturation; LSH: prevents
+hash concentration) is our empirical contribution, not the
+formalization.
+
+\paragraph{U22: Convergence kills
+exploration}\label{u22-convergence-kills-exploration}
+
+\textbf{Prior work:} In bandit theory, a converged policy exploits one
+arm and never explores others (Lai \& Robbins, 1985). In RL, policy
+convergence to a deterministic policy eliminates exploration (Sutton \&
+Barto, 2018). The formal statement that convergent dynamics in
+interactive environments produce stationary behavior is
+well-established.
+
+\textbf{Our formalization:} If \(\|s_{t+1} - s_t\| \to 0\), then
+\((a_t)\) becomes eventually periodic. Mathematically: convergent
+adaptation makes the environment appear stationary \(\to\) trivially
+predictable \(\to\) no learning signal \(\to\) no new states.
+
+\textbf{Relationship to prior work:} Known. The specific empirical
+confirmations (codebook Step 428 score convergence, TemporalPrediction
+Step 437d weight freezing) are data points for a known phenomenon.
 
 \subsection{4. Results}\label{results}
 
 \subsubsection{4.1 The Core Tension (R3 + U7 + U17 +
 U22)}\label{the-core-tension-r3-u7-u17-u22}
 
-The system has no fixed point (Theorem 1). Self-modification is
-necessary, not optional.
+\textbf{Theorem 1:} No satisfying system has a fixed point. If
+\(s_t \to s^*\), then \(\phi(s^*) < \infty\), contradicting U17.
+Self-modification is necessary, not optional --- growth perpetually
+disrupts the dominant mode (U7), preventing convergence (U22).
 
-{[}From BIRTH.md Formalization 1, Section 1.2-1.3{]}
+The system oscillates: U7 drives toward dominant mode \(\to\) U17 growth
+disrupts the mode via R3 \(\to\) new dominant mode emerges \(\to\)
+repeat. The oscillation period is a degree of freedom.
 
 \subsubsection{4.2 Irredundant Growth}\label{irredundant-growth}
 
