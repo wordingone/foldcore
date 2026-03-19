@@ -2,7 +2,7 @@
 
 **Can a system improve itself by criteria it generates?**
 
-This repository documents a systematic search for a substrate — a minimal computational structure — that satisfies six simultaneous rules for recursive self-improvement. 445 experiments across three architecture families. No solution found yet. The constraint map from those failures is the main contribution.
+This repository documents a systematic search for a substrate — a minimal computational structure — that satisfies six simultaneous rules for recursive self-improvement. 525+ experiments across 9 architecture families. No solution found yet. The constraint map from those failures is the main contribution.
 
 ---
 
@@ -23,43 +23,59 @@ R3 is the binding constraint. Every substrate tested so far has hardcoded operat
 
 ---
 
-## What 445 Experiments Found
+## What 525 Experiments Found
 
-### Three architecture families
+### Architecture families
 
 | Family | Experiments | Best Result | Status |
 |--------|------------|-------------|--------|
-| Codebook (LVQ) | 435 | 94.48% P-MNIST (supervised), LS20 Level 1 at ~26K steps | Mapped — 26 constraints extracted |
-| Reservoir (ESN) | 7 | Rank-1 collapse solved (sparse: rank=251), no useful computation yet | Characterized |
-| Graph | 5 | LS20 Level 1 at 25738 steps (3/10 seeds at 50K) | First non-codebook to navigate |
+| Codebook (LVQ) | ~435 | 94.48% P-MNIST (supervised), chain 3/3 ARC games | Mapped — banned for further experiments |
+| LSH graph | ~55 | LS20 Level 1, chain WIN@1116 (10x faster than codebook) | Active — best non-codebook family |
+| L2 k-means graph | ~25 | LS20 9/10 at 120K, chain negative transfer confirmed | Active |
+| Reservoir (ESN) | ~20 | Memory contributes nothing to navigation | Killed |
+| Graph (cosine) | ~8 | LS20 Level 1 at 25738 steps | Superseded by LSH/k-means |
+| Connected-component | 1 | 23 states, too slow (200 steps/sec) | Killed |
+| Bloom filter | 2 | 1/10 (random walk luck) | Killed |
+| CA | 3 | Degenerate mapping | Killed |
+| LLM agent | 1 | Action collapse (100% ACTION1) | Preliminary |
 
-Four Phase 2a candidates (SelfRef, TapeMachine, ExprSubstrate, TemporalPrediction) were killed. See [CONSTRAINTS.md](CONSTRAINTS.md).
+### The chain benchmark
+
+The real test is not single-benchmark performance. It is the **chain**: heterogeneous benchmarks run in sequence with one continuous state, no reset.
+
+```
+CIFAR-100 → Atari (ARC-AGI-3) → CIFAR-100
+```
+
+| Finding | Step | Result |
+|---------|------|--------|
+| Frozen centroids → negative transfer | 506, 515 | Universal across codebook AND k-means families |
+| Dynamic growth → domain separation | 507-508 | Chain 3/3 ARC games, zero CIFAR forgetting |
+| LSH chain via action-scope isolation | 516 | WIN@1116 — different mechanism than codebook chain |
+| Threshold tension | 509-513 | CIFAR needs threshold≥3.0, ARC needs ≤0.5. Incompatible. |
+| K-means cross-game transfer | 522 | Degenerate (centroid collapse). Attract update load-bearing. |
 
 ### Key findings
 
-**Classification is supervised (Step 432).** The codebook's 94.48% depends entirely on external labels. Self-generated labels: 9.8% (below chance). The self-labeling mechanism compounds errors through softmax voting (U26).
+**All 3 ARC-AGI-3 games Level 1 solved (Steps 503, 505).** Unifying mechanism: graph + edge-count argmin + correct action decomposition. LS20: 4 actions. FT09: 69 actions (64 click grid + 5 simple). VC33: 3 zones (2 magic pixels). Confirmed across codebook and k-means families.
 
-**Navigation hits a wall (Step 428).** Action-score convergence makes the codebook a random walk after ~5K steps. No scoring modification fixes this — 60+ experiments tried (U25). Navigation speed is determined by encoding quality, not scoring formula (300x between encodings).
+**Classification is supervised (Step 432).** Self-generated labels: 9.8% (below chance). The chain achieves 1% on CIFAR-100 (chance) — encoding has class signal (NMI=0.42) but the threshold is incompatible across domains.
 
-**Cross-domain survival (Step 433).** P-MNIST knowledge survives LS20 exposure with 0.0pp contamination. The codebook partitions by domain geometry. One-directional: existing knowledge suppresses new-domain exploration.
+**Negative transfer is universal (Steps 506, 515).** Frozen centroids from one domain break navigation in another. This holds for both codebook (cosine) and k-means (L2). LSH avoids it entirely — random projections are domain-agnostic.
 
-**A graph navigates without scores (Step 442b).** Nodes as observation landmarks, edges as transition counts, actions from least-visited edges. First architecture to navigate LS20 without codebook machinery. Systematic exploration by construction — no score convergence possible.
+**Two independent chain mechanisms.** Codebook survives the chain via encoding-space separation (CIFAR and ARC centroids are far apart). LSH survives via action-scope isolation (each game queries only its own actions). Both prevent catastrophic interference.
 
 ### The constraint map
 
-26 universal constraints extracted from experimental failure define what ANY substrate must satisfy. 7 are provisional (codebook-only evidence). See [CONSTRAINTS.md](CONSTRAINTS.md) for the full map.
-
-Each constraint is a closed door. The pattern of elimination IS the search.
+Constraints extracted from experimental failure across 9 families. See [CONSTRAINTS.md](CONSTRAINTS.md) for the full map with cross-family validation status.
 
 ---
 
-## Current Direction (Phase 2b)
+## Current Direction
 
-1. **Graph without codebook DNA** — The current graph still uses cosine-matched nodes (codebook loophole). Next: quantization or LSH-based matching. The relational structure (edges) is the contribution; the spatial mechanism must be genuinely new.
-
-2. **Reservoir family** — Sparse Hebbian solved rank collapse. Open question: how to get useful computation from a self-modifying recurrent network under R1. 7 experiments done, hundreds needed.
-
-3. **Impossibility direction** — 445 experiments of systematic failure. Can U24 + U25 + U26 be formalized into a proof that the feasible region is empty?
+1. **Non-codebook scale-up** — ~55 non-codebook experiments vs ~435 codebook. Scaling non-codebook families to balance the evidence base. Codebook experiments banned.
+2. **New architecture families** — Hebbian learning, Markov transition models, sequence prediction agents. Testing genuinely different mechanisms on the chain.
+3. **The paper** — [PAPER.md](PAPER.md) compiles to LaTeX. Formal framework (f, g, F), two theorems, 11 degrees of freedom.
 
 ---
 
@@ -70,12 +86,10 @@ pip install torch torchvision numpy
 
 # Phase 1: the LVQ baseline
 python experiments/run_step250_complete_substrate.py       # Complete demo (~30s)
-python experiments/foldcore-steps/run_step99_topk_vote.py  # P-MNIST benchmark
 
-# Phase 2 experiments
-python experiments/run_step442_graph_substrate.py           # Graph substrate
-python experiments/run_step441_sparse_reservoir.py          # Sparse reservoir
-python experiments/run_step432_labeled_vs_self.py           # Label dependency test
+# Chain experiments (Phase 2)
+python experiments/run_step508_full_chain.py                # Full chain CIFAR→ARC→CIFAR
+python experiments/run_step474_kmeans_l2.py                 # K-means graph on LS20
 ```
 
 ---
@@ -85,25 +99,16 @@ python experiments/run_step432_labeled_vs_self.py           # Label dependency t
 ```
 the-search/
   CONSTITUTION.md        -- 5 principles + 6 rules (R1-R6)
-  CONSTRAINTS.md         -- U1-U26, I1-I9, S1-S21
-  RESEARCH_STATE.md      -- Full experiment log
-  INDEX.md               -- File-by-file index
+  CONSTRAINTS.md         -- Constraint map with cross-family validation
+  RESEARCH_STATE.md      -- Full experiment log (Steps 1-525+)
+  PAPER.md               -- Publication draft (compiles to LaTeX)
+  build-paper.py         -- LaTeX compilation pipeline
 
-  substrates/            -- All substrate implementations
-    foldcore/            -- Codebook baseline (LVQ + GNG)
-    topk-fold/           -- Phase 1 peak (94.48% P-MNIST)
-    living-seed/         -- Phase 1: Sessions 1-17 [closed]
-    anima/               -- Phase 1: Sessions 18-23 [closed]
-    eigenfold/           -- Phase 1: Matrix codebook [closed]
-    selfref/             -- Phase 2a: Self-referential [killed]
-    tape/                -- Phase 2a: Integer tape [killed]
-    expr/                -- Phase 2a: Expression tree [killed]
-    temporal/            -- Phase 2a: Temporal prediction [killed]
-
-  experiments/           -- 445 experiment scripts
-  knowledge/             -- Structured knowledge base
+  substrates/            -- Substrate implementations (Phase 1)
+  experiments/           -- 525+ experiment scripts
+  research/              -- Research methodology and frameworks
+  archive/               -- Archived Phase 1 infrastructure
   audits/                -- External audit reports
-  paper/                 -- Paper compiler
   tests/                 -- Unit tests
 ```
 
