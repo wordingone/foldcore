@@ -57,4 +57,54 @@
 
 ---
 
+## Indexing Process
+
+Every experiment passes through four gates. First match wins.
+
+| Gate | Question | Tier |
+|------|----------|------|
+| 1 | **Did this change what we pursue next?** Before/after this result, the research direction is fundamentally different. | Tier 1 |
+| 2 | **Will 5+ future experiments reference this as a given?** The result becomes a premise, not a finding. | Tier 2 |
+| 3 | **Does this confirm cross-family, provide key negative evidence, or quantify a boundary?** | Tier 3 |
+| 4 | **Is this foundational context or a necessary control?** | Tier 4 |
+| — | None of the above. | Not indexed. |
+
+Most experiments are not indexed. That's correct. The index is a curated signal, not an exhaustive log. RESEARCH_STATE.md is the exhaustive log.
+
+### Replication status
+
+Each indexed entry should track:
+
+| Status | Meaning |
+|--------|---------|
+| **Replicated** | Confirmed across 2+ architecturally distinct families |
+| **Single-family** | Result from one family only — hypothesis, not law |
+| **Superseded** | A later experiment replaced this finding |
+
+Current replication status of indexed experiments:
+
+| Entry | Families confirmed | Status |
+|-------|-------------------|--------|
+| 442b (graph navigates) | Codebook, LSH, k-means | Replicated |
+| 432 (classification requires labels) | Codebook only | Single-family |
+| 418 (argmin ≠ argmax) | Codebook, LSH, k-means | Replicated |
+| 481 (smart exploration kills) | LSH, k-means | Replicated |
+| 485 (9/10 budget artifact) | LSH (9/10), k-means (9/10) | Replicated |
+| 489-493 (Level 2 closed) | LSH, k-means | Replicated |
+| 453 (LSH navigates) | LSH only (by definition) | Single-family |
+| 503/505 (action decomposition) | Codebook, k-means | Replicated |
+| 428 (score convergence) | Codebook only | Single-family |
+| 512 (threshold tension) | Codebook chain only | Single-family |
+| 506/515 (negative transfer) | Codebook, k-means | Replicated |
+| 516 (action-scope isolation) | LSH only | Single-family |
+
+**Re-benchmark trigger:** When 3+ entries are "Single-family," run the single-family experiments on the strongest non-codebook family (currently LSH). Priority: entries where cross-family replication would strengthen or invalidate a paper claim.
+
+Current re-benchmark candidates:
+- **432** (classification requires labels) — test on LSH/k-means. Does argmax over LSH edge counts classify? Prediction: no, but data needed.
+- **428** (score convergence) — does LSH edge-count argmin also converge? Prediction: yes (counts converge by definition), but the mechanism is different.
+- **512** (threshold tension) — test LSH on chain with CIFAR. Already partially answered by Step 516 (LSH chain passes via action-scope isolation, bypassing the threshold issue entirely).
+
+---
+
 *The 16 experiments above cover what 525 found. The other 509 are the search space that made these visible.*
