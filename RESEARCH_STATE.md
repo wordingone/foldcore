@@ -389,4 +389,5 @@ The codebook family is fully mapped. Phase 2b explores the temporal dual: self-m
 | **483** | **Ensemble (argmin + global novelty parallel)** | — | **25%** | **6/10. Appeared to be game ceiling.** Seeds 1,2,5,6 fail for both mechanisms at 50K. |
 | **484** | **Hard seeds (1,2,5,6) at 200K** | — | **25%** | **4/4 NAVIGATE.** 6/10 was step budget artifact. Hard seeds need 35K-115K. |
 | **485** | **LSH k=12 at 120K, 10 seeds** | — | **25%** | **9/10.** Mechanism is ~100% reliable given sufficient budget (5K-150K per seed). |
-| **486** | **Multi-level (no reset, 200K)** | — | **25%** | **Level 1: 5/5. Level 2: 0/5.** Graph contamination — Level 1 edges (200K counts) dominate argmin. Zero Level 2 signal quality. The graph can't distinguish levels. Transfer (I5) fails without reset/decay/partitioning. |
+| **486** | **Multi-level (no reset, 200K)** | — | **25%** | **L1: 5/5. L2: 0/5.** Graph contamination from Level 1 edges. |
+| **487** | **Multi-level with edge reset** | — | **25%** | **L1: 3/3. L2: 0/3.** Edge reset insufficient — the hash CELLS are the problem. Level 1's random projection doesn't discriminate Level 2's visual structure. ~2300 game-overs = agent IS exploring Level 2 but cells don't provide useful navigation. I1 (discover own representation) fails. Fixed LSH can't adapt across levels. |
