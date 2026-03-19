@@ -57,7 +57,13 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   STAGE 8 = learned projection. The substrate discovers which pixels matter from its own codebook.
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 385c (center + PCA self-encoding at 64x64 on LS20)
+CURRENT STEP: 522 (k-means graph cross-game transfer — non-codebook chain replication)
+
+ACTIVE FRONTIER: Non-codebook experiment scale-up.
+  - Current non-codebook count: ~54. Target: 400 (to match codebook's 435).
+  - Strategy: Replicate every codebook chain finding (Steps 506-512) in each non-codebook family.
+  - Step 513 in progress (Eli): domain-adaptive threshold.
+  - Step 522 queued: k-means cross-game transfer (LS20 centroids → FT09/VC33).
   385b KILLED: centering alone in 4096 dims → thresh=-0.17, cb=8, frozen. Confirmed adversary prediction.
   384 running: FT09 fine click (256 regions), at ~40K/50K, level 1 only. Level 2 still not found.
 ```
@@ -416,3 +422,5 @@ The codebook family is fully mapped. Phase 2b explores the temporal dual: self-m
 | **510** | **CIFAR centroid count sweep (k=50-1000, NMI)** | — | **NMI=0.34** | **Encoding HAS class signal.** NMI climbs monotonically: k=50→0.145, k=100→0.188, k=200→0.230, k=500→0.311, k=1000→0.344. At k=1000: 439/1000 >50% pure. **The wall is resolution, not encoding.** |
 | **511** | **Meta-clustering chain centroids (meta-k sweep)** | — | **NMI=0.19** | **Hierarchy adds nothing at threshold=0.3.** 9998 centroids ≈ 1 per image. Meta-k=100 NMI=0.191 ≈ direct k=100 (0.188). The spawn threshold controls centroid count. |
 | **512** | **CIFAR threshold sweep (0.5-3.0)** | — | **NMI=0.42** | **NMI inflated at threshold<2.0** (9K+ centroids ≈ 1 per image). Real signal at threshold=3.0: 2701 centroids, NMI=0.423, purity=0.818. Outperforms k-means k=1000 (0.344). BUT threshold=3.0 would merge ALL ARC states (L2~0.5 << 3.0). **Chain tension quantified: CIFAR needs threshold≥3.0, ARC needs threshold≤0.5.** One fixed threshold cannot serve both domains. Domain-adaptive or multi-scale threshold required. |
+| **513** | **Domain-adaptive threshold via local density** | PENDING | — | Eli processing. Spec in mail 2020. |
+| **522** | **K-means graph cross-game transfer (LS20→FT09/VC33)** | PENDING | — | Non-codebook chain replication. K-means centroids fitted on LS20, frozen, tested on FT09 (69-action) and VC33 (3-zone). Tests whether codebook's cross-game transfer (Step 508: FT09 reused LS20 space) is universal or mechanism-specific. Predictions: FT09 2/3, VC33 1/3. Kill: FT09 0/3 → transfer is codebook-specific. Hart challenge integrated: "Step 522 is designed to confirm, not learn" → revised from CIFAR→ARC (obvious failure) to LS20→FT09 (genuinely unknown). |
