@@ -194,6 +194,51 @@ U3 + U17 + R6 together require that the system adds new components indefinitely 
 
 **Conjecture (not proven):** The minimal self-observing substrate is a fixed point of $F$. Applying the system to its own state trajectory reproduces the system's dynamics. This would terminate the potential infinite regress of self-observation (processing state → new state → processing new state → ...). Related to autopoiesis (Maturana & Varela, 1972): the network produces the components that produce the network. Difference: autopoiesis maintains structure; our system grows (U17). Status: open.
 
+### 4.5 Constructive Characterization of the Feasible Region
+
+Combining all formalized constraints, we characterize the class of $F$ that satisfies R1-R6 + validated U-constraints simultaneously.
+
+**The minimal frozen frame $F$ decomposes as:**
+
+$$F(s)(x) = \texttt{store}(s, \texttt{select}(s, \texttt{compare}(s, x)))$$
+
+where:
+- $\texttt{compare}(s, x)$: produces similarity/distance scores between $x$ and elements of $s$
+- $\texttt{select}(s, \text{scores})$: chooses an element of $s$ (or triggers creation of a new element)
+- $\texttt{store}(s, \text{selection})$: updates $s$ with the result
+
+**Constraints on each operation:**
+
+| Operation | Must satisfy | Cannot do |
+|---|---|---|
+| compare | Lipschitz in $x$ (U20). Varies with $s$ (R3). Encodes $x - \mathbb{E}[x]$ (U16). | Rearrange topology (T3). Use external signal (R1). |
+| select | Deterministic given $s$ and scores. Hard selection, not soft blend (U8, provisional). | Converge to fixed policy (U22 + Thm 1). |
+| store | Only add, never remove (U3). Irredundant (R6). Unbounded (U17). | Create redundant components. Delete existing components. |
+
+**Phase structure (from Theorem 1):**
+
+The trajectory of $s$ has two alternating phases:
+- **Phase A (amplification):** U7 drives toward the dominant mode. compare and select become increasingly predictable. The system exploits accumulated structure.
+- **Phase B (disruption):** U17 growth adds new components. Via R3, new components change compare and select. The dominant mode shifts. The system explores new structure.
+
+The oscillation between phases is perpetual (Theorem 1). The PERIOD is a degree of freedom — fast oscillation produces chaotic behavior, slow oscillation produces near-convergent behavior with occasional disruptions.
+
+**After exploration saturates (Theorem 2):**
+
+Phase B must draw new components from $s$ itself (self-observation), not from $x$. The store operation must be able to create components of TYPE different from the original observation-derived components — meta-components that represent patterns, compressions, or properties of the existing state.
+
+This means $S$ is not homogeneous. It contains at least two kinds of elements:
+1. **Observation-derived** components (nodes from $\pi(x)$, edges from transitions) — bounded by the finite environment.
+2. **State-derived** components (patterns extracted from the trajectory of type-1 components) — potentially unbounded, satisfying U17 after saturation.
+
+**What remains undetermined:**
+
+The decomposition into compare-select-store is the STRUCTURE of $F$. The specific IMPLEMENTATIONS of each operation are the degrees of freedom (Section 6). The feasible region is the set of all $(compare, select, store)$ triples that satisfy the constraints in the table above.
+
+**Non-emptiness:** The feasible region for compare-select-store with observation-derived components is non-empty — the graph + k-means + argmin system occupies it (Section 5.1). The feasible region INCLUDING state-derived components (self-observation) is the open question. No system has been shown to satisfy R6 after exploration saturates.
+
+**Relationship to prior work:** The compare-select-store decomposition resembles the read-match-write cycle of Neural Turing Machines (Graves et al., 2014) and the content-based addressing of memory-augmented neural networks. The key difference: in NTMs, the controller is trained by backpropagation (violates R1/R2). In our framework, the controller IS $F$ — frozen, minimal, and non-trainable. The state $s$ does all the adapting.
+
 ## 5. Experimental Evidence
 
 ### 5.1 Navigation (505 experiments)

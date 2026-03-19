@@ -550,6 +550,102 @@ state → processing new state → \ldots). Related to autopoiesis (Maturana
 network. Difference: autopoiesis maintains structure; our system grows
 (U17). Status: open.
 
+\subsubsection{4.5 Constructive Characterization of the Feasible
+Region}\label{constructive-characterization-of-the-feasible-region}
+
+Combining all formalized constraints, we characterize the class of \(F\)
+that satisfies R1-R6 + validated U-constraints simultaneously.
+
+\textbf{The minimal frozen frame \(F\) decomposes as:}
+
+\[F(s)(x) = \texttt{store}(s, \texttt{select}(s, \texttt{compare}(s, x)))\]
+
+where: - \(\texttt{compare}(s, x)\): produces similarity/distance scores
+between \(x\) and elements of \(s\) -
+\(\texttt{select}(s, \text{scores})\): chooses an element of \(s\) (or
+triggers creation of a new element) -
+\(\texttt{store}(s, \text{selection})\): updates \(s\) with the result
+
+\textbf{Constraints on each operation:}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Operation
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Must satisfy
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Cannot do
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+compare & Lipschitz in \(x\) (U20). Varies with \(s\) (R3). Encodes
+\(x - \mathbb{E}[x]\) (U16). & Rearrange topology (T3). Use external
+signal (R1). \\
+select & Deterministic given \(s\) and scores. Hard selection, not soft
+blend (U8, provisional). & Converge to fixed policy (U22 + Thm 1). \\
+store & Only add, never remove (U3). Irredundant (R6). Unbounded (U17).
+& Create redundant components. Delete existing components. \\
+\end{longtable}
+}
+
+\textbf{Phase structure (from Theorem 1):}
+
+The trajectory of \(s\) has two alternating phases: - \textbf{Phase A
+(amplification):} U7 drives toward the dominant mode. compare and select
+become increasingly predictable. The system exploits accumulated
+structure. - \textbf{Phase B (disruption):} U17 growth adds new
+components. Via R3, new components change compare and select. The
+dominant mode shifts. The system explores new structure.
+
+The oscillation between phases is perpetual (Theorem 1). The PERIOD is a
+degree of freedom --- fast oscillation produces chaotic behavior, slow
+oscillation produces near-convergent behavior with occasional
+disruptions.
+
+\textbf{After exploration saturates (Theorem 2):}
+
+Phase B must draw new components from \(s\) itself (self-observation),
+not from \(x\). The store operation must be able to create components of
+TYPE different from the original observation-derived components ---
+meta-components that represent patterns, compressions, or properties of
+the existing state.
+
+This means \(S\) is not homogeneous. It contains at least two kinds of
+elements: 1. \textbf{Observation-derived} components (nodes from
+\(\pi(x)\), edges from transitions) --- bounded by the finite
+environment. 2. \textbf{State-derived} components (patterns extracted
+from the trajectory of type-1 components) --- potentially unbounded,
+satisfying U17 after saturation.
+
+\textbf{What remains undetermined:}
+
+The decomposition into compare-select-store is the STRUCTURE of \(F\).
+The specific IMPLEMENTATIONS of each operation are the degrees of
+freedom (Section 6). The feasible region is the set of all
+\((compare, select, store)\) triples that satisfy the constraints in the
+table above.
+
+\textbf{Non-emptiness:} The feasible region for compare-select-store
+with observation-derived components is non-empty --- the graph + k-means
++ argmin system occupies it (Section 5.1). The feasible region INCLUDING
+state-derived components (self-observation) is the open question. No
+system has been shown to satisfy R6 after exploration saturates.
+
+\textbf{Relationship to prior work:} The compare-select-store
+decomposition resembles the read-match-write cycle of Neural Turing
+Machines (Graves et al., 2014) and the content-based addressing of
+memory-augmented neural networks. The key difference: in NTMs, the
+controller is trained by backpropagation (violates R1/R2). In our
+framework, the controller IS \(F\) --- frozen, minimal, and
+non-trainable. The state \(s\) does all the adapting.
+
 \subsection{5. Experimental Evidence}\label{experimental-evidence}
 
 \subsubsection{5.1 Navigation (505
