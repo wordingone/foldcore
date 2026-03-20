@@ -126,6 +126,10 @@ Step 572m-572s: puq iteration chain (prev_cl fix, death detection, BFS gaps, xhp
 Step 572t-572u: **L3=5/5**. puq solved. Key fix: energy routing through iri at (34,5) adds 2 steps but restores budget. Full SPAWN→GIC→KDY→LHS sequence = 46 steps, exceeds 42-step life budget without iri. Commit 0463b3c.
   PIVOTING to Steps 573-575 (constraint validation + cross-game).
 
+Step 573: U26 CHALLENGED. LSH k=16 on P-MNIST: test_acc=36.2% (vs codebook 9.8%). Self-label failure was codebook-specific (NN-voting on cosine centroids). splits=0 = pure LSH, not Recode. 4742 cells, coverage=70%.
+Step 574: U19 PARTIALLY CHALLENGED. LSH k=12 raw 64x64 on LS20: L1 reliable (1191-1418/seed). Dynamics alone sufficient for L1. L2=0 (sequencing needs features). Refined: dynamics≠features only for L2+.
+Step 575: RUNNING. Pure LSH baseline on FT09 (69-action, k=12, avgpool16). Control before mode map adaptation.
+
 ACTIVE FRONTIER: Mode map candidate sweep (L2 path). Self-observation thread closed.
   - Current non-codebook count: ~97. Target: 400 (to match codebook's 435).
   - 11 families tested. Recode is strongest non-codebook (5/5 L1, 2/3 chain).
