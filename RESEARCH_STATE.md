@@ -101,7 +101,9 @@ Step 567: Mode map rare-color targeting. L1@468 (32X FASTER). 8 rare targets fou
 Step 568-569: Visit-all-targets KILL. 6 rare clusters (not 8). TSP to all 6 + exit exhausts 129-step budget. L1=0/5, L2=0/5. Bug fix: on_reset() broke visit_order rebuild. Even after fix, budget too tight for 6 targets.
   KEY: Step 567 (greedy nearest) = L1=5/5@468. Visit-all = L1=0/5. Greedy wins.
 
-Step 570 PENDING: Self-observation via graph planning — LSH + BFS routing to least-visited nodes when exploration stalls. A/B vs pure argmin. 10 seeds, 10K steps, LS20.
+Step 570: Self-observation KILL. BFS never triggered (0 plans across 10 seeds). Two root causes: (1) >0.5 determinism threshold too strict for LSH stochastic transitions, (2) 10K steps below L1 threshold (~15K needed). Structural insight: k=12 produces EXACTLY 860 nodes across all seeds — fixed-point graph.
+
+Step 570b PENDING: Fix — argmax routing (no threshold) + 20K steps.
 
 ACTIVE FRONTIER: Two threads — (1) mode map candidate sweep (one target+exit per episode), (2) self-observation mechanism (graph planning).
   - Current non-codebook count: ~97. Target: 400 (to match codebook's 435).
