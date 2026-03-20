@@ -505,22 +505,25 @@ All formalized constraints were checked for mutual consistency. Identified tensi
 
 1. The system has no fixed point (Theorem 1). Self-modification is necessary.
 2. In finite environments, the system must process its own state (Theorem 2). Self-observation is required.
-3. The current graph + argmin mechanism exits the feasible region after exploration saturates.
-4. Argmin over visit counts is robust to noisy TV and representation-invariant (Section 4.5, Proposition 3). Action selection for navigation is solved.
-5. Self-modification of the encoding ($\ell_\pi$) is achievable and improves navigation reliability (Recode, Step 542).
+3. R3 and R5 are simultaneously satisfiable if and only if the ground truth is strictly environmental (Theorem 3, System Boundary Theorem). The feasible region is not provably empty — the question is empirical.
+4. The current graph + argmin mechanism exits the feasible region after exploration saturates.
+5. Argmin over visit counts is robust to noisy TV and representation-invariant (Section 4.5, Proposition 3). Action selection for navigation is solved.
+6. Self-modification of the encoding ($\ell_\pi$) is achievable and improves navigation reliability (Recode, Step 542).
+7. Permanent soft death penalty ($\ell_1$) improves navigation from 3/5 to 4/5 on LS20 (Step 581d). Self-modifying data is empirically beneficial. Seed expansion (Step 584, 20 seeds) pending for statistical validation.
 
 ### 7.3 What is conjectured
 
-6. The minimal self-observing substrate is a fixed point of $F$ (Section 4.5).
-7. The oscillation between U7 (convergence) and U17 (growth) is a limit cycle, not chaos.
+8. The minimal self-observing substrate is a fixed point of $F$ (Section 4.5).
+9. The oscillation between U7 (convergence) and U17 (growth) is a limit cycle, not chaos.
 
 ### 7.4 What is open
 
-8. Whether the full feasible region (R1-R6 + all validated U-constraints) is non-empty.
-9. What self-observation mechanism satisfies R6 (irredundancy) while avoiding noisy TV traps (T7).
-10. Whether $\ell_F$ (full self-reference) is achievable without infinite regress — or whether $\ell_\pi$ suffices.
-11. How to resolve U11 + U24 + U1 (incompatible tasks, no mode switch) in a single system (T6).
-12. R1-compliant classification — no substrate has achieved above-chance accuracy without external labels.
+10. Whether the full feasible region (R1-R6 + all validated U-constraints) is occupied. Theorem 3 shows it is not provably empty; a witness or tighter impossibility result is needed.
+11. What self-observation mechanism satisfies R6 (irredundancy) while avoiding noisy TV traps (T7).
+12. Whether $\ell_F$ (full self-reference) is achievable without infinite regress — or whether $\ell_\pi$ suffices. 581d is $\ell_1$; the gap to $\ell_F$ is two qualitative levels (Proposition 4).
+13. How to resolve U11 + U24 + U1 (incompatible tasks, no mode switch) in a single system (T6).
+14. R1-compliant classification — no substrate has achieved above-chance accuracy without external labels.
+15. Baselines: no comparison with EWC, DER++, or replay buffer on the chain benchmark. Step 586 pending.
 
 ### 7.5 The Level 2 Problem
 
@@ -554,6 +557,26 @@ The cascade reveals the problem decomposes into orthogonal layers: (1) level-awa
 The feasible region for Level 1 navigation is occupied — graph + argmin + correct action decomposition satisfies R1, R2, U1, U3, U17, U20 and solves all three games. Level 2 (mgu completion) is achieved via a 12-component prescribed pipeline: mode map, isolated connected-component detection, level-aware reset, multi-episode accumulation, dead reckoning, state estimation from pixel diffs, and sequenced visitation (Step 572j, L2=5/5 at avg 4804 steps). The pipeline is R1-compliant in its detection components (no external labels) but game-specific in its state estimation (pixel regions and visit ordering are prescribed from source code analysis).
 
 The gap to R3 is precisely enumerated: 12 design choices that the substrate cannot currently self-discover. Four are general techniques (mode map, isolated CC, level-aware reset, multi-episode accumulation). Eight are game-specific engineering (position tracking, state estimation, sequencing, threshold tuning). A substrate satisfying R3 would need to discover all 12 from interaction alone — including recognizing that the game has hidden state variables gating progression (the POMDP structure). No current substrate family approaches this. The full R1-R6 region remains unoccupied.
+
+#### The R3-R5 Tension (Proposition 4)
+
+R5 requires one fixed ground truth. R3 requires every aspect of computation to be self-modifiable. The tension is: if evaluation criteria are fixed (R5), then at minimum the system's notion of "good" is prescribed — violating R3.
+
+**Resolution:** R5's ground truth is *environmental feedback* (game score, death events, level transitions). It is input the substrate reads, not computation the substrate performs. R3 applies to the substrate's *response* to ground truth, not to the ground truth signal itself. The resolution holds if and only if: (a) the ground truth is strictly environmental (no designer-specified reward shaping), and (b) the substrate's interpretation of ground truth is itself self-modifiable.
+
+**581d under the hierarchy:** Step 581d (permanent soft death penalty, 4/5 vs argmin 3/5) is the closest empirical approach to R3. But it is $\ell_1$, not $\ell_\pi$: the system self-selects WHICH edges to penalize (death edges — data-driven), but the penalty VALUE (fixed constant) and DURATION (permanent) are designer-prescribed. The response to ground truth is partially self-modified (placement), partially hardcoded (magnitude, persistence). Full R3 requires $\ell_F$: the system modifies its own rule for how to respond to death. The gap from $\ell_1$ (581d) to $\ell_F$ is two qualitative levels — this is the central open problem.
+
+#### Theorem 3: The System Boundary Theorem
+
+**Statement:** R3 (full self-modification) and R5 (fixed ground truth) are simultaneously satisfiable if and only if the ground truth $g$ is strictly environmental — i.e., $g \notin F$.
+
+**Proof sketch:**
+
+($\Rightarrow$) Suppose $g$ is a component of $F$. R3 requires every component of $F$ to be self-modifiable. If $g$ is self-modifiable, the system can alter its evaluation criterion, violating R5. If $g$ is protected from modification, that protection mechanism is a non-self-modifiable component of $F$, violating R3. Contradiction in both cases.
+
+($\Leftarrow$) Suppose $g$ is strictly environmental (determined by the environment, not by any component of $F$). Then R3's requirement that every component of $F$ be self-modifiable does not apply to $g$, since $g \notin F$. R5 holds because $g$ is fixed by the environment. No contradiction.
+
+**Implication:** The boundary of self-modification is precisely the system-environment interface. Everything inside the system boundary (encoding, update, selection, meta-rules) must be self-modifiable for R3. Everything outside (ground truth signal) must be fixed for R5. The theorem constrains substrate design: the ground truth MUST be environmental feedback (game death, level transitions, external reward), never an internal evaluation function. Any substrate with an internal fitness function violates R3 or R5.
 
 ## References
 
