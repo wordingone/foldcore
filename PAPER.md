@@ -540,7 +540,8 @@ A systematic falsification cascade (Steps 571-572f, 10 iterations) diagnosed the
 | 572c | Re-entry + no visited marker | lhs color 5 shared with HUD ($>$5\%) |
 | 572d | Hardcoded lhs position | Coordinate mapping error |
 | 572e | Isolated cluster detection | lhs+snw sprites merge (49px $>$ MAX\_CLUSTER=30) |
-| 572f | MAX\_CLUSTER=60 | Pending |
+| 572f-i | MAX\_CLUSTER + navigation fixes | Position tracking noise, state timing |
+| 572j | Dead reckoning + state estimation + sequencing | **L2=5/5 at avg 4804 steps** |
 
 The cascade reveals the problem decomposes into orthogonal layers: (1) level-aware background modeling (resetting pixel statistics on environment change), (2) robust object detection (isolated connected components with adaptive size thresholds, not color rarity), (3) hidden state coverage (POMDP with $|S| \leq 96$, solvable by stochastic visitation within budget). Each layer required a prescribed fix. The aggregate constitutes the L2 frozen frame — the set of design choices that R3 must discover autonomously.
 
