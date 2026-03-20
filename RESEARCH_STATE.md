@@ -80,7 +80,9 @@ Step 555: Living longer doesn't help. Active set plateaus at 5048. Growth rate 1
 Step 556: Game is LIVE after L1 (frames changing, not frozen). No simple action pattern reaches L2.
 Step 557: ROOT CAUSE FOUND. 129-step energy budget (3 lives × 43 steps). L1 solvable by luck in 129 steps. L2 requires finding "iri" energy palettes to refill, then navigating to exit — WITHIN BUDGET. Argmin can't detect objects. This is object-directed navigation, not random exploration.
 
-ACTIVE FRONTIER: L2 = object detection + purposeful navigation within 129-step budget. All 555 L2 failures explained by one number. Next: can Recode detect frame anomalies that signal energy palette pickup?
+Step 558: Frame anomaly detection BIMODAL. Perfect gap 0.078→0.431 (zero samples between). frame_diff > 0.082 = moved to new region (63%). frame_diff <= 0.082 = blocked/wasted step (37%). Deaths 62.9% detectable. L1 transition NOT detectable (looks like wall-hit). R1-compliant self-observation signal confirmed.
+
+ACTIVE FRONTIER: The l_F signal EXISTS (frame_diff). Next: can frame-diff guidance + argmin reach energy palettes within 129 steps?
   - Current non-codebook count: ~95. Target: 400 (to match codebook's 435).
   - 11 families tested. Recode is strongest non-codebook (5/5 L1, 2/3 chain).
   - 7 provisional constraints need targeted experiments: U5, U8, U9, U18, U19, U21, U26.
