@@ -106,9 +106,12 @@ Step 570: Self-observation KILL. BFS never triggered (0 plans across 10 seeds). 
 Step 570b: KILL. Argmax routing fires BFS (130 plans) but 0 wins at 20K. 920 nodes vs 925 argmin — BFS REDUCES exploration. Same noisy TV as Steps 477-482. Self-observation thread CLOSED for LSH substrate.
 
 Step 571: KILL — BUT LIKELY A BUG. Candidate sweep L2=0/5 after 1547 episodes. EXIT at (12,36) is LEVEL 1's exit. Mode map built from Level 1 frames. Targets are Level 1's clusters applied to Level 2's layout = wrong targets.
-  ROOT CAUSE: iri sprites only exist on Level 2+. Level 1 has zero iri. Mode map never saw Level 2's layout.
-  FIX: Reset mode map on level transition, warmup on Level 2, re-detect. Step 572b spec sent.
-  IRI color=11 (cyan), 3x3px each, 0.44% coverage — well below 5% rare threshold. SHOULD be detectable.
+  ROOT CAUSE 1: Mode map stale after level transition (Level 1 targets on Level 2 layout).
+  ROOT CAUSE 2 (DEEPER): iri is NOT the win condition. Win requires lhs sprites (color 5, tag "mae") visited while state variables (snw/tmx/tuv) match required values. State variables changed by toggle sprites (gsu/qqv/kdy).
+  L1 was solved by LUCK: greedy rare-color navigation accidentally toggled state correctly.
+  FIX: Reset mode map on level transition. But L2 also requires accidentally solving Level 2's state puzzle.
+
+Step 572 Part C RUNNING: Mode map reset + re-detection on Level 2. Prediction: 1-2/5 (random state-solving).
 
 ACTIVE FRONTIER: Mode map candidate sweep (L2 path). Self-observation thread closed.
   - Current non-codebook count: ~97. Target: 400 (to match codebook's 435).
