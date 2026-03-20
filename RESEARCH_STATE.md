@@ -96,7 +96,9 @@ Step 565: Q7 ANSWERED — 56.4% of splits rearrange (cos>0.9), not refine. Incre
 ALL 13 QUESTIONS ANSWERED.
 Step 566: Background subtraction encoding. L1=5/5 (fg encoding works, 1.46x faster). L2=0/5 (palettes static → background). KEY FINDING: mode map IS the level map. Contains palette positions. Rare-color clusters in mode = R1-compliant object detection targets.
 
-ACTIVE FRONTIER: Mode map → rare-color targeting. The substrate has BUILT a map of the level from its own observations. It just doesn't know how to READ it yet.
+Step 567: Mode map rare-color targeting. L1@468 (32X FASTER). 8 rare targets found. Exit is one of them. L2=0 because exit reached before palette. Fix: visit non-exit targets first.
+
+ACTIVE FRONTIER: Step 568 — visit all targets before exit. If palette is among the 8 rare targets, L2 is within reach. First L2 attempt with R1-compliant object detection.
   - Current non-codebook count: ~95. Target: 400 (to match codebook's 435).
   - 11 families tested. Recode is strongest non-codebook (5/5 L1, 2/3 chain).
   - 7 provisional constraints need targeted experiments: U5, U8, U9, U18, U19, U21, U26.
