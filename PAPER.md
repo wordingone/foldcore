@@ -443,7 +443,11 @@ Recode is LSH k=16 with passive self-refinement: when a cell produces inconsiste
 
 **Classification (Step 547):** Recode's self-refinement is inert on classification — single-pass image presentation never triggers refinement (MIN_OBS=8 per node-action pair is never met with ~1.4 images per node). NMI=0.599 is pure k=16 LSH. Self-refinement is a navigation mechanism, not a general learning mechanism.
 
-**Non-codebook experiment count:** ~95 (vs ~435 codebook). Ongoing scale-up.
+**R6 diagnostic (Step 548):** Does self-refinement satisfy R6 (irredundancy) after exploration saturates? Prediction: <10% of post-saturation refinements change argmin action. **Result: 89.5% — prediction inverted.** Mechanism: when a node splits, one child inherits a fresh edge table; argmin defaults to the least-visited action (typically action 0). Since the pre-split action is rarely action 0 in well-explored cells, the split forces fresh exploration from that partition. 357 total refinements over 599K steps, 304 changed action selection. R6 is satisfied in the narrow sense: each refinement is behaviorally irredundant. Whether this produces new REACHABLE states (not just re-exploration of the same frontier) is tested by Step 549 (trajectory divergence).
+
+**Implication for the self-modification hierarchy (Section 3.2):** $\ell_\pi$ self-modification is more powerful than initially characterized. Each split resets local policy, creating a fresh exploration trajectory from the refined partition. This is not just perceptual refinement — it's behavioral reset. The claim that $\ell_F$ is necessary for R6 compliance needs revision: $\ell_\pi$ may suffice if the refinement mechanism couples perception changes to action changes.
+
+**Non-codebook experiment count:** ~97 (vs ~435 codebook). Ongoing scale-up.
 
 ## 6. Degrees of Freedom
 

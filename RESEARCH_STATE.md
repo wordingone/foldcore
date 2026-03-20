@@ -57,11 +57,13 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   STAGE 8 = learned projection. The substrate discovers which pixels matter from its own codebook.
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 547 (Recode NMI on CIFAR-100 — U26 test)
+CURRENT STEP: 548 (Recode R6 diagnostic — KILL INVERTED)
 
 Step 547: Recode on CIFAR-100. NMI=0.599, acc=67% (training). TWO ARTIFACTS: (1) sp=0 — refinement never fires (single-pass, MIN_OBS never met). NMI is pure k=16 LSH. (2) Training accuracy meaningless (6981 nodes for 10K images = singletons). Test accuracy ~15% (Step 543). Self-refinement is inert on classification.
 
-ACTIVE FRONTIER: Non-codebook experiment scale-up + birth (formalizing compressed findings).
+Step 548: Recode R6 diagnostic. KILL INVERTED — prediction wrong. Post-500K action change rate = 89.5% (predicted <10%). Mechanism: splits reset child edge table → argmin defaults to action 0 → forces re-exploration. R6 satisfied in the narrow sense (each refinement changes behavior). But does the action change produce new reachable states? Step 549 tests this.
+
+ACTIVE FRONTIER: Experiment loop. Step 549 (trajectory divergence) running.
   - Current non-codebook count: ~95. Target: 400 (to match codebook's 435).
   - 11 families tested. Recode is strongest non-codebook (5/5 L1, 2/3 chain).
   - 7 provisional constraints need targeted experiments: U5, U8, U9, U18, U19, U21, U26.
