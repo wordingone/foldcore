@@ -1,0 +1,7 @@
+{
+  "model": "step581b",
+  "dataset": "/mnt/b/M/the-search/experiments",
+  "script": "/mnt/b/M/the-search/experiments/run_step581b_death_avoidance.py",
+  "output_dir": "/mnt/b/M/the-search/models/step581b",
+  "hyperparams": {}
+}

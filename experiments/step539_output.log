@@ -1,0 +1,9 @@
+T0 PASS
+
+seed 0:
+2026-03-19 15:08:29 | INFO | Got anonymous API key: c1078bed-764b-412d-8f7b-5e87c1f754ed
+2026-03-19 15:08:29 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-19 15:08:29 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-19 15:08:29 | INFO | Created new scorecard: 4e831f13-1f83-40e3-b088-02f609b008e2
+2026-03-19 15:08:29 | INFO | Successfully fetched metadata for game ls20
+2026-03-19 15:08:29 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\cb3b57cc\ls20.py
