@@ -524,7 +524,9 @@ The root cause is the game's energy mechanic: each life lasts 43 steps (3 lives 
 
 The encoding ($\text{avgpool}_{16}$: 64$\times$64 $\to$ 16$\times$16 = 256D) is too lossy to resolve 3-pixel sprites. An R1-compliant self-observation signal exists — frame-diff is perfectly bimodal with a gap at 0.082 separating movement from blocked actions (Step 558) — and using it to skip wasted actions reaches L1 2x faster (Step 559). But this signal detects whether the agent MOVED, not what it moved TOWARD. Naive object-directed navigation (connected-component segmentation without salience filtering) kills L1 entirely — 97.7% of actions chase walls and floor (Step 561). The noisy TV problem applies to objects: without discriminating interactive from decorative elements, object-chasing is worse than argmin.
 
-The bottleneck is I1 (encoding discovery from raw observations), not any pair of R1-R6 constraints. The constraint system is internally consistent (Section 7.1). No substrate has demonstrated pixel-level object detection from its own dynamics without external reward.
+Two R1-compliant approaches to object detection have been tested. The mode map (running pixel-mode over frames) accumulates a level map from observations. Rare-color clusters in the mode map identify interactive objects (Step 566). Greedy navigation to the nearest rare target reaches L1 in 468 steps — 32x faster than argmin baseline (Step 567). However, visiting all 6 rare targets before the exit exhausts the 129-step episode budget (Steps 568-569, L1=0/5). The bottleneck is target ordering: L2 requires visiting the energy palette FIRST, then exit, within budget. A candidate sweep (one target + exit per episode, cycling) would test each rare cluster as a potential palette.
+
+The deeper bottleneck remains I1 (encoding discovery from raw observations). The constraint system is internally consistent (Section 7.1).
 
 ### 7.6 Honest assessment
 
