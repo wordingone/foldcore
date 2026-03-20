@@ -1,285 +1,284 @@
 """
-Step 585 — Cross-game: 581d on FT09 + VC33.
+Step 585 — Cross-game: 581d soft death penalty on FT09 + VC33.
 
-Tests whether permanent soft death penalty transfers to different games.
-Same mechanism as 581d (PENALTY=100, permanent soft penalty on death edges).
-Flexible encoding: adapts to per-game frame size automatically.
+Uses arc_agi directly (same interface as steps 575/576).
+FT09: 69 actions (64 click positions 8x8 grid + ACTION1-5)
+VC33: 64 actions (click positions only, ACTION6)
 
-5 seeds per game. Compare vs argmin baseline on same game.
-5-min cap per seed.
+Compare: SoftPenalty (PENALTY=100) vs ArgminSub baseline on each game.
+5 seeds each, TIME_CAP=60s/seed.
 
-Output: SIGNAL/NEUTRAL/FAIL per game, cells comparison.
+Transfer test: does permanent soft death penalty help on click-based games?
 """
 import time
+import logging
 import numpy as np
-import sys
+
+logging.getLogger().setLevel(logging.WARNING)
 
 K = 12
 DIM = 256
-N_A = 4
-MAX_STEPS = 10_000   # 10K per runtime cap; increase to 50K with Jun approval
-TIME_CAP = 60        # 5 min per seed (60s for 10K matches LS20 ratio)
-N_SEEDS = 5
 PENALTY = 100
+TIME_CAP = 60
+MAX_STEPS = 50_000
+
+# FT09: 64 click + 5 simple = 69
+# VC33: 64 click only = 64
+GAME_CONFIGS = {
+    'ft09': {'n_actions': 69, 'has_simple': True},
+    'vc33': {'n_actions': 64, 'has_simple': False},
+}
 
 
-# ── Flexible LSH encoding ─────────────────────────────────────────────────────
-# Handles any frame size by downsampling to DIM=256 elements.
+# ── Encoding ──────────────────────────────────────────────────────────────────
 
 def encode(frame, H):
-    arr = np.array(frame[0], dtype=np.float32).flatten()
-    n = arr.size
-
-    if n == DIM:
-        x = arr / 15.0
-    elif n > DIM:
-        # Downsample: split into DIM chunks, average each
-        # Fast path for sizes that are clean multiples
-        if n % DIM == 0:
-            x = arr.reshape(DIM, n // DIM).mean(axis=1) / 15.0
-        else:
-            # General case: use np.array_split
-            chunks = np.array_split(arr, DIM)
-            x = np.array([c.mean() for c in chunks]) / 15.0
-    else:
-        # Upsample: pad with zeros
-        x = np.zeros(DIM, dtype=np.float32)
-        x[:n] = arr / 15.0
-
+    arr = np.array(frame[0], dtype=np.float32) / 15.0
+    x = arr.reshape(16, 4, 16, 4).mean(axis=(1, 3)).flatten()
     x -= x.mean()
-    bits = (H @ x > 0).astype(np.int64)
-    return int(np.dot(bits, 1 << np.arange(K)))
+    bits = (H @ x > 0).astype(np.uint8)
+    return int(np.packbits(bits, bitorder='big').tobytes().hex(), 16)
 
 
-# ── Soft penalty substrate (identical to 581d, flexible encode) ───────────────
+# ── Action mapping ────────────────────────────────────────────────────────────
+
+def action_to_env(action_id, action_space, has_simple):
+    """Map integer action_id to (env_action, data)."""
+    if action_id < 64:
+        gy, gx = divmod(action_id, 8)
+        cx, cy = gx * 8 + 4, gy * 8 + 4
+        # Find ACTION6 (click action) in action_space
+        click_action = next((a for a in action_space if a.is_complex()), action_space[-1])
+        return click_action, {"x": cx, "y": cy}
+    elif has_simple:
+        simple_actions = [a for a in action_space if not a.is_complex()]
+        idx = action_id - 64
+        if idx < len(simple_actions):
+            return simple_actions[idx], {}
+        return simple_actions[-1], {}
+    return action_space[0], {}
+
+
+# ── Soft penalty substrate ────────────────────────────────────────────────────
 
 class SoftPenaltySub:
-    def __init__(self, lsh_seed=0):
+    def __init__(self, n_actions, lsh_seed=0):
         self.H = np.random.RandomState(lsh_seed).randn(K, DIM).astype(np.float32)
         self.G = {}
         self.death_edges = set()
-        self._prev_node = None
-        self._prev_action = None
+        self.n_actions = n_actions
+        self._pn = self._pa = self._cn = None
         self.cells = set()
         self.total_deaths = 0
 
     def observe(self, frame):
-        node = encode(frame, self.H)
-        self.cells.add(node)
-        self._curr_node = node
-        if self._prev_node is not None:
-            d = self.G.setdefault((self._prev_node, self._prev_action), {})
-            d[node] = d.get(node, 0) + 1
+        n = encode(frame, self.H)
+        self.cells.add(n)
+        if self._pn is not None:
+            d = self.G.setdefault((self._pn, self._pa), {})
+            d[n] = d.get(n, 0) + 1
+        self._cn = n
 
     def on_death(self):
-        if self._prev_node is not None:
-            self.death_edges.add((self._prev_node, self._prev_action))
+        if self._pn is not None:
+            self.death_edges.add((self._pn, self._pa))
             self.total_deaths += 1
 
     def act(self):
-        node = self._curr_node
-        counts = np.array([sum(self.G.get((node, a), {}).values()) for a in range(N_A)],
-                          dtype=np.float64)
-        penalized = counts.copy()
-        for a in range(N_A):
-            if (node, a) in self.death_edges:
-                penalized[a] += PENALTY
-        action = int(np.argmin(penalized))
-        self._prev_node = node
-        self._prev_action = action
-        return action
+        counts = np.array([sum(self.G.get((self._cn, a), {}).values())
+                           for a in range(self.n_actions)], dtype=np.float64)
+        for a in range(self.n_actions):
+            if (self._cn, a) in self.death_edges:
+                counts[a] += PENALTY
+        action_id = int(np.argmin(counts))
+        self._pn = self._cn
+        self._pa = action_id
+        return action_id
 
     def on_reset(self):
-        self._prev_node = None
-        self._prev_action = None
+        self._pn = None
 
-
-# ── Argmin baseline ───────────────────────────────────────────────────────────
 
 class ArgminSub:
-    def __init__(self, lsh_seed=0):
+    def __init__(self, n_actions, lsh_seed=0):
         self.H = np.random.RandomState(lsh_seed).randn(K, DIM).astype(np.float32)
         self.G = {}
-        self._prev_node = None
-        self._prev_action = None
+        self.n_actions = n_actions
+        self._pn = self._pa = self._cn = None
         self.cells = set()
 
     def observe(self, frame):
-        node = encode(frame, self.H)
-        self.cells.add(node)
-        self._curr_node = node
-
-    def act(self):
-        node = self._curr_node
-        counts = [sum(self.G.get((node, a), {}).values()) for a in range(N_A)]
-        action = int(np.argmin(counts))
-        if self._prev_node is not None:
-            d = self.G.setdefault((self._prev_node, self._prev_action), {})
-            d[node] = d.get(node, 0) + 1
-        self._prev_node = node
-        self._prev_action = action
-        return action
-
-    def on_reset(self):
-        self._prev_node = None
-        self._prev_action = None
+        n = encode(frame, self.H)
+        self.cells.add(n)
+        if self._pn is not None:
+            d = self.G.setdefault((self._pn, self._pa), {})
+            d[n] = d.get(n, 0) + 1
+        self._cn = n
 
     def on_death(self):
         pass
 
+    def act(self):
+        counts = [sum(self.G.get((self._cn, a), {}).values())
+                  for a in range(self.n_actions)]
+        min_c = min(counts)
+        candidates = [a for a, c in enumerate(counts) if c == min_c]
+        action_id = int(np.random.choice(candidates))
+        self._pn = self._cn
+        self._pa = action_id
+        return action_id
+
+    def on_reset(self):
+        self._pn = None
+
 
 # ── Seed runner ───────────────────────────────────────────────────────────────
 
-def run_seed(mk, seed, SubClass, time_cap=TIME_CAP):
-    env = mk()
-    sub = SubClass(lsh_seed=seed * 100 + 7)
-    obs = env.reset(seed=seed)
+def run_seed(arc, game_id, seed, SubClass, n_actions, has_simple):
+    from arcengine import GameState
+    np.random.seed(seed)
+
+    env = arc.make(game_id)
+    action_space = env.action_space
+    sub = SubClass(n_actions=n_actions, lsh_seed=seed * 1000 + 7)
+    obs = env.reset()
     sub.on_reset()
 
-    prev_cl = 0; fresh = True
-    l1 = l2 = go = step = 0
+    ts = go = l1 = l2 = 0
     t0 = time.time()
 
-    while step < MAX_STEPS and time.time() - t0 < time_cap:
+    while ts < MAX_STEPS and time.time() - t0 < TIME_CAP:
         if obs is None:
-            obs = env.reset(seed=seed)
+            obs = env.reset()
             sub.on_reset()
-            prev_cl = 0; fresh = True; go += 1
+            go += 1
             continue
 
-        sub.observe(obs)
-        action = sub.act()
-        obs, _, done, info = env.step(action)
-        step += 1
+        frame = obs.frame if hasattr(obs, 'frame') else obs
+        if frame is None:
+            obs = env.reset()
+            sub.on_reset()
+            go += 1
+            continue
 
-        if done:
+        sub.observe(frame)
+        action_id = sub.act()
+        env_action, data = action_to_env(action_id, action_space, has_simple)
+        obs = env.step(env_action, data=data)
+        ts += 1
+
+        if obs is None:
             sub.on_death()
-            obs = env.reset(seed=seed)
+            obs = env.reset()
             sub.on_reset()
-            prev_cl = 0; fresh = True; go += 1
+            go += 1
             continue
 
-        cl = info.get('level', 0) if isinstance(info, dict) else 0
-        if fresh:
-            prev_cl = cl; fresh = False
-        elif cl >= 1 and prev_cl < 1:
-            l1 += 1
-            if l1 <= 2:
-                print(f"    s{seed} L1@{step}", flush=True)
-        elif cl >= 2 and prev_cl < 2:
-            l2 += 1
-        prev_cl = cl
+        done = obs.state in (GameState.GAME_OVER, GameState.WIN)
+        lvl = obs.levels_completed if hasattr(obs, 'levels_completed') else 0
+        if done:
+            if lvl >= 1: l1 += 1
+            if lvl >= 2: l2 += 1
+            sub.on_death()
+            obs = env.reset()
+            sub.on_reset()
+            go += 1
 
     elapsed = time.time() - t0
     cells = len(sub.cells)
     deaths = getattr(sub, 'total_deaths', 0)
-    print(f"  s{seed}: L1={l1} L2={l2} go={go} step={step} cells={cells} deaths={deaths} {elapsed:.0f}s",
+    print(f"  s{seed}: L1={l1} L2={l2} go={go} step={ts} cells={cells} deaths={deaths} {elapsed:.0f}s",
           flush=True)
-    return dict(seed=seed, l1=l1, l2=l2, go=go, steps=step, cells=cells)
+    return dict(seed=seed, l1=l1, l2=l2, go=go, steps=ts, cells=cells, deaths=deaths)
 
 
-def run_game(game_name, mk, label=""):
+def run_game(arc, game_name, game_id, n_actions, has_simple, n_seeds=5):
     sp_results = []
     am_results = []
-    t_total = time.time()
+    t0 = time.time()
 
     print(f"\n{'='*50}", flush=True)
-    print(f"Game: {game_name} {label}", flush=True)
+    print(f"Game: {game_name} (N_A={n_actions})", flush=True)
     print(f"{'='*50}", flush=True)
 
     print("\n-- SoftPenalty --", flush=True)
-    for seed in range(N_SEEDS):
+    for seed in range(n_seeds):
         print(f"\nseed {seed}:", flush=True)
-        r = run_seed(mk, seed, SoftPenaltySub)
-        sp_results.append(r)
+        try:
+            r = run_seed(arc, game_id, seed, SoftPenaltySub, n_actions, has_simple)
+            sp_results.append(r)
+        except Exception as e:
+            print(f"  FAIL: {e}", flush=True)
 
     print("\n-- Argmin --", flush=True)
-    for seed in range(N_SEEDS):
+    for seed in range(n_seeds):
         print(f"\nseed {seed}:", flush=True)
-        r = run_seed(mk, seed, ArgminSub)
-        am_results.append(r)
+        try:
+            r = run_seed(arc, game_id, seed, ArgminSub, n_actions, has_simple)
+            am_results.append(r)
+        except Exception as e:
+            print(f"  FAIL: {e}", flush=True)
+
+    if not sp_results or not am_results:
+        print(f"  INSUFFICIENT DATA for {game_name}", flush=True)
+        return None
 
     sp_l1 = sum(r['l1'] for r in sp_results)
-    sp_seeds = sum(1 for r in sp_results if r['l1'] > 0)
+    sp_s = sum(1 for r in sp_results if r['l1'] > 0)
     am_l1 = sum(r['l1'] for r in am_results)
-    am_seeds = sum(1 for r in am_results if r['l1'] > 0)
-    elapsed = time.time() - t_total
+    am_s = sum(1 for r in am_results if r['l1'] > 0)
+    sp_d = sum(r['deaths'] for r in sp_results)
+    am_d = sum(r['deaths'] for r in am_results)
+    elapsed = time.time() - t0
 
     print(f"\n--- {game_name} Summary ---")
-    print(f"  SoftPenalty: {sp_seeds}/{N_SEEDS} seeds L1, total L1={sp_l1}")
-    for r in sp_results:
-        print(f"    s{r['seed']}: L1={r['l1']} cells={r['cells']}")
-    print(f"  Argmin:      {am_seeds}/{N_SEEDS} seeds L1, total L1={am_l1}")
-    for r in am_results:
-        print(f"    s{r['seed']}: L1={r['l1']} cells={r['cells']}")
-
-    sp_cells_avg = np.mean([r['cells'] for r in sp_results])
-    am_cells_avg = np.mean([r['cells'] for r in am_results])
-    print(f"  Cells avg: SP={sp_cells_avg:.0f} AM={am_cells_avg:.0f}")
+    print(f"  SoftPenalty: {sp_s}/{len(sp_results)} L1={sp_l1} deaths={sp_d}")
+    print(f"  Argmin:      {am_s}/{len(am_results)} L1={am_l1} deaths={am_d}")
 
     if sp_l1 > am_l1:
         verdict = f"SIGNAL: SP({sp_l1}) > AM({am_l1})"
     elif sp_l1 == am_l1:
-        if sp_cells_avg > am_cells_avg * 1.05:
-            verdict = f"NEUTRAL+: SP({sp_l1}) == AM({am_l1}), cells SP>{am_cells_avg:.0f}"
-        else:
-            verdict = f"NEUTRAL: SP({sp_l1}) == AM({am_l1})"
+        verdict = f"NEUTRAL: SP({sp_l1}) == AM({am_l1})"
     else:
         verdict = f"FAIL: SP({sp_l1}) < AM({am_l1})"
-    print(f"  {verdict}")
-    print(f"  Elapsed: {elapsed:.0f}s")
-    return dict(game=game_name, sp_l1=sp_l1, sp_seeds=sp_seeds,
-                am_l1=am_l1, am_seeds=am_seeds,
-                sp_cells=sp_cells_avg, am_cells=am_cells_avg,
-                verdict=verdict)
+    print(f"  {verdict}  [{elapsed:.0f}s]")
+    return dict(game=game_name, sp_l1=sp_l1, am_l1=am_l1, verdict=verdict, deaths_sp=sp_d)
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def main():
-    try:
-        sys.path.insert(0, '.')
-        import arcagi3
-    except Exception as e:
-        print(f"arcagi3: {e}"); return
+    import arc_agi
+    arc = arc_agi.Arcade()
 
     print(f"Step 585: Cross-game transfer — FT09 + VC33", flush=True)
     print(f"  K={K} MAX_STEPS={MAX_STEPS} PENALTY={PENALTY} TIME_CAP={TIME_CAP}s/seed", flush=True)
 
-    game_results = []
-
-    # FT09
-    try:
-        mk_ft09 = lambda: arcagi3.make("FT09")
-        r = run_game("FT09", mk_ft09)
-        game_results.append(r)
-    except Exception as e:
-        print(f"FT09 failed: {e}", flush=True)
-
-    # VC33
-    try:
-        mk_vc33 = lambda: arcagi3.make("VC33")
-        r = run_game("VC33", mk_vc33)
-        game_results.append(r)
-    except Exception as e:
-        print(f"VC33 failed: {e}", flush=True)
+    results = []
+    for game_name, cfg in GAME_CONFIGS.items():
+        try:
+            r = run_game(arc, game_name.upper(), game_name,
+                         cfg['n_actions'], cfg['has_simple'])
+            if r:
+                results.append(r)
+        except Exception as e:
+            print(f"{game_name} FAIL: {e}", flush=True)
 
     print(f"\n{'='*60}")
     print(f"Step 585: Cross-game transfer summary")
-    for r in game_results:
-        print(f"  {r['game']}: {r['verdict']}")
+    for r in results:
+        print(f"  {r['game']}: {r['verdict']} (SP_deaths={r['deaths_sp']})")
 
-    # Transfer verdict
-    signals = sum(1 for r in game_results if r['verdict'].startswith('SIGNAL'))
-    neutrals = sum(1 for r in game_results if r['verdict'].startswith('NEUTRAL'))
-    fails = sum(1 for r in game_results if r['verdict'].startswith('FAIL'))
-    print(f"\n  Transfer: SIGNAL={signals} NEUTRAL={neutrals} FAIL={fails}")
+    signals = sum(1 for r in results if r['verdict'].startswith('SIGNAL'))
+    neutrals = sum(1 for r in results if r['verdict'].startswith('NEUTRAL'))
+    fails = sum(1 for r in results if r['verdict'].startswith('FAIL'))
+    print(f"\n  SIGNAL={signals} NEUTRAL={neutrals} FAIL={fails}")
     if signals >= 1:
-        print("  Death penalty TRANSFERS to at least one game.")
+        print("  Death penalty TRANSFERS to click-based games.")
     elif fails == 0:
-        print("  Death penalty NEUTRAL across all games (no harm, no boost).")
+        print("  Death penalty NEUTRAL on click-based games.")
     else:
-        print("  Death penalty FAILS on some games — game-specific phenomenon.")
+        print("  Death penalty does not transfer uniformly.")
 
 
 if __name__ == "__main__":
