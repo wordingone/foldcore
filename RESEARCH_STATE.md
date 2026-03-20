@@ -84,7 +84,9 @@ Step 558: Frame anomaly detection BIMODAL. Perfect gap 0.078→0.431 (zero sampl
 
 Step 559: Frame-diff guided Recode. L1=5/5 at avg 7318 steps (2x faster). L2=0/5. Wall avoidance improves efficiency but NOT direction. L2 requires object-directed navigation — detecting energy palette pixels and moving toward them. avgpool16 may lose sprite-level resolution.
 
-ACTIVE FRONTIER: L2 needs pixel-level object detection within enc-space. Three levels of self-modification tested: l_0 (30K), l_pi (15K), l_F v1 (7K). All navigate faster but none detect objects.
+Step 560: Codebook ban VALIDATED. 98.4% of visually similar pairs (cos>0.95) have different transitions. Codebook would merge them = false bridges. No object clusters in enc-space. LSH correctly separates behaviorally distinct states. L2 needs pixel-level sprite detection — neither codebook nor LSH provides this.
+
+ACTIVE FRONTIER: L2 = sprite detection in raw pixels. enc() is too lossy (16x16). 9/13 questions answered. Remaining: Q5, Q6, Q7.
   - Current non-codebook count: ~95. Target: 400 (to match codebook's 435).
   - 11 families tested. Recode is strongest non-codebook (5/5 L1, 2/3 chain).
   - 7 provisional constraints need targeted experiments: U5, U8, U9, U18, U19, U21, U26.
