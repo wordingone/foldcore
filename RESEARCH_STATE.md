@@ -69,7 +69,9 @@ Step 550: LS20 state graph mapped. 942 live cells, 1 component, fully connected.
 
 Step 551: k=20 Recode at ~700K. L1=3/3, L2=0/3. max_cells=1749. Resolution NOT the L2 bottleneck. Closes Q2.
 
-ACTIVE FRONTIER: Experiment loop. Step 552 (transition classification) running. Q1+Q2 answered: L2 is a policy problem (argmin attractor).
+Step 552: Transition-based classification. Sorted: 7.07x within/between ratio — works. Shuffled: no signal (sparsity). R1-compliant classification possible IF data is correlated. Chain implication: substrate must CREATE correlation, not receive it.
+
+ACTIVE FRONTIER: Experiment loop. Step 553 (reducible confusion) running. Q1+Q2+Q9 answered.
   - Current non-codebook count: ~95. Target: 400 (to match codebook's 435).
   - 11 families tested. Recode is strongest non-codebook (5/5 L1, 2/3 chain).
   - 7 provisional constraints need targeted experiments: U5, U8, U9, U18, U19, U21, U26.
