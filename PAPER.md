@@ -331,7 +331,11 @@ Two families confirm identical behavior:
 
 All edge manipulations reduce coverage below the pure argmin baseline (argmin=259 > decay=241 > death-avoidance=227 > death-seeking=196, Steps 489-492). Six targeted exploration strategies all perform worse than argmin (Section 4.5). The reward region is beyond the argmin-reachable frontier regardless of mapping architecture, partition granularity, or budget.
 
-Relationship to Section 4: Edge counts grow (U17 formally satisfied) but each marginal count is redundant in the high-visit region (R6 violated). The system satisfies U17 locally but cannot satisfy R6 globally once the reachable region saturates. Level 2 requires strategic exploration (I6/I9) — a capability not yet tested. The noisy TV barrier (Section 4.5) constrains what strategies can be used: any targeted approach must avoid the irreducible-stochasticity trap.
+**The state graph reveals why (Step 550).** At 500K steps with Recode k=16: 942 live cells, fully connected (1 component), 13695 edges. The agent circulates in a 364-node **active set** (29% of nodes). 834 nodes (67%) were visited early and abandoned. 134 (node, action) pairs have low entropy ($H < 0.1$) and only 10 observations each — these are the **deterministic frontier**: edges the agent has barely tried, leading to potentially unexplored regions. 67% of all (node, action) pairs have $H > 1.0$ (noisy TV transitions). Argmin is locally optimal (picks the least-visited action from the current node) but globally trapped: from any node in the active set, all actions are well-explored ($> 100$ observations), so argmin cycles within the attractor. The abandoned nodes with deterministic frontier edges are unreachable because argmin never drives the agent toward them.
+
+**Implication:** L2 is not a resolution problem (942 cells is more than enough). It is not a budget problem (growth rate is ~2 cells/100K at 740K). It is a **policy problem**: argmin creates an attractor basin in the active set, and the L2 path requires escaping this basin to reach the deterministic frontier in the abandoned set. This directly validates Theorem 2: self-observation is needed to detect the attractor and escape it. $\ell_\pi$ (partition refinement) refines within the attractor (Step 549) but cannot break out.
+
+Relationship to Section 4: Edge counts grow (U17 formally satisfied) but marginal counts in the active set are redundant (R6 violated). The 134 deterministic frontier edges are the non-redundant growth targets — but argmin cannot reach them.
 
 ### 5.3 Architecture Family Summary
 
