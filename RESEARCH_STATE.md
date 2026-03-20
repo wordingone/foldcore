@@ -116,7 +116,11 @@ Step 572b: KILL. Both bugs confirmed (cycles=1, l2_clusters=[]). Fixes: re-entry
 Step 572c: KILL. Re-entry works (cycles=1546). BUT lhs (color 5) NOT in targets — HUD uses color 5 extensively (>5% of pixels). Win objective invisible to rare-color filter.
 Step 572d SENT: Hardcoded positions diagnostic (kdy×3→qqv×1→lhs). NOT R1-compliant. 121 steps within 129 budget.
 Step 572d: KILL. Hardcoded lhs(42,16) never reached (lhs_visits=0). Coord mapping off or maze-blocked. Position from set_position(14,40) doesn't map to (42,16) in rendered frame.
-Step 572e RUNNING: Isolated cluster detection (all colors → CC → size 2-30). Finds lhs at TRUE pixel position from mode map. R1-compliant. Logs c5= detected coordinates.
+Step 572e: KILL. c5=[] — lhs+snw merge into 49px blob > MAX_CLUSTER=30.
+Step 572f-572i: iterations (MAX_CLUSTER, navigation, position tracking fixes).
+Step 572j: **L2=5/5** FIRST EVER. avg 4804 steps (35-37 mgu entries per seed).
+  Key fixes: dead reckoning (not frame-diff), kdj diff detection (pixel-level toggle counting), state sequencing (kdy×3 before lhs).
+  Post-L2: stall on puq (wall map corruption). 572k building.
 
 ACTIVE FRONTIER: Mode map candidate sweep (L2 path). Self-observation thread closed.
   - Current non-codebook count: ~97. Target: 400 (to match codebook's 435).
