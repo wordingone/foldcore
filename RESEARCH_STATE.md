@@ -98,8 +98,13 @@ Step 566: Background subtraction encoding. L1=5/5 (fg encoding works, 1.46x fast
 
 Step 567: Mode map rare-color targeting. L1@468 (32X FASTER). 8 rare targets found. Exit is one of them. L2=0 because exit reached before palette. Fix: visit non-exit targets first.
 
-ACTIVE FRONTIER: Step 568 — visit all targets before exit. If palette is among the 8 rare targets, L2 is within reach. First L2 attempt with R1-compliant object detection.
-  - Current non-codebook count: ~95. Target: 400 (to match codebook's 435).
+Step 568-569: Visit-all-targets KILL. 6 rare clusters (not 8). TSP to all 6 + exit exhausts 129-step budget. L1=0/5, L2=0/5. Bug fix: on_reset() broke visit_order rebuild. Even after fix, budget too tight for 6 targets.
+  KEY: Step 567 (greedy nearest) = L1=5/5@468. Visit-all = L1=0/5. Greedy wins.
+
+Step 570 PENDING: Self-observation via graph planning — LSH + BFS routing to least-visited nodes when exploration stalls. A/B vs pure argmin. 10 seeds, 10K steps, LS20.
+
+ACTIVE FRONTIER: Two threads — (1) mode map candidate sweep (one target+exit per episode), (2) self-observation mechanism (graph planning).
+  - Current non-codebook count: ~97. Target: 400 (to match codebook's 435).
   - 11 families tested. Recode is strongest non-codebook (5/5 L1, 2/3 chain).
   - 7 provisional constraints need targeted experiments: U5, U8, U9, U18, U19, U21, U26.
   - Compression complete (3 iterations with Hart adversary). Birth phase active.
