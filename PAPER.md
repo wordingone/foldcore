@@ -516,22 +516,15 @@ All formalized constraints were checked for mutual consistency. Identified tensi
 11. How to resolve U11 + U24 + U1 (incompatible tasks, no mode switch) in a single system (T6).
 12. R1-compliant classification — no substrate has achieved above-chance accuracy without external labels.
 
-### 7.5 The L2 Diagnostic (Steps 548-562)
+### 7.5 The Level 2 Problem
 
-Thirteen directed questions (Steps 548-562) mapped the Level 2 problem completely:
+Steps 548-562 systematically eliminated candidate explanations for the Level 2 failure. The state graph at 500K steps contains 942 live cells in a single connected component, with the agent circulating through a 364-node active set (29% of nodes). 134 deterministic frontier edges remain unexploited (Step 550). Increasing partition resolution to k=20 (1749 cells) does not reach L2 (Step 551). Aggressive splitting disrupts the attractor (4970 active cells) without reaching L2 (Step 554). Extended budget produces no improvement — the active set plateaus at ~5000 (Step 555).
 
-1. **State graph**: 942 cells, 364-node attractor, 134 unexploited deterministic frontier edges (Step 550).
-2. **Resolution**: k=20 gives 1749 cells, 0/3 L2. Not the bottleneck (Step 551).
-3. **Root cause**: 129-step energy budget (3 lives $\times$ 43 steps). L2 requires finding energy palette sprites ("iri"), picking them up, then navigating to exit. Argmin can't detect objects (Steps 556-557). Rudakov et al. solved L2 in 4000 actions with visual salience.
-4. **Refinement trigger**: 98.8% of confusion is reducible (Step 553), but refinement is partition-only — doesn't expand frontier (Step 549).
-5. **Self-modification levels**: $\ell_0$ (LSH) reaches L1 at 30K. $\ell_\pi$ (Recode) at 15K. $\ell_F$ v1 (frame-diff skip) at 7K. None detect objects (Step 559).
-6. **Frame-diff signal**: Perfectly bimodal (gap at 0.082). R1-compliant self-observation signal exists (Step 558).
-7. **Codebook**: Would make things worse — 98.4% of perceptually similar pairs are behaviorally distinct. Ban validated (Step 560).
-8. **Object-directed navigation**: Naive CC segmentation kills L1 (0/5). 97.7% of actions chase walls. Salience filtering required — the noisy TV problem applies to objects too (Step 561).
-9. **Classification**: Transition-based classification works under correlated presentation (7.07x ratio), not under random presentation (Step 552).
-10. **Budget**: Active set plateaus at 5048. Time doesn't help (Step 555).
+The root cause is the game's energy mechanic: each life lasts 43 steps (3 lives = 129 steps per episode). Level 1 is reachable by random walk within this budget. Level 2 introduces energy palette sprites ("iri") that refill the step counter — the agent must navigate TO them before running out of energy, then proceed to the exit (Steps 556-557). Rudakov et al. (2025) solved L2 in 4000 actions using connected-component segmentation with visual salience prioritization.
 
-**The L2 bottleneck is object detection within a step budget.** The substrate can map the environment (942 cells), refine its partition (98.8% reducible confusion), detect frame anomalies (bimodal signal), and skip wasted actions (2x speedup). But it cannot identify that specific pixels represent interactive objects (energy palettes) and navigate toward them. This is the encoding frozen frame: avgpool16 (64$\times$64 $\to$ 16$\times$16) loses sprite-level resolution. The constraint is I1 (encoding discovery), not any pair of R1-R6.
+The encoding ($\text{avgpool}_{16}$: 64$\times$64 $\to$ 16$\times$16 = 256D) is too lossy to resolve 3-pixel sprites. An R1-compliant self-observation signal exists — frame-diff is perfectly bimodal with a gap at 0.082 separating movement from blocked actions (Step 558) — and using it to skip wasted actions reaches L1 2x faster (Step 559). But this signal detects whether the agent MOVED, not what it moved TOWARD. Naive object-directed navigation (connected-component segmentation without salience filtering) kills L1 entirely — 97.7% of actions chase walls and floor (Step 561). The noisy TV problem applies to objects: without discriminating interactive from decorative elements, object-chasing is worse than argmin.
+
+The bottleneck is I1 (encoding discovery from raw observations), not any pair of R1-R6 constraints. The constraint system is internally consistent (Section 7.1). No substrate has demonstrated pixel-level object detection from its own dynamics without external reward.
 
 ### 7.6 Honest assessment
 
