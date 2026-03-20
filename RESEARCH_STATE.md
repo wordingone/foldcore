@@ -138,7 +138,11 @@ Step 577d: Multi-buffer 100% buffer nav. **0 L1s across ALL 5 buffers, ALL 390 w
 Step 578: U5 CHALLENGED — Recode softmax T=1.0, 3/3 L1. Sparse selection NOT required for navigation.
 Step 579: U8 CHALLENGED — LSH softmax T=0.5, 5/5 L1. Hard selection NOT required for navigation.
 
-ACTIVE FRONTIER: R3 attack. Pixel statistics fail (577d). Next: reward-correlated feature discovery (use L1 events as credit signal). OPEN-ENDED.
+Step 580: Per-edge interpreter selection. NEUTRAL (3/5 = 3/5 argmin). Self-modification works (edges flip rules) but 81-85% settle back on argmin. Fixed menu too small.
+Step 581: Cerebellar dual-signal (per-edge prediction error). FAIL 1/5 vs 3/5 argmin. Predictions work (93%+ accuracy) but confident-edge-following = exploitation = fewer cells. Same pattern as 477-482.
+Step 581b: RUNNING. Death-avoidance only — predictions VETO lethal edges, argmin explores the rest. Cerebellum says "not that," not "do this."
+
+ACTIVE FRONTIER: R3 via cerebellar dual-signal. Predictions for avoidance, not guidance. The frozen frame shrinks to 3 operations (similarity, error, default) if predictions are self-modifying data.
   - Current non-codebook count: ~97. Target: 400 (to match codebook's 435).
   - 11 families tested. Recode is strongest non-codebook (5/5 L1, 2/3 chain).
   - 7 provisional constraints need targeted experiments: U5, U8, U9, U18, U19, U21, U26.
