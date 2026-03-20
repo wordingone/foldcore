@@ -468,27 +468,47 @@ The formalization identifies what the constraints REQUIRE but also what they lea
 
 ## 7. Discussion
 
-### What is proven
+### 7.1 Pairwise Consistency Audit
+
+All formalized constraints were checked for mutual consistency. Identified tensions and their resolutions:
+
+| Tension | Constraints | Status |
+|---------|------------|--------|
+| T1: Stationarity vs self-modification | U7 + R3 | Open — U7 needs reformulation as instantaneous, not asymptotic |
+| T2: Weak vs strong R3 | R3 interpretation | **Resolved** — self-modification hierarchy (Sec 3.2). $\ell_\pi$ is partial, $\ell_F$ is full. |
+| T3: Continuity vs self-modification | U20 + R3 | Constrained — metric can refine but not rearrange topology |
+| T4: Never delete vs no redundancy | U3 + R6 | **Resolved** — irredundant growth (Sec 4.2). Every new component covers unique territory. |
+| T5: Infinite growth vs finite environment | U17 + finite $X$ | **Resolved** — Theorem 2. Growth shifts to state-derived components. |
+| T6: Navigation vs classification | U11 + U24 + U1 | Open — state-dependent behavior (DoF 11). No implementation yet. |
+| T7: Self-observation vs noisy TV | Theorem 2 + Sec 4.5 | Open — self-observation must avoid irreducible-noise traps. Constrains mechanisms. |
+| T8: Centering vs domain separation | U16 + chain benchmark | **Resolved** — per-domain centering (Step 546). R1-compliant via on_reset. |
+
+**No undiscovered contradictions.** All tensions are either resolved (T2, T4, T5, T8), constrained (T3), or identified as open questions (T1, T6, T7). The constraint system is internally consistent.
+
+### 7.2 What is proven
 
 1. The system has no fixed point (Theorem 1). Self-modification is necessary.
 2. In finite environments, the system must process its own state (Theorem 2). Self-observation is required.
 3. The current graph + argmin mechanism exits the feasible region after exploration saturates.
+4. Argmin over visit counts is robust to noisy TV and representation-invariant (Section 4.5, Proposition 3). Action selection for navigation is solved.
+5. Self-modification of the encoding ($\ell_\pi$) is achievable and improves navigation reliability (Recode, Step 542).
 
-### What is conjectured
+### 7.3 What is conjectured
 
-4. The minimal self-observing substrate is a fixed point of $F$ (Section 4.4).
-5. The oscillation between U7 (convergence) and U17 (growth) is a limit cycle, not chaos.
+6. The minimal self-observing substrate is a fixed point of $F$ (Section 4.5).
+7. The oscillation between U7 (convergence) and U17 (growth) is a limit cycle, not chaos.
 
-### What is open
+### 7.4 What is open
 
-6. Whether the full feasible region (R1-R6 + all validated U-constraints) is non-empty.
-7. What self-observation mechanism satisfies R6 (irredundancy) in practice.
-8. Whether R3 in the strong sense (active modification of operations) is achievable without infinite regress.
-9. How to resolve U11 + U24 + U1 (incompatible tasks, no mode switch) in a single system.
+8. Whether the full feasible region (R1-R6 + all validated U-constraints) is non-empty.
+9. What self-observation mechanism satisfies R6 (irredundancy) while avoiding noisy TV traps (T7).
+10. Whether $\ell_F$ (full self-reference) is achievable without infinite regress — or whether $\ell_\pi$ suffices.
+11. How to resolve U11 + U24 + U1 (incompatible tasks, no mode switch) in a single system (T6).
+12. R1-compliant classification — no substrate has achieved above-chance accuracy without external labels.
 
-### Honest assessment
+### 7.5 Honest assessment
 
-The feasible region for Level 1 navigation is occupied — graph + argmin + correct action decomposition satisfies R1, R2, U1, U3, U17, U20 and solves all three games. But this system fails R3 (operations are fixed), R4 (no self-testing), and exits the feasible region at Level 2 (R6 violation). The full R1-R6 region remains unoccupied. Whether it contains a point is the open question this paper frames but does not answer.
+The feasible region for Level 1 navigation is occupied — graph + argmin + correct action decomposition satisfies R1, R2, U1, U3, U17, U20 and solves all three games. Recode extends this to partial R3 ($\ell_\pi$). But no system satisfies R3 in the strong sense ($\ell_F$), R4 (no self-testing), or R6 after exploration saturates. The full R1-R6 region remains unoccupied. Whether it contains a point is the open question this paper frames but does not answer.
 
 ## References
 
