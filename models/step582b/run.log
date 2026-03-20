@@ -1,0 +1,113 @@
+Step 582b: 582 with op3 disabled (only op0+op2)
+
+seed 0:
+2026-03-20 12:40:06 | INFO | Got anonymous API key: 79bc3d6f-2056-4175-9978-cbee0af767fb
+2026-03-20 12:40:06 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-20 12:40:06 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-20 12:40:06 | INFO | Created new scorecard: 9f1f489b-2176-42d7-a52c-3b984272e6cd
+2026-03-20 12:40:06 | INFO | Successfully fetched metadata for game ls20
+2026-03-20 12:40:06 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\cb3b57cc\ls20.py
+    s0 L1@5875
+  s0: L1=1 L2=0 go=383 step=50000 cells=428 31s
+
+seed 1:
+2026-03-20 12:40:38 | INFO | Got anonymous API key: 476b74ab-d3b4-4c6f-a3de-515c41d15d78
+2026-03-20 12:40:38 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-20 12:40:38 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-20 12:40:38 | INFO | Created new scorecard: fef04deb-bda7-49f1-804f-1b6e0d395962
+2026-03-20 12:40:38 | INFO | Successfully fetched metadata for game ls20
+2026-03-20 12:40:38 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\cb3b57cc\ls20.py
+    s1 L1@10962
+  s1: L1=1 L2=0 go=385 step=50000 cells=335 34s
+
+seed 2:
+2026-03-20 12:41:13 | INFO | Got anonymous API key: 80f5ad6d-ac8d-412e-be0e-7def7dd48729
+2026-03-20 12:41:13 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-20 12:41:13 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-20 12:41:13 | INFO | Created new scorecard: 63b1267a-568c-40ec-a296-3664b9dda717
+2026-03-20 12:41:13 | INFO | Successfully fetched metadata for game ls20
+2026-03-20 12:41:13 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\cb3b57cc\ls20.py
+  s2: L1=0 L2=0 go=387 step=50000 cells=225 36s
+
+seed 3:
+2026-03-20 12:41:49 | INFO | Got anonymous API key: 5f104133-3f45-4ca3-9faf-4a65c32c2ab6
+2026-03-20 12:41:49 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-20 12:41:49 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-20 12:41:49 | INFO | Created new scorecard: b1b5ada8-0585-48a7-9b0f-f2cc56da9e6d
+2026-03-20 12:41:50 | INFO | Successfully fetched metadata for game ls20
+2026-03-20 12:41:50 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\cb3b57cc\ls20.py
+  s3: L1=0 L2=0 go=387 step=50000 cells=110 38s
+
+seed 4:
+2026-03-20 12:42:28 | INFO | Got anonymous API key: 556104c7-5e80-41a1-a12c-14e046a79423
+2026-03-20 12:42:28 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-20 12:42:28 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-20 12:42:28 | INFO | Created new scorecard: 8db0a5ff-0dd4-4e6b-b441-c09911baa43b
+2026-03-20 12:42:29 | INFO | Successfully fetched metadata for game ls20
+2026-03-20 12:42:29 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\cb3b57cc\ls20.py
+  s4: L1=0 L2=0 go=386 step=50000 cells=325 37s
+
+seed 0:
+2026-03-20 12:43:06 | INFO | Got anonymous API key: 86197c43-4cef-44c6-85cb-33e966e1b29a
+2026-03-20 12:43:06 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-20 12:43:06 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-20 12:43:06 | INFO | Created new scorecard: 1b8db830-0ba4-4202-b8ce-f72dffa7f652
+2026-03-20 12:43:06 | INFO | Successfully fetched metadata for game ls20
+2026-03-20 12:43:06 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\cb3b57cc\ls20.py
+    s0 L1@9016
+  s0: L1=1 L2=0 go=383 step=50000 cells=454 31s
+
+seed 1:
+2026-03-20 12:43:38 | INFO | Got anonymous API key: 32773271-ca6b-4187-8732-98993bf96071
+2026-03-20 12:43:38 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-20 12:43:38 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-20 12:43:38 | INFO | Created new scorecard: a3b5db46-661c-4355-9ff3-e8ff1d982473
+2026-03-20 12:43:38 | INFO | Successfully fetched metadata for game ls20
+2026-03-20 12:43:38 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\cb3b57cc\ls20.py
+    s1 L1@31819
+  s1: L1=1 L2=0 go=385 step=50000 cells=352 33s
+
+seed 2:
+2026-03-20 12:44:11 | INFO | Got anonymous API key: 5d3b3086-dffd-484e-9b4f-c0cadcc4579a
+2026-03-20 12:44:11 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-20 12:44:11 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-20 12:44:11 | INFO | Created new scorecard: f5b2a39c-cf6c-477d-a4b4-45192cf354be
+2026-03-20 12:44:12 | INFO | Successfully fetched metadata for game ls20
+2026-03-20 12:44:12 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\cb3b57cc\ls20.py
+  s2: L1=0 L2=0 go=386 step=50000 cells=244 34s
+
+seed 3:
+2026-03-20 12:44:46 | INFO | Got anonymous API key: f9919146-49d1-4a3d-b798-a796b1034aab
+2026-03-20 12:44:46 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-20 12:44:46 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-20 12:44:46 | INFO | Created new scorecard: 917cb29a-d036-4cb6-870f-5a9039b757b3
+2026-03-20 12:44:47 | INFO | Successfully fetched metadata for game ls20
+2026-03-20 12:44:47 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\cb3b57cc\ls20.py
+    s3 L1@18070
+  s3: L1=1 L2=0 go=384 step=50000 cells=174 32s
+
+seed 4:
+2026-03-20 12:45:19 | INFO | Got anonymous API key: ef414312-e53d-4811-ad36-358e4e966d56
+2026-03-20 12:45:19 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-20 12:45:19 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-20 12:45:19 | INFO | Created new scorecard: ae1dde62-ab6c-45c0-9eea-2e7f7ee17efa
+2026-03-20 12:45:19 | INFO | Successfully fetched metadata for game ls20
+2026-03-20 12:45:19 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\cb3b57cc\ls20.py
+  s4: L1=0 L2=0 go=386 step=50000 cells=323 35s
+
+============================================================
+Step 582b: op3 disabled
+  NoOp3:  2/5 seeds L1, total=2
+    s0: L1=1 cells=428
+    s1: L1=1 cells=335
+    s2: L1=0 cells=225
+    s3: L1=0 cells=110
+    s4: L1=0 cells=325
+  Argmin: 3/5 seeds L1, total=3
+    s0: L1=1 cells=454
+    s1: L1=1 cells=352
+    s2: L1=0 cells=244
+    s3: L1=1 cells=174
+    s4: L1=0 cells=323
+
+FAIL: no-op3 (2) < argmin (3)
