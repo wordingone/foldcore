@@ -129,7 +129,7 @@ Step 572t-572u: **L3=5/5**. puq solved. Key fix: energy routing through iri at (
 Step 573: U26 CHALLENGED. LSH k=16 on P-MNIST: test_acc=36.2% (vs codebook 9.8%). Self-label failure was codebook-specific (NN-voting on cosine centroids). splits=0 = pure LSH, not Recode. 4742 cells, coverage=70%.
 Step 574: U19 PARTIALLY CHALLENGED. LSH k=12 raw 64x64 on LS20: L1 reliable (1191-1418/seed). Dynamics alone sufficient for L1. L2=0 (sequencing needs features). Refined: dynamics≠features only for L2+.
 Step 575: FT09 5/5. LSH k=12, 69-action, avg_cells=5. FT09 trivially solvable — pure action-coverage, no spatial structure needed.
-Step 576: RUNNING. VC33 mode map + isolated CC — autonomous zone discovery test. Can the pipeline discover magic pixels without being told?
+Step 576: VC33 **5/5**. Mode map + isolated CC autonomously discovered magic pixels at (62,26) and (62,34) — same positions as Step 505 but WITHOUT prescribed zone positions. 7 clusters detected. Burst navigation (5 clicks per cluster) found that (62,34) needs 3 consecutive clicks. Pipeline generalizes across games: LS20 sprites, FT09 action coverage, VC33 zone discovery — all from the same isolated CC mechanism.
 
 ACTIVE FRONTIER: Mode map candidate sweep (L2 path). Self-observation thread closed.
   - Current non-codebook count: ~97. Target: 400 (to match codebook's 435).
