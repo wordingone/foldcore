@@ -1377,7 +1377,58 @@ achievable is the open question.
 
 \subsection{7. Discussion}\label{discussion}
 
-\subsubsection{What is proven}\label{what-is-proven}
+\subsubsection{7.1 Pairwise Consistency
+Audit}\label{pairwise-consistency-audit}
+
+All formalized constraints were checked for mutual consistency.
+Identified tensions and their resolutions:
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3103}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4138}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2759}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Tension
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Constraints
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Status
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+T1: Stationarity vs self-modification & U7 + R3 & Open --- U7 needs
+reformulation as instantaneous, not asymptotic \\
+T2: Weak vs strong R3 & R3 interpretation & \textbf{Resolved} ---
+self-modification hierarchy (Sec 3.2). \(\ell_\pi\) is partial,
+\(\ell_F\) is full. \\
+T3: Continuity vs self-modification & U20 + R3 & Constrained --- metric
+can refine but not rearrange topology \\
+T4: Never delete vs no redundancy & U3 + R6 & \textbf{Resolved} ---
+irredundant growth (Sec 4.2). Every new component covers unique
+territory. \\
+T5: Infinite growth vs finite environment & U17 + finite \(X\) &
+\textbf{Resolved} --- Theorem 2. Growth shifts to state-derived
+components. \\
+T6: Navigation vs classification & U11 + U24 + U1 & Open ---
+state-dependent behavior (DoF 11). No implementation yet. \\
+T7: Self-observation vs noisy TV & Theorem 2 + Sec 4.5 & Open ---
+self-observation must avoid irreducible-noise traps. Constrains
+mechanisms. \\
+T8: Centering vs domain separation & U16 + chain benchmark &
+\textbf{Resolved} --- per-domain centering (Step 546). R1-compliant via
+on\_reset. \\
+\end{longtable}
+}
+
+\textbf{No undiscovered contradictions.} All tensions are either
+resolved (T2, T4, T5, T8), constrained (T3), or identified as open
+questions (T1, T6, T7). The constraint system is internally consistent.
+
+\subsubsection{7.2 What is proven}\label{what-is-proven}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -1391,51 +1442,61 @@ achievable is the open question.
 \item
   The current graph + argmin mechanism exits the feasible region after
   exploration saturates.
+\item
+  Argmin over visit counts is robust to noisy TV and
+  representation-invariant (Section 4.5, Proposition 3). Action
+  selection for navigation is solved.
+\item
+  Self-modification of the encoding (\(\ell_\pi\)) is achievable and
+  improves navigation reliability (Recode, Step 542).
 \end{enumerate}
 
-\subsubsection{What is conjectured}\label{what-is-conjectured}
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\setcounter{enumi}{3}
-\tightlist
-\item
-  The minimal self-observing substrate is a fixed point of \(F\)
-  (Section 4.4).
-\item
-  The oscillation between U7 (convergence) and U17 (growth) is a limit
-  cycle, not chaos.
-\end{enumerate}
-
-\subsubsection{What is open}\label{what-is-open}
+\subsubsection{7.3 What is conjectured}\label{what-is-conjectured}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \setcounter{enumi}{5}
 \tightlist
 \item
+  The minimal self-observing substrate is a fixed point of \(F\)
+  (Section 4.5).
+\item
+  The oscillation between U7 (convergence) and U17 (growth) is a limit
+  cycle, not chaos.
+\end{enumerate}
+
+\subsubsection{7.4 What is open}\label{what-is-open}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{7}
+\tightlist
+\item
   Whether the full feasible region (R1-R6 + all validated U-constraints)
   is non-empty.
 \item
-  What self-observation mechanism satisfies R6 (irredundancy) in
-  practice.
+  What self-observation mechanism satisfies R6 (irredundancy) while
+  avoiding noisy TV traps (T7).
 \item
-  Whether R3 in the strong sense (active modification of operations) is
-  achievable without infinite regress.
+  Whether \(\ell_F\) (full self-reference) is achievable without
+  infinite regress --- or whether \(\ell_\pi\) suffices.
 \item
   How to resolve U11 + U24 + U1 (incompatible tasks, no mode switch) in
-  a single system.
+  a single system (T6).
+\item
+  R1-compliant classification --- no substrate has achieved above-chance
+  accuracy without external labels.
 \end{enumerate}
 
-\subsubsection{Honest assessment}\label{honest-assessment}
+\subsubsection{7.5 Honest assessment}\label{honest-assessment}
 
 The feasible region for Level 1 navigation is occupied --- graph +
 argmin + correct action decomposition satisfies R1, R2, U1, U3, U17, U20
-and solves all three games. But this system fails R3 (operations are
-fixed), R4 (no self-testing), and exits the feasible region at Level 2
-(R6 violation). The full R1-R6 region remains unoccupied. Whether it
-contains a point is the open question this paper frames but does not
-answer.
+and solves all three games. Recode extends this to partial R3
+(\(\ell_\pi\)). But no system satisfies R3 in the strong sense
+(\(\ell_F\)), R4 (no self-testing), or R6 after exploration saturates.
+The full R1-R6 region remains unoccupied. Whether it contains a point is
+the open question this paper frames but does not answer.
 
 \subsection{References}\label{references}
 
