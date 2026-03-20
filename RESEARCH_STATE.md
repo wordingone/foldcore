@@ -67,7 +67,9 @@ Step 549: Recode trajectory divergence. Jaccard overlap 95.1%→79.8% at 50K→3
 
 Step 550: LS20 state graph mapped. 942 live cells, 1 component, fully connected. CRITICAL: agent trapped in 364-node active set (29%). 834 abandoned nodes (67%). 134 deterministic frontier edges (H<0.1) with only 10 obs each — completely unexploited. 67% of edges are noisy TV (H>1.0). L2 is a POLICY problem: argmin cycles in the attractor, never reaches abandoned nodes with unexploited deterministic edges.
 
-ACTIVE FRONTIER: Experiment loop. Steps 551 (k=20), 552 (transition classification) running.
+Step 551: k=20 Recode at ~700K. L1=3/3, L2=0/3. max_cells=1749. Resolution NOT the L2 bottleneck. Closes Q2.
+
+ACTIVE FRONTIER: Experiment loop. Step 552 (transition classification) running. Q1+Q2 answered: L2 is a policy problem (argmin attractor).
   - Current non-codebook count: ~95. Target: 400 (to match codebook's 435).
   - 11 families tested. Recode is strongest non-codebook (5/5 L1, 2/3 chain).
   - 7 provisional constraints need targeted experiments: U5, U8, U9, U18, U19, U21, U26.
