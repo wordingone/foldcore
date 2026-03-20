@@ -2,7 +2,7 @@
 
 *Revised 2026-03-18 session 2. Major restructure: task requirements first, honest universality reclassification.*
 
-*546+ experiments across 11 architecture families (codebook ~435, LSH ~65, L2 k-means ~25, reservoir ~20, Hebbian 3, SplitTree 5, Recode 3, graph 8, CA 3, Bloom 2, CC 1, LLM 1, kd-tree 1). N-gram (Step 521) converges to LSH argmin — not a distinct family. Codebook banned 2026-03-18. Chain benchmark introduced 2026-03-19. Key findings: algorithm invariance (argmin across 4 representations), self-refinement improves navigation reliability (Recode 5/5 vs LSH 3/3), centering tension resolved via per-domain centering (Step 546), noisy TV universal (6 targeted strategies all worse than argmin).*
+*570+ experiments across 11 architecture families (codebook ~435, LSH ~65, L2 k-means ~25, reservoir ~20, Hebbian 3, SplitTree 5, Recode 3, graph 8, CA 3, Bloom 2, CC 1, LLM 1, kd-tree 1). N-gram (Step 521) converges to LSH argmin — not a distinct family. Codebook banned 2026-03-18. Chain benchmark introduced 2026-03-19. Key findings: algorithm invariance (argmin across 4 representations), self-refinement improves navigation reliability (Recode 5/5 vs LSH 3/3), centering tension resolved via per-domain centering (Step 546), noisy TV universal (6 targeted strategies all worse than argmin).*
 
 **Classification:**
 - **Task Requirement**: What the TASK demands of any substrate (derived from successes AND failures across families)
