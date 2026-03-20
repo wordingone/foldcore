@@ -68,7 +68,33 @@ Dynamics: s_{t+1} = F(s_t)(x_t), a_t = g(s_t).
 
 **Tensions:**
 - T1: U7 assumes stationarity that R3 breaks. May need reformulation as "locally amplifies largest-variance component" (instantaneous, not asymptotic).
-- T2: R3 is ambiguous between "actively modifies operations" and "operations responsive to state." Strong vs weak interpretation.
+- T2: R3 is ambiguous between "actively modifies operations" and "operations responsive to state." Resolved by the self-modification hierarchy below.
+
+#### Resolving T2: The Self-Modification Hierarchy
+
+**Prior work:** Schmidhuber (1993, "A Self-Referential Weight Matrix") proposed collapsing potentially infinite meta-learning levels into one self-referential system. Kirsch & Schmidhuber (2022, ICML) implement this: a weight matrix that learns to modify its own weights, achieving meta-meta-...-learning without explicit hierarchy. The hierarchy of meta-learning levels is well-established: Level 0 (fixed), Level 1 (learning), Level 2 (learning to learn), etc. Our contribution is mapping this hierarchy onto our specific decomposition of $F$.
+
+**Our formalization:** Decompose $F(s)(x)$ into three components:
+- $\pi_s: X \to N$ (encoding — maps observations to nodes)
+- $u_s: N \times S \to S$ (update — modifies state given a node)
+- $g_s: S \to A$ (selection — chooses actions)
+
+The **self-modification level** of a substrate is determined by which components' *structure* (not just data) depends on $s$:
+
+| Level | What depends on $s$ | Example | R3? |
+|-------|---------------------|---------|-----|
+| $\ell_0$ | Only $g_s$ (action from data) | LSH: fixed hash, argmin over edge counts | Weak only |
+| $\ell_1$ | $g_s$ and data in $u_s$ | Codebook: entries move via attract, but attract rule fixed | Weak only |
+| $\ell_\pi$ | $\pi_s$ changes structure | Recode: hash routes through learned hyperplanes from transition statistics | **Partial** |
+| $\ell_F$ | The rule for modifying $\pi$ itself adapts | No substrate yet. Schmidhuber's SRWM is Level $\ell_F$ for neural systems. | **Strong** |
+
+**Key distinction:** At $\ell_0$ and $\ell_1$, the encoding $\pi$ is fixed at initialization. The system sees through the same lens forever; only what it remembers changes. At $\ell_\pi$, the lens itself changes — an observation that mapped to node $n_1$ at time $t$ may map to $(n_1, 0)$ at time $t' > t$ because a hyperplane was learned. This is a qualitative jump: the system's perception of the environment changes, not just its memory.
+
+**Empirical evidence (Step 542, Recode):** $\ell_\pi$ produces 5/5 L1 navigation vs 3/3 for $\ell_0$ (LSH k=16). Self-modification of $\pi$ improves navigation reliability. But the refinement algorithm (entropy threshold, hyperplane from mean difference) is frozen — the system cannot modify HOW it refines, only WHERE. This is partial R3: $F$ is non-constant because $\pi_s$ varies with $s$, but $F$ is still a SINGLE fixed meta-rule.
+
+**Relationship to prior work:** Schmidhuber's hierarchy (1993) addresses the same question — what level of self-reference does the system have? His solution (self-referential weight matrix) collapses all levels into one. Our framework makes the levels explicit and maps concrete substrates to them. The contribution is empirical: showing that $\ell_\pi$ is achievable and produces measurable improvement over $\ell_0$, while $\ell_F$ remains open.
+
+**Implication for Theorem 2:** Self-observation (Section 4.3) requires extracting new irredundant structure from $s$. At $\ell_0$, the system cannot encode this new structure into $\pi$ — it can only add edges. At $\ell_\pi$, it can modify $\pi$ to distinguish states that were previously confused. $\ell_\pi$ is necessary but may not be sufficient for full self-observation — the system also needs to modify its update and selection rules ($\ell_F$).
 
 ### 3.3 Growth Topology (U3, U17, U20, R6)
 
@@ -436,8 +462,9 @@ The formalization identifies what the constraints REQUIRE but also what they lea
 | 9 | Self-observation → rule modification | New structure must change $f$ (R3) | How: does detecting stuckness change exploration? Does cycle detection trigger avoidance? | Sec 4.3 |
 | 10 | Fixed-point structure | Conjectured to exist (Sec 4.4) | What invariant is preserved under self-observation | Sec 4.4 |
 | 11 | Exploration/exploitation resolution | $g_{nav} \neq g_{class}$ (U11), no mode switch (U1) | State-dependent behavior: what state feature triggers the switch? | Sec 3.4 |
+| 12 | Self-modification level | Must be $\geq \ell_\pi$ for R3 compliance (Sec 3.2) | How deep: $\ell_\pi$ (Recode) vs $\ell_F$ (full self-reference). Which component of $F$ adapts, and by what trigger? | Sec 3.2 |
 
-**The central experimental question (DoF 8-9):** What specific self-observation mechanism produces irredundant growth after exploration saturates? This is the next experiment phase.
+**The central experimental question (DoF 8-9, 12):** What specific self-observation mechanism produces irredundant growth after exploration saturates, and at what self-modification level? Recode shows $\ell_\pi$ is achievable; whether $\ell_F$ is necessary or achievable is the open question.
 
 ## 7. Discussion
 
@@ -472,6 +499,7 @@ The feasible region for Level 1 navigation is occupied — graph + argmin + corr
 - Givan, R., Dean, T. & Greig, M. (2003). Equivalence Notions and Model Minimization in Markov Decision Processes. Artificial Intelligence, 147(1-2), 163-223.
 - Graves, A. et al. (2014). Neural Turing Machines. arXiv:1410.5401.
 - Jin, C. et al. (2020). Reward-Free Exploration for Reinforcement Learning. ICML.
+- Kirsch, L. & Schmidhuber, J. (2022). Self-Referential Meta Learning. ICML.
 - Kohonen, T. (1988). Self-Organization and Associative Memory. Springer.
 - Maturana, H. & Varela, F. (1972). Autopoiesis and Cognition: The Realization of the Living.
 - McCloskey, M. & Cohen, N. J. (1989). Catastrophic interference in connectionist networks. Psychology of Learning and Motivation, 24, 109-165.
