@@ -388,7 +388,7 @@ Each benchmark tests a different capability that specialized systems win:
 
 **Protocol:** 5-minute phases per benchmark. 1-pass CIFAR (10K images), 5-min per ARC game, 1-pass CIFAR return. One continuous agent state, no reset between phases. Metrics: CIFAR accuracy before/after (forgetting delta), ARC levels reached, total actions to first level completion.
 
-**Missing baselines (acknowledged):** No existing method has been evaluated on this exact protocol. Step 586 (pending) will compare EWC (Kirkpatrick et al. 2017), replay buffer, and naive fine-tuning on the CIFAR classification phase to establish whether the substrate's zero-forgetting claim holds against standard continual learning methods. The navigation phases have no direct baseline — RL methods require reward (violating R1) and CL methods don't address navigation.
+**Baselines from literature (reviewer gap #4):** No existing method has been evaluated on this exact protocol (cross-domain chain with no reset). For the classification phase, published split-CIFAR-100 results provide context: naive sequential ~10-20%, EWC (Kirkpatrick et al. 2017) ~20-35%, replay buffer (50/class) ~30-45%, DER++ (Buzzega et al. 2020) ~45-55% average accuracy (van de Ven & Tolias, 2024). All exhibit measurable forgetting. The substrate achieves zero forgetting by construction (growth-only state, U3) — no parameter overwriting occurs. Direct comparison is limited by benchmark difference (substrate tested on P-MNIST, not CIFAR-100). The navigation phases have no direct baseline — RL methods require reward (violating R1) and CL methods don't address navigation.
 
 #### 5.4.1 Negative Transfer and Dynamic Growth (Steps 506-508)
 
@@ -579,6 +579,17 @@ R5 requires one fixed ground truth. R3 requires every aspect of computation to b
 ($\Leftarrow$) Suppose $g$ is strictly environmental (determined by the environment, not by any component of $F$). Then R3's requirement that every component of $F$ be self-modifiable does not apply to $g$, since $g \notin F$. R5 holds because $g$ is fixed by the environment. No contradiction.
 
 **Implication:** The boundary of self-modification is precisely the system-environment interface. Everything inside the system boundary (encoding, update, selection, meta-rules) must be self-modifiable for R3. Everything outside (ground truth signal) must be fixed for R5. The theorem constrains substrate design: the ground truth MUST be environmental feedback (game death, level transitions, external reward), never an internal evaluation function. Any substrate with an internal fitness function violates R3 or R5.
+
+#### Proposition 6: Self-Modification Level Determines Speed vs Reachability
+
+**Statement:** $\ell_1$ self-modification (data-driven placement of prescribed operations) accelerates exploration but does not expand the reachable set. Only $\ell_\pi$ self-modification (data-driven encoding change) expands reachability.
+
+**Evidence:**
+- Step 584 (20 seeds, 50K): Soft penalty (SP) and argmin (AM) converge to 13/20 at 50K, but SP leads 9/6 at 10K. The penalty accelerates discovery without expanding the graph.
+- Step 542 (Recode, 5/5): Self-modification of $\pi$ (hash refinement from transition statistics) expands the graph from 440 to 1267 cells and improves success from 3/3 to 5/5. The encoding change creates new nodes the agent can visit.
+- Step 587: Death-count penalty DC(1) solves at 2338 steps vs SP at 7749 — faster still, but on the same graph.
+
+**Interpretation:** The reachable set is determined by the partition geometry ($\pi$). $\ell_1$ operations (penalty, boost) change how the agent traverses the existing graph. $\ell_\pi$ operations (Recode) change what the graph IS. Speed vs reachability maps exactly to $\ell_1$ vs $\ell_\pi$ in the self-modification hierarchy.
 
 ## References
 
