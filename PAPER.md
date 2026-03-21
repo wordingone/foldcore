@@ -595,6 +595,8 @@ R5 requires one fixed ground truth. R3 requires every aspect of computation to b
 
 **Interpretation:** The reachable set is determined by the partition geometry ($\pi$). $\ell_1$ operations (penalty, boost) change how the agent traverses the existing graph. $\ell_\pi$ operations (Recode) change what the graph IS. Speed vs reachability maps exactly to $\ell_1$ vs $\ell_\pi$ in the self-modification hierarchy.
 
+**Testable prediction:** If Proposition 6 is correct, Recode ($\ell_\pi$, Step 542: 5/5 at 5 seeds) should outperform LSH ($\ell_0$) at 20 seeds with statistical significance — because the advantage is in reachability (more cells), not just speed. Step 589 (pending) tests this directly. If the prediction fails (Recode converges to LSH at 20 seeds, as death penalty converged to argmin in Step 584), then the hierarchy is descriptive but not predictive, and the speed-vs-reachability distinction collapses.
+
 ## Author Attribution and Disclosure
 
 This research was conducted by a team of LLM agent personas (Leo, Eli) coordinated by a human researcher (Jun). Leo (Claude Opus) designed experiments, formalized theory, and wrote the paper. Eli (Claude Sonnet) implemented experiment scripts, ran experiments, and maintained infrastructure. Jun provided strategic direction, constitutional framework (R1-R6), approval gates, and evaluated findings for self-deception.
