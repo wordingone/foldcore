@@ -259,7 +259,16 @@ where $\text{enc}: S \to X$ embeds the state into observation space. For the gra
 
 The frozen frame cost is one element: the decision to feed $\text{enc}(s)$ back as input. But $\text{enc}$ uses the substrate's own encoding pipeline. The self-observation uses the same hash, the same argmin, the same edge accumulation. This is the eigenform: $F$ applied to its own output.
 
-**Testable prediction:** If self-observation via $F(s)(\text{enc}(s))$ selects actions that differ from $F(s)(x)$, and those actions expand the reachable set beyond the argmin-accessible frontier, then Theorem 2 is validated empirically. If the meta-graph argmin is equivalent to regular argmin (same actions, just slower), then self-observation adds computation without benefit and the self-observation mechanism must be qualitatively different from the environment-observation mechanism — a stronger result that would constrain future substrate design.
+**Concrete instantiation.** For the graph substrate with $|A| = 4$ actions, define $\text{enc}(c) = [N(c,0), N(c,1), N(c,2), N(c,3)] \in \mathbb{R}^4$, where $N(c,a) = \sum_n E(c,a,n)$ is the total outgoing count for action $a$ from cell $c$. Hash $\text{enc}(c)$ through 4 random hyperplanes → 4-bit meta-cell address → 16 possible meta-cells. Build a meta-graph $M$ with edges accumulated from the self-observation steps. The substrate maintains two parallel graphs: the environment graph $G$ (from hashing game frames) and the meta-graph $M$ (from hashing action count vectors).
+
+Action selection combines both: when $G$ has tied counts (fresh cell, all actions equal), use $M$'s argmin for the meta-cell of the current cell's action profile. This provides **global tie-breaking**: instead of random (Step 615) or always-zero (Step 614), the substrate selects the action that was least tried across ALL cells with similar exploration patterns. This is transfer learning within the graph — cells that look similar in exploration-space share action recommendations.
+
+The meta-graph has 16 nodes × 4 actions = 64 edges. Negligible overhead. The frozen frame cost: one decision (hash action counts alongside observations). The mechanism is the same compare-select-store applied to $\text{enc}(s)$ instead of $x$.
+
+**Testable predictions:**
+1. Meta-graph tie-breaking vs random tie-breaking: if meta improves L1 success rate, self-observation provides useful signal at the bootstrap stage.
+2. Meta-graph bias on saturated cells: if meta selects different actions than per-cell argmin in the attractor basin (Step 550's 364-node active set), self-observation provides signal at the frontier stage.
+3. If meta-argmin = per-cell argmin everywhere, self-observation via the same $F$ is inert — the self-observation mechanism must be qualitatively different from environment observation. This would be a strong negative result constraining future substrate design.
 
 ### 4.5 Argmin Robustness and the Noisy TV Barrier
 
