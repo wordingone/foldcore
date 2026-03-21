@@ -57,7 +57,29 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 616 (LS20 L4 depth push — argmin tie-breaking + no G reset + bootstrap fixes)
+CURRENT STEP: 620 (Eigenform self-observation on L1 — self-derived op codes from graph statistics)
+
+**Search space visualization (2026-03-21):**
+378 real experiments mapped to 3D sphere (center=resolved, edge=open). Cluster distribution:
+  representation: 114 (30%), navigation: 76 (20%), transfer: 63 (17%),
+  depth: 53 (14%), R3: 37 (10%), architecture: 35 (9%).
+R3 — the central question — has the FEWEST experiments. The search explored the periphery
+(encoding, navigation) while the center is almost empty. Next direction: move toward center.
+Viz committed to repo as search_space.html + viz.py.
+
+**Steps 611-618 debug cascade (2026-03-21):**
+611: puq_wall_set=None (bootstrap timing). 612b: G={} reset killed graph.
+614: np.argmin([0,0,0,0])=0 always. 615: L0 cluster targeting freezes agent_yx.
+616: L1 confirmed (6965 cycles) but MGU_SPAWN wrong. 617: cluster targeting freeze.
+618: L1 works but mgu waypoints fail (wp=0, lhs=0).
+**572u verbatim (617b) also fails — BUT code diff shows only n_seeds/per_seed_cap changed.**
+Step 619: exact reproduction from commit 0463b3c (5 seeds × 60s, no modifications).
+
+**Eigenform experiment series (Steps 620-628):**
+First R3 experiments from birth mode. Self-derived op codes from graph statistics.
+The substrate observes its own edge count distribution, computes percentile thresholds,
+assigns AVOID/PREFER/NEUTRAL ops. Thresholds are self-calibrated, not prescribed.
+Tests eigenform hypothesis: F(s)(enc(s)) — can the substrate improve by reading itself?
 
 **Research-algorithm isomorphism (external audit Finding 12, formalized 2026-03-21):**
 The research process (Leo's compare-select-store on experiments/constraints) IS structurally identical to the substrate's compare-select-store on observations/state. Jun (2026-03-21): "have we tried compressing everything you do except for the LLM part into the substrate itself?" Answer: the eigenform mechanism F(s)(enc(s)) — the substrate applies its own transition function to its own state. Formalized in PAPER.md Section 4.4. First experiment: Step 617 (meta-graph from action count vectors).
