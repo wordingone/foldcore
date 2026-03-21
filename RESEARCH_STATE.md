@@ -78,10 +78,23 @@ Step 629: Eigenform L2 attempt — KILL (L1=5/5, L2=0/5). L1-success tagging + s
   helps navigate to unknown nodes. Same wall as Steps 477-482 (targeted exploration) from a
   different angle.
 
-  **Eigenform series conclusion (620-629):** Self-observation mechanism works mechanically
-  (AVOID grows, self-calibrates, self-terminates). But it is INERT for navigation — adds nothing
-  to argmin at L1, and cannot reach L2. The graph stores the PAST. L2 requires the FUTURE.
-  The substrate needs a world model (causal structure, physics), not a graph model (visit counts).
+Step 627: Eigenform + death signal — KILL. Deaths=0 in LS20. Death signal inapplicable.
+Step 625: Eigenform chain — P3 7-53x SLOWER than P1. AVOID contaminates L1 path.
+  Self-observation IS active (not inert) but MISALIGNED: avoids known territory without
+  finding new territory. Knows WHERE NOT TO GO but not WHERE TO GO.
+
+  **Eigenform series conclusion (620-629, 10 experiments):**
+  The eigenform mechanism works mechanically — AVOID grows, self-calibrates, contaminates
+  known paths. It is the first R3 mechanism that genuinely modifies navigation behavior.
+  But it points INWARD (avoiding the known graph) not OUTWARD (toward unknown territory).
+  L2 requires predicting unseen states — a world model. The graph stores the past.
+  L2 requires the future.
+
+  **Next direction: world model substrate.** Genesis (substrates/worldmodel/) has the architecture
+  for action→state-change prediction but violates R1-R6 (external objectives, gradient descent,
+  frozen neural network frame). The question: can the world model concept be made R1-compliant?
+  The graph IS a world model (predicts node transitions). Missing piece: it predicts WHERE you go,
+  not WHAT CHANGES. Store frame deltas alongside node transitions = R1-compliant causal data.
 
 Step 619: 572u exact reproduction — KILL (L3=0/5). Eli claims game API served different version
   (cb3b57cc March 17 → 9607627b March 20, different sprite definitions). Jun verifying.
