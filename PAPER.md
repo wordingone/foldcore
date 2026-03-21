@@ -47,7 +47,16 @@ Stigmergy (Grassé, 1959) is indirect communication through environment modifica
 
 ## 3. Formal Framework
 
-**On the status of R1-R6:** The six rules are axioms — philosophical commitments about what "recursive self-improvement" means. They are not empirically derived, not uniquely determined, and not the only possible formalization. Alternative frameworks (Schmidhuber's Gödel Machine, open-ended evolution, intrinsic motivation) make different commitments and would define different feasible regions. We adopt R1-R6 because they produce a concrete, testable constraint satisfaction problem. The contribution is what follows from these axioms (the constraint map, the hierarchy, the theorems), not the axioms themselves. A reader who rejects R1 (no external objectives) or R3 (full self-modification) will reject the framework — and that is a legitimate position.
+**On the status of R1-R6:** The six rules began as philosophical commitments. The experiments validated them — each rule is justified by what fails when it is violated:
+
+- **R1 (no external objectives):** Every targeted exploration strategy failed (Steps 478-481: novelty 1/10, prediction-error 0/10, UCB1 neutral). External objectives create exploitable structure that noisy environments corrupt. Argmin survives because it has no target to corrupt.
+- **R2 (adaptation from computation):** Algorithm invariance across 4 families (codebook, LSH, Hebbian, Markov — Steps 524-525). The same argmin algorithm emerges regardless of representation. Adaptation IS the computation, not a separate learning rule.
+- **R3 (every aspect self-modified):** The aspiration. 12 prescribed components remain (Section 7.6). Every experiment that prescribed fewer components performed worse (Step 593: removing centering → 0/5). R3 defines the gap between current substrates and the goal.
+- **R4 (modifications tested against prior state):** Negative transfer destroys prior capability when untested (Steps 506, 515, 596). Domain isolation (separate edge dicts) is the empirical solution — effectively a per-domain R4 check.
+- **R5 (one fixed ground truth):** Theorem 3: without a fixed external ground truth, R3 permits self-modification of evaluation criteria, which is degenerate. The ground truth must be environmental (game death, level transitions).
+- **R6 (no deletable parts):** Step 548: 89.5% of Recode splits change argmin action. Every component is behaviorally load-bearing. Redundant components would waste the growth budget (U17).
+
+Alternative frameworks (Schmidhuber's Gödel Machine, open-ended evolution, intrinsic motivation) make different commitments. R1-R6 are not uniquely determined — but each is experimentally motivated, not arbitrary.
 
 ### 3.1 Primitives
 
