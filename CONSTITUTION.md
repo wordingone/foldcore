@@ -73,23 +73,9 @@ A system that can modify all of its own evaluation criteria can trivially "impro
 
 Remove all external loss functions, reward signals, and evaluation metrics. The system still produces distinguishable outputs for distinguishable inputs.
 
-*Clarification (post-audit, 2026-03-18):* R1 governs the system's DYNAMICS — its update rules and computation must operate without external signal. R5 governs EVALUATION — the fixed ground truth test that measures whether the system works.
+*Clarification (revised 2026-03-21, post Hart debate):* R1 prohibits external loss functions, reward signals, and evaluation metrics — signals that encode what the system SHOULD achieve. Environmental observations (state transitions, event occurrences, interaction outcomes) are part of the input stream, not evaluative signals. Whether a specific use of environmental data introduces a frozen value judgment is governed by R3 (must be self-modifiable) and R4 (must be minimal or irreducible).
 
-*Reclassification (2026-03-21, Hart debate Round 1):* R1 distinguishes between **optimization targets** and **consequence observations**. The system must compute without externally prescribed objectives (loss functions, reward signals, evaluation metrics). But the system MAY observe and record environmental consequences (deaths, transitions, state changes) as data that adjusts its dynamics — provided the core computation works WITHOUT those signals.
-
-**The two-part test:**
-1. Remove ALL environmental feedback signals. Does the system still produce distinguishable outputs for distinguishable inputs? (Must be YES — core computation is self-sufficient.)
-2. When feedback IS used: does it prescribe WHAT TO ACHIEVE (optimization target → violates R1) or record WHAT HAPPENED (consequence observation → permitted)?
-
-**Evidence:**
-- Steps 477-482: Six optimization targets tested (destination novelty, prediction error, UCB1, entropy, softmax, global novelty). ALL worse than argmin. These prescribe what to achieve → noisy TV problem (Burda et al. 2018).
-- Steps 581d, 582: Consequence observations (death → soft penalty, game events → op codes). 4/5 vs 3/5 argmin. These record what happened → improve navigation without prescribing goals.
-- Step 620: Self-derived feedback (graph statistics → AVOID ops). Purely internal, no external signal at all. R1-compliant by any reading.
-- Step 576: Mode map discovers interactive objects from environmental observations. Goals DISCOVERED, not prescribed.
-
-**Relationship to prior work:** The intrinsic/extrinsic motivation distinction (Singh et al. 2004; Oudeyer & Kaplan 2007) separates self-generated from externally prescribed reward signals. Our distinction is more fundamental: not between types of reward, but between having an optimization target at all vs recording consequences. Reward-free exploration (Jin et al. 2020) separates exploration from reward — our argmin exploration is structurally reward-free. The consequence observation mechanism (582) is closer to associative learning than to reward optimization.
-
-**Open challenge (for Hart):** The mgu pipeline (572u) uses waypoints derived from mode map analysis. Are waypoints "discovered goals" (permitted) or "prescribed objectives" (violation)? The waypoints were discovered from observations, but using them for directed navigation IS goal-directed behavior. Where exactly is the line?
+*History: The 2026-03-18 clarification ("must operate without external signal") over-restricted R1 beyond what Principle I says. The original principle prohibits three specific signal types, not all external information. A proposed reclassification (optimization targets vs consequence observations, 2026-03-21) was REJECTED after Hart debate — the original Principle I text was already correct. The fix was in the clarification, not the principle.*
 
 **Step 432 result (critical):** Without external labels, P-MNIST classification = 9.8% (below chance). With external labels = 94.48%. The entire classification capability depends on external labels. Self-generated labels compound errors because softmax voting requires correct labels to produce correct predictions.
 
