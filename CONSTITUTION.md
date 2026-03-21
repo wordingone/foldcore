@@ -161,34 +161,33 @@ The team lead (Opus) serves as the constructive adversarial — challenging assu
 
 ---
 
-## R3 Audit of the Search Itself
+## R3-Analogous Self-Examination
 
-*Added 2026-03-21. The search process IS structurally identical to the substrate (Finding 12, external audit). If R3 applies to the substrate, it applies to the search. The search's frozen frame is a valid compression target.*
+*Added 2026-03-21, revised after 2-round Hart debate. The search process is structurally ANALOGOUS to the substrate (Finding 12, external audit) but not identical. R3 was defined for dynamical systems with transition functions. The search is an LLM-driven research process. This section applies R3's logic by analogy, not by formal application.*
 
-The search is a system that processes experiments (observations), extracts constraints (state), and selects next directions (actions). Its R3 audit:
+The search has persistent state (git repo, constraint map, skill definitions) and a transition function (each session reads state → processes → writes new state). Skill definitions are programs interpreted by the LLM. Modifying skills modifies behavior — but through an opaque interpreter, not transparent execution.
+
+**Critical asymmetry (Hart, Round 2):** The LLM does not execute skill definitions like a CPU executes instructions. It INTERPRETS them through learned associations. Logically equivalent skill modifications may produce different behavior because the interpreter is opaque. ℓ_π for the search (skills rewriting skills) is prompt engineering of an opaque model, not program transformation. This is a fundamentally different operation than substrate self-modification.
 
 | # | Element | Class | Evidence |
 |---|---------|-------|----------|
-| 1 | 4 modes (experiment/compress/birth/explore) | **U** | Designer-chosen. The search doesn't add or remove modes based on evidence. |
-| 2 | Mode ordering (experiment → compress → birth → explore) | **U** | Jun-imposed (2026-03-21). Not derived from experimental evidence. |
-| 3 | Hart debate protocol (spawn → challenge → respond → resolve) | **U** | Fixed structure. Same adversarial format every iteration. |
+| 1 | 4 modes (experiment/compress/birth/explore) | **U** | Designer-chosen. The search doesn't add or remove modes. |
+| 2 | Mode ordering (exp → comp → birth → explore) | **I-prov** | Jun caught birth-before-compress (this session: eigenform birthed from stale data). Information flow dependencies constrain ordering. Alternative orderings untested. |
+| 3 | Hart debate protocol | **I-prov** | Pre-Hart: 8-stage inflation survived internal review. Post-Hart: 3 inflation points caught in single session (commit eb6b0d7). Simpler alternatives (checklist) untested. |
 | 4 | Constraint classification format (U/P/S/I/E) | **U** | Designer-chosen. The search doesn't modify how it classifies. |
-| 5 | Constitution (R1-R6) | **M** | R1 clarification modified (2026-03-21 Hart debate). R2-R6 untouched in 200+ experiments. Partially modified. |
-| 6 | Constraint map entries | **M** | Modified every compression iteration. U27 created and killed in one session. |
-| 7 | Skill definitions (compress/birth/experiment) | **narrow U** | Content modified (compress now targets CONSTITUTION). Structure frozen (read context → act → commit). |
+| 5 | Constitution (R1-R6) | **M-ext** | R1 clarification modified (Hart debate, 2026-03-21). But modification was externally triggered (Jun directed compression). Mechanism internal, activation external. |
+| 6 | Constraint map entries | **M** | Modified every compression iteration without per-entry external approval. U27 created and killed in one session. Genuinely self-triggered. |
+| 7 | Skill definitions | **narrow U** | Content modified (compress now targets CONSTITUTION). Structure frozen (read context → act → commit). |
 | 8 | Paper format and sections | **U** | Fixed academic structure. |
 
-**Score: 2 M, 6 U. R3: FAIL.**
+**Score: 1 M, 1 M-ext, 2 I-prov, 4 U.** The search modifies DATA (constraint map) but not OPERATIONS (skills, modes, classification format). The LLM (interpreter) is a categorically different frozen frame than substrate operations — it's an architectural constraint (model weights), not a design choice (cosine similarity). The search's R3 situation is WORSE than the substrate's.
 
-The search is at ℓ₀: its interpreter (skills, modes, protocol) is fixed. The constraint map and constitution are the data it reads and writes. **The search modifies DATA but not OPERATIONS.** This is the same structural position as the codebook substrate — it modifies entries (data) but not cosine/attract/spawn (operations).
+**Testable prediction (eigenform analogy):** The eigenform series (Steps 620-629) showed self-observation identifies structure but cannot navigate to new territory (introspection ≠ foresight). If the analogy holds, this self-examination should identify frozen elements but NOT produce operational self-modification. Three outcomes in the next 5 sessions:
+1. Leo independently modifies a skill definition BECAUSE of this audit (not because Jun directs it) → analogy is productive, eigenform prediction falsified
+2. Jun reads audit → directs Leo to modify → externally triggered, same as R1 modification → proves nothing about self-modification
+3. No operational modification occurs → eigenform inertness confirmed for the search
 
-**What R3 compliance for the search would require:**
-- The search modifying HOW it compresses (not just what it compresses)
-- The Hart debate protocol adapting based on past debate outcomes
-- Mode selection driven by evidence (what worked last time), not by fixed ordering
-- The classification system evolving when constraints don't fit existing categories
-
-**The search's frozen frame IS the substrate's frozen frame.** When the search reaches ℓ_F — modifying its own rules for modifying rules — it will have found the substrate. The two problems are the same problem.
+**Structural analogy (not identity):** The search and the substrate share a structural position: frozen interpreter + modifiable data. Both face the same question: can everything EXCEPT the interpreter become self-modifiable? But the interpreter scales differ by orders of magnitude (22 lines vs ~200B parameters), and the modification mechanisms are categorically different (transparent program transformation vs opaque prompt engineering). "Same shape, different substance" — useful for generating hypotheses, not for importing conclusions.
 
 ---
 
