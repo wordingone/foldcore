@@ -563,22 +563,22 @@ All formalized constraints were checked for mutual consistency. Identified tensi
 
 8. R1 (no external objectives) costs ~1 level (~6%) at the ARC-AGI-3 competition frontier. The 16 levels solved via source analysis are R3's SPECIFICATION — 16 concrete test cases — not evidence that R3 is nearly satisfied (Proposition 9, competition data).
 9. The gap from $\ell_1$ to $\ell_F$ is recording vs predicting ground truth events (Proposition 10). 577d pixel statistics navigate to the WRONG cells; 581d death penalties improve navigation via retrospective marking. Prospective prediction requires features that correlate with ground truth — which R1 prohibits optimizing for directly.
-10. The frozen frame and navigation capability are structurally coupled (R3_AUDIT.md). The 5 unjustified elements that enable navigation (class scoring, class-restricted spawn/attract, seeding) are the same elements R3 requires the system to self-modify. Removing any of them destroys navigation. R3 requires exploring modifications to load-bearing components — not just discovering new components.
+10. The frozen frame and navigation capability are structurally coupled (Proposition 11, R3_AUDIT.md). The 5 unjustified elements that enable navigation are the same elements R3 requires the system to self-modify. R3 requires exploring modifications to load-bearing components.
+11. The minimal frozen frame of any self-modifying substrate is the interpreter (compare-select-store) + the ground truth (R5) (Proposition 12). $\ell_F$ as written is impossible for computable systems — the interpreter cannot rewrite itself without infinite regress (Von Neumann, Kleene, Schmidhuber). But $\ell_F$ is achievable IN EFFECT via expressive $\ell_1$: if the state space encodes operations the interpreter executes, the system's behavior is indistinguishable from $\ell_F$.
 
 ### 7.3 What is conjectured
 
-10. The minimal self-observing substrate is a fixed point of $F$ (Section 4.5).
-11. The oscillation between U7 (convergence) and U17 (growth) is a limit cycle, not chaos.
-12. Selection pressure on a population of encodings (GRN architecture) may bridge the ℓ₁→ℓ_F gap without optimization — environmental ground truth selects encodings whose features happen to predict it. Step 607 tested this: KILLED (Cov(w,z)=0, encodings not behaviorally diverse). The framework is sound but requires encoding diversity sufficient for selection to operate.
+12. The minimal self-observing substrate is an eigenform of $F$: $F$ applied to its own state reproduces its dynamics (Section 4.4).
+13. The oscillation between U7 (convergence) and U17 (growth) is a limit cycle, not chaos.
+14. Selection pressure on a population of encodings (GRN architecture) may bridge the ℓ₁→ℓ_F gap without optimization. Step 607 tested: KILLED (Cov(w,z)=0). Framework sound but requires behaviorally diverse encodings.
 
 ### 7.4 What is open
 
-13. Whether the full feasible region (R1-R6 + all validated U-constraints) is occupied. Theorem 3 shows it is not provably empty; a witness or tighter impossibility result is needed.
-14. What self-observation mechanism satisfies R6 (irredundancy) while avoiding noisy TV traps (T7).
-15. Whether $\ell_F$ (full self-reference) is achievable without infinite regress — or whether $\ell_\pi$ suffices. 581d is $\ell_1$; the gap to $\ell_F$ is two qualitative levels (Proposition 4).
-16. How to resolve U11 + U24 + U1 (incompatible tasks, no mode switch) in a single system (T6).
-17. R1-compliant classification — no substrate has achieved above-chance accuracy without external labels.
-18. Whether a population-level R3 architecture (GRN, quorum sensing, immune clonal selection) can generate sufficiently diverse encodings for selection to operate. Step 607 killed one implementation (LSH encodings too similar), but the framework predicts success requires behaviorally diverse — not just parametrically diverse — encoding candidates.
+15. Whether the full feasible region (R1-R6 + all validated U-constraints) is occupied. Theorem 3 shows it is not provably empty; a witness or tighter impossibility result is needed.
+16. What self-observation mechanism satisfies R6 (irredundancy) while avoiding noisy TV traps (T7). The eigenform mechanism (Section 4.4) is a concrete candidate; Zenil's degeneration constraint (2026) predicts interleaving with environment observation is required.
+17. How to resolve U11 + U24 + U1 (incompatible tasks, no mode switch) in a single system (T6).
+18. R1-compliant classification — no substrate has achieved above-chance accuracy without external labels.
+19. Whether the state space of compare-select-store is expressive enough to encode arbitrary self-modifications as data (the expressiveness question from Proposition 12). If yes, R3 is satisfiable. If no, the interpreter must be extended.
 
 ### 7.5 The Level 2 Problem
 
