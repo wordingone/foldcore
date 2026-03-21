@@ -14,7 +14,7 @@ Each test: measure FLOPs, params, accuracy, and compute savings ratio.
 """
 
 import sys
-sys.path.insert(0, 'B:/M/ArtificialArchitecture/worldmodel')
+import os; sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import torch
 import torch.nn as nn

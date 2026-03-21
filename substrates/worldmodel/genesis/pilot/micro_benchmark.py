@@ -9,7 +9,7 @@ Compares: Baseline (pixel), Slot (pixel), Baseline-AR (latent), Slot-AR (latent)
 """
 
 import sys
-sys.path.insert(0, 'B:/M/ArtificialArchitecture/worldmodel')
+import os; sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import argparse
 import torch
