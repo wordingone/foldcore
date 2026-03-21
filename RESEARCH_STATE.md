@@ -103,6 +103,30 @@ Step 645: Self-derived penalty (active, surprise_count). L1=3/5, penalty_active=
   Finding 3: The fix for 645 is normalization — bounded signals don't swamp argmin (Hart debate:
   sparse/bounded signals neutral, dense/unbounded signals damage).
 
+Step 645b: Normalized surprise-rate penalty (alpha=1.0). L1=4/5, avg_speedup=0.71x. MARGINAL/WORSE.
+  Normalization bounded the magnitude but not the breadth: 82% of edges have nonzero surprise_rate →
+  penalty fires on 85% of decisions. Same U28 pattern: signals >60% density damage argmin.
+  Self-derived penalty can't achieve 581d's sparsity (1.3%) because high-surprise edges aren't rare.
+
+Step 648: Outcome-hash transfer (K=3 Hamming neighbors). L1=3/5, changed=39% (vs 640's 8%).
+  Outcome-hash neighbors ARE genuinely non-random (confirms 642). But same seed asymmetry as ALL
+  transfer experiments: s3 always benefits (6x faster), s0/s1/s4 always slower. NOT mechanism-
+  specific — seed-specific. Game topology determines which seeds benefit from ANY transfer signal.
+
+  **Edge-state enrichment series CLOSED (Steps 640-648, 9 experiments).**
+  Finding 1: Enriched state (outcome hashes, surprise rates) IS informative — cells differentiated,
+  edges separable by stochasticity. Proposition 14 validated: S contains more than visit counts.
+  Finding 2: L1 is argmin-optimal. No mechanism consistently improves on argmin for L1 — benefit
+  is seed-dependent by construction (game topology determines which seeds favor auxiliary signals).
+  Finding 3: The enriched state may be useful for L2, but L2 is unreachable with current substrate.
+  Finding 4: U28 refined — not just density but BREADTH. 645b normalized to [0,1] but fires on 85%
+  of edges. The signal must be both bounded AND sparse (<~5%) to help. Only game events (death)
+  are naturally that sparse.
+
+  **Direction assessment:** L1 improvement via edge-state enrichment = KILLED. Argmin is locally
+  optimal for L1 across 9 experiments, 4 mechanism variants, and the same seed asymmetry pattern.
+  The next direction must target L2 directly — not L1 improvement.
+
 Step 635: Frontier-gradient action selection. L1=5/5, avg_speedup=1.15x (marginal). Frontier bias
   fires 94-98% of steps — unconditionally. 3/5 seeds 5-20x SLOWER (over-exploration: 812-938 cells).
   2/5 seeds 2-3x faster (286-399 cells — L1 in unexplored territory). Same failure mode as delta
