@@ -578,7 +578,7 @@ All formalized constraints were checked for mutual consistency. Identified tensi
 16. What self-observation mechanism satisfies R6 (irredundancy) while avoiding noisy TV traps (T7). The eigenform mechanism (Section 4.4) is a concrete candidate; Zenil's degeneration constraint (2026) predicts interleaving with environment observation is required.
 17. How to resolve U11 + U24 + U1 (incompatible tasks, no mode switch) in a single system (T6).
 18. R1-compliant classification — no substrate has achieved above-chance accuracy without external labels.
-19. Whether the state space of compare-select-store is expressive enough to encode arbitrary self-modifications as data (the expressiveness question from Proposition 12). If yes, R3 is satisfiable. If no, the interpreter must be extended.
+19. Whether the state space of compare-select-store is expressive enough to encode arbitrary self-modifications as data (the expressiveness question from Proposition 12). SUBLEQ (subtract-and-branch-if-≤-0) is Turing complete with one instruction and unbounded memory. Compare-select-store maps structurally: COMPARE → subtract, SELECT → branch, STORE → write. But our specific COMPARE (LSH hash) is a fixed random projection — not an arbitrary function. The system's expressiveness is bounded by the comparison function's expressiveness. Whether the eigenform mechanism (hashing action counts → meta-comparison) iterates toward Turing-complete comparison is the core open question. If yes, R3 is satisfiable with the current interpreter. If no, the comparison function must be extended or made adaptive ($\ell_\pi$ → $\ell_F$ in effect).
 
 ### 7.5 The Level 2 Problem
 
