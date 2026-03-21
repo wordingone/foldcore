@@ -225,10 +225,12 @@ def build_experiments():
         result = entry['result']
         ci = classify_cluster(desc, step_num)
         score = resolution_score(result, desc)
+        # Game epoch: ARC Prize API updated LS20/FT09 on March 20 (step ~619)
+        epoch = 'new' if step_num >= 619 else 'old'
         all_exps[sid] = {
             'step': step_num, 'desc': desc[:80],
             'ci': ci, 'res': result, 'score': score,
-            'phase': 1 if step_num <= 416 else 2
+            'phase': 1 if step_num <= 416 else 2, 'epoch': epoch
         }
 
     # From scripts (fill gaps — phase 1 at lower opacity)
@@ -240,10 +242,11 @@ def build_experiments():
             doc = f'Step {step_num}'
         ci = classify_cluster(doc, step_num)
         phase = 1 if step_num <= 416 else 2
+        epoch = 'new' if step_num >= 619 else 'old'
         all_exps[sid] = {
             'step': step_num, 'desc': doc[:80],
             'ci': ci, 'res': 'O', 'score': 0.15,
-            'phase': phase
+            'phase': phase, 'epoch': epoch
         }
 
     return all_exps
@@ -375,7 +378,7 @@ html,body{{width:100%;height:100%;overflow:hidden;background:#000;touch-action:n
 <h1>THE SEARCH</h1>
 <p class="sub">{n} experiments · 12 families · 3 games · 6 rules</p>
 <p class="counts">{count_str}</p>
-<p class="hint">center = resolved · edge = open<br>drag rotate · scroll zoom · click inspect</p>
+<p class="hint">center = resolved · edge = open<br>drag rotate · scroll zoom · click inspect<br><span style="color:#ffaa00">&#9675;</span> = new game epoch (LS20/FT09 updated March 20)</p>
 </div>
 <div id="lg">{legend}</div>
 <div id="sh"><span style="color:#00ff88">&#9670; solved</span><span style="color:#ff4444">&#9671; kill</span><span style="color:#ffaa00">&#9650; signal</span><span style="color:#555">&#9679; open</span></div>
@@ -429,6 +432,11 @@ D.forEach(function(e){{
     var gl=new THREE.Mesh(new THREE.SphereGeometry(sz*3.5,8,8),new THREE.MeshBasicMaterial({{color:col,transparent:true,opacity:.12}}));
     gl.position.set(x,y,z);scene.add(gl);
   }}
+  // Epoch ring for new-game experiments (step >= 619)
+  if(e[8]===2 && e[5]>=619){{
+    var ring=new THREE.Mesh(new THREE.TorusGeometry(sz*2.2,.003,6,16),new THREE.MeshBasicMaterial({{color:"#ffaa00",transparent:true,opacity:.6}}));
+    ring.position.set(x,y,z);scene.add(ring);
+  }}
 }});
 
 // Trajectory lines connecting experiment threads
@@ -456,6 +464,7 @@ function addLabel(e,mesh){{
   var el=document.createElement("div");el.className="lbl";el.style.color=col;el.style.borderLeft="2px solid "+col;
   var txt="<b style='font-size:clamp(10px,2.6vw,12px)'>"+step+"</b> <span style='color:#555'>"+CN[ci]+"</span>";
   if(rn)txt+=" <span style='color:"+rcol+"'>"+rn+"</span>";
+  if(e[5]>=619)txt+=" <span style='color:#ffaa00'>NEW</span>";
   txt+="<br><span style='color:#444;font-size:clamp(6px,1.6vw,8px)'>"+desc+"</span>";
   el.innerHTML=txt;labelsEl.appendChild(el);
   var line=document.createElementNS(svgNS,"line");line.setAttribute("stroke",col);line.setAttribute("stroke-opacity","0.3");line.setAttribute("stroke-width","1");svgEl.appendChild(line);
