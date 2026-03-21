@@ -603,7 +603,7 @@ R5 requires one fixed ground truth. R3 requires every aspect of computation to b
 
 **Interpretation:** The reachable set is determined by the partition geometry ($\pi$). $\ell_1$ operations (penalty, boost) change how the agent traverses the existing graph. $\ell_\pi$ operations (Recode) change what the graph IS. Speed vs reachability maps exactly to $\ell_1$ vs $\ell_\pi$ in the self-modification hierarchy.
 
-**Testable prediction:** If Proposition 6 is correct, Recode ($\ell_\pi$, Step 542: 5/5 at 5 seeds) should outperform LSH ($\ell_0$) at 20 seeds with statistical significance — because the advantage is in reachability (more cells), not just speed. Step 589 (pending) tests this directly. If the prediction fails (Recode converges to LSH at 20 seeds, as death penalty converged to argmin in Step 584), then the hierarchy is descriptive but not predictive, and the speed-vs-reachability distinction collapses.
+**Testable prediction (FALSIFIED by Step 589):** Proposition 6 predicted Recode ($\ell_\pi$) would outperform LSH ($\ell_0$) at 20 seeds. Result: Recode(K=16) 18/20 = LSH(K=16) 18/20 > LSH(K=12) 13/20. The advantage over K=12 is entirely explained by having 16 hash bits, not by adaptive splitting. $\ell_\pi$ self-modification adds nothing on top of the K it uses. The hierarchy remains descriptively useful (categorizing mechanisms by what they modify) but is not operationally predictive: more hash bits (a frozen $\ell_0$ parameter) achieves the same reachability as adaptive splitting ($\ell_\pi$). The speed-vs-reachability distinction holds at mid-budget (Recode leads at 30-40K checkpoints, p<0.05) but collapses at 50K.
 
 ## Author Attribution and Disclosure
 
