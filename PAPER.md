@@ -43,6 +43,8 @@ McCloskey & Cohen (1989) identified catastrophic forgetting — neural networks 
 
 ## 3. Formal Framework
 
+**On the status of R1-R6:** The six rules are axioms — philosophical commitments about what "recursive self-improvement" means. They are not empirically derived, not uniquely determined, and not the only possible formalization. Alternative frameworks (Schmidhuber's Gödel Machine, open-ended evolution, intrinsic motivation) make different commitments and would define different feasible regions. We adopt R1-R6 because they produce a concrete, testable constraint satisfaction problem. The contribution is what follows from these axioms (the constraint map, the hierarchy, the theorems), not the axioms themselves. A reader who rejects R1 (no external objectives) or R3 (full self-modification) will reject the framework — and that is a legitimate position.
+
 ### 3.1 Primitives
 
 The substrate is a triple (f, g, F):
