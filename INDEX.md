@@ -1,6 +1,6 @@
 # The Search — Index
 
-*525+ experiments. These are the ones that matter.*
+*596+ experiments across 12 families. These are the ones that matter.*
 
 ---
 
