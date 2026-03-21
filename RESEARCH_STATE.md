@@ -78,6 +78,31 @@ Step 641: Soft bias transfer (alpha=0.1). L1=1/5 (same s1, same step). transfer_
   counts are too uniform. S ⊇ repr(F) requires richer state than visit counts — transition outcomes,
   prediction errors, or program-like structures.
 
+Step 642: Outcome-hash edges (passive). avg_distinct=3.32/4.0, 71.6% cells all-distinct. 479 unique
+  4-tuple signatures per seed. SIGNAL — outcome hashes ARE differentiated under argmin. Proposition
+  14 validated: richer state breaks profile uniformity. Argmin equalizes counts but NOT outcomes.
+
+Step 643: Predictive edges (passive). surprise_rate bimodal: 18% zero (deterministic), 43% high
+  (>50% stochastic). std=0.271 >> 0.1. SIGNAL — the environment's edge structure IS informative.
+  Deterministic edges (navigation) vs stochastic edges (death/resets) are separable.
+
+Step 644: Successor diversity tie-breaking (active). L1=4/5, avg_speedup=0.70x. KILL — diversity
+  preference inverted. Low diversity = deterministic loops (traps), not good navigation. changed=50%
+  means tie-breaking fires constantly but in wrong direction. s0 35x SLOWER.
+
+Step 645: Self-derived penalty (active, surprise_count). L1=3/5, penalty_active=90.5%. MARGINAL/WORSE.
+  surprise_count grows proportionally with count: after N visits with rate r, surprise_count ≈ rN,
+  count ≈ N, effective ≈ N(1+r) — constant scaling. Ordering preserved early but swamped late.
+  **FIX: use surprise_RATE (=surprise_count/count ∈ [0,1]), not surprise_COUNT (unbounded).**
+
+  **642-645 edge-state enrichment series:**
+  Finding 1: Richer edge state (outcome hashes, predictions) DOES contain differentiating information
+  under argmin. Proposition 14 validated empirically.
+  Finding 2: Naive exploitation fails — direction inversion (644) and unbounded growth (645) are
+  predictable failure modes. U28 pattern: even with signal, the exploitation mechanism matters.
+  Finding 3: The fix for 645 is normalization — bounded signals don't swamp argmin (Hart debate:
+  sparse/bounded signals neutral, dense/unbounded signals damage).
+
 Step 635: Frontier-gradient action selection. L1=5/5, avg_speedup=1.15x (marginal). Frontier bias
   fires 94-98% of steps — unconditionally. 3/5 seeds 5-20x SLOWER (over-exploration: 812-938 cells).
   2/5 seeds 2-3x faster (286-399 cells — L1 in unexplored territory). Same failure mode as delta
