@@ -57,7 +57,23 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 635 (Frontier-gradient action selection — running)
+CURRENT STEP: 635 (Frontier-gradient — MARGINAL, unconditional bias)
+
+Step 635: Frontier-gradient action selection. L1=5/5, avg_speedup=1.15x (marginal). Frontier bias
+  fires 94-98% of steps — unconditionally. 3/5 seeds 5-20x SLOWER (over-exploration: 812-938 cells).
+  2/5 seeds 2-3x faster (286-399 cells — L1 in unexplored territory). Same failure mode as delta
+  PREFER: always-on perturbation, not targeted intervention.
+
+  **Pattern across Steps 630-635 (6 experiments):**
+  Any signal that fires unconditionally is indistinguishable from noise on argmin. Sparsity determines
+  utility: death penalty (581d, 4/5) fires on ~5% of edges → helps. Delta PREFER fires 66-98% → hurts.
+  Frontier gradient fires 94-98% → hurts. The mechanism must be SPARSE (fire rarely), NEGATIVE
+  (avoid, not seek), and PER-EDGE (context-specific, not global).
+
+  Delta direction (630-635): 6 experiments, 0 improvements over argmin. Kill criteria met (>5
+  experiments). Direction KILLED for unconditional bias mechanism. Delta STRUCTURE exists (633 showed
+  real signal in binary masks). Future: per-edge delta mechanism (tag specific edges as stale when
+  same delta_cell > 80% of transitions, bias AGAINST those edges). Sparse + negative + per-edge.
 
 Step 634: Binary mask with separate delta H matrix. kd=4: L1=4/5, unique_dc=5-16. kd=8: L1=4/5,
   unique_dc=10-22. PREFER bias active (33-42%). BUT: L1 steps IDENTICAL to pure argmin for 4/5 seeds
