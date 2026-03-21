@@ -198,25 +198,27 @@ The task is interactive (unknown environment, no separate training phase). Any s
 
 ### What's Solved
 
-**The navigation mechanism is understood.** Graph + edge-count action selection (pick least-taken action from current node). Confirmed across codebook and LSH families. The mechanism is architecture-independent — any mapping that satisfies the three properties feeds into it.
+**The navigation mechanism is understood.** Graph + edge-count argmin. Confirmed across codebook, LSH, k-means, Hebbian families. Architecture-independent — any mapping satisfying three properties feeds into it. Argmin advantage over random is speed, not exclusive access (13/20 vs 10/20, Step 594, NS).
 
-**The three mapping properties are validated.** Deterministic + locally continuous + persistent. Predicts navigation success/failure with 100% accuracy across all 6 tested families. This is the strongest empirical finding in the project.
+**The three mapping properties are validated.** Deterministic + locally continuous + persistent. Predicts L1 success/failure with 100% accuracy across 6 tested families.
 
-**Three working mappings exist for LS20:** codebook (cosine — 6/10 at 50K, banned), LSH (random hyperplanes — 9/10 at 120K), L2 k-means (5/10 at 50K, 3/3 Level 1 at 200K). All satisfy the three mapping properties through different mechanisms. **But ALL only work on LS20.** Zero non-codebook solutions exist for FT09 or VC33.
+**All 3 games solved at multiple levels.** LS20 L1-L3=5/5 (mgu pipeline, Steps 572j-572u). FT09 all 6 levels, 75 clicks deterministic (Step 608b). VC33 all 7 levels, 176 clicks, analytical BFS (Step 610). **16 total levels — but all via source analysis (prescribed pipelines). These are R3's SPECIFICATION: 16 concrete test cases for what an R3-compliant substrate must discover autonomously.**
+
+**Cross-game detection generalizes.** Mode map + isolated CC pipeline discovers interactive objects across all 3 games without game-specific tuning (Step 576). FT09 trivially solvable by action coverage alone (Step 575).
+
+**Recode achieves ℓ_π.** LSH k=16 + passive self-refinement = 5/5 L1 on LS20 (Step 542). First substrate where the observation→cell mapping self-modifies AND navigation succeeds. But K confound (Step 589): Recode(K=16) = LSH(K=16) 18/20. Self-modification provides mid-budget speed advantage only.
 
 ### What's Open
 
-1. **R3 (self-modification):** No substrate self-modifies its mapping. Codebook attract is prescribed. LSH hyperplanes are fixed. The mapping IS the frozen frame. Making it adaptive without reintroducing banned mechanisms is the core open problem.
+1. **R3 (self-modification of operations):** The frozen frame and navigation capability are structurally coupled (R3_AUDIT.md). The 5 unjustified elements enabling navigation are the same elements R3 requires the system to self-modify. Removing any kills navigation. This is not engineering — it is the central structural tension.
 
-2. **FT09 and VC33 — the REAL test:** No non-codebook substrate has navigated either game. FT09 requires discovering click-region actions from raw pixels (I3). VC33 requires temporal reasoning — WHEN to act, not WHERE (I4). These aren't frozen games — they're games that expose what LS20 hides: the need for action space discovery and temporal structure. Codebook solved both only with PRESCRIBED encodings (69-class click for FT09, 3-zone for VC33). The substrate must discover these encodings autonomously.
+2. **R1-compliant classification:** No substrate classifies without external labels. LSH k=16 achieves 36.2% with self-labels (Step 573, 4x above codebook's 9.8%), but still far below supervised. Classification under R1 remains unsolved.
 
-3. **R1-compliant classification:** No substrate classifies without external labels. Codebook: 9.8% self-labels vs 94.48% external (Step 432). Graph: 10.1% vs 93.34% (Step 444b). This is an honest admission — classification under R1 remains unsolved.
+3. **Purposeful exploration (I6, I9):** All navigation is stochastic coverage with argmin bias. 6 targeted strategies tested, all worse than argmin (Steps 477-482). Strategic hypothesis testing remains absent.
 
-4. **Purposeful exploration (I6, I9):** All successful navigation is stochastic coverage with argmin bias. Not intelligence. Strategic hypothesis testing remains absent.
+4. **Population-level R3:** GRN substrate (Step 607) killed — encodings not diverse enough. Price equation framework predicts success requires behaviorally diverse encoding candidates, not just parametric variation.
 
-5. **Temporal reasoning (I4):** No substrate handles temporal structure. Reservoir was the natural candidate but rank-1 collapse killed it in 8 experiments (with codebook-biased metrics — deserves revisit with family-appropriate evaluation).
-
-6. **Transfer (I5) and richer communication (I7):** Untested beyond single-level navigation.
+5. **LS20 L4+:** Blocked at L3 transition (puq_wall_set bootstrap, Step 611-612). Fix structurally correct but needs longer run to verify.
 
 ### What's Changed Since Phase 1 Assessment
 
