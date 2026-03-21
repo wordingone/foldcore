@@ -197,6 +197,8 @@ Specifically: $g_{explore} = \text{argmin}_a \sum_n E(c, a, n)$ (least-tried act
 
 **Ablation (Step 593):** LSH k=12 without centering: 0/5 L1, avg 5 cells (vs 222 cells with centering). The hash collapses to ~5 states without mean subtraction. One line of preprocessing — `x -= x.mean()` — is the difference between a functioning exploration system and a degenerate one. This confirms U16 is not a soft recommendation but a hard requirement.
 
+**Tension with R3 (Proposition 7):** U16 is frozen — centering is part of the encoding pipeline that R3 requires to be self-modifiable. But removing centering is lethal (0/5 vs 1/5). This creates a necessary constraint on R3: some components are so load-bearing that self-modification of them is functionally suicidal. The system cannot safely explore modifications to centering because every modification kills navigation. R3 must be interpreted as "every component is self-modifiable IN PRINCIPLE" rather than "every component IS modified" — otherwise the system must explore centering ablations, discover they're lethal, and never try again. This is analogous to highly conserved genes: essential for viability, frozen by selection pressure, not by design constraint.
+
 #### U22: Convergence kills exploration
 
 **Prior work:** In bandit theory, a converged policy exploits one arm and never explores others (Lai & Robbins, 1985). In RL, policy convergence to a deterministic policy eliminates exploration (Sutton & Barto, 2018). The formal statement that convergent dynamics in interactive environments produce stationary behavior is well-established.
