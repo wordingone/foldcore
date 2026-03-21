@@ -2,7 +2,7 @@
 
 *Revised 2026-03-18 session 2. Major restructure: task requirements first, honest universality reclassification.*
 
-*603+ experiments across 12 architecture families (codebook ~435, LSH ~80, L2 k-means ~25, reservoir ~20, Hebbian 3, SplitTree 5, Recode 3, Absorb 3, graph 8, CA 3, Bloom 2, CC 1). Codebook banned 2026-03-18. Key findings: algorithm invariance (argmin across 4+ representations), centering load-bearing (U16, Step 593: 222→5 cells without it), speed not rate (Step 584: 13/20=13/20 at 50K; Step 594: random 10/20 vs argmin 13/20 NS), domain isolation necessary (Step 596), Recode K confound (Step 589: ℓ_π = ℓ₀ at same K).*
+*612+ experiments across 12 architecture families (codebook ~435, LSH ~80, L2 k-means ~25, reservoir ~20, Hebbian 3, SplitTree 5, Recode 3, Absorb 3, graph 8, CA 3, Bloom 2, CC 1). Codebook banned 2026-03-18. Key findings: algorithm invariance (argmin across 4+ representations), centering load-bearing (U16, Step 593: 222→5 cells without it), speed not rate (Step 584: 13/20=13/20 at 50K; Step 594: random 10/20 vs argmin 13/20 NS), domain isolation necessary (Step 596), Recode K confound (Step 589: ℓ_π = ℓ₀ at same K).*
 
 **Classification:**
 - **Task Requirement**: What the TASK demands of any substrate (derived from successes AND failures across families)
@@ -192,9 +192,9 @@ The task is interactive (unknown environment, no separate training phase). Any s
 
 ---
 
-## The State of the Search (580 experiments, 8 families)
+## The State of the Search (612+ experiments, 12 families)
 
-*Revised 2026-03-20 session. Updated with Steps 494-579. Chain benchmark (no contamination), U5/U8 challenged, R3 attack underway (577b exploration proxy).*
+*Revised 2026-03-21 session. Updated with Steps 494-612. 16 levels via source analysis (R3 specification). GRN killed (607). LS20 L4 bootstrap in progress (612).*
 
 ### What's Solved
 

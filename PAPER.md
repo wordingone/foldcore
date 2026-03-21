@@ -8,11 +8,11 @@ date: 2026-03-19
 
 ## Abstract
 
-We formalize six rules (R1-R6) for recursive self-improvement as mathematical conditions on a state-update function $f: S \times X \to S$ and derive necessary properties of any system satisfying all six simultaneously. From 603+ experiments across 12 architecture families on ARC-AGI-3 interactive games, we extract 26 constraints and prove: (1) no satisfying system has a fixed point — self-modification is necessary, not optional; (2) in finite environments, the system must process its own internal state to maintain irredundant growth (the self-observation requirement); (3) the feasible region is non-empty for Level 1 navigation but currently unoccupied for the full constraint set including R3 (self-modification of operations). Whether a substrate exists inside all six walls remains open. The contribution is the walls themselves.
+We formalize six rules (R1-R6) for recursive self-improvement as mathematical conditions on a state-update function $f: S \times X \to S$ and derive necessary properties of any system satisfying all six simultaneously. From 612+ experiments across 12 architecture families on ARC-AGI-3 interactive games, we extract 26 constraints and prove: (1) no satisfying system has a fixed point — self-modification is necessary, not optional; (2) in finite environments, the system must process its own internal state to maintain irredundant growth (the self-observation requirement); (3) the feasible region is non-empty for Level 1 navigation but currently unoccupied for the full constraint set including R3 (self-modification of operations). Whether a substrate exists inside all six walls remains open. The contribution is the walls themselves.
 
 ## 1. Introduction
 
-603+ experiments across 12 architecture families (codebook/LVQ, LSH, L2 k-means, reservoir, Hebbian, Recode/self-refining LSH, graph, SplitTree, Absorb, connected-component, Bloom filter, CA) tested substrates for navigation and classification on ARC-AGI-3 interactive games and a cross-domain chain benchmark (CIFAR-100 → ARC-AGI-3 → CIFAR-100). All experiments used the same evaluation framework (R1-R6) and constraint map.
+612+ experiments across 12 architecture families (codebook/LVQ, LSH, L2 k-means, reservoir, Hebbian, Recode/self-refining LSH, graph, SplitTree, Absorb, connected-component, Bloom filter, CA) tested substrates for navigation and classification on ARC-AGI-3 interactive games and a cross-domain chain benchmark (CIFAR-100 → ARC-AGI-3 → CIFAR-100). All experiments used the same evaluation framework (R1-R6) and constraint map.
 
 The experiments carved a feasible region — the set of systems that satisfy all constraints simultaneously. This paper formalizes the constraints mathematically, derives necessary properties of the feasible region, and states honestly what is proven vs conjectured vs open.
 
@@ -323,7 +323,7 @@ The decomposition into compare-select-store is the STRUCTURE of $F$. The specifi
 
 ## 5. Experimental Evidence
 
-### 5.1 Navigation (570+ experiments)
+### 5.1 Navigation (612+ experiments)
 
 All 3 ARC-AGI-3 games solved at Level 1:
 
@@ -362,7 +362,7 @@ Relationship to Section 4: Edge counts grow (U17 formally satisfied) but margina
 
 ### 5.3 Architecture Family Summary
 
-11 families tested across 570+ experiments.
+11 families tested across 612+ experiments.
 
 | Family | Experiments | Navigation result | Kill reason |
 |---|---|---|---|
@@ -534,14 +534,15 @@ All formalized constraints were checked for mutual consistency. Identified tensi
 6. Self-modification of the encoding ($\ell_\pi$) is achievable and improves navigation reliability (Recode, Step 542).
 7. Permanent soft death penalty ($\ell_1$) does NOT improve navigation success rate at 50K steps: 13/20 vs 13/20 (Step 584, p=0.63). However, it accelerates early discovery: 9/20 vs 6/20 at 10K (Fisher p=0.33). The mechanism is a speed improvement, not a success improvement — argmin catches up by 30K. Cross-game test (Step 585): NEUTRAL on VC33 — death penalty is navigation-specific, not universal.
 
-8. R1 (no external objectives) costs ~1 level (~6%) at the ARC-AGI-3 competition frontier. R3 costs ~12 levels. The bottleneck is self-modifiable exploration, not external objectives (Proposition 9, competition data).
+8. R1 (no external objectives) costs ~1 level (~6%) at the ARC-AGI-3 competition frontier. The 16 levels solved via source analysis are R3's SPECIFICATION — 16 concrete test cases — not evidence that R3 is nearly satisfied (Proposition 9, competition data).
 9. The gap from $\ell_1$ to $\ell_F$ is recording vs predicting ground truth events (Proposition 10). 577d pixel statistics navigate to the WRONG cells; 581d death penalties improve navigation via retrospective marking. Prospective prediction requires features that correlate with ground truth — which R1 prohibits optimizing for directly.
+10. The frozen frame and navigation capability are structurally coupled (R3_AUDIT.md). The 5 unjustified elements that enable navigation (class scoring, class-restricted spawn/attract, seeding) are the same elements R3 requires the system to self-modify. Removing any of them destroys navigation. R3 requires exploring modifications to load-bearing components — not just discovering new components.
 
 ### 7.3 What is conjectured
 
 10. The minimal self-observing substrate is a fixed point of $F$ (Section 4.5).
 11. The oscillation between U7 (convergence) and U17 (growth) is a limit cycle, not chaos.
-12. Selection pressure on a population of encodings (GRN architecture) may bridge the ℓ₁→ℓ_F gap without optimization — environmental ground truth selects encodings whose features happen to predict it.
+12. Selection pressure on a population of encodings (GRN architecture) may bridge the ℓ₁→ℓ_F gap without optimization — environmental ground truth selects encodings whose features happen to predict it. Step 607 tested this: KILLED (Cov(w,z)=0, encodings not behaviorally diverse). The framework is sound but requires encoding diversity sufficient for selection to operate.
 
 ### 7.4 What is open
 
@@ -550,7 +551,7 @@ All formalized constraints were checked for mutual consistency. Identified tensi
 15. Whether $\ell_F$ (full self-reference) is achievable without infinite regress — or whether $\ell_\pi$ suffices. 581d is $\ell_1$; the gap to $\ell_F$ is two qualitative levels (Proposition 4).
 16. How to resolve U11 + U24 + U1 (incompatible tasks, no mode switch) in a single system (T6).
 17. R1-compliant classification — no substrate has achieved above-chance accuracy without external labels.
-18. Whether the GRN substrate (Step 606, population of competing encodings) achieves genuine $\ell_F$ or disguised $\ell_1$.
+18. Whether a population-level R3 architecture (GRN, quorum sensing, immune clonal selection) can generate sufficiently diverse encodings for selection to operate. Step 607 killed one implementation (LSH encodings too similar), but the framework predicts success requires behaviorally diverse — not just parametrically diverse — encoding candidates.
 
 ### 7.5 The Level 2 Problem
 
@@ -583,7 +584,15 @@ The cascade reveals the problem decomposes into orthogonal layers: (1) level-awa
 
 The feasible region for Level 1 navigation is occupied — graph + argmin + correct action decomposition satisfies R1, R2, U1, U3, U17, U20 and solves all three games. However, argmin's advantage over random action selection is a speed improvement, not exclusive access: 13/20 vs 10/20 at 50K (Step 594, p=0.26, NS). LS20 Level 1 is within random-walk reach at sufficient budget. Level 2 (mgu completion) is achieved via a 12-component prescribed pipeline: mode map, isolated connected-component detection, level-aware reset, multi-episode accumulation, dead reckoning, state estimation from pixel diffs, and sequenced visitation (Step 572j, L2=5/5 at avg 4804 steps). The pipeline is R1-compliant in its detection components (no external labels) but game-specific in its state estimation (pixel regions and visit ordering are prescribed from source code analysis).
 
-The gap to R3 is precisely enumerated: 12 design choices that the substrate cannot currently self-discover. Four are general techniques (mode map, isolated CC, level-aware reset, multi-episode accumulation). Eight are game-specific engineering (position tracking, state estimation, sequencing, threshold tuning). A substrate satisfying R3 would need to discover all 12 from interaction alone — including recognizing that the game has hidden state variables gating progression (the POMDP structure). No current substrate family approaches this. The full R1-R6 region remains unoccupied.
+The gap to R3 is precisely enumerated at two levels:
+
+**At the pipeline level (L2+):** 12 design choices that the substrate cannot currently self-discover. Four are general techniques (mode map, isolated CC, level-aware reset, multi-episode accumulation). Eight are game-specific engineering (position tracking, state estimation, sequencing, threshold tuning). A substrate satisfying R3 would need to discover all 12 from interaction alone — including recognizing that the game has hidden state variables gating progression (the POMDP structure).
+
+**At the substrate level (L1):** The R3 audit (R3_AUDIT.md) reveals a deeper problem. The navigating substrate (process_novelty) has 5-7 unjustified elements, and the 5 that enable navigation (class-restricted spawn, class-restricted attract, argmin class scoring, top-K scoring, seeding protocol) ARE the frozen frame. Removing any of them produces SelfRef, which does not navigate. The frozen frame and navigation capability are **coupled through the class structure**: the U elements that R3 requires the system to self-modify are the same elements that make navigation work. This is not an engineering problem — it is a structural tension between R3 (self-modify operations) and the fact that the operations being modified are load-bearing. The system cannot safely explore modifications to its own class structure because every modification kills navigation.
+
+This parallels the U16 centering finding (Proposition 7): some frozen elements are so load-bearing that self-modification of them is functionally suicidal. The system cannot learn to remove centering because every removal kills it. Similarly, the system cannot learn to restructure its class scoring because every restructuring kills it. R3 requires exploring modifications to elements whose modification is lethal — a much harder problem than discovering new encodings or action spaces.
+
+No current substrate family approaches this. The full R1-R6 region remains unoccupied.
 
 #### The R3-R5 Tension (Proposition 4)
 
