@@ -467,6 +467,8 @@ Recode is LSH k=16 with passive self-refinement: when a cell produces inconsiste
 
 **Combined interpretation (Steps 548-549):** $\ell_\pi$ self-modification satisfies R6 behaviorally (89.5% of splits change argmin) but not frontierally (no new game states reached). The 5/5 vs 3/3 reliability improvement comes from finer state discrimination within the same explored frontier — the agent distinguishes states that were previously confused, enabling more reliable navigation. This is a genuine improvement but does not address Theorem 2's requirement for self-observation after saturation: partition refinement cannot discover states BEYOND the original hash partition's reachable set. $\ell_\pi$ is necessary but not sufficient; $\ell_F$ remains the open question.
 
+**Relationship to DESOM (Forest et al. 2021):** Deep Embedded Self-Organizing Maps jointly train an autoencoder and a SOM layer, learning representations that are "SOM-friendly" — the encoding adapts to serve the topology-preserving mechanism. Recode is a gradient-free analog: the hash refinement adapts the encoding to serve the argmin mechanism. Both modify $\pi$ to improve the downstream computation. The difference: DESOM uses backpropagation through a loss function (violating R1), while Recode uses entropy-based splitting from transition statistics (R1-compliant). Step 589 (pending) tests whether this R1-compliant $\ell_\pi$ provides a statistically significant advantage over fixed $\ell_0$ at 20 seeds.
+
 **Non-codebook experiment count:** ~99 (vs ~435 codebook). Ongoing scale-up.
 
 ## 6. Degrees of Freedom
