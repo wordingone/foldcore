@@ -57,7 +57,18 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 621 (Eigenform adaptive observation frequency — self-derived M)
+CURRENT STEP: 629 (Eigenform L2 attempt — self-observation with L1 success tagging)
+
+Step 621: Eigenform adaptive M — SIGNAL (L1=5/5, M→2000 on all seeds). Self-observation becomes
+  self-terminating at L1. Once edge counts form stable percentiles, distribution stops changing.
+  M grows to max, observations stop adding information.
+
+Step 626: Eigenform negative control — L1 MAINTAINED (5/5) after disabling self-observation at
+  step 5000. Frozen ops don't degrade L1 — they were already irrelevant.
+
+  621 + 626 conclusion: self-observation is INERT at L1. Two independent paths confirm.
+  L1 is argmin-solvable — no room for eigenform improvement. Real test is L2+.
+  Steps 622-624 (also L1) SKIPPED — would also be inert. 629 tests L2 directly.
 
 Step 619: 572u exact reproduction — KILL (L3=0/5). Eli claims game API served different version
   (cb3b57cc March 17 → 9607627b March 20, different sprite definitions). Jun verifying.
