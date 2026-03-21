@@ -506,3 +506,16 @@ The codebook family is fully mapped. Phase 2b explores the temporal dual: self-m
 | **543** | **Recode chain (CIFAR→LS20→CIFAR)** | — | **KILL 0/3** | CIFAR floods graph with 6000+ nodes. Centering kills domain separation. Same failure as SplitTree (538). CIFAR accuracy 15% (15x chance). |
 | **544** | **Recode uncentered on LS20** | — | **KILL 0/5** | 62 cells (vs 1267 centered). Without centering, hash bits uninformative. |
 | **546** | **Recode per-domain centering chain** | — | **2/3 L1** | **CENTERING TENSION RESOLVED.** Per-domain centering (reset running mean on domain switch) enables chain. s0 L1@12201 (faster than clean 29691). s2 fails at 50K (budget, not contamination — clean s2 needed 62K). CIFAR nodes separate from LS20 nodes (|mu| 7.67 vs 4.4). |
+| **572j** | **MGU L2 multi-episode accumulation** | — | **L2=5/5** | 12-component pipeline. Mode map + isolated CC + level-aware reset + multi-episode. avg 4804 steps. L2 SOLVED. |
+| **572u** | **MGU L3 on LS20** | — | **L3=5/5** | Extends 572j to L3. Pivot to cross-game. |
+| **573-574** | **LSH vs codebook cross-game** | — | **U26 CHALLENGED** | LSH 36.2% vs codebook 9.8%. U19 partially challenged (raw 64×64 LSH achieves L1). |
+| **575** | **FT09 LSH k=12** | — | **5/5 L1** | avg_cells=5. FT09 too simple for differentiation. |
+| **576** | **VC33 mode map** | — | **5/5 L1** | Mode map finds VC33 zones autonomously. |
+| **577d** | **R3 multi-buffer** | — | **0/5 L1** | 100% buffer navigation, 0 L1. Pixel statistics don't find exits. R3 barrier: pixel saliency ≠ task relevance. |
+| **580** | **Per-edge interpreter** | — | **NEUTRAL 3/5** | == argmin. Per-edge ops don't help without death signal. |
+| **581d** | **Soft death penalty (permanent)** | — | **SIGNAL 4/5** | vs argmin 3/5. on_death() writes penalty to count. ℓ₁: placement data-driven, magnitude prescribed. **Best R3 approach.** |
+| **582** | **Ops as data (revocable + surprise)** | — | **SIGNAL 4/5** | Coupled: op2+op3 dependent. Same result as 581d but more complex. |
+| **582b-c** | **Ablation: op2 alone, op3 alone** | — | **FAIL/NEUTRAL** | op2 alone: 2/5. op3 alone: 3/5. Ops are coupled, not additive. |
+| **583** | **Permanent + surprise** | — | **NEUTRAL 3/5** | Combining cancels the gain. 581d alone is the winner. |
+| **584** | **Seed expansion (20 seeds, 50K)** | — | **NOT SIGNIFICANT** | SP=13/20 vs AM=13/20 (p=0.63). Early lead: SP 9/6 at 10K, converges by 30K. **Death penalty = speed boost, not success boost.** 581d's 4/5 was small-N variance. |
+| **585** | **Cross-game: VC33 death penalty** | — | **NEUTRAL** | SP==AM at 50K. 1000 deaths/seed but penalty doesn't help click-based search. VC33 needs position discovery (mode map), not path avoidance. FT09 blocked by API regression. **Death penalty is navigation-specific (LS20), not universal.** |

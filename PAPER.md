@@ -386,7 +386,9 @@ Each benchmark tests a different capability that specialized systems win:
 2. **R4 across benchmarks:** After ARC-AGI-3 modifies the state, does CIFAR-100 performance degrade? R4 requires that modifications are tested against prior capability.
 3. **U11 in sequence:** The substrate must classify (argmax-like) AND navigate (argmin-like) with one state, one mechanism. The chain forces both in sequence, not in parallel.
 
-**Protocol:** 5-minute phases per benchmark. 1-pass CIFAR (10K images), 5-min per ARC game, 1-pass CIFAR return.
+**Protocol:** 5-minute phases per benchmark. 1-pass CIFAR (10K images), 5-min per ARC game, 1-pass CIFAR return. One continuous agent state, no reset between phases. Metrics: CIFAR accuracy before/after (forgetting delta), ARC levels reached, total actions to first level completion.
+
+**Missing baselines (acknowledged):** No existing method has been evaluated on this exact protocol. Step 586 (pending) will compare EWC (Kirkpatrick et al. 2017), replay buffer, and naive fine-tuning on the CIFAR classification phase to establish whether the substrate's zero-forgetting claim holds against standard continual learning methods. The navigation phases have no direct baseline — RL methods require reward (violating R1) and CL methods don't address navigation.
 
 #### 5.4.1 Negative Transfer and Dynamic Growth (Steps 506-508)
 
@@ -509,7 +511,7 @@ All formalized constraints were checked for mutual consistency. Identified tensi
 4. The current graph + argmin mechanism exits the feasible region after exploration saturates.
 5. Argmin over visit counts is robust to noisy TV and representation-invariant (Section 4.5, Proposition 3). Action selection for navigation is solved.
 6. Self-modification of the encoding ($\ell_\pi$) is achievable and improves navigation reliability (Recode, Step 542).
-7. Permanent soft death penalty ($\ell_1$) improves navigation from 3/5 to 4/5 on LS20 (Step 581d). Self-modifying data is empirically beneficial. Seed expansion (Step 584, 20 seeds) pending for statistical validation.
+7. Permanent soft death penalty ($\ell_1$) does NOT improve navigation success rate at 50K steps: 13/20 vs 13/20 (Step 584, p=0.63). However, it accelerates early discovery: 9/20 vs 6/20 at 10K (Fisher p=0.33). The mechanism is a speed improvement, not a success improvement — argmin catches up by 30K. Cross-game test (Step 585): NEUTRAL on VC33 — death penalty is navigation-specific, not universal.
 
 ### 7.3 What is conjectured
 

@@ -1,23 +1,23 @@
 """
-Step 587 — Death-count penalty (ℓ_π candidate).
+Step 587 -- Death-count penalty (l_pi candidate).
 
-ℓ₁ (581d): penalty is FIXED (PENALTY=100 regardless of death history).
-ℓ_π (this): penalty = death_count * UNIT — magnitude IS the substrate's experience.
+l_1 (581d): penalty is FIXED (PENALTY=100 regardless of death history).
+l_pi (this): penalty = death_count * UNIT -- magnitude IS the substrate's experience.
 
-Edge with 1 death → penalty UNIT.
-Edge with 10 deaths → penalty 10*UNIT.
-No prescribed constant — the data drives the magnitude.
+Edge with 1 death -> penalty UNIT.
+Edge with 10 deaths -> penalty 10*UNIT.
+No prescribed constant -- the data drives the magnitude.
 
 Distinguishes: stochastic one-time accidents vs genuine death traps.
-Naturally permanent (count only grows) — avoids 582 oscillation.
+Naturally permanent (count only grows) -- avoids 582 oscillation.
 
 Three-way comparison on LS20, 5 seeds, 10K steps:
-  A) DeathCount (UNIT=1)    — raw experience
-  B) DeathCount (UNIT=10)   — scaled experience
-  C) SoftPenalty (fixed=100) — 581d reference (ℓ₁)
+  A) DeathCount (UNIT=1)    -- raw experience
+  B) DeathCount (UNIT=10)   -- scaled experience
+  C) SoftPenalty (fixed=100) -- 581d reference (l_1)
   D) Argmin baseline
 
-Key question: does B or C > D? And does B/C differ from 581d (ℓ₁)?
+Key question: does B or C > D? And does B/C differ from 581d (l_1)?
 If death_count beats fixed penalty: substrate extracts information from repeated death.
 """
 import time
@@ -29,7 +29,7 @@ DIM = 256
 N_A = 4
 MAX_STEPS = 10_000
 TIME_CAP = 60
-PENALTY_FIXED = 100   # 581d's constant (ℓ₁ reference)
+PENALTY_FIXED = 100   # 581d's constant (l_1 reference)
 UNIT_1 = 1            # raw death_count
 UNIT_10 = 10          # scaled death_count
 
@@ -44,7 +44,7 @@ def encode(frame, H):
     return int(np.dot(bits, 1 << np.arange(K)))
 
 
-# ── Death-count penalty (ℓ_π) ─────────────────────────────────────────────────
+# ── Death-count penalty (l_pi) ─────────────────────────────────────────────────
 
 class DeathCountSub:
     """Penalty = death_count * unit. Magnitude is data-driven."""
@@ -109,7 +109,7 @@ class DeathCountSub:
         }
 
 
-# ── Soft penalty (581d reference, ℓ₁) ────────────────────────────────────────
+# ── Soft penalty (581d reference, l_1) ────────────────────────────────────────
 
 class SoftPenaltySub:
     def __init__(self, lsh_seed=0):
@@ -270,7 +270,7 @@ def main():
     except Exception as e:
         print(f"arcagi3: {e}"); return
 
-    print("Step 587: Death-count penalty (ℓ_π candidate)", flush=True)
+    print("Step 587: Death-count penalty (l_pi candidate)", flush=True)
     print(f"  K={K} MAX_STEPS={MAX_STEPS} UNIT_1={UNIT_1} UNIT_10={UNIT_10} "
           f"PENALTY_FIXED={PENALTY_FIXED}", flush=True)
 
@@ -304,15 +304,15 @@ def main():
     best_dc = max(dc1_l1, dc10_l1)
     best_dc_label = "DC(1)" if dc1_l1 >= dc10_l1 else "DC(10)"
     if best_dc > sp_l1:
-        print(f"\n  ℓ_π SIGNAL: {best_dc_label}({best_dc}) > SoftPenalty({sp_l1}) > Argmin({am_l1})")
+        print(f"\n  l_pi SIGNAL: {best_dc_label}({best_dc}) > SoftPenalty({sp_l1}) > Argmin({am_l1})")
         print(f"  Death-count penalty extracts MORE from repeated death than fixed constant.")
     elif best_dc == sp_l1 and sp_l1 > am_l1:
-        print(f"\n  ℓ_π NEUTRAL: DC({best_dc}) == SoftPenalty({sp_l1}) > Argmin({am_l1})")
+        print(f"\n  l_pi NEUTRAL: DC({best_dc}) == SoftPenalty({sp_l1}) > Argmin({am_l1})")
         print(f"  Presence of penalty matters; magnitude does not (yet).")
     elif best_dc > am_l1:
-        print(f"\n  ℓ_π PARTIAL: DC({best_dc}) > Argmin({am_l1}), but SP({sp_l1}) performs differently.")
+        print(f"\n  l_pi PARTIAL: DC({best_dc}) > Argmin({am_l1}), but SP({sp_l1}) performs differently.")
     else:
-        print(f"\n  ℓ_π FAIL: death-count penalty does not improve over argmin.")
+        print(f"\n  l_pi FAIL: death-count penalty does not improve over argmin.")
 
     print(f"\n  Total elapsed: {time.time()-t_total:.0f}s")
 
