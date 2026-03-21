@@ -374,6 +374,40 @@ The decomposition into compare-select-store is the STRUCTURE of $F$. The specifi
 
 **Relationship to prior work:** The compare-select-store decomposition resembles the read-match-write cycle of Neural Turing Machines (Graves et al., 2014) and the content-based addressing of memory-augmented neural networks. The key difference: in NTMs, the controller is trained by backpropagation (violates R1/R2). In our framework, the controller IS $F$ — frozen, minimal, and non-trainable. The state $s$ does all the adapting.
 
+### 4.7 Interpreter Entailment (Proposition 14)
+
+**The question (posed 2026-03-21):** Section 4.6 identifies the minimal frozen frame as the interpreter: compare-select-store. When is this interpreter *entailed* by the system — a logical consequence of R1-R6 + task structure — rather than a designer choice?
+
+**Prior work:** Rosen's (M,R)-systems (1991) formalize organizational closure as a cycle of efficient causation: metabolism $f: A \to B$, repair $\Phi_f: B \to H(A,B)$, and replication $\beta: B \to H(B, H(A,B))$, forming the entailment cycle $f \to \beta \to \Phi_f \to f$. Critically, Letelier et al. (2006) and Cárdenas et al. (2010) showed that **the existence of $\beta$ does not follow from the architecture of (M,R)-systems** — it must be postulated. The closure cycle is closed by assumption, not by derivation. Independently, Bauer (2016) proved that self-interpreters do not exist in System T (a total typed lambda calculus): a self-interpreter implies fixed-point operators at all types, which total languages cannot have. Self-interpretation requires general recursion. Recent work (Letelier et al., 2023, BioSystems) gives exact solutions for functional closure equations (FCEs) in restricted cases, partially addressing Rosen's contested conjecture that closure to efficient causation has no computable models.
+
+**Our formalization:** We distinguish two senses of "entailment":
+
+1. **Abstract entailment:** The OPERATIONS {compare, select, store, modify} are logically necessary given R1-R6 + U3:
+   - R1 (no external objectives) → the system must distinguish inputs autonomously → **compare**
+   - R2 (adaptation from computation) → discriminative action choice IS adaptation → **select**
+   - U3 (zero forgetting) → persistent accumulation required → **store**
+   - R3 (self-modification) → stored procedures must change → **modify**
+
+   Each operation is entailed by a different rule. Removing any operation violates the corresponding rule. The abstract interpreter is the intersection of all rules.
+
+2. **Concrete entailment:** The IMPLEMENTATIONS (cosine similarity, argmin, entry creation, attract-update) are NOT entailed. Multiple implementations satisfy the abstract requirements (confirmed: 4 families navigate with different implementations of compare, Steps 521-525). The specific choice is the frozen frame.
+
+**Proposition 14 (Interpreter Entailment):** The abstract interpreter {compare, select, store, modify} is entailed by R1-R6 + U3. The concrete interpreter (specific implementations) is not. The gap between abstract and concrete entailment is exactly the R3 problem: can the system discover its own implementations?
+
+**Connection to Rosen:** Rosen's $\beta$-map asks whether the system produces its own components at runtime (constructive closure). Our abstract entailment asks whether the components are logically necessary (deductive closure). These are different questions. Logical necessity does not imply constructive production. A system can require an interpreter without being able to build one.
+
+**Connection to Bauer:** If our system's dynamics were total (always halting), the concrete interpreter could not be self-produced (Bauer, 2016). Our system is non-total ($s_t$ evolves indefinitely), so the Bauer obstruction doesn't apply directly. But Rosen's computability conjecture suggests concrete self-interpretation may require capabilities beyond standard computation — this remains contested.
+
+**The synthesis:** Abstract entailment + R3 creates a constructive demand: the system must discover concrete implementations of operations that are abstractly necessary. This is not a search for WHAT to do (the abstract operations are determined) but HOW to do it (the implementations are free). The frozen frame is the HOW; R3 asks it to become adaptive.
+
+**Implications:**
+1. $\ell_F$ (rule-modification) requires $S \supseteq \text{repr}(F)$: the state space must contain representations of the meta-rule. Without this representational capacity, the system cannot modify what it cannot represent.
+2. The codebook's state ($\mathbb{R}^d$ centroids) cannot represent update rules → $\ell_F$ is structurally impossible for the codebook. Not an engineering problem — a type error.
+3. A program-bearing state (op-codes as edge data, Steps 581d-582) CAN represent operations → $\ell_F$ becomes possible in principle.
+4. Whether the constructive gap is bridgeable — whether a system can discover its own implementations of compare-select-store from interaction alone — is the central open question. Rosen says no (for biological systems, contested). Bauer says no (for total systems, proved). Our evidence (612+ experiments, 0 substrates at $\ell_F$) is consistent with both pessimistic answers but has not established impossibility.
+
+**Degrees of freedom:** The representational capacity of $S$ — what operations can be encoded as state that the interpreter reads and executes — determines whether interpreter entailment is achievable (DoF 9).
+
 ## 5. Experimental Evidence
 
 ### 5.1 Navigation (612+ experiments)
@@ -605,7 +639,8 @@ All formalized constraints were checked for mutual consistency. Identified tensi
 16. What self-observation mechanism satisfies R6 (irredundancy) while avoiding noisy TV traps (T7). The eigenform mechanism (Section 4.4) is a concrete candidate; Zenil's degeneration constraint (2026) predicts interleaving with environment observation is required.
 17. How to resolve U11 + U24 + U1 (incompatible tasks, no mode switch) in a single system (T6). Recent work (Hao et al. 2025, "Beyond the Exploration-Exploitation Trade-off," arXiv 2509.23808) argues the tradeoff is an artifact of measurement level — in hidden-state space, exploration and exploitation decouple. The eigenform mechanism (Section 4.4) may dissolve U24 similarly: at the meta-cell level, argmin naturally produces exploitation (follow meta-cell recommendations) or exploration (least-tried action) depending on state richness, without mode switching.
 18. R1-compliant classification — no substrate has achieved above-chance accuracy without external labels.
-19. Whether the state space of compare-select-store is expressive enough to encode arbitrary self-modifications as data (the expressiveness question from Proposition 12). SUBLEQ (subtract-and-branch-if-≤-0) is Turing complete with one instruction and unbounded memory. Compare-select-store maps structurally: COMPARE → subtract, SELECT → branch, STORE → write. But our specific COMPARE (LSH hash) is a fixed random projection — not an arbitrary function. The system's expressiveness is bounded by the comparison function's expressiveness. Whether the eigenform mechanism (hashing action counts → meta-comparison) iterates toward Turing-complete comparison is the core open question. If yes, R3 is satisfiable with the current interpreter. If no, the comparison function must be extended or made adaptive ($\ell_\pi$ → $\ell_F$ in effect).
+19. **Interpreter entailment (Proposition 14).** The abstract interpreter is entailed by R1-R6. The concrete interpreter is not. Whether the constructive gap is bridgeable — whether a system can discover its own implementations of compare-select-store from interaction alone — connects to Rosen's (M,R) closure (β-map must be postulated) and Bauer's self-interpreter impossibility (total systems cannot self-interpret). The intersection of organizational closure and self-modification in non-total dynamical systems appears open.
+20. Whether the state space of compare-select-store is expressive enough to encode arbitrary self-modifications as data (the expressiveness question from Proposition 12). SUBLEQ (subtract-and-branch-if-≤-0) is Turing complete with one instruction and unbounded memory. Compare-select-store maps structurally: COMPARE → subtract, SELECT → branch, STORE → write. But our specific COMPARE (LSH hash) is a fixed random projection — not an arbitrary function. The system's expressiveness is bounded by the comparison function's expressiveness. Whether the eigenform mechanism (hashing action counts → meta-comparison) iterates toward Turing-complete comparison is the core open question. If yes, R3 is satisfiable with the current interpreter. If no, the comparison function must be extended or made adaptive ($\ell_\pi$ → $\ell_F$ in effect).
 
 ### 7.5 The Level 2 Problem
 
