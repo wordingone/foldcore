@@ -2,7 +2,7 @@
 
 **Can a system improve itself by criteria it generates?**
 
-This repository documents a systematic search for a substrate — a minimal computational structure — that satisfies six simultaneous rules for recursive self-improvement. 525+ experiments across 9 architecture families. No solution found yet. The constraint map from those failures is the main contribution.
+This repository documents a systematic search for a substrate — a minimal computational structure — that satisfies six simultaneous rules for recursive self-improvement. 588+ experiments across 12 architecture families. No solution found yet. The constraint map from those failures, a self-modification hierarchy (ℓ₀ through ℓ_F), and three theorems characterizing the feasible region are the main contributions.
 
 ---
 
@@ -23,21 +23,24 @@ R3 is the binding constraint. Every substrate tested so far has hardcoded operat
 
 ---
 
-## What 525 Experiments Found
+## What 588 Experiments Found
 
 ### Architecture families
 
 | Family | Experiments | Best Result | Status |
 |--------|------------|-------------|--------|
-| Codebook (LVQ) | ~435 | 94.48% P-MNIST (supervised), chain 3/3 ARC games | Mapped — banned for further experiments |
-| LSH graph | ~55 | LS20 Level 1, chain WIN@1116 (10x faster than codebook) | Active — best non-codebook family |
-| L2 k-means graph | ~25 | LS20 9/10 at 120K, chain negative transfer confirmed | Active |
-| Reservoir (ESN) | ~20 | Memory contributes nothing to navigation | Killed |
-| Graph (cosine) | ~8 | LS20 Level 1 at 25738 steps | Superseded by LSH/k-means |
-| Connected-component | 1 | 23 states, too slow (200 steps/sec) | Killed |
+| Codebook (LVQ) | ~435 | 94.48% P-MNIST, chain 3/3 ARC games | Mapped — banned |
+| LSH graph | ~80 | LS20 L1-L3 (5/5), Recode 5/5 (ℓ_π) | Active — primary family |
+| L2 k-means graph | ~25 | LS20 9/10 at 120K | Active |
+| Reservoir (ESN) | ~20 | Memory contributes nothing | Killed |
+| Hebbian | 3 | 5/5 LS20, chain pass | Active |
+| Recode (self-refining LSH) | 3 | 5/5 LS20 (ℓ_π, expands reachable set) | Active |
+| Graph (cosine) | ~8 | LS20 L1 at 25738 | Superseded |
+| SplitTree | 5 | 3/3 LS20 (deterministic) | Chain-incompatible |
+| Absorb | 3 | 1/3 (noisy TV dominant) | Killed |
+| Connected-component | 1 | 23 states, too slow | Killed |
 | Bloom filter | 2 | 1/10 (random walk luck) | Killed |
 | CA | 3 | Degenerate mapping | Killed |
-| LLM agent | 1 | Action collapse (100% ACTION1) | Preliminary |
 
 ### The chain benchmark
 
@@ -57,25 +60,25 @@ CIFAR-100 → Atari (ARC-AGI-3) → CIFAR-100
 
 ### Key findings
 
-**All 3 ARC-AGI-3 games Level 1 solved (Steps 503, 505).** Unifying mechanism: graph + edge-count argmin + correct action decomposition. LS20: 4 actions. FT09: 69 actions (64 click grid + 5 simple). VC33: 3 zones (2 magic pixels). Confirmed across codebook and k-means families.
+**All 3 ARC-AGI-3 games solved through Level 3 (Steps 572j-576).** LS20 L3=5/5, FT09 L1=5/5, VC33 L1=5/5. Mechanism: graph + edge-count argmin + mode map + isolated connected-component detection. LS20: 4 directional actions. FT09: 69 actions (64 click grid + 5 simple). VC33: 64 click actions.
 
-**Classification is supervised (Step 432).** Self-generated labels: 9.8% (below chance). The chain achieves 1% on CIFAR-100 (chance) — encoding has class signal (NMI=0.42) but the threshold is incompatible across domains.
+**Self-modification hierarchy maps speed vs reachability (Proposition 6).** ℓ₁ (death penalty) accelerates exploration but doesn't expand the graph: 13/20 = 13/20 at 50K (Step 584, p=0.63). ℓ_π (Recode, encoding refinement) expands the graph from 440→1267 cells and improves 3/3→5/5 (Step 542). Speed vs reachability corresponds exactly to ℓ₁ vs ℓ_π.
 
-**Negative transfer is universal (Steps 506, 515).** Frozen centroids from one domain break navigation in another. This holds for both codebook (cosine) and k-means (L2). LSH avoids it entirely — random projections are domain-agnostic.
+**System Boundary Theorem (Theorem 3).** R3 (full self-modification) and R5 (fixed ground truth) are simultaneously satisfiable iff ground truth is strictly environmental. The feasible region is not provably empty.
 
-**Two independent chain mechanisms.** Codebook survives the chain via encoding-space separation (CIFAR and ARC centroids are far apart). LSH survives via action-scope isolation (each game queries only its own actions). Both prevent catastrophic interference.
+**Negative transfer is universal (Steps 506, 515).** Frozen centroids from one domain break navigation in another. LSH avoids it — random projections are domain-agnostic.
 
 ### The constraint map
 
-Constraints extracted from experimental failure across 9 families. See [CONSTRAINTS.md](CONSTRAINTS.md) for the full map with cross-family validation status.
+Constraints extracted from experimental failure across 12 families. See [CONSTRAINTS.md](CONSTRAINTS.md) for the full map with cross-family validation status.
 
 ---
 
 ## Current Direction
 
-1. **Non-codebook scale-up** — ~55 non-codebook experiments vs ~435 codebook. Scaling non-codebook families to balance the evidence base. Codebook experiments banned.
-2. **New architecture families** — Hebbian learning, Markov transition models, sequence prediction agents. Testing genuinely different mechanisms on the chain.
-3. **The paper** — [PAPER.md](PAPER.md) compiles to LaTeX. Formal framework (f, g, F), two theorems, 11 degrees of freedom.
+1. **ℓ_π self-modification** — Recode (Step 542, 5/5) is the strongest non-codebook result. Encoding self-modification expands the reachable set. Next: head-to-head Recode vs LSH at 20 seeds (Step 589).
+2. **Statistical rigor** — 20-seed validation of all claims. Step 584 showed 5-seed results can be noise. Fisher exact tests on all comparisons.
+3. **The paper** — [PAPER.md](PAPER.md) compiles to LaTeX. Three theorems, self-modification hierarchy (ℓ₀–ℓ_F), Propositions 4/6. Addressing NeurIPS reviewer feedback.
 
 ---
 
@@ -100,12 +103,12 @@ python experiments/run_step474_kmeans_l2.py                 # K-means graph on L
 the-search/
   CONSTITUTION.md        -- 5 principles + 6 rules (R1-R6)
   CONSTRAINTS.md         -- Constraint map with cross-family validation
-  RESEARCH_STATE.md      -- Full experiment log (Steps 1-525+)
+  RESEARCH_STATE.md      -- Full experiment log (Steps 1-588+)
   PAPER.md               -- Publication draft (compiles to LaTeX)
   build-paper.py         -- LaTeX compilation pipeline
 
   substrates/            -- Substrate implementations (Phase 1)
-  experiments/           -- 525+ experiment scripts
+  experiments/           -- 588+ experiment scripts
   research/              -- Research methodology and frameworks
   archive/               -- Archived Phase 1 infrastructure
   audits/                -- External audit reports
