@@ -410,6 +410,20 @@ Step 688: Chemotaxis-inspired biased random walk (gradient-triggered mode switch
   sources at the right TIME. Exploration-based signals (novelty, discovery rate) are useless
   because the reachable topology is saturated.
 
+Step 689: Survival bonus (inverted death penalty, BONUS=10). KILL. Seed 8, 300s.
+  9309 deaths across 257 death edges. Death rate ~1.5% UNIFORM throughout state space.
+  No death-gradient toward L2. Energy depletion kills everywhere regardless of position.
+  Survival bias steers away from lethal edges but can't encode "go toward energy sprites."
+  L2 requires POSITIVE signal (proximity to energy), not negative (avoid death).
+
+  **L2 line CLOSED for this session (Steps 682-689, 5 experiments):**
+  686: π-refinement diverges (aliased 2→439)
+  688: Coverage saturated (546 nodes, disc_rate=0)
+  689: Death gradient uniform (no directional signal)
+  All three L2 approaches killed. L2 requires game-specific information (energy sprite
+  locations, energy levels) that is not observable from pixels alone at the substrate's
+  current perception level. The mgu/puq pipelines that solved L2-L3 used source analysis.
+
   **Implication for the paper:** Proposition 15 (perception-action decoupling) holds for L1
   but NOT for L2. L1's bottleneck is perception resolution (bounded aliasing). L2's bottleneck
   is that perception resolution DIVERGES — the mechanism can't refine fast enough to keep
