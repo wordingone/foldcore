@@ -57,7 +57,7 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 692 (20/20 L1 confirmed + FT09 aliasing frozen)
+CURRENT STEP: 694 (baseline stale — 674 regression diagnosed)
 
 Step 640: Meta-graph tie-breaking. L1=1/5 (s1 only, 1499 steps = 2.2x faster). tie_rate=75.7%,
   changed=8%. Ties extremely common (argmin keeps most actions at count 0 early, near-equal later).
@@ -462,6 +462,19 @@ Step 691: 674 on FT09, 5 seeds, 300s. L1=5/5, L2=0/5. **CRITICAL STRUCTURAL FIND
   L2 requires something beyond perception refinement (ℓ_π). Confirms RG analogy:
   L2 has different relevant operators. The substrate needs ℓ_F (new operations),
   not more ℓ_π (finer perception).
+
+Step 694: Plain k=12 on seeds 0, 4 (regression diagnosis). **STEP 485 BASELINE STALE.**
+  s0: plain k=12 NOW = 8298 (vs 485 baseline 1362). s4: plain NOW = 132 (vs 485 baseline 846).
+  Current environment gives different results than Step 485 (March 19).
+  Actual regressions (674 vs CURRENT plain k=12):
+    s0: 674=18401 vs plain=8298 → 2.2x slower (was reported as 13.5x vs stale baseline)
+    s4: 674=24968 vs plain=132 → **189x slower** (catastrophic, was reported as 29.5x)
+  s4 is now trivially easy with plain k=12 (L1@132) but 674 makes it 189x harder.
+  337 aliased cells on s4 cause fine hash CONFUSION, not disambiguation.
+  The 20/20 at 120K (Step 692) remains valid. Speed comparisons to Step 485 are NOT.
+  NOTE: Games are deterministic (feedback rule). If baseline changed, either LS20 version
+  changed (Eli's claim, partially corroborated by file timestamps) or setup/code changed.
+  Either way, all comparisons must use CURRENT baselines, not Step 485.
 
 Step 635: Frontier-gradient action selection. L1=5/5, avg_speedup=1.15x (marginal). Frontier bias
   fires 94-98% of steps — unconditionally. 3/5 seeds 5-20x SLOWER (over-exploration: 812-938 cells).
