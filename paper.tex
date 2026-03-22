@@ -336,6 +336,53 @@ low variability maintain coarse resolution (adaptation). The
 intervention is determined by local cell statistics, not global analysis
 --- R1-compliant by construction.
 
+\subsubsection{2.11 Renormalization group and the Level 2 phase
+transition}\label{renormalization-group-and-the-level-2-phase-transition}
+
+The renormalization group (RG; Kadanoff 1966, Wilson 1971) formalizes
+how physical systems behave across scales. The core operation ---
+``block spinning'' --- averages microscopic variables into blocks and
+asks: does the effective Hamiltonian at the coarser scale have the same
+structure? At critical points, the answer is yes (scale invariance), and
+the system flows along a universality class determined by symmetries,
+not by microscopic details.
+
+\textbf{Connection to encoding:} Our \(\text{avgpool}_{16}\):
+\(64 \times 64 \to 16 \times 16\) IS Kadanoff blocking --- averaging
+pixels in \(4 \times 4\) blocks. U16 (centering is load-bearing) says
+this specific coarse-graining preserves the information needed for
+navigation. The ``right'' blocking is one that preserves the
+task-relevant symmetries while discarding irrelevant microscopic detail.
+Step 674 (transition-triggered dual-hash, k=12 coarse + k=20 fine) is a
+multi-scale RG: the coarse scale identifies WHERE finer resolution is
+needed (aliased cells), and the fine scale resolves the hidden-state
+ambiguity there.
+
+\textbf{Connection to the L2 wall:} In RG, a phase transition occurs
+when the effective Hamiltonian at a new scale has DIFFERENT relevant
+operators --- the symmetry class changes. L1 \(\to\) L2 is precisely
+this: L1 requires resolving \(\leq 4\) hidden states at the exit cell
+(the conjunction condition). L2 introduces energy sprites, extended
+state variables, and multi-step temporal dependencies --- qualitatively
+different relevant operators. The L2 wall is not a refinement problem
+(making L1 finer does not reach L2, confirmed Steps 486-492, 686). It is
+a relevance problem: L2 has different relevant operators than L1,
+analogous to crossing a phase boundary in RG flow where the same
+coarse-graining produces a qualitatively different effective theory.
+
+\textbf{Implication for R3:} RG shows that effective theories at
+different scales can be expressed using the SAME mathematical structure
+(Hamiltonians) with different parameters. The substrate analog:
+compare-select-store may be expressively sufficient for L2 if the state
+space can encode scale-dependent operators --- operations that change
+their behavior depending on which ``level'' of the game's hidden state
+the agent is in. This is the \(\ell_1 \to \ell_F\) bridge: the
+interpreter stays fixed, but the state encodes WHICH comparison to apply
+at WHICH scale, and the system discovers this mapping from interaction.
+The RG framing sharpens Q21: not ``can compare-select-store encode
+arbitrary modifications?'' but ``can compare-select-store encode the
+RELEVANT operators at each scale?''
+
 \subsection{3. Formal Framework}\label{formal-framework}
 
 \textbf{On the status of R1-R6:} The six rules began as philosophical
