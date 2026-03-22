@@ -57,7 +57,7 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 716 (action discovery CLOSED — neither ℓ₀ nor ℓ_π universal)
+CURRENT STEP: 717 (action discovery dead — argmin equalizes, destroying signal)
 DIRECTION (Jun, 2026-03-22): Stop optimizing per-level. The goal is ALL games, ALL levels, classification — the full chain. Whole-trajectory rule: never optimize for a single level/game/task. Breaking games into levels creates a frozen frame — the substrate should handle all levels with ONE mechanism.
 L1 BAN (Jun, 2026-03-22): L1 banned as metric. 674+running-mean = frozen bootloader. Every experiment states R3 hypothesis. Ban lifts when R3 produces first M reclassification.
 
@@ -1355,6 +1355,21 @@ Step 716/716b/716c: k_prune=8 full run on all 3 games. KILL.
   Neither is a universal R3 mechanism for action space discovery.
   VC33 requires game-semantic progress knowledge — beyond observation/graph statistics.
 
-OPEN: What R3 mechanism works universally? Action discovery from environmental
-  events (level completion, death) is the remaining path. Bandit over action subsets
-  with episode outcome as signal. R1-compliant but untested.
+Step 717: Episode-outcome action weighting on LS20. val_std=0.000 in 4/5 seeds. KILL.
+  Argmin over 68 actions distributes all actions uniformly across all episodes.
+  No action ever absent from any episode → avg_ep_len_when_used ≈ avg_overall → val=1.0.
+  ROOT INSIGHT: Argmin EQUALIZES action usage by design. You can't learn which actions
+  are better by equalizing their usage. The exploration mechanism IS the obstacle to
+  action discovery. R3 for g requires BREAKING argmin's equalization — exploring action
+  subsets, not individual actions.
+
+**ACTION DISCOVERY DEAD ENDS (Steps 713-717, 11 experiments):**
+  ℓ₀ pixel delta: VC33 blind (uniform delta=3.0)
+  ℓ_π graph novelty: hash saturates at long budgets
+  ℓ_π k_prune sweep: no universal k across games × timescales
+  ℓ₁ episode-outcome: argmin equalizes all actions, destroying signal
+
+STRUCTURAL DIAGNOSIS: Argmin is the obstacle. It prevents action discrimination
+  because it ensures every action is tried equally. R3 for action discovery requires
+  a mechanism that explores ACTION SUBSETS (try 4 dirs for N episodes, then 8 clicks
+  for N episodes, compare outcomes). This is bandit-over-subsets, not bandit-over-actions.
