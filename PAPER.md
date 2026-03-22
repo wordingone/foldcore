@@ -389,6 +389,19 @@ Steps 477-482, 539-541. 6 strategies tested, all worse than or equal to argmin.
 
 **Degrees of freedom:** The specific self-refinement mechanism for $\pi$ at critical cells is undetermined. Recode uses transition statistics. The POMDP literature suggests belief-state estimation (Kaelbling et al., 1998). Whether a purely R1-compliant mechanism can achieve targeted $\pi$-refinement at the exit cell — without knowing which cells are critical — is open.
 
+#### Corollary: L1/L2 Asymmetry
+
+**Finding (Steps 682-686, empirical):** Proposition 15's perception-action decoupling holds for L1 but NOT for L2. The qualitative difference:
+
+- **L1 aliasing is bounded.** The number of aliased cells (cells with inconsistent transitions) plateaus at 83-313 depending on seed. The fine graph (k=20 at aliased cells) accumulates useful counts within the 25s budget. Step 674: 9/10 L1.
+- **L2 aliasing is unbounded.** After L1, aliased cells grow monotonically: 2→439 (seed 8, 572K steps), 48→445 (seed 3, 535K steps). The fine graph becomes sparser as more cells compete for budget. The mechanism adapts (detects new aliased cells post-L1) but the adaptation diverges — count accumulation can never keep pace with the growing aliased set.
+
+**Formalization:** Let $A(t) = |\{n \in N : |\text{succ}(n, a)| \geq 2 \text{ for some } a\}|$ be the aliased cell count at step $t$. For L1: $A(t) \to A^*$ (bounded, seed-dependent). For L2: $A(t) \sim c \cdot t^\alpha$ for $\alpha > 0$ (unbounded growth). The per-aliased-cell visit rate is $\sim 1/A(t)$. Count-based action selection requires $\Omega(\log |\mathcal{A}|)$ visits per cell to distinguish actions. When $A(t) \gg A^*_{L1}$, the per-cell visit rate drops below the threshold for useful count accumulation.
+
+**Implication:** L2 requires a mechanism that can navigate toward a goal region DESPITE unresolved perceptual aliasing — not one that resolves all aliasing before navigating. This is the L2 energy mechanic (iri sprites, Steps 556-557): the agent must navigate TO energy sources before dying, then proceed to the exit. Exhaustive coverage via argmin (which works for L1 because L1's exit is findable by random coverage) fails for L2 because the energy constraint imposes a TIME LIMIT per episode.
+
+**Connection to Proposition 13 (Eigenform Inertness):** Self-observation identifies structure in visited states but cannot guide navigation to unvisited states. For L2, the unvisited states include energy sources. The mechanism must predict WHERE energy sources are from partial observations — a world model, not a coverage strategy. This sharpens the L2 problem: the bottleneck is not perception ($\pi$) and not action selection ($g$), but prediction of unvisited states from partial observations. This is the transition from $\ell_\pi$ (perception refinement) to $\ell_F$ (rule modification) — the system must modify its UPDATE RULE to incorporate predictions, not just refine its mapping.
+
 ### 4.6 Constructive Characterization of the Feasible Region
 
 Combining all formalized constraints, we characterize the class of $F$ that satisfies R1-R6 + validated U-constraints simultaneously.
