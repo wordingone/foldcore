@@ -497,6 +497,18 @@ Step 693: Chain benchmark with 674 at 120K. Game version: ls20/9607627b. L1=5/5,
   CIFAR acc near-chance (1.3%). No cross-domain transfer. 6-11 aliased cells during CIFAR.
   LS20 aliased: 574-718 at 120K. Chain-compatible confirmed.
 
+Step 698: s4 centering diagnostic. Game: ls20/9607627b. FINDING — centering IS a variable.
+  Running-mean centering: s4=L1@15544 at 25s (aliased=551). RESCUED from NO_L1.
+  Compare: frame-local 674: NO_L1 at 25s. Chain 674: L1@2002 at 120K.
+  Two effects explain s4 chain success:
+    1. Centering type: running-mean vs frame-local changes hash distribution
+    2. CIFAR pre-population: 1000 CIFAR obs pre-populate graph with 6-11 aliased cells
+  Running-mean alone: partial fix (15544). Chain context: full fix (2002).
+  The CIFAR phase provides a "warm start" that further benefits navigation.
+  Implication: the centering mechanism is NOT just preprocessing — it's an active
+  variable that determines which cells get aliased. This connects to U16 (centering
+  load-bearing) and I1 (representation discovery).
+
 Step 635: Frontier-gradient action selection. L1=5/5, avg_speedup=1.15x (marginal). Frontier bias
   fires 94-98% of steps — unconditionally. 3/5 seeds 5-20x SLOWER (over-exploration: 812-938 cells).
   2/5 seeds 2-3x faster (286-399 cells — L1 in unexplored territory). Same failure mode as delta
