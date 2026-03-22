@@ -186,6 +186,19 @@ The benchmark tests NAVIGATION. Navigation is solved (674+running-mean, 20/20, 9
 | Procedural generalization | ProcGen (16 envs), Craftax | Tests whether mechanism generalizes, not memorizes. |
 | Self-modification | No published benchmark exists | Our R3 audit (frozen element count) is genuinely novel. |
 
+**Chain from established benchmarks (non-attackable base):**
+1. Split-CIFAR-100 (CL standard) — without labels (R1 mode = strictly harder than SOTA)
+2. Atari hard-exploration (RL standard) — without reward (R1 mode = strictly harder)
+3. ProcGen or Craftax (generalization standard) — procedural, no memorization
+4. Split-CIFAR-100 again — forward/backward transfer
+
+Each piece is published and accepted. The NOVEL contributions layered on top:
+- The chain composition itself
+- R1 mode (no reward/labels) on established benchmarks
+- R3 audit (frozen element analysis)
+- Dynamic R3 measurement (operations at t=0 vs t=N)
+- ARC-AGI-3 as additional validation (not primary evidence)
+
 The R3 audit is the novel contribution. ARC-AGI-3 (1,000+ levels, 150+ environments, launches March 25, 2026) is the actual benchmark venue — no published system has been evaluated on interactive game environments without reward.
 
 **Darwin Gödel Machine (Sakana AI, May 2025):** SWE-bench 20%→50% over 80 self-modification iterations. This IS R3 in the wild — a system that modifies its own code using test pass/fail as trigger. But: test suite pass/fail is an external objective (R1 violation by our definition). Our games have level transitions — environmental ground truth (R5-compliant), not external objectives. This distinction matters: if the substrate uses level transitions as the self-modification trigger, that's R1-compliant R3.
