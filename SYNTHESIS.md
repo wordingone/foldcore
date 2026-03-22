@@ -80,10 +80,14 @@ Formally: does there exist a substrate (f, g, F) where F: S → (X → S) is non
 6. **Episode-outcome correlation** (Step 717): argmin ensures every action appears in every episode. No discrimination possible.
 7. **Subset bandit** (Step 719): LS20 signal reversed (survival ≠ progress). FT09 no signal (all timeout).
 
-### The Deepest Insight (Step 717)
+### The Deepest Insight (Step 717 + Eli's structural observation)
 **Argmin is the obstacle to R3.** It equalizes action usage by design. You can't learn which actions are better by ensuring they're all tried equally. R3 for action selection requires BREAKING argmin's equalization — but every alternative tested (targeted exploration, prediction error, entropy, UCB) performed WORSE than argmin for L1 navigation.
 
-The frozen frame and navigation capability are COUPLED. The things R3 requires the system to modify are the things whose modification kills navigation.
+**The encoding, memory, and action selection are ONE INDIVISIBLE MECHANISM.** The graph IS the memory — modifying how you traverse it erases what it stored. LSH (encoding), graph (memory), argmin (selection) are three views of one coupled system. You can't modify one without the other two re-interpreting everything stored. This is deeper than "R3 kills navigation."
+
+**Aliased-cell detection is R3-adjacent.** The substrate already observes "my encoding is degrading" via hash collisions. If it tracked WHICH dimensions saturate → retired those planes → spawned new ones, that's ℓ_π: encoding-modification from substrate-observable state. Local modification (saturating region only) might dissolve the coupling.
+
+**Encoding-as-action hypothesis (Eli):** If the substrate chose which LSH planes to apply — not just which action to take — then encoding IS action. R3 satisfied structurally. Hash planes are the policy. Game frames are environment.
 
 ---
 
@@ -150,16 +154,21 @@ The frozen frame and navigation capability are COUPLED. The things R3 requires t
 
 ## FOR THE SYNTHESIS SESSION
 
-**Load order:**
-1. This document (SYNTHESIS.md)
-2. CONSTITUTION.md (R1-R6 formal)
-3. Selected literature:
+**Load order (~107K tokens, ~893K reasoning):**
+1. This document — SYNTHESIS.md (~2.3K tokens)
+2. CONSTITUTION.md — R1-R6 formal (~4.3K tokens)
+3. R3_AUDIT.md — every frozen element of every substrate (~9K tokens). THE densest file.
+4. Literature (fetch abstracts first, full papers if budget allows):
    - Schmidhuber (2003) Gödel Machine: https://arxiv.org/pdf/cs/0309048
-   - Irie/Schmidhuber (2022) SRWM: https://arxiv.org/pdf/2202.05780
-   - Mossio & Longo (2009) closure computability: https://shs.hal.science/halshs-00791132/document
-   - Heins et al. (2025) AXIOM: https://arxiv.org/abs/2505.24784
-4. Key substrate code (step0674, candidate.c)
-5. Memory patterns (reasoning habits, Jun's corrections)
+   - Irie et al. (2022) SRWM: https://arxiv.org/pdf/2202.05780
+   - Mossio & Longo (2009) closure: https://shs.hal.science/halshs-00791132/document
+   - Heins et al. (2025) AXIOM: https://arxiv.org/pdf/2505.24784
+   - Rudakov et al. (2025) ARC-AGI-3: https://arxiv.org/pdf/2512.24156
+5. Key code:
+   - step0674_lsh_transition_triggered.py (~2K) — frozen bootloader
+   - candidate.c (~0.4K) — contrast architecture
+   - step0658_lsh_decoupled.py (~1.8K) — irreducibility proof
+6. Memory MCP patterns (requires daemon): reasoning habits, Jun's corrections, blind spots
 
 **The question for the session:**
 What mechanism allows compare-select-store to encode its own modification via state, without the encoding being prescribed?
