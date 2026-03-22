@@ -58,7 +58,15 @@ Two R3 mechanisms tested for autonomous action-space discovery with 68 universal
 
 *ℓ_π: Graph-novelty pruning (Steps 715-716).* Track which actions lead to new graph cells. Hash saturation kills the mechanism: k_prune=8 (256 buckets) fills at 120K steps → everything "already seen" → no discrimination. VC33 structural set is random seed-dependent subset. LS20 over-prunes (4→1 dir). FT09 saturates to all-cosmetic. **No k value works for all games at all timescales.**
 
-**Conclusion:** Observation statistics (ℓ₀) and graph topology (ℓ_π) are INSUFFICIENT for universal action discovery. VC33 requires game-semantic progress knowledge — correlation between action usage and environmental outcomes (death, level transitions). This is ℓ₁ for g: action weights modified by episode outcome data. Untested.
+*ℓ₁: Episode-outcome correlation (Steps 717-719, 5 experiments, KILLED).* Three approaches tested for action weights modified by episode outcome data:
+
+- **Episode weighting (Step 717):** Weight actions by episode outcome (survived=+1, died=-1). Result: argmin EQUALIZES action usage by design — every action appears in every episode because argmin samples least-visited. No discrimination possible. The signal that SHOULD distinguish good from bad actions is destroyed by the mechanism that makes navigation work.
+
+- **Subset bandit (Step 719):** Restrict to action subsets per episode, compare survival rates. **LS20: signal REVERSED** — survival correlates with FEWER actions (staying still), not exploration. **FT09: no signal** — all episodes timeout regardless of action subset. Survival ≠ progress.
+
+- **candidate.c characterization (Step 718):** 57-line CA substrate plays blind — output determined by XorShift seed, not game observations. ℓ₁ mechanism exists (memory grid modified by dynamics) but decoupled from environment. Action distribution uniform across seeds. KILL.
+
+**Conclusion (updated 2026-03-22):** ALL three levels of self-modification hierarchy tested for action discovery — ℓ₀ (observation statistics), ℓ_π (graph topology), ℓ₁ (episode outcome) — ALL insufficient. Argmin equalizes action usage, preventing any outcome-based discrimination. The coupling is structural: the mechanism that makes navigation work (argmin = try everything equally) is the mechanism that prevents learning which actions are better. R3 for action selection requires BREAKING this equalization, but every alternative tested (6 targeted strategies + 3 outcome-based) performed worse than argmin for navigation.
 
 **Level 2 reward disconnect.** Dedicated L2 investigations (LSH Steps 486-493/528-529/532, k-means Step 493) confirm: L2's reward region is beyond the argmin-reachable frontier at all tested budgets and partition granularities. Incidental confirmation in codebook (Phase 1) and Recode (Step 542, 0/5 L2). The reachable set grows sublinearly but never includes L2 reward. Growing the mapping (more cells, finer partition, self-refinement) does not unlock L2.
 
