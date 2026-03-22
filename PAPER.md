@@ -59,6 +59,19 @@ The adaptive immune system is the clearest biological example of a system that d
 
 **Germinal center regulation** (Nakagawa et al., 2025, *Nature*): B cells modify their own mutation RATE to preserve high-affinity receptors. This is meta-self-modification — the system modifies how fast it modifies itself. In our hierarchy: not just $\ell_\pi$ (modify the comparison) but approaching $\ell_F$ (modify the modification rule). Whether this constitutes genuine $\ell_F$ depends on whether the rate-modification mechanism is itself fixed (frozen frame) or adaptive.
 
+### 2.10 Retinal contrast adaptation and selective π-refinement
+
+Retinal ganglion cells (RGCs) solve Proposition 15's open question — targeted observation-mapping refinement without foreknowledge of what's important — via local contrast adaptation. Each RGC independently adjusts its receptive field based on recent stimulus statistics (Baccus & Meister, 2002, *Neuron*; Gollisch & Meister, 2010). Two mechanisms operate at the same spatial location: **adaptation** (reduce sensitivity at familiar stimuli, via bipolar cell synaptic depression) and **sensitization** (increase sensitivity at novel/variable stimuli, via amacrine cell inhibition — Kastner & Bhatt, 2018, PMC). Dynamic receptive fields are "flexible and fluid" (Rivlin-Etzion et al., 2018), adjusting shape based on stimulus content.
+
+**Connection to Proposition 15:** The substrate's bottleneck is hash resolution at critical cells ($k_{n^*}$, the number of aliased hidden states). Step 669 attempted local variance-driven refinement — running variance per cell, fine hash of high-variance pixels. Result: MARGINAL 5/10. Seeds with few high-variance cells (91) solved 285x faster; seeds with many (286) lost L1. The mechanism WORKS locally but fails to SELECT which cells to refine.
+
+The retina's solution has three features the substrate lacks:
+1. **Cell-type diversity** — different RGC types have different adaptation profiles (Kastner & Baccus, 2017). Multiple "hash functions" at different resolutions operate SIMULTANEOUSLY, not one function that switches. The substrate analog: maintain LSH at multiple k values (e.g., k=12 for navigation, k=20 for refinement at variable cells) and let local statistics determine which resolution to read from.
+2. **Spatially segregated adaptation/sensitization** — adaptation at the center, sensitization at the surround (Baccus & Meister, 2002). The cell refines its resolution at the BOUNDARY of its receptive field, not uniformly. For the substrate: refine hash at cells where transition outcomes are MOST variable, not where pixel variance is highest.
+3. **No foreknowledge** — each RGC adapts based on its own stimulus history. No global controller identifies "critical cells." The retina doesn't know which locations will be important — it maintains resolution everywhere and INCREASES it where variability is detected. This is exactly the R1-compliant $\pi$-refinement Proposition 15 requires.
+
+**Degree of freedom concretized:** Recode (Step 542) refines $\pi$ from transition statistics but treats all cells equally. The retinal insight suggests SELECTIVE refinement: cells with high transition variability get finer resolution (sensitization), cells with low variability maintain coarse resolution (adaptation). The intervention is determined by local cell statistics, not global analysis — R1-compliant by construction.
+
 ## 3. Formal Framework
 
 **On the status of R1-R6:** The six rules began as philosophical commitments. The experiments validated them — each rule is justified by what fails when it is violated:
