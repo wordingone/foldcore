@@ -58,7 +58,7 @@ Every navigation experiment since Step 442 uses the same graph + edge-count mech
 
 **Chain benchmark: cross-domain contamination tested (Step 577 chain, 2026-03-20).** Full sequence: CIFAR-100 (P1, 1K steps) → LS20 navigation → CIFAR-100 (P3, 1K steps). Result: CIFAR P1=1.02%, P3=1.02%, delta=0.00pp. **No contamination confirmed.** The per-domain centering fully isolates CIFAR classification from LS20 navigation — LS20 edges don't corrupt CIFAR nodes because of the separate edge dicts (G for LS20 nav, G_cif for CIFAR) and per-domain mean reset. Caveat: L2 was not reached (time cap hit at 572s with only 1 L1 cycle), so full chain (P1→L1→L2→CIFAR→L1_delta) was not measured. No contamination confirmed for the partial chain.
 
-**Game version stability (unconfirmed — 2026-03-21).** Eli reports with physical evidence (two LS20 game files on disk: cb3b57cc created March 17, 1560 lines; 9607627b created March 20, 2060 lines; different sprite definitions). FT09 also reportedly changed. VC33 unchanged. **Not independently verified.** Jun acknowledges as plausible. Note: Eli has been flagged twice previously for claiming game environments changed (audit commit 027a5b0). If true: pre-619 and post-619 LS20/FT09 results are on different games and not directly comparable. Waypoint-based pipelines (mgu/puq) would be game-version-specific. The 572u L3=5/5 result (commit 0463b3c, March 20 03:41) — timing ambiguity: if the game changed "on March 20," it is unclear whether 572u ran before or after the switchover.
+**Game version changes (confirmed 2026-03-22, Jun).** Games DO change. LS20: cb3b57cc → 9607627b (different sprite definitions). FT09: also changed. VC33: unchanged. Pre-change and post-change results are on DIFFERENT games — both valid tasks. The substrate must win ANY version of ANY game (Jun's directive). Game change = new task, not baseline invalidation. All Steps 690+ verified on current versions (LS20/9607627b, FT09/0d8bbf25). Pre-690 results on LS20/FT09 are on prior versions and not directly comparable.
 
 **Self-observation mechanism (Step 620, eigenform, 2026-03-21).** Eigenform self-observation on L1: substrate reads its own edge count distribution every 500 steps, computes percentile thresholds, assigns AVOID/PREFER/NEUTRAL op codes. L1=5/5 (matches baseline — no performance improvement). Op distribution: 94-99% NEUTRAL, 0-2% AVOID, 1-10% PREFER. AVOID grows over time (0% → 8-10% across all seeds). **Mechanism produces non-zero output. No performance effect detected on L1.** Whether AVOID growth is meaningful self-calibration or a statistical artifact (percentile calculation over accumulating distribution → tails grow mechanically) is unknown until tested on L2+ where argmin fails and trap avoidance could matter. Combined with 582 (event-driven ops, SIGNAL 4/5): two independent R3 approaches both produce non-zero output.
 
@@ -84,11 +84,36 @@ LS20 is a POMDP: hidden state variables (snw, tmx, tuv) are inaccessible to the 
 
 **Pattern across all interventions (Steps 668-670):** Every mechanism helps some seeds and LOSES others. The intervention disrupts argmin's gradient for seeds where argmin was already succeeding. No intervention captures the full union of argmin + random seeds.
 
-**Selective π-refinement series (Steps 672-686, 15 experiments):**
+**Selective π-refinement series (Steps 672-711, 40 experiments):**
 
-**Proposition 15 CONFIRMED:** Perception quality (π-refinement) IS the L1 lever. Step 674 (transition-triggered dual-hash: k=12 coarse + k=20 fine at cells with inconsistent transitions) reaches **17/20 at 25s (Step 690), 20/20 at 120K (Steps 692/699)**. Plain k=12 baseline on current game: 11/20 at 25s (Step 697). 674 advantage: +6/20 at same budget. Seed 8: 192x faster (24235→126). The binary aliasing criterion (|successor_set|≥2, min_visits=3) finds the right cells naturally. Capping HURTS (674b/c/d all 8/10, 695 freeze=8/10, 696 death=6/10). All modifications worse than uncapped 674. FT09 cross-game: 5/5 L1, aliased=1-4 (Step 680). Chain: 20/20 at 120K (Step 700).
+**Proposition 15 CONFIRMED:** Perception quality (π-refinement) IS the L1 lever. Step 674 (transition-triggered dual-hash: k=12 coarse + k=20 fine at cells with inconsistent transitions, |successor_set|≥2, min_visits=3). Conceptually related to CEGAR (Counterexample-Guided Abstraction Refinement) for POMDPs — transition inconsistency = counterexample showing the hash is too coarse. Our implementation is a concrete instantiation for LSH navigation.
 
-**Series ranking:** 674 (transition-triggered) 9/10 > 673 (entropy) 8/10 = 677 (multi-res vote) 8/10 > 675/678/679 all 7/10 > 672/676 5/10.
+**Complete cross-game characterization (Steps 690-711, all verified on current game versions):**
+
+| Game | Method | Budget | L1 | vs plain | Step |
+|------|--------|--------|----|----------|------|
+| LS20 | Plain k=12 | 25s | 11/20 | — | 697 |
+| LS20 | 674 frame-local | 25s | 17/20 | +6 | 690 |
+| LS20 | 674 running-mean | 25s | **20/20** | +9 | 705 |
+| LS20 | Plain k=12 | 120K | 16/20 | — | 701 |
+| LS20 | 674 frame-local | 120K | 20/20 | +4 | 699 |
+| LS20 | 674 running-mean | 120K | 20/20 | +4 | 708 |
+| LS20 | 674 chain | 120K | 20/20 | +4 | 700 |
+| FT09 | Plain k=12 | 25s | 8/20 | — | 711 |
+| FT09 | Plain k=12 | 120K | 8/20 | — | 706 |
+| FT09 | 674 frame-local | 120K | 17/20 | +9 | 702 |
+| FT09 | 674 running-mean | 120K | **20/20** | +12 | 709 |
+| VC33 | 674 any centering | 25s | 0/5 | — | 681/707 |
+
+**Key structural findings:**
+- **Plain k=12 has a hard ceiling.** LS20: 16/20 at 120K — 4 seeds never solve (s2,s9,s11,s17). FT09: 8/20 — identical 8 seeds at 25s AND 120K (binary — budget irrelevant, Step 711).
+- **674 provides genuine COVERAGE improvement**, not just speed. Rescues seeds plain k=12 never solves at any budget.
+- **Running-mean centering universally rescues deterministic seeds.** FT09 s11,s13,s18 had aliased=0 under frame-local (674 mechanism never engaged). Running-mean creates aliasing even on previously frozen seeds (0→2-3 aliased cells, Step 709). Running-mean = universal mechanism activation.
+- **Running-mean 674 = 20/20 on BOTH games** at sufficient budget. Best short-budget: 20/20 at 25s on LS20.
+- **Capping HURTS** (674b/c/d all 8/10, 695 freeze=8/10, 696 death=6/10). All modifications worse than uncapped.
+- **VC33 = zone discovery failure**, not aliasing. 674 irrelevant — VC33 needs room/zone mapping (I3).
+
+**Series ranking (original 10-seed sweep):** 674 (transition-triggered) 9/10 > 673 (entropy) 8/10 = 677 (multi-res vote) 8/10 > 675/678/679 all 7/10 > 672/676 5/10.
 
 **L1 vs L2 asymmetry (Steps 682-686).** L1 aliasing is BOUNDED — seed 8 has 87 aliased cells, sufficient for count accumulation. L2 aliasing is UNBOUNDED — aliased cells grow monotonically (2→439 over 572K steps, seed 8; 48→445, seed 3). The transition-triggered mechanism detects new aliased cells post-L1 (dynamic adaptation), but the cell count never plateaus. Fine graph becomes too sparse for argmin when 400+ cells compete for budget. **L2 requires navigation DESPITE unresolved aliasing, not resolution of all aliasing before navigation.** This connects to the energy mechanic (iri sprites, Steps 556-557) — L2 requires purposeful energy-seeking, not exhaustive coverage.
 
@@ -100,7 +125,7 @@ LS20 is a POMDP: hidden state variables (snw, tmx, tuv) are inaccessible to the 
 5. **Centering is an active variable, not just preprocessing (Step 698).** Running-mean vs frame-local centering changes which cells get aliased. s4: frame-local→NO_L1 (189x regression), running-mean→L1@15544 (rescued), chain (running-mean + CIFAR pre-pop)→L1@2002 (12.5x faster than standalone). Two separable effects: centering type changes hash distribution; CIFAR pre-population seeds aliased cells before LS20 starts. Connects to U16 (centering load-bearing) and I1 (representation discovery).
 6. **674 is a trade, not a uniform improvement.** Helps seeds where exit-cell aliasing is the bottleneck (s8: 198x faster). Hurts seeds where exit cell is already resolved (s4: 189x slower on current game). Net: +6/20 at 25s. Chain context reverses: s4 12.5x faster in chain, s8 158x slower.
 
-**Honest framing (revised 2026-03-22):** For graph-based approaches, local continuity + persistence explain L1 failures. L1's actual constraint is HIDDEN-STATE CONJUNCTION at bounded-aliasing cells. Transition-triggered π-refinement resolves the aliasing and reaches 9/10 (Step 674). L2 requires a qualitatively different mechanism — purposeful navigation toward energy sources despite growing aliased cell count. FT09 cross-game validated (Step 680: 5/5). **Caveat: cross-game claims (LS20/FT09/VC33 all solved) need re-verification.** FT09 re-tested on current version 0d8bbf25 (Step 680: 5/5 confirmed). VC33 unchanged. **Audit queue (027a5b0) partially resolved:** FT09 re-verified. 572u L3=5/5, 610 VC33 7 levels, 572j L2=5/5 — still flagged.
+**Honest framing (revised 2026-03-22, post-711):** L1 is SOLVED for LS20 and FT09 within the graph+LSH framework. Running-mean 674 = 20/20 on both games. The mechanism: transition-inconsistency identifies cells where the hash conflates hidden states; fine hash resolves the ambiguity; running-mean centering ensures the mechanism engages even on deterministic seeds. L2 remains a qualitatively different wall — 0/20 on both games regardless of aliasing dynamics (LS20 high-aliasing, FT09 zero-aliasing). VC33 requires zone discovery (I3), not disambiguation. **Cross-game verification complete:** LS20/9607627b (Steps 690-712), FT09/0d8bbf25 (Steps 680, 702, 706, 709, 711). **Audit queue (027a5b0):** FT09 re-verified on current version. Pre-change results (572u L3=5/5, 610 VC33 7 levels, 572j L2=5/5) remain flagged — on prior game versions.
 
 ### Classification (P-MNIST)
 
