@@ -2,7 +2,7 @@
 """
 Step 289 (curriculum) -- Can curriculum help? 1-digit mod then 2-digit.
 
-Leo mail 1308/1314. Arc question: emergent step discovery.
+[researcher] mail 1308/1314. Arc question: emergent step discovery.
 
 Curriculum: train on small mod first (a,b in 1..10), then extend to larger (1..20).
 Does the step predictor generalize from small to large?

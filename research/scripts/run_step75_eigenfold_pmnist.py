@@ -2,7 +2,7 @@
 """
 Step 75 — EigenFold on P-MNIST, 2 tasks.
 
-Leo directive (mail 1177): P-MNIST, 2 tasks, 6K/task.
+[researcher] directive (mail 1177): P-MNIST, 2 tasks, 6K/task.
 Projection: R^784 -> R^384 (permuted, unit-normalized, numpy) -> R^16 (P2) -> 4x4 matrix.
 EigenFold spec unchanged from Step 74.
 Sweep thresholds: 0.5, 1.0, 2.0 — skip later values if codebook behavior is stable.

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Step 110 -- Raw pixels, no feature extractor. P-MNIST 10-task.
-Leo mail 1264. The honest test.
+[researcher] mail 1264. The honest test.
 
 Same always-spawn + top-k system. Input: raw 784-dim normalized pixels.
 No random projection, no ResNet, no feature extractor.

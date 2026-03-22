@@ -1,5 +1,5 @@
 # Research State — Live Document
-*Updated by Leo. Read by /checkpoint skill. Source of truth for active work.*
+*Updated by [researcher]. Read by /checkpoint skill. Source of truth for active work.*
 
 ---
 
@@ -15,7 +15,7 @@ STEP: 106 (next)
 
 ## Operational Test for the Atomic Substrate
 
-*Added Step 105. Prompted by Eli's critique (mail 1253): accuracy-based kills don't measure structural unity.*
+*Added Step 105. Prompted by [engineer]'s critique (mail 1253): accuracy-based kills don't measure structural unity.*
 
 The atomic substrate is confirmed if a system passes ALL of these structural tests:
 
@@ -50,9 +50,9 @@ Hard-won from 96 experiments. Every candidate must pass ALL constraints before i
 | C5 | Must achieve structural zero forgetting | Step 65 | requirement |
 | C6 | Must work on dense embeddings without per-dataset tuning | Steps 63, 66 | empirical |
 | C7 | Must beat 1-NN readout over same codebook | Steps 65-71 | requirement |
-| C8 | Current hardware, no external API | Jun | requirement |
-| C9 | Minimal — expressible in <100 lines | Jun | requirement |
-| C10 | Not a combination of known techniques | Jun | requirement |
+| C8 | Current hardware, no external API | [director] | requirement |
+| C9 | Minimal — expressible in <100 lines | [director] | requirement |
+| C10 | Not a combination of known techniques | [director] | requirement |
 | C11 | Readout signal factors must not anti-correlate (e.g. attn×displacement) | Step 97 | empirical |
 | C12 | Readout must be input-conditional, not static vector property (coherence, density) | Step 98 | empirical |
 | C13 | Spawn threshold must be calibrated per feature space (cosine range varies) | Step 100 | empirical |

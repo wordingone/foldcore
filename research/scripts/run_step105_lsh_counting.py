@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Step 105 -- LSH Counting substrate. P-MNIST full 10-task.
-Leo mail 1251.
+[researcher] mail 1251.
 
 No codebook. No spawning. Fixed structure: R (n_hashes x d) + counts (n_hashes x C).
 step()    : relu(R @ normalize(r)) -> accumulate into counts[:,label]

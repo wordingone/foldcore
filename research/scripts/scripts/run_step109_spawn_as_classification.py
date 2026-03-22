@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Step 109 -- Spawn-as-Classification. P-MNIST 10-task.
-Leo mail 1262.
+[researcher] mail 1262.
 
 Always-spawn (no threshold) vs threshold-spawn (sp=0.7).
 Kill: always-spawn AA < threshold-spawn AA - 2pp.

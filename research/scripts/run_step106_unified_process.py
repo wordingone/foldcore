@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Step 106 -- Unified Process (S1-compliant). P-MNIST full 10-task.
-Leo mail 1255.
+[researcher] mail 1255.
 
 ONE function, no train/eval branch. Label=None -> prediction-guided spawn.
 S1 test: can step() and classify() be the same code path?

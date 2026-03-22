@@ -2,7 +2,7 @@
 """
 Step 75b — EigenFold P-MNIST, calibrated threshold.
 
-Leo directive (mail 1179):
+[researcher] directive (mail 1179):
 1. Delta diagnostic on 200 samples (10x-scaled P2)
 2. Pick threshold at p90 of delta distribution
 3. Run 2 tasks with that threshold

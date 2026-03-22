@@ -2,7 +2,7 @@
 """
 Step 87 -- High-convergence composition + chaining test.
 
-Leo directive (mail 1208):
+[researcher] directive (mail 1208):
 Part 1: Top-8 orbit EFs, 8x8 at 5000 steps. Does convergence improve vs 1000 steps?
 Part 2: Pick 4 EFs with all-pairwise convergence. All 24 permutations of length-4 chain.
   result = ((A o B) o C) o D at 5000 steps per intermediate.

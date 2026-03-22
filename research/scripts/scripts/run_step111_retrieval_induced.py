@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Step 111 -- Retrieval-Induced Learning. P-MNIST 10-task, raw pixels.
-Leo mail 1266.
+[researcher] mail 1266.
 
 Hypothesis: retrieval IS the adaptation signal. Top-k neighbors that
 vote on classification also receive contrastive update (pull same-class,

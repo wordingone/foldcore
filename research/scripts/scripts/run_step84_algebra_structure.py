@@ -2,7 +2,7 @@
 """
 Step 84 -- Eigenform algebra structure: families, closed sub-algebras, orbits.
 
-Leo directive (mail 1202): is the composition table a STRUCTURE or a HASH?
+[researcher] directive (mail 1202): is the composition table a STRUCTURE or a HASH?
 
 Recomputes 26x26 table (same seed/params as Step 83), then analyzes:
 Part 1: Family structure (M*, -M*, M*^T, -M*^T) and whether composition respects families.

@@ -113,7 +113,7 @@ All test outputs are in `results/`:
 
 ## License
 
-TBD — Jun to decide.
+TBD — [director] to decide.
 
 ---
 

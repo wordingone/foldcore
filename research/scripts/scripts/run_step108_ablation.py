@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Step 108 -- Ablation: which parts of process() are load-bearing?
-Leo mail 1260.
+[researcher] mail 1260.
 
 Full system: 91.9% AA (Step 106/99). Three ablations on P-MNIST 10-task:
 

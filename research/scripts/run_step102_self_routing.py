@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Step 102 -- Self-Routing Codebook. Targeting Separation 4: System/State.
-Leo mail 1244.
+[researcher] mail 1244.
 
 Each codebook entry carries a gate scalar (learned participation weight).
 Gate increases when winner label matches input, decreases when not.

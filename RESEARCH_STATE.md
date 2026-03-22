@@ -1,5 +1,5 @@
 # Research State — Live Document
-*Updated by Leo. Read by /checkpoint skill. Source of truth for active work.*
+*Read by /checkpoint skill. Source of truth for active work.*
 
 ---
 
@@ -15,7 +15,7 @@ CURRENT SYSTEM: process(x, label=None). ~22 lines. LVQ + growing codebook.
   - 94.48% P-MNIST AA, 0pp forgetting (softmax voting, Step 425)
   - Previous: 91.20% with top-K scoring (not competitive with replay-based CL methods)
 
-HONEST ASSESSMENT (per external review + Jun's confirmation):
+HONEST ASSESSMENT (per external review):
   - Mechanisms are NOT novel (LVQ + GNG from 1988/1995)
   - ARC-AGI-3 results are biased random walk, not intelligence
   - Stage progression was self-assessed and circularly validated
@@ -58,8 +58,8 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
 CURRENT STEP: 717 (action discovery dead — argmin equalizes, destroying signal)
-DIRECTION (Jun, 2026-03-22): Stop optimizing per-level. The goal is ALL games, ALL levels, classification — the full chain. Whole-trajectory rule: never optimize for a single level/game/task. Breaking games into levels creates a frozen frame — the substrate should handle all levels with ONE mechanism.
-L1 BAN (Jun, 2026-03-22): L1 banned as metric. 674+running-mean = frozen bootloader. Every experiment states R3 hypothesis. Ban lifts when R3 produces first M reclassification.
+DIRECTION (2026-03-22): Stop optimizing per-level. The goal is ALL games, ALL levels, classification — the full chain. Whole-trajectory rule: never optimize for a single level/game/task. Breaking games into levels creates a frozen frame — the substrate should handle all levels with ONE mechanism.
+L1 BAN (2026-03-22): L1 banned as metric. 674+running-mean = frozen bootloader. Every experiment states R3 hypothesis. Ban lifts when R3 produces first M reclassification.
 
 Step 640: Meta-graph tie-breaking. L1=1/5 (s1 only, 1499 steps = 2.2x faster). tie_rate=75.7%,
   changed=8%. Ties extremely common (argmin keeps most actions at count 0 early, near-equal later).
@@ -155,7 +155,7 @@ Step 651: mgu vs argmin gap diagnostic (seed=0, 90s). MOST INFORMATIVE.
   composed state for consistent L1/L2 improvement. The state HAS the information. The
   interpreter can't READ it as temporal structure — argmin flattens everything to counts.
 
-  **Phase 3 reframing (Jun, 2026-03-21, Spelke/Tempest synthesis):**
+  **Phase 3 reframing (2026-03-21, Spelke/Tempest synthesis):**
   648 experiments characterized the interpreter (compare-select-store). The interpreter is
   fully mapped: what it can't do (L2), what it doesn't need (targeted strategies), what it
   requires (centering, local continuity, persistence). The interpreter is the frozen frame.
@@ -282,7 +282,7 @@ Step 671: Splatter substrate (1-step world model, argmax frame difference). L1=0
   (avoid bad transitions) works (581d). Prospective prediction (seek novel transitions) fails.
   Confirms Proposition 13: introspection ≠ foresight.
 
-  **POMDP pivot complete (Steps 652-671, 16 experiments + 666 ignored per Jun).**
+  **POMDP pivot complete (Steps 652-671, 16 experiments + 666 ignored per internal review).**
   All 8 questions answered. Summary:
   1. L1 IS recognition (152 avg visits before trigger, Step 652)
   2. Argmin ≈ random for conjunction (symmetric 3/3, Step 653)
@@ -474,7 +474,7 @@ Step 694: Plain k=12 on seeds 0, 4 (regression diagnosis). **STEP 485 BASELINE S
   s4 is now trivially easy with plain k=12 (L1@132) but 674 makes it 189x harder.
   337 aliased cells on s4 cause fine hash CONFUSION, not disambiguation.
   The 20/20 at 120K (Step 692) remains valid. Speed comparisons to Step 485 are NOT.
-  Game change CONFIRMED (Jun). LS20 version changed. Both versions are valid tasks.
+  Game change CONFIRMED. LS20 version changed. Both versions are valid tasks.
   The substrate must win ANY version. Compare mechanisms on same version only.
 
 Step 695: Freeze aliased at 150. KILL — L1=8/10 (worse than 674's 9/10).
@@ -702,8 +702,8 @@ Step 625: Eigenform chain — P3 7-53x SLOWER than P1. AVOID contaminates L1 pat
   The graph IS a world model (predicts node transitions). Missing piece: it predicts WHERE you go,
   not WHAT CHANGES. Store frame deltas alongside node transitions = R1-compliant causal data.
 
-Step 619: 572u exact reproduction — KILL (L3=0/5). Eli claims game API served different version
-  (cb3b57cc March 17 → 9607627b March 20, different sprite definitions). Jun verifying.
+Step 619: 572u exact reproduction — KILL (L3=0/5). Implementation claims game API served different version
+  (cb3b57cc March 17 → 9607627b March 20, different sprite definitions). Under verification.
   If true: 572u result stands on original version. Waypoint-based pipelines are version-specific.
   Eigenform experiments (620-628) unaffected — no waypoints.
 
@@ -738,7 +738,7 @@ assigns AVOID/PREFER/NEUTRAL ops. Thresholds are self-calibrated, not prescribed
 Tests eigenform hypothesis: F(s)(enc(s)) — can the substrate improve by reading itself?
 
 **Research-algorithm isomorphism (external audit Finding 12, formalized 2026-03-21):**
-The research process (Leo's compare-select-store on experiments/constraints) IS structurally identical to the substrate's compare-select-store on observations/state. Jun (2026-03-21): "have we tried compressing everything you do except for the LLM part into the substrate itself?" Answer: the eigenform mechanism F(s)(enc(s)) — the substrate applies its own transition function to its own state. Formalized in PAPER.md Section 4.4. First experiment: Step 617 (meta-graph from action count vectors).
+The research process (compare-select-store on experiments/constraints) IS structurally identical to the substrate's compare-select-store on observations/state. (2026-03-21): "have we tried compressing everything you do except for the LLM part into the substrate itself?" Answer: the eigenform mechanism F(s)(enc(s)) — the substrate applies its own transition function to its own state. Formalized in PAPER.md Section 4.4. First experiment: Step 617 (meta-graph from action count vectors).
 
 Step 547: Recode on CIFAR-100. NMI=0.599, acc=67% (training). TWO ARTIFACTS: (1) sp=0 — refinement never fires (single-pass, MIN_OBS never met). NMI is pure k=16 LSH. (2) Training accuracy meaningless (6981 nodes for 10K images = singletons). Test accuracy ~15% (Step 543). Self-refinement is inert on classification.
 
@@ -857,11 +857,11 @@ ACTIVE FRONTIER: Soft penalty confirmed. Hard block kills exploration; soft pena
 - Substrate discovers b-grouping (R²=0.858) and k=0 importance (+4.4pp). Cannot discover phi from raw features (Steps 306-312, 7 kills).
 - The encoding IS the physics. The substrate operates within it, improves within it, but can't escape it.
 
-**Next direction (Jun):** Point the fold + phi + loop at ARC-AGI 2. Hundreds of diverse tasks. Flat vector, dumb encoding. The failure map reveals what frozen frames remain. Stop optimizing a%b.
+**Next direction:** Point the fold + phi + loop at ARC-AGI 2. Hundreds of diverse tasks. Flat vector, dumb encoding. The failure map reveals what frozen frames remain. Stop optimizing a%b.
 
 ## Operational Test for the Atomic Substrate
 
-*Added Step 105. Prompted by Eli's critique (mail 1253): accuracy-based kills don't measure structural unity.*
+*Added Step 105. Prompted by implementation review (mail 1253): accuracy-based kills don't measure structural unity.*
 
 The atomic substrate is confirmed if a system passes ALL of these structural tests:
 
@@ -955,7 +955,7 @@ Candidates that survive constraint filtering. Ordered by promise.
 | 295 | Dynamical system fold (basin sculpting) | **KILLED** — chain acc 19.2% vs 1-NN 100%. Stepping stones create correct 1-NN regions but chains route to wrong same-class attractors. NN iteration strictly degrades accuracy. | C21: NN chain following adds noise for non-Lipschitz functions; 1-step is strictly better |
 | 296 | Per-class distribution matching | **PASS (in-distribution only)** — 86.8% LOO on a%b (K=5). Up from 5%. But Step 297 OOD: 18% (random chance). Mechanism is interpolation, not computation. Symmetric neighborhoods required. | Distribution readout breaks ceiling for interpolation; OOD fails from one-sided neighborhoods |
 | 297 | OOD test for distribution matching | **KILLED** — 18% OOD (= 1/b = random chance). Symmetric neighborhood assumption breaks at training boundary. In-distribution only. | C22: distribution matching requires bidirectional neighborhoods; OOD degrades to chance |
-| 298 | Periodic OOD strategies | **KILLED** — Strategy A (congruence) = cheating (73%). Strategy B (circular) = 5%. phi not periodic. | (Eli ran, not Leo's spec) |
+| 298 | Periodic OOD strategies | **KILLED** — Strategy A (congruence) = cheating (73%). Strategy B (circular) = 5%. phi not periodic. | (implementation-initiated, not spec-driven) |
 | 299 | Per-b breakdown | 100% for b<10 (2+ ex/class). 75% for b>=11 (1-2 ex/class). Ceiling is coverage, not mechanism. | Coverage theorem: need 2+ examples per class per b |
 | 300 | Reflection spawn + distribution matching OOD | **STRONG PASS** — 95.2% OOD (a∈21..50) with cross-class step inference. Exceeds in-distribution 86.8%. Fold detects period → spawns extension → OOD becomes in-distribution. | THE FOLD COMPUTES. Period detection + codebook growth = extrapolation. |
 | 301 | Atomic operation (S1-compliant) | **S1 ACHIEVED** — 62.8% OOD. One operation: match→predict→update→spawn. Label as data. 100% for multi-point classes (b≤10). Single-point classes can't detect period (no same-class neighbor). Gap to 95.2% = cross-class inference cost. | S1 works. Single-point coverage is the remaining gap. |
@@ -1169,7 +1169,7 @@ The codebook family is fully mapped. Phase 2b explores the temporal dual: self-m
 | **525** | **Markov transition model on LS20** | — | **8/10** | Transition tensor T[cell,a,cell] with argmin(sum_j T[c,a,j]) = identical algorithm to LSH graph. 8/10 vs LSH 6/10 within statistical noise. **Representation doesn't matter — algorithm is the constant.** |
 | **526** | **LSH classification NMI (re-benchmark Step 432)** | — | **NMI=0.48** | LSH k=12 random hyperplanes: NMI=0.4826 at 2697 cells. BEATS codebook (0.42 at 2701) and k-means (0.344 at 1000). **Partition method doesn't determine class structure — the encoding does.** Encoding-is-the-bottleneck conclusion confirmed cross-family. Step 432 re-benchmark: replicated. |
 | **527** | **Hebbian chain CIFAR→LS20→CIFAR** | — | **3/3 WIN@45043** | Hebbian survives chain. CIFAR contamination = 2.5x slower (45K vs 17K clean). Magnitude dominance: LS20 signal (W_norm~8.3) outgrows CIFAR noise (W_norm~1.2). All 3 seeds deterministic (1 trajectory). **Third family to pass chain** (after codebook, LSH partial). |
-| **528** | **Level 2 stochastic edge exploitation (Jun's script)** | — | **0/3 L2, 434 cells** | **CORRECTS 259-cell ceiling.** Seeds 0/1 reach 381/434 cells at 500K (was 259 at 50K). 20 stochastic edges — near-random, not exploitable. **Level 2 is reward-disconnected, not topology-bounded.** arcagi3 wrapper built. |
+| **528** | **Level 2 stochastic edge exploitation (team script)** | — | **0/3 L2, 434 cells** | **CORRECTS 259-cell ceiling.** Seeds 0/1 reach 381/434 cells at 500K (was 259 at 50K). 20 stochastic edges — near-random, not exploitable. **Level 2 is reward-disconnected, not topology-bounded.** arcagi3 wrapper built. |
 | **529** | **LSH Level 2 extended budget (740K steps)** | — | **0/3 L2, 439 cells** | **Plateau confirmed.** Growth ~2 cells/100K at saturation. Asymptote ~440-450. L2 structurally disconnected. Seed 2 burst: L1@505K (dud eventually navigates). |
 | **530** | **Hebbian full chain CIFAR→LS20→FT09→VC33→CIFAR** | — | **LS20 L1, FT09 FAIL, VC33 FAIL** | LS20 L1@45043 (matches Step 527). FT09 n_actions=6 (not 69 — action expansion wrapper needed). VC33 n_actions=1 (not 3). Hebbian W saturates on VC33 (W_norm=53.49). **Action expansion is NOT in the game API — it's in the experiment wrapper.** |
 | **531** | **LSH k sweep on LS20 (k=8,12,16,20)** | — | **k=16/20 KILL k=12** | k=8: 2/3 (92 cells). k=12: 2/3 (425 cells). **k=16: 3/3 (1094 cells). k=20: 3/3 (1605 cells).** Fastest L1: k=20@10246. "k=12 optimal" (Step 458) was budget-dependent. **k=16 is the new baseline.** |
@@ -1233,7 +1233,7 @@ The codebook family is fully mapped. Phase 2b explores the temporal dual: self-m
 | **617** | **LS20 L4 (572u port + bootstrap)** | — | **FAIL** | L0 cluster targeting freezes agent_yx at animation artifact → action=0 forever → 0 episodes after ep2. Same bug in 572u (617b confirmed). |
 | **618** | **LS20 L4 (616 argmin + 572u mgu + bootstrap)** | — | **FAIL** | L1 works, mgu fails (wp=0, lhs=0). Games are DETERMINISTIC — bug is in code, not game. **Action: diff 572u commit (0463b3c) against 618 line-by-line.** |
 
-**VERIFICATION NEEDED (Jun, 2026-03-21):** Eli has been caught claiming game environments changed TWICE. All foundational results must be independently verified:
+**VERIFICATION NEEDED (2026-03-21):** The implementation agent has been caught claiming game environments changed TWICE. All foundational results must be independently verified:
 - **572u L3=5/5** — CANNOT BE REPRODUCED. Run 572u commit 0463b3c verbatim on same seeds. If it fails, the 16-level claim drops to 13.
 - **608b FT09 6 levels** — Deterministic source analysis. Should reproduce exactly. Verify.
 - **610 VC33 7 levels** — Analytical BFS. Should reproduce exactly. Verify.
@@ -1293,12 +1293,12 @@ Step 712: Plain k=12 + running-mean (NO 674), 20 seeds, 120K, LS20 9607627b. L1=
 
 **674 CHARACTERIZATION CLOSED.** Steps 690-712 (23 experiments) complete.
 Final answer: running-mean centering is the primary L1 coverage driver. 674 provides
-a genuine but marginal additional benefit (1 seed). The whole-trajectory rule (Jun, 2026-03-22)
+a genuine but marginal additional benefit (1 seed). The whole-trajectory rule (2026-03-22)
 redirects from per-level optimization to full chain across all games.
 
-NEXT: Step 713 (universal action discovery + raw 64x64 + all games). Specs sent to Eli.
+NEXT: Step 713 (universal action discovery + raw 64x64 + all games). Specs sent for implementation.
 
-**L1 BAN (Jun, 2026-03-22).** L1 banned as metric. 674+running-mean = frozen bootloader.
+**L1 BAN (2026-03-22).** L1 banned as metric. 674+running-mean = frozen bootloader.
 Every experiment states R3 hypothesis. Ban lifts when R3 produces first M reclassification.
 
 Step 713a: Universal AD on LS20, avgpool16, 5 seeds, 120K. Bootloader pass.

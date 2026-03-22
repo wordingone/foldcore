@@ -10,7 +10,7 @@ Comparison:
   1. Direct k-NN: predict full sorted output from input (Step 216 baseline: 2.8%)
   2. Iterated k-NN: predict 1-bubble-pass output, iterate to convergence
 
-Leo mail 1294.
+[researcher] mail 1294.
 """
 
 import numpy as np

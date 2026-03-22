@@ -2,7 +2,7 @@
 """
 Step 73b — AtomicFold CIFAR-100, tau=0.01 slice only.
 
-Leo directive (mail 1172): skip remaining P-MNIST taus, run CIFAR-100 with
+[researcher] directive (mail 1172): skip remaining P-MNIST taus, run CIFAR-100 with
 tau=0.01 x lr=[0.001, 0.005, 0.01, 0.05] only.
 
 P-MNIST results already collected (4 configs, tau=0.01):

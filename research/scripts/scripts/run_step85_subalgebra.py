@@ -2,7 +2,7 @@
 """
 Step 85 -- Sub-algebra verification and second-generation composition.
 
-Leo directive (mail 1204):
+[researcher] directive (mail 1204):
 Part 1: Verify {C,D,E,J,M,N} sub-algebra (6x6 table, full coverage)
   - Pick 1 representative EF from each family C,D,E,J,M,N
   - All 36 pairwise compositions (6x6), COMPOSE_STEPS=5000
@@ -28,7 +28,7 @@ DT = 0.03
 MAX_NORM = 3.0
 CONVERGE_TOL = 0.001
 FIND_STEPS = 1000
-COMPOSE_STEPS = 5000   # Leo: longer iterations for full coverage
+COMPOSE_STEPS = 5000   # [researcher]: longer iterations for full coverage
 KNOWN_COS = 0.95
 BASIN_COS = 0.99
 FAMILY_COS = 0.95
@@ -175,7 +175,7 @@ def main():
     print()
 
     # ── Identify {C,D,E,J,M,N} representatives ────────────────────────────────
-    # Target families by name (Leo specified C,D,E,J,M,N)
+    # Target families by name ([researcher] specified C,D,E,J,M,N)
     target_names = {'C', 'D', 'E', 'J', 'M', 'N'}
     target_reps = {}  # fam_name -> (fam_id, representative_ef_idx)
     for fid in fam_ids_sorted:

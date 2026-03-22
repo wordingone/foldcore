@@ -2,7 +2,7 @@
 """
 Step 74 — EigenFold proof-of-concept.
 
-Leo directive (mail 1175): matrix codebook, eigenform stability as classifier.
+[researcher] directive (mail 1175): matrix codebook, eigenform stability as classifier.
 3 clusters in R^16, presented sequentially. Pure Python, rk.py only.
 
 Spec:

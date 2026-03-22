@@ -2,7 +2,7 @@
 """
 Step 288 -- Subtraction-based GCD: is (a,b) -> (b, a-b) easier to discover?
 
-Leo mail 1308. Arc question: can the substrate discover an algorithmic step
+[researcher] mail 1308. Arc question: can the substrate discover an algorithmic step
 from I/O and iterate it OOD?
 
 Subtraction GCD: (a, b) -> (b, a-b) for a > b, swap if a < b, stop if a == b.

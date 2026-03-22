@@ -2,7 +2,7 @@
 """
 Step 82 -- Eigenform algebra: composition table.
 
-Leo directive (mail 1198): test whether eigenforms compose into an algebra.
+[researcher] directive (mail 1198): test whether eigenforms compose into an algebra.
 Classification is the wrong benchmark. The question: does Psi(M_i*, M_j*) -> known eigenform?
 
 Part 1: Build composition table for 10 eigenforms.

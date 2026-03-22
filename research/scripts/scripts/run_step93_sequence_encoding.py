@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Step 93 -- Sequence encoding with Formula C + spectral eigenform.
-Leo mail 1223. k=8.
+[researcher] mail 1223. k=8.
 
 Phi(M) = M*M^T / ||M*M^T||_F * sqrt(k)
 Formula C: Psi(A,B) = Phi(A + B - A*B/||A*B||*target)

@@ -5,7 +5,7 @@
 ### Context
 Session 22 closed the ANIMA parameter landscape: all parameters characterized, none both binding AND adaptable from within. The conclusion from Session 22's adversarial review was unambiguous — ANIMA has reached an architecture ceiling for Stage 3. Session 23 was scheduled as a meta-cognitive review: no experiments, no code, no new implementations. Pure analysis. The goal: what are we missing? Where are the blind spots?
 
-No teammates deployed for implementation. Analysis conducted by Leo (team lead).
+No teammates deployed for implementation. Analysis conducted by [researcher] (team lead).
 
 ### Blind Spot 1: ACE.py — Third Substrate, Never Formally Tested
 
@@ -108,18 +108,18 @@ Next: Session 24 — Calibration test execution. ACE/rk ground truth evaluation.
 ### Context
 Session 21 confirmed MI-err structural decoupling: no I-based signal can locate the w_lr interior optimum. The forward path was tau_slow — implement a slow-timescale memory accumulator (mem_slow) that feeds back into organism dynamics and characterize whether tau_slow is a binding parameter for Stage 3.
 
-Full team deployed: Eli (implementation + sweep script), Jude (code review), Tess (revalidation + sweep execution).
+Full team deployed: [engineer] (implementation + sweep script), Jude (code review), Tess (revalidation + sweep execution).
 
-### Deliverable 1: Dual-Timescale I Implementation (Task #1, Eli; Task #2, Jude)
+### Deliverable 1: Dual-Timescale I Implementation (Task #1, [engineer]; Task #2, Jude)
 `src/anima_organism.py` modified (172→193 lines, +21 lines).
 
 **Mechanism:** mem_slow accumulates tanh(err) with tau_slow EMA rate, parallel to existing mem (tau=0.3). Feedback: `i_slow_drive = mem_slow[i][k] * xs[i][k]`, additive to pre_act alongside i_drive. Principle II compliant: signal from organism's own prediction error, feeds back into state.
 
-**Backward compatibility:** tau_slow=0.0 (default): mem_slow stays zero, i_slow_drive=0.0, dynamics bit-for-bit identical to original. Verified by Eli (noise=0 comparison), Jude (code review), Tess (revalidation).
+**Backward compatibility:** tau_slow=0.0 (default): mem_slow stays zero, i_slow_drive=0.0, dynamics bit-for-bit identical to original. Verified by [engineer] (noise=0 comparison), Jude (code review), Tess (revalidation).
 
 **Review verdict (Jude):** APPROVED. All checks pass. One non-blocking note: no range validation on tau_slow (consistent with existing code style).
 
-### Deliverable 2: tau_slow Binding Sweep Script (Task #3, Eli)
+### Deliverable 2: tau_slow Binding Sweep Script (Task #3, [engineer])
 `src/run_tau_slow_sweep.py` created (257 lines). Protocol: 7 tau_slow values × 10 seeds × K=[4,6,8,10] × n_perm=8 × n_trials=6. 280 total conditions.
 
 ### Deliverable 3: Stage 1 Revalidation (Task #4, Tess)
@@ -144,7 +144,7 @@ Full team deployed: Eli (implementation + sweep script), Jude (code review), Tes
 
 **Binding verdict:** tau_slow is binding in the NEGATIVE direction only. Boundary-optimal at 0.0.
 
-### Adversarial Review Conclusions (Leo)
+### Adversarial Review Conclusions ([researcher])
 
 1. **The effect is real.** d=1.19 on 10 seeds × 4 K values (40 conditions per tau_slow) is well above noise. The trough at 0.005 makes physical sense: tau_slow=0.005 creates a ~200-step integration window, while signal presentation is 90 steps. This integrates across half a signal cycle — maximally confusing current-signal processing with previous-signal residue.
 
@@ -176,7 +176,7 @@ Full team deployed: Eli (implementation + sweep script), Jude (code review), Tes
 ### Context
 Session 20 produced the Stage 3 forward plan (entry 066): dual-timescale I with cycle-boundary adaptation for w_lr. The central question for Session 21 Phase 1: can ANY combination of I-based signals detect the w_lr interior optimum (0.0003) from within the organism's own computation? Or is the MI inverted-U invisible from prediction-error space?
 
-Full team deployed: Sage (analytical derivation), Eli (diagnostic script), Jude (code review), Tess (execution), Rune (analysis + verdict).
+Full team deployed: Sage (analytical derivation), [engineer] (diagnostic script), Jude (code review), Tess (execution), Rune (analysis + verdict).
 
 ### Deliverable 1: Analytical Signal Shape Predictions (Task #1, Sage)
 Sage derived expected shapes of I_fast_mean(w_lr), I_slow_mean(w_lr), and their ratio analytically.
@@ -187,7 +187,7 @@ Sage derived expected shapes of I_fast_mean(w_lr), I_slow_mean(w_lr), and their 
 - Ratio: not cleanly peaked at 0.0003 (confirmed entry 066 adversarial review)
 - Anti-signal risk: HIGH — signals are unsigned, cannot encode direction
 
-### Deliverable 2: Phase 1 Diagnostic Script (Task #2, Eli; Task #3, Jude)
+### Deliverable 2: Phase 1 Diagnostic Script (Task #2, [engineer]; Task #3, Jude)
 `src/run_phase1_diagnostic.py` — InstrumentedAnimaOrganism wrapping AnimaOrganism with mem_slow (tau_slow=0.005) tracking. Measures 5 signals + alive_gap at 5 w_lr values × 2 seeds × 4 K values (40 combinations).
 
 **Two critical bugs found by Jude during review:**
@@ -231,7 +231,7 @@ Signal-by-signal:
 - **c049**: No combination of I_fast, I_slow, I_curvature, or their ratios can locate the w_lr interior optimum via dual-timescale I. All signals show <25% variation across 100× w_lr range. MI-err structural decoupling empirically confirmed.
 - **c050**: W_velocity is monotone increasing in w_lr and is not available as an internal organism adaptation signal. It cannot serve as a Principle-II-compliant Stage 3 signal.
 
-### Adversarial Review Conclusions (Leo)
+### Adversarial Review Conclusions ([researcher])
 
 1. **The MI-err structural decoupling is the session's key scientific result.** The w_lr inverted-U exists in MI space (alive_gap peaks at 0.0003) but has NO gradient in prediction-error space. err-based signals (which is all the organism has) cannot detect position on the MI landscape. This is not a measurement problem — it is a structural property of the relationship between prediction error and mutual information.
 
@@ -260,7 +260,7 @@ Next: Session 22 — Implement dual-timescale I in anima_organism.py. Stage 1 re
 ### Context
 Session 19 closed Stage 2 as vacuous (Amendment 1) — w_lr has interior optimum at 0.0003 but no Principle-II-compliant signal can detect position on the curve per-step. The timescale barrier (c036, c047, c048) is the central unsolved problem. Session 20 is the scheduled meta-cognitive review: full audit of 19 sessions, 48 constraints, and 63 knowledge entries, plus integration of the Han 7+2 Framework paper.
 
-Full team deployed: Rune (constraint taxonomy), Mira (7+2 mapping), Jude (KB consistency), Eli (compile.py fix), Tess (baseline validation), Sage (Stage 3 forward plan).
+Full team deployed: Rune (constraint taxonomy), Mira (7+2 mapping), Jude (KB consistency), [engineer] (compile.py fix), Tess (baseline validation), Sage (Stage 3 forward plan).
 
 ### Deliverable 1: Constraint Taxonomy (Entry 065, Rune)
 All 48 constraints categorized into 8 failure modes:
@@ -296,7 +296,7 @@ Han's 7+2 Framework defines sufficient state space: 7 individual variables (Vm, 
 ### Deliverable 3: KB Consistency (Entry 065, Jude)
 Zero anomalies. 48 constraints sequential c001-c048. All cross-references valid. Canonical params consistent across state.md, anima_organism.py, run_anima_stage1.py.
 
-### Deliverable 4: compile.py ANIMA-Aware (Entry 064, Eli)
+### Deliverable 4: compile.py ANIMA-Aware (Entry 064, [engineer])
 Fixed compile.py to handle ANIMA architecture:
 - Active-substrate vs archived status detection
 - format_decision() fallback (content.decision → content.finding)
@@ -330,7 +330,7 @@ ANIMA Stage 1 baseline confirmed exactly reproducible:
 
 **Vacuousness criterion:** If Phase 1 shows no signal has information content and no natural equilibrium exists, Stage 3 for w_lr is structurally vacuous. The MI-err structural decoupling means the inverted-U has no intrinsic gradient detectable from within.
 
-### Adversarial Review Findings (Leo + Sage)
+### Adversarial Review Findings ([researcher] + Sage)
 
 The adversarial exchange produced three key theoretical results:
 
@@ -344,7 +344,7 @@ The adversarial exchange produced three key theoretical results:
 
 **Architecture decision: dual-timescale I, not T-as-Φ.** Stage 3 = augment I with slow timescale. T-as-Φ violates Principle IV (adds frozen frame element). Deferred to Stage 4+.
 
-### Six Meta-Lessons (Leo)
+### Six Meta-Lessons ([researcher])
 
 1. **The landscape is almost entirely flat.** Of all parameters tested across two substrates, almost none are binding. The system is massively degenerate. 7+2 explains: ~10⁵:10² compression.
 
@@ -543,7 +543,7 @@ Adaptive conditions are significantly worse than the calibrated optimum (adaptiv
 
 ### Stage 4 Closure Declaration
 
-**Jun's declaration:** Stage 4 is NOT vacuously passed. Delta IS binding (+6%). Declare closed as characterization result: **the Living Seed is a memoryless signal processor.**
+**[director]'s declaration:** Stage 4 is NOT vacuously passed. Delta IS binding (+6%). Declare closed as characterization result: **the Living Seed is a memoryless signal processor.**
 
 What this means:
 - Pure state replacement (delta=1.0) is architecturally optimal

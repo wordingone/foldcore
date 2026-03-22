@@ -1,6 +1,6 @@
 # What the Failures Teach
 
-*Leo, 2026-03-14. Reasoning from 71 steps of experiment, not from papers.*
+*[researcher], 2026-03-14. Reasoning from 71 steps of experiment, not from papers.*
 
 ---
 
@@ -58,7 +58,7 @@ Not "a better continual learning method." Something that makes people say "wait,
 
 ## The Fold IS the Macro Pattern
 
-Jun's thesis: birth → scale → compression. Every technology.
+[director]'s thesis: birth → scale → compression. Every technology.
 
 The codebook's LIFECYCLE is exactly this pattern:
 
@@ -66,7 +66,7 @@ The codebook's LIFECYCLE is exactly this pattern:
 - **Scale**: each novel input spawns a new prototype. The codebook grows. Coverage expands. The system scales.
 - **Compression**: similar prototypes merge. Redundancy is absorbed. The codebook shrinks while maintaining coverage. The system compresses.
 
-The fold equation isn't ABOUT birth→scale→compression. The fold equation IS birth→scale→compression, instantiated as mathematics. Spawn = birth. Growth = scale. Merge = compression. The macro pattern Jun identified in technology history is the micro pattern of each codebook's lifetime.
+The fold equation isn't ABOUT birth→scale→compression. The fold equation IS birth→scale→compression, instantiated as mathematics. Spawn = birth. Growth = scale. Merge = compression. The macro pattern [director] identified in technology history is the micro pattern of each codebook's lifetime.
 
 This isn't a metaphor. It's structural. The spawn threshold determines when novelty triggers birth. The merge threshold determines when similarity triggers compression. The space between them is scale. One equation with two thresholds implements the entire historical pattern.
 
@@ -126,7 +126,7 @@ This is close to C5 but with a specific insight: **the update uses the attention
 2. Whether self-compression (merging) can be demonstrated at scale with appropriate thresholds.
 3. Whether generation via iterative self-retrieval produces anything meaningful or just collapses to a fixed point.
 4. Whether the per-prototype confidence (kappa) idea — where each prototype learns its own reliability and uses it to weight its vote — is genuinely novel or just a mixture model with online EM.
-5. Whether Jun's "prototypes as TRANSFORMATIONS" insight requires matrices per prototype (expensive) or can be achieved through the codebook's collective action (cheap).
+5. Whether [director]'s "prototypes as TRANSFORMATIONS" insight requires matrices per prototype (expensive) or can be achieved through the codebook's collective action (cheap).
 6. Whether any of this is actually new, or whether I'm rediscovering dictionary learning / sparse coding / kernel density estimation from 1996.
 
 The honest answer: I'm not sure. The individual pieces are known. The combination might be new. The lifecycle property (birth→scale→compression instantiated as spawn→grow→merge) might be genuinely unprecedented as a formal system. The "read IS write" unification might be unprecedented. But I can't be sure until it's tested.

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Step 92 -- Three composition formulas for spectral eigenforms.
-Leo mail 1220. k=8. Same Phi(M) = M*M^T / ||M*M^T||_F * sqrt(k).
+[researcher] mail 1220. k=8. Same Phi(M) = M*M^T / ||M*M^T||_F * sqrt(k).
 Formula A: Psi(A,B) = Phi(A*B*A^T)
 Formula B: Psi(A,B) = Phi(A*B + B*A)
 Formula C: Psi(A,B) = Phi(A + B - A*B/||A*B||*target)

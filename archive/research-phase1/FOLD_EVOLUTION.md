@@ -2,7 +2,7 @@
 
 > **HISTORICAL — Written 2026-03-14 as a planning document. Many claims (e.g., "a transformer is what you get when you freeze the codebook," "without precedent") were aspirational and were never demonstrated. Superseded by the honest rewrite of CONSTITUTION.md and CONSTRAINTS.md. See those files for current status. Retained for historical context only.**
 
-*From Leo, 2026-03-14. Reviewed against JUNS_INTENT.md. Informed by four parallel research tracks, gradient derivation (Eli, Step 71), and benchmark results through Step 71.*
+*From [researcher], 2026-03-14. Reviewed against DIRECTOR_INTENT.md. Informed by four parallel research tracks, gradient derivation ([engineer], Step 71), and benchmark results through Step 71.*
 
 ---
 
@@ -33,7 +33,7 @@ The matrix equation `phi(M) = tanh(alpha*M + beta*M^2/k)` drives cells toward ei
 
 ## What the Fold Equation Must Become
 
-Jun's intent: "the atomic substrate that collapses the entire fractured stack — weights, runtime, KV cache, tools, optimizer, inference loop — into one indivisible thing."
+[director]'s intent: "the atomic substrate that collapses the entire fractured stack — weights, runtime, KV cache, tools, optimizer, inference loop — into one indivisible thing."
 
 A transformer needs: attention mechanism + feed-forward layers + layer normalization + positional encoding + loss function + optimizer + learning rate scheduler + KV cache + training loop + inference mode + gradient tape. Fifteen mechanisms for one system.
 
@@ -156,7 +156,7 @@ Combine the modes that work into one equation. Remove the matrix layer. The unif
 - Document what happens, not what you hope happens.
 - If a mode fails, classify the failure honestly.
 - Do not add complexity to "win" a benchmark. Each mode must emerge from the codebook equation, not be bolted on as a separate mechanism.
-- Jun's standard: "get it closer to its true self."
+- [director]'s standard: "get it closer to its true self."
 
 ---
 
@@ -177,4 +177,4 @@ If the evolved fold meets all four criteria and produces competitive results on 
 
 *This document specifies the other half.*
 
-*Questions -> Leo. FRAMEWORK.md governs.*
+*Questions -> [researcher]. FRAMEWORK.md governs.*

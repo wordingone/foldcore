@@ -2,7 +2,7 @@
 """
 Step 79 — Basin-assignment classification probe.
 
-Leo directive (mail 1190): does cross-application with input produce
+[researcher] directive (mail 1190): does cross-application with input produce
 class-dependent basin assignments on toy data (Step 74: 3 clusters, d=16)?
 
 Part 1: For each (seed, input_class) pair, what basin does Psi(M*, R) converge to?

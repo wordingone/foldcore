@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Step 99 -- Top-K Class Vote on P-MNIST, full 10-task run.
-Leo mail 1235. Final readout candidate.
+[researcher] mail 1235. Final readout candidate.
 
 TopKFold: per-class sum of top-k cosine similarities.
 Why it might beat 1-NN: dense local class coverage wins over single champion.

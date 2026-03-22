@@ -18,7 +18,7 @@
     "purpose": "Implement dual-timescale I (mem_slow) as a real organism dynamics element in anima_organism.py, then sweep tau_slow to determine if it is a binding parameter. This is the Session 21 forward path: tau_slow as alternative Stage 3 target.",
     "implementation": {
       "mechanism": "mem_slow accumulates tanh(err) with tau_slow EMA rate, parallel to existing mem (tau=0.3). Feedback: i_slow_drive = mem_slow[i][k] * xs[i][k], additive to pre_act alongside i_drive. Principle II compliant: signal from organism's own prediction error, feeds back into state.",
-      "backward_compat": "tau_slow=0.0 (default): mem_slow stays zero, i_slow_drive=0.0, dynamics bit-for-bit identical to original. Verified by Jude (review) and Eli (noise=0 comparison).",
+      "backward_compat": "tau_slow=0.0 (default): mem_slow stays zero, i_slow_drive=0.0, dynamics bit-for-bit identical to original. Verified by Jude (review) and [engineer] (noise=0 comparison).",
       "file": "src/anima_organism.py (193 lines, +21 from original 172)"
     },
     "revalidation": {

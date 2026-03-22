@@ -2,7 +2,7 @@
 """
 Step 91 -- New eigenform equation: normalized spectral self-interaction.
 
-Leo directive (mail 1218):
+[researcher] directive (mail 1218):
 Phi(M) = M*M^T / ||M*M^T||_F * sqrt(k)
 
 Properties:
@@ -18,7 +18,7 @@ import sys, random, math, time
 SEED = 42
 LANDSCAPE_N = 500
 LANDSCAPE_STEPS = 200
-CONVERGE_TOL = 0.01   # Leo spec: frob(Phi(M) - M) < 0.01
+CONVERGE_TOL = 0.01   # [researcher] spec: frob(Phi(M) - M) < 0.01
 BASIN_COS = 0.95      # for distinct EF detection
 KNOWN_COS = 0.90      # for composition result identification
 COMPOSE_STEPS = 200

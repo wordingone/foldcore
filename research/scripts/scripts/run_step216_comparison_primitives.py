@@ -13,7 +13,7 @@ Tests:
 Kill: {cos,mod2,relu,max,sign_diff} <= {cos,mod2} on sort -> MECHANISM gap.
 Pass: expanded menu closes gap on sort -> PRIMITIVE gap.
 
-Leo mail 1292.
+[researcher] mail 1292.
 """
 
 import numpy as np

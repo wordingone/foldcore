@@ -1,6 +1,6 @@
 # Candidate Equations for the Atomic Foundation
 
-*Leo, 2026-03-14. Raw exploration. Three categories: clean-slate, divergent, and evolutionary.*
+*[researcher], 2026-03-14. Raw exploration. Three categories: clean-slate, divergent, and evolutionary.*
 
 ---
 
@@ -104,7 +104,7 @@ Decode(a, V) = V^T @ a                      # reconstruct from soft address
 Update: V += lr * (r - V^T @ softmax(V @ r / tau)) @ softmax(V @ r / tau)^T
 ```
 
-This is dictionary learning / sparse coding with online updates. The update rule minimizes reconstruction error. Known — but the framing as "compression IS learning" connects to Jun's thesis.
+This is dictionary learning / sparse coding with online updates. The update rule minimizes reconstruction error. Known — but the framing as "compression IS learning" connects to [director]'s thesis.
 
 ### A5. The Self-Referential Equation
 

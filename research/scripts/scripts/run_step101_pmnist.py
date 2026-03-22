@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Step 101 -- Spawn-Only Codebook (lr=0) on P-MNIST.
-Leo mail 1241. Verify P-MNIST performance doesn't degrade with lr=0.
+[researcher] mail 1241. Verify P-MNIST performance doesn't degrade with lr=0.
 
 Same as Step 99 (lr=0.001) but no updates. Quick comparison.
 sp=0.7, k_vote={1,3,5,10}.

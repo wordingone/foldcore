@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Step 98 -- Neighborhood Coherence Readout on P-MNIST.
-Leo mail 1233.
+[researcher] mail 1233.
 
 CoherenceFold: coherence-weighted cosine readout.
 Fixes Step 97 anti-correlation (C11) and codebook starvation.

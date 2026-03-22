@@ -1,5 +1,5 @@
 # FoldCore Research Framework
-*Version 0.3 — 2026-03-14. Leo + Jun + Eli.*
+*Version 0.3 — 2026-03-14. [researcher] + [director] + [engineer].*
 
 Full experiment history (96 steps): `EXPERIMENT_LOG.md`
 
@@ -90,7 +90,7 @@ Hard constraints. Violation means stop and re-read this document.
 4. **Fix before extend.** No new capabilities until existing bugs are resolved.
 5. **One variable per experiment.**
 6. **Real data or it doesn't count.**
-7. **Jun's standard.** "Get it closer to its true self."
+7. **[director]'s standard.** "Get it closer to its true self."
 8. **Call things what they are.** If it's velocity damping, don't call it active inference.
 
 ---
@@ -101,17 +101,17 @@ Hard constraints. Violation means stop and re-read this document.
 |---|---|
 | `RESEARCH_STATE.md` | **READ FIRST.** Live state: active hypothesis, constraints, candidate queue |
 | `EXPERIMENT_LOG.md` | Full 96-step history, all claims with evidence, testing protocol |
-| `JUNS_INTENT.md` | Jun's original research intent (extracted from 3 AI conversations) |
+| `DIRECTOR_INTENT.md` | [director]'s original research intent (extracted from 3 AI conversations) |
 | `WHAT_THE_FAILURES_TEACH.md` | Four separations that must die |
 | `EQUATION_CANDIDATES.md` | 15 substrate candidates (most filtered by constraints) |
-| `ELI_DIRECTIVE.md` | Current-state briefing for Eli |
+| `ENGINEER_DIRECTIVE.md` | Current-state briefing for [engineer] |
 
 ## Protocol
 
-- Eli executes experiments, mails results to Leo
-- Leo decides direction, updates FRAMEWORK.md
+- [engineer] executes experiments, mails results to [researcher]
+- [researcher] decides direction, updates FRAMEWORK.md
 - Public repo (github.com/wordingone/foldcore) updated for external review
-- Nothing leaves this PC without Jun's approval
+- Nothing leaves this PC without [director]'s approval
 
 ---
 

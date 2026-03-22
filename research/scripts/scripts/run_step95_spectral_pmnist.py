@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Step 95 -- P-MNIST benchmark with spectral substrate.
-Leo mail 1227. k=8, spectral Phi, Formula C composition.
+[researcher] mail 1227. k=8, spectral Phi, Formula C composition.
 
 Classification via compositional encoding:
   Train: for each class c, compose all training sample eigenforms left-to-right

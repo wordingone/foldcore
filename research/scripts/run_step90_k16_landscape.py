@@ -2,7 +2,7 @@
 """
 Step 90 -- k=16 landscape scan, final scale test.
 
-Leo directive (mail 1214):
+[researcher] directive (mail 1214):
 alpha=1.1, beta=2.0 (beta/k = 2.0/16 = 0.125, same ratio as 0.5/4)
 
 1. Generate 500 random 16x16 matrices, iterate Phi for 2000 steps

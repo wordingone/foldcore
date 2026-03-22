@@ -2,7 +2,7 @@
 """
 Step 80 -- k=8 landscape + basin routing.
 
-Leo directive (mail 1194): k=4 exhausted. Does k=8 change the picture?
+[researcher] directive (mail 1194): k=4 exhausted. Does k=8 change the picture?
 
 Part A: k=8 eigenform landscape
   - N=1000 random 8x8 matrices, uniform [-2,2]

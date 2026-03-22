@@ -2,7 +2,7 @@
 """
 Step 79b — Basin crossing threshold sweep + class-dependent crossing.
 
-Leo directive (mail 1192): additive perturbation stays in basins (Step 78).
+[researcher] directive (mail 1192): additive perturbation stays in basins (Step 78).
 Find critical epsilon where crossing starts, then test if it's class-dependent.
 
 Part 1: epsilon sweep [0.1, 0.3, 0.5, 0.7, 1.0, 1.5, 2.0]

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Step 118 -- Random Fourier Features + k-NN, CIFAR-100 raw pixels.
-Leo mail 1281.
+[researcher] mail 1281.
 
 RFF transform: z = cos(W @ r + b), W ~ N(0, 1/sigma^2), b ~ U(0, 2pi)
 Approximates Gaussian RBF kernel. Fixed (no learning, no forgetting).

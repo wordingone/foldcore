@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Step 117 -- Adaptive k P-MNIST raw pixels. Leo mail 1279.
+Step 117 -- Adaptive k P-MNIST raw pixels. [researcher] mail 1279.
 Fixed k={1,5,10,20} + density-adaptive k. Always-spawn.
 Kill: adaptive k <= best fixed k.
 """

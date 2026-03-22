@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Step 120 -- S1 eval on P-MNIST + multi-pass CIFAR-100 ResNet.
-Leo mail 1286.
+[researcher] mail 1286.
 
 Test A: P-MNIST raw pixels — standard vs S1 eval (does it boost 95.4%?)
 Test B/C: CIFAR-100 ResNet — multi-pass S1 eval (1,2,3,5 passes), does it saturate?

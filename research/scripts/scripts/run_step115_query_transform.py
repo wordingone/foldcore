@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Step 115 -- Query Transformation KNN, CIFAR-100 raw pixels.
-Leo mail 1275.
+[researcher] mail 1275.
 
 Store all samples raw (never modified). Learn per-class query biases.
 Zero forgetting structural: biases are per-class, independent indices.

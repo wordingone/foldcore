@@ -1,5 +1,5 @@
 # FluxCore Research Framework
-*Version 0.2 — 2026-03-13. Leo + Jun + Eli.*
+*Version 0.2 — 2026-03-13. [researcher] + [director] + [engineer].*
 
 ---
 
@@ -62,62 +62,62 @@ Each claim has a status. Nothing advances past its gate without evidence.
 
 ### CLAIM 3: Accelerated reacquisition — the fold remembers (VERIFIED)
 - **Evidence**: A2 converges 5-6× faster than A1 after A→B→A at DIM=64,512,8192.
-- **Verified by Eli**: 2026-03-13, fluxcore_true.mjs T2 at all dimensions. Entity version reacquisition ~8% faster.
+- **Verified by [engineer]**: 2026-03-13, fluxcore_true.mjs T2 at all dimensions. Entity version reacquisition ~8% faster.
 - **Reported from Kimi logs**: Consistent with independent verification.
 - **Gate**: PASSED at DIM=64, 512, 8192.
 
 ### CLAIM 4: The fold is not reducible to EMA (VERIFIED)
 - **Evidence**: T1 (anticipation), T3 (shift detection), T4 (adaptive LR) all pass at DIM=64,512,8192.
-- **Verified by Eli**: 2026-03-13, fluxcore_true.mjs T1-T4 full suite, 4/4 at all dimensions.
+- **Verified by [engineer]**: 2026-03-13, fluxcore_true.mjs T1-T4 full suite, 4/4 at all dimensions.
 - **Gate**: PASSED.
 
 ### CLAIM 5: Prediction-error-driven steering produces measurable advantage (VERIFIED, QUALIFIED)
 - **Evidence**: Active agent shows lower surprise than passive across full controllability range. Monotonic curve: α=0.1 → 24.66%, α=0.3 → 7.08%, α=0.5 → 2.76%, α=0.7 → 1.08%, α=0.9 → 0.25%. Above 1% down to α=0.7.
 - **Mechanism**: Prediction storage → prediction error (reality - lastPredicted) → memory-directed action scaled by error magnitude. Blend contract: activeReality = normalize(α × externalReality + (1-α) × actionVec). actionGain=10.0.
-- **Verified by Eli**: 2026-03-13. Three experiments: (1) full control = self-referential collapse (not inference), (2) α=0.5 blend with new mechanism = 2.6% advantage with attractor-lag oscillation, (3) α sweep confirms monotonic robustness.
+- **Verified by [engineer]**: 2026-03-13. Three experiments: (1) full control = self-referential collapse (not inference), (2) α=0.5 blend with new mechanism = 2.6% advantage with attractor-lag oscillation, (3) α sweep confirms monotonic robustness.
 - **Qualification**: Advantage proportional to control authority. Attractor lag (~50 ticks at memLr=0.015) causes oscillatory overshoot during memory transitions at mid-α. This is prediction-error-driven memory-directed steering, not full free-energy active inference.
 - **Gate**: PASSED (qualified).
 
 ### CLAIM 6: Hierarchy extracts temporal abstractions (VERIFIED)
 - **Evidence**: After normalization fix, L1=2 memories, L2=2 memories (down from L1=100, L2=64). L2 attractors map 1:1 to distribution epochs (500 uses each). L2_mem1 aligns with L0_mem0 (dot=-0.852) — meta-patterns referencing raw distribution space.
-- **Fix applied by Eli**: 2026-03-13. Root cause: lowerSurprise scalar killed under normalize(), plus instantaneous velocity was noise in steady state. Fix: b-dir structural encoding (normVel + lowerSurprise × levelSelf, normalized) + EMA-smoothed velocity (decay=0.99).
+- **Fix applied by [engineer]**: 2026-03-13. Root cause: lowerSurprise scalar killed under normalize(), plus instantaneous velocity was noise in steady state. Fix: b-dir structural encoding (normVel + lowerSurprise × levelSelf, normalized) + EMA-smoothed velocity (decay=0.99).
 - **Gate**: PASSED.
 
 ### CLAIM 7: The fold scales to high dimensions on GPU (VERIFIED)
 - **Evidence**: CUDA compiles (nvcc -O3 -arch=sm_89, RTX 4090), matches JS qualitatively at DIM=64. Scales to DIM=512 and DIM=4096 with identical convergence signature. 4 memories at all scales. Tick-0 surprise follows √(1/dim) scaling as expected.
 - **DIM=64**: surprise 0.1438→0.0003, 4 memories. **DIM=512**: surprise 0.0532→0.0003, 4 memories. **DIM=4096**: surprise 0.0182→0.0003, 4 memories.
-- **Verified by Eli**: 2026-03-13. 5 bugs fixed. Compiled clean on RTX 4090, Compute 8.9 (sm_89).
+- **Verified by [engineer]**: 2026-03-13. 5 bugs fixed. Compiled clean on RTX 4090, Compute 8.9 (sm_89).
 - **Gate**: PASSED at DIM=64, 512, 4096.
 
 ### CLAIM 8: The fold retains information on real-world data (VERIFIED)
 - **Evidence**: CSI corpus (1920 records, 33 divisions, DIM=384 MiniLM embeddings, unit-normalized). 359 memories spawned, 357/359 (99.4%) align with division centers (dot > 0.3). Mean best similarity 0.5710 (random baseline ≈ 0.0). All 33 divisions represented.
 - **Notable**: div26/div01 cross-alignment (0.8331) reflects real semantic overlap in construction specs, not a bug. Multiple memories per large division = genuine subcategory structure. Surprise plateau at 0.038 (vs 0.0003 synthetic) reflects real within-division variance.
 - **2 failures**: mem175 (div13, sim=0.2909) and mem209 (div28, sim=0.2852) — borderline transition points between adjacent divisions.
-- **Verified by Eli**: 2026-03-13. JS entity version, DIM=384, fed in division order.
+- **Verified by [engineer]**: 2026-03-13. JS entity version, DIM=384, fed in division order.
 - **Gate**: PASSED.
 
 ### CLAIM 9: The fold works without ring topology gradient (VERIFIED)
 - **Evidence**: Gradient ablation (results/ablation_gradient.txt). T1-T4 at DIM=64/512/8192: all 12/12 PASS, differences in 5th-6th decimal place. TEST 1 attractor genesis: identical (4 memories, same spawn ticks). CSI real data: 357/359 pass, mean sim=0.5710 — identical to 4dp. The gradient term `(alr * 0.5) * |s[i] - r[i]| * grad[i]` has effectively zero impact on all metrics.
-- **Verified by Eli team**: 2026-03-13.
+- **Verified by [engineer] team**: 2026-03-13.
 - **Qualification**: Gradient may still help on ordered-dimension data (audio spectrograms, time series) where ring topology is meaningful. Step 21 (Phase 7) will test this. For general unstructured vectors, gradient is inert.
 - **Gate**: PASSED. Gradient removed from canonical fold.
 
 ### CLAIM 10: The fold's hyperparameters can be self-derived from surprise (VERIFIED)
 - **Evidence**: Self-derived thresholds (results/ablation_thresholds.txt). Spawn: μ-2σ of running max-sim. Merge: 1-meanSurprise (EMA). Prune: per-memory contribution EMA vs noise floor. Results: TEST 1 attractor genesis 4/4 memories (all dims). CSI: 21/21 pass, mean sim=0.5895, 21 memories vs 359 hand-tuned — 17× fewer, 3% higher similarity. AutoThresh strictly better than hand-tuned on real data.
-- **Verified by Eli team**: 2026-03-13.
+- **Verified by [engineer] team**: 2026-03-13.
 - **Gate**: PASSED. Self-derived thresholds adopted in canonical fold.
 
 ### CLAIM 11: The compressed equation generates structured dynamics under autoregression (VERIFIED)
 - **Evidence**: The original fold (additive terms + normalize) collapses to fixed point under autoregression — proven structurally impossible across 4 experiments (Steps 17, 29, 30, 32). The compressed equation (fold perception + RK generation + coupling) sustains dynamics: energy 0.220 over 10,000 steps, ef_dist 0.157, autonomy 0.757. More active than pure RK (0.067).
 - **The compression**: FluxCore's entire fold compresses to one perception term `(1-a_i)*lr_i*(R-M_i)` added to the Reflexive Kernel. State is matrix M (enables M^2 self-interaction). tanh replaces normalize (avoids collinearity trap). alpha > 1 prevents trivial fixed points.
 - **Compressed equation**: `dM_i = a_i*(Phi(M_i)-M_i) + (1-a_i)*lr_i*(R-M_i) + (1-a_i)*Σ_j w_ij*(Psi(M_i,M_j)-M_i)`
-- **Verified by Eli**: 2026-03-13, fluxcore_compressed.py, 5/5 tests pass (autoregression, tracking, reacquisition, shift detection, perturbation integration).
+- **Verified by [engineer]**: 2026-03-13, fluxcore_compressed.py, 5/5 tests pass (autoregression, tracking, reacquisition, shift detection, perturbation integration).
 - **Gate**: PASSED.
 
 ### CLAIM 12: Cell coupling produces emergent specialization and memory (VERIFIED)
 - **Evidence**: 8 cells self-divide into perception-specialists (responsive to signal, ef_dist=0.174, autonomy=0.714) and generation-specialists (at eigenform, ef_dist=0.005, autonomy=1.000). Specific cells align to specific signals (cells 0/1/5/6 → signal A, cell 4 → signal D). No architectural imposition — emergence from coupling topology alone.
 - **Coupling replaces attractor field**: provides both distributed memory AND generation perturbation. Attractor field is redundant.
-- **Verified by Eli**: 2026-03-13, RK perception test (Step 33) + compressed equation (Step 34).
+- **Verified by [engineer]**: 2026-03-13, RK perception test (Step 33) + compressed equation (Step 34).
 - **Gate**: PASSED.
 
 ---
@@ -166,66 +166,66 @@ All Tier 1 tests must pass at DIM=64, DIM=512, DIM=4096. Note: the two test suit
 ## Iteration Plan (Ordered, With Blockers)
 
 ### Phase 1: Reproduce and Verify (COMPLETE — 2026-03-13)
-1. ✓ T1-T4 verified at DIM=64, 512, 8192 (Eli, Milestone A)
-2. ✓ TEST 1 (attractor genesis) verified at DIM=64 (Leo + Eli)
-3. ✓ Entity reacquisition test added — ~8% faster on return (Eli)
-4. ✓ T5 multi-distribution (A→B→C→D→A) — 4 memories, perfect alignment (Eli)
-5. ✓ Prune threshold adjusted for longer cycles (Eli)
+1. ✓ T1-T4 verified at DIM=64, 512, 8192 ([engineer], Milestone A)
+2. ✓ TEST 1 (attractor genesis) verified at DIM=64 ([researcher] + [engineer])
+3. ✓ Entity reacquisition test added — ~8% faster on return ([engineer])
+4. ✓ T5 multi-distribution (A→B→C→D→A) — 4 memories, perfect alignment ([engineer])
+5. ✓ Prune threshold adjusted for longer cycles ([engineer])
 
 ### Phase 2: Fix Known Bugs (COMPLETE — 2026-03-13)
-6. ✓ Hierarchy normalization fixed: b-dir structural encoding + EMA velocity. L1=2, L2=2 (Eli, Milestone B)
+6. ✓ Hierarchy normalization fixed: b-dir structural encoding + EMA velocity. L1=2, L2=2 ([engineer], Milestone B)
 7. Redesign active inference: deferred to Phase 3 Step 12 (requires design approval)
-8. ✓ CUDA bugs fixed (5 patches), compiles clean on sm_89, matches JS at DIM=64 (Eli, Milestone B)
+8. ✓ CUDA bugs fixed (5 patches), compiles clean on sm_89, matches JS at DIM=64 ([engineer], Milestone B)
 
 ### Phase 3: Scale and Real Data (COMPLETE — 2026-03-13)
-9. ✓ CUDA runs at DIM=512, DIM=4096 — identical convergence signature (Eli) (Eli — in progress)
-10. ✓ CSI corpus real data — 99.4% alignment, all 33 divisions (Eli)
-11. ✓ GNG comparison — different operating regimes documented (Eli)
-12. ✓ Active inference redesign — prediction-error steering, α sweep, qualified claim (Eli)
+9. ✓ CUDA runs at DIM=512, DIM=4096 — identical convergence signature ([engineer]) ([engineer] — in progress)
+10. ✓ CSI corpus real data — 99.4% alignment, all 33 divisions ([engineer])
+11. ✓ GNG comparison — different operating regimes documented ([engineer])
+12. ✓ Active inference redesign — prediction-error steering, α sweep, qualified claim ([engineer])
 
 ### Phase 4: Initial Packaging (COMPLETE — 2026-03-13, release deferred)
-13. ✓ README written from Jun's voice (Eli)
+13. ✓ README written from [director]'s voice ([engineer])
 14. Repo structure (src/tests/docs) — deferred to Phase 8
 15. Reproducible test suite — deferred to Phase 8
-16. License — research + limited commercial (Jun's decision)
+16. License — research + limited commercial ([director]'s decision)
 
-**BLOCKER for release**: Phase 5+6 must complete first. Jun's directive: not ready until foundational experiments are done.
+**BLOCKER for release**: Phase 5+6 must complete first. [director]'s directive: not ready until foundational experiments are done.
 
 ### Phase 5: Compression — Cut What's Unnecessary (COMPLETE — 2026-03-13)
-17. ✓ Gradient ablation — inert on general vectors, all 12/12 PASS (Eli team)
-18. ✓ Threshold self-derivation — autothresh beats baseline, 21 memories vs 359, mean sim +3% (Eli team)
-19. ✓ Canonical fold created: `u[i] = s[i] + alr*r[i] + memW*m[i]` + self-derived thresholds. 9/12 Tier 1-3 pass (3 marginal DIM=512/8192 reacquisition failures at noise floor <0.0003 — not meaningful regressions). (Eli team)
+17. ✓ Gradient ablation — inert on general vectors, all 12/12 PASS ([engineer] team)
+18. ✓ Threshold self-derivation — autothresh beats baseline, 21 memories vs 359, mean sim +3% ([engineer] team)
+19. ✓ Canonical fold created: `u[i] = s[i] + alr*r[i] + memW*m[i]` + self-derived thresholds. 9/12 Tier 1-3 pass (3 marginal DIM=512/8192 reacquisition failures at noise floor <0.0003 — not meaningful regressions). ([engineer] team)
 
 **BLOCKER for Phase 6**: Phase 5 determines the canonical fold that Phase 6 experiments run on. [UNBLOCKED]
 
 ### Phase 6: Foundation — The Generation and Reasoning Questions (COMPLETE — 2026-03-13)
-20. ✓ Autoregressive self-feeding — FIXED POINT. Fold cannot generate (structural). (Eli)
-21. ✓ Autoregression with perturbation — fold absorbs and dies. (Eli)
-22. ✓ Lateral composition (same input) — REDUNDANCY. (Eli)
-23. ✓ Lateral composition (different inputs) — INFORMATION TRANSFER (+8.5%). (Eli)
+20. ✓ Autoregressive self-feeding — FIXED POINT. Fold cannot generate (structural). ([engineer])
+21. ✓ Autoregression with perturbation — fold absorbs and dies. ([engineer])
+22. ✓ Lateral composition (same input) — REDUNDANCY. ([engineer])
+23. ✓ Lateral composition (different inputs) — INFORMATION TRANSFER (+8.5%). ([engineer])
 
-**DECISION GATE result**: Fold is a perceptual primitive. Generation requires structural change. Iterated per Jun's directive.
+**DECISION GATE result**: Fold is a perceptual primitive. Generation requires structural change. Iterated per [director]'s directive.
 
 ### Phase 6b: Breaking the Fixed Point (COMPLETE — 2026-03-13)
-29. ✓ Quadratic self-interaction — FAILED. Higher qW = faster convergence, not slower. (Eli)
-30. ✓ Tangent-space alpha instability — FAILED. u_perp = 0 exactly. Nothing to amplify. (Eli)
-31. ✓ RK autoregression — SUSTAINED DYNAMICS. Energy 0.067, 675× noise floor, 10,000 steps. (Eli)
-32. ✓ Fold with tanh — FAILED. Different fixed point, same class. Any monotone bounded activation fails. (Eli)
-33. ✓ RK perception test — 4/5 criteria. Discontinuous reacquisition, cell specialization emergent. (Eli)
-34. ✓ Compressed equation (fold+RK) — 5/5. Generates AND perceives. (Eli)
-35. ✓ CSI real-data — 7/33 division coverage at fixed n=8. (Eli)
-36. ✓ Dynamic spawning (mu-2sigma) — 20/33 coverage, generation survives disconnection. (Eli)
-37. ✓ Hard spawn threshold (cos<0.5) — WORSE: 13/33. 92 spawns → O(n²) coupling homogenization. (Eli)
-38. ✓ Sparse coupling (top-k=5) — 19/33 coverage (parity with all-to-all), generation 3.4× stronger (energy 0.116 vs 0.034). Top-k=5 adopted as canonical coupling. (Eli)
+29. ✓ Quadratic self-interaction — FAILED. Higher qW = faster convergence, not slower. ([engineer])
+30. ✓ Tangent-space alpha instability — FAILED. u_perp = 0 exactly. Nothing to amplify. ([engineer])
+31. ✓ RK autoregression — SUSTAINED DYNAMICS. Energy 0.067, 675× noise floor, 10,000 steps. ([engineer])
+32. ✓ Fold with tanh — FAILED. Different fixed point, same class. Any monotone bounded activation fails. ([engineer])
+33. ✓ RK perception test — 4/5 criteria. Discontinuous reacquisition, cell specialization emergent. ([engineer])
+34. ✓ Compressed equation (fold+RK) — 5/5. Generates AND perceives. ([engineer])
+35. ✓ CSI real-data — 7/33 division coverage at fixed n=8. ([engineer])
+36. ✓ Dynamic spawning (mu-2sigma) — 20/33 coverage, generation survives disconnection. ([engineer])
+37. ✓ Hard spawn threshold (cos<0.5) — WORSE: 13/33. 92 spawns → O(n²) coupling homogenization. ([engineer])
+38. ✓ Sparse coupling (top-k=5) — 19/33 coverage (parity with all-to-all), generation 3.4× stronger (energy 0.116 vs 0.034). Top-k=5 adopted as canonical coupling. ([engineer])
 
-39. ✓ Corpus density analysis — NOT data-limited. 13/14 missing divisions have 61 samples each (same as covered). Ceiling is semantic proximity: missing divisions too close to dominant attractors (div 28, 41) to trigger novelty-based spawning. (Eli)
-41. ✓ Cell splitting — 0 splits triggered. Input variance for winning cells never exceeds threshold. Splitting and spawning are orthogonal — neither generates signal for proximate divisions. (Eli)
-42. ✓ Centroid seeding (diagnostic) — 33/33 initial → 7/33 after convergence. **MAINTENANCE problem confirmed.** Even perfectly initialized cells collapse toward dominant attractors (div 28, 41) under coupling. 31/33 cells drifted from seed. Surviving 7 divisions match Step 38 exactly. Generation PASS (energy=0.034). (Eli)
+39. ✓ Corpus density analysis — NOT data-limited. 13/14 missing divisions have 61 samples each (same as covered). Ceiling is semantic proximity: missing divisions too close to dominant attractors (div 28, 41) to trigger novelty-based spawning. ([engineer])
+41. ✓ Cell splitting — 0 splits triggered. Input variance for winning cells never exceeds threshold. Splitting and spawning are orthogonal — neither generates signal for proximate divisions. ([engineer])
+42. ✓ Centroid seeding (diagnostic) — 33/33 initial → 7/33 after convergence. **MAINTENANCE problem confirmed.** Even perfectly initialized cells collapse toward dominant attractors (div 28, 41) under coupling. 31/33 cells drifted from seed. Surviving 7 divisions match Step 38 exactly. Generation PASS (energy=0.034). ([engineer])
 
-44. ✓ Coupling suppression + centroid seeding — 14/33 (doubled from 7/33). Coupling is significant but not sole cause. (Eli)
-45. ✓ Cold-start + coupling suppression — 21/33, gen=0.024. Coverage +2, generation −4.8×. Bad tradeoff. (Eli)
-46. ✓ Sparse perception (top-3 routing) — 7/33, gen=0.124. Coverage collapses, generation preserved. (Eli)
-47. ✓ Crowding-aware autonomy — 19/33, gen=0.097. No change (uniform crowding). (Eli)
+44. ✓ Coupling suppression + centroid seeding — 14/33 (doubled from 7/33). Coupling is significant but not sole cause. ([engineer])
+45. ✓ Cold-start + coupling suppression — 21/33, gen=0.024. Coverage +2, generation −4.8×. Bad tradeoff. ([engineer])
+46. ✓ Sparse perception (top-3 routing) — 7/33, gen=0.124. Coverage collapses, generation preserved. ([engineer])
+47. ✓ Crowding-aware autonomy — 19/33, gen=0.097. No change (uniform crowding). ([engineer])
 
 **Coverage/Generation Tradeoff (Steps 36-47, FUNDAMENTAL):** Six experiments confirm the tradeoff is architectural. The perception term `(1-a_i)*lr_i*(R-M_i)` broadcasts to all cells — this drives both coverage (cells align to meaningful inputs) AND collapse (dominant inputs pull proximate cells). Weakening perception improves coverage but kills generation. Preserving perception preserves generation but caps coverage at ~19-21/33.
 
@@ -243,7 +243,7 @@ Where Phi(M) = tanh(alpha*M + beta*M^2/k), a_i = autonomy (eigenform-based), lr_
 Coupling: top-k=5 nearest neighbors (by matrix cosine), not all-to-all.
 
 ### Phase 7: Multi-Domain Validation (IN PROGRESS — 2026-03-13)
-24. ✓ Sensor/ECG domain — synthetic ECG (4 rhythm classes, 673 vectors, d=128). 4→13 cells, 3/4 rhythm coverage (arrhythmia too proximate to NSR/brady — same coverage ceiling pattern). Generation PASS (energy 0.067, 3000 steps). Confirms architecture generalizes beyond text embeddings. (Eli)
+24. ✓ Sensor/ECG domain — synthetic ECG (4 rhythm classes, 673 vectors, d=128). 4→13 cells, 3/4 rhythm coverage (arrhythmia too proximate to NSR/brady — same coverage ceiling pattern). Generation PASS (energy 0.067, 3000 steps). Confirms architecture generalizes beyond text embeddings. ([engineer])
 25. Pending: Online k-means comparison on concept drift benchmark (Wren running)
 26. Multi-modal lateral composition — text + audio cross-modal structure
 27. Convergence envelope — parameter sensitivity bounds
@@ -251,39 +251,39 @@ Coupling: top-k=5 nearest neighbors (by matrix cosine), not all-to-all.
 **BLOCKER for Phase 8**: At least 2 additional real-data domains show meaningful results. [CSI = domain 1, ECG = domain 2. Blocker substantially met.]
 
 ### Phase 6c: Post-Compression Experiments
-40. ✓ ESN comparison on chaotic time series — complementary capability profiles. ESN: prediction. FluxCore: generation + online adaptation. (Eli)
+40. ✓ ESN comparison on chaotic time series — complementary capability profiles. ESN: prediction. FluxCore: generation + online adaptation. ([engineer])
 41-42. ✓ Coverage recovery attempts — see Phase 6b Steps 41-42. Cell splitting and centroid seeding both failed. Root cause: coupling + representation, not spawning.
-43. ✓ k-size experiment (k=4→k=10) — coverage WORSE (10/33 vs 19/33). Different dominant attractors (div 46, 22 instead of 28, 41), same collapse dynamic. Generation 4× stronger (0.457). **k-size hypothesis disproven** — coverage ceiling is coupling dynamics, not representational capacity. (Eli)
-44. ✓ Coupling suppression + centroid seeding — 14/33, gen=0.016. Coupling is ~half the collapse. (Eli)
-45. ✓ Cold-start + coupling suppression — 21/33, gen=0.024. Coverage +2, generation −4.8×. (Eli)
-46. ✓ Sparse perception (top-3 routing) — 7/33, gen=0.124. Hard cutoff → cells drift to meaningless eigenforms. (Eli)
-47. ✓ Crowding-aware autonomy — 19/33, gen=0.097. Uniform crowding → no selective effect. (Eli)
-48. ✓ Gaussian-weighted perception (σ×2.0=1.57) — 21/33, gen=0.063. New Pareto B: 2.6× better gen than Step 45 at same coverage. (Eli)
-49. ✓ Flipped coupling coefficient (a_i instead of 1-a_i) — 8/33, gen=0.083. Failed: autonomy ~0.86 during ingestion → flip made coupling stronger. (Eli)
-50. ✓ Dual-rep: winner codebook + winner matrix — 20/33, gen=0.047. Codebook bootstrap too slow (random init). (Eli)
-51. ✓ Dual-rep: all-cell codebook — 1/33, gen=0.095. Positive-only update collapses to corpus centroid. (Eli)
-52. ✓ Dual-rep: data-seeded codebook — 18/33, gen=0.189 (strongest generation). Coverage narrower but generation 63% above baseline. (Eli)
+43. ✓ k-size experiment (k=4→k=10) — coverage WORSE (10/33 vs 19/33). Different dominant attractors (div 46, 22 instead of 28, 41), same collapse dynamic. Generation 4× stronger (0.457). **k-size hypothesis disproven** — coverage ceiling is coupling dynamics, not representational capacity. ([engineer])
+44. ✓ Coupling suppression + centroid seeding — 14/33, gen=0.016. Coupling is ~half the collapse. ([engineer])
+45. ✓ Cold-start + coupling suppression — 21/33, gen=0.024. Coverage +2, generation −4.8×. ([engineer])
+46. ✓ Sparse perception (top-3 routing) — 7/33, gen=0.124. Hard cutoff → cells drift to meaningless eigenforms. ([engineer])
+47. ✓ Crowding-aware autonomy — 19/33, gen=0.097. Uniform crowding → no selective effect. ([engineer])
+48. ✓ Gaussian-weighted perception (σ×2.0=1.57) — 21/33, gen=0.063. New Pareto B: 2.6× better gen than Step 45 at same coverage. ([engineer])
+49. ✓ Flipped coupling coefficient (a_i instead of 1-a_i) — 8/33, gen=0.083. Failed: autonomy ~0.86 during ingestion → flip made coupling stronger. ([engineer])
+50. ✓ Dual-rep: winner codebook + winner matrix — 20/33, gen=0.047. Codebook bootstrap too slow (random init). ([engineer])
+51. ✓ Dual-rep: all-cell codebook — 1/33, gen=0.095. Positive-only update collapses to corpus centroid. ([engineer])
+52. ✓ Dual-rep: data-seeded codebook — 18/33, gen=0.189 (strongest generation). Coverage narrower but generation 63% above baseline. ([engineer])
 
-53. ✓ LVQ competitive codebook + uniform stride seeding — 20/33, gen=0.091. LVQ helps generation (2× Step 50) but not coverage. Missing divisions are absorption victims. (Eli)
-54. ✓ mu-3sigma spawn threshold (WRONG DIRECTION) — 7/33, 12 cells. Lower threshold = harder to trigger = fewer spawns. Confirmed spawn count is the lever. (Eli)
-55. ✓ Fold-faithful codebook in dual-rep (v16): fixed threshold=0.5, additive lr=0.015, merge cos>0.95. STOPPED — compute explosion (107 cells at step 400, projected 90+ min). Proved fold dynamics work but O(n^2) matrix coupling is the wrong unit. (Eli)
-56. ✓ **BREAKTHROUGH — Many-to-few architecture (v17)**: 33/33 coverage, energy=0.081, 25.2s runtime. Fold vector codebook (359 vectors, 0 merges) + fixed 8 RK matrix cells + many-to-one routing. Coverage ceiling BROKEN. (Eli)
-57. ✓ n_matrix=4 sweep: 33/33 coverage, energy=0.009 (COLLAPSED), 21s. Too few cells — extreme load imbalance (cell 3: 204/359), coupling too small. (Eli)
-58. ✓ n_matrix=16 sweep: 33/33 coverage, energy=0.052, 34s. Weaker than n=8 — perception diffused across too many cells. (Eli)
+53. ✓ LVQ competitive codebook + uniform stride seeding — 20/33, gen=0.091. LVQ helps generation (2× Step 50) but not coverage. Missing divisions are absorption victims. ([engineer])
+54. ✓ mu-3sigma spawn threshold (WRONG DIRECTION) — 7/33, 12 cells. Lower threshold = harder to trigger = fewer spawns. Confirmed spawn count is the lever. ([engineer])
+55. ✓ Fold-faithful codebook in dual-rep (v16): fixed threshold=0.5, additive lr=0.015, merge cos>0.95. STOPPED — compute explosion (107 cells at step 400, projected 90+ min). Proved fold dynamics work but O(n^2) matrix coupling is the wrong unit. ([engineer])
+56. ✓ **BREAKTHROUGH — Many-to-few architecture (v17)**: 33/33 coverage, energy=0.081, 25.2s runtime. Fold vector codebook (359 vectors, 0 merges) + fixed 8 RK matrix cells + many-to-one routing. Coverage ceiling BROKEN. ([engineer])
+57. ✓ n_matrix=4 sweep: 33/33 coverage, energy=0.009 (COLLAPSED), 21s. Too few cells — extreme load imbalance (cell 3: 204/359), coupling too small. ([engineer])
+58. ✓ n_matrix=16 sweep: 33/33 coverage, energy=0.052, 34s. Weaker than n=8 — perception diffused across too many cells. ([engineer])
 
 **n_matrix sweep conclusion (Steps 57-58):** Coverage fully decoupled from n_matrix (33/33 at {4, 8, 16}). Generation peaks at n_matrix=8. n=4 collapses (0.009), n=16 plateaus (0.052), n=8 rises (0.081). n_matrix=8 confirmed optimal.
 
-59. ✓ Phase 7b re-validation: concept drift with v17. Event-driven detection (instant spawn on first novel sample). Generation weak with sparse codebook (1 vector → 1 matrix cell trained). Confirms generation scales with input diversity. (Eli)
-60. ✓ Phase 7b re-validation: chaotic time series with v17. MG: 1 codebook vector, energy=0.013. Lorenz: 7 vectors, energy=0.050. Complexity tracking confirmed. Directional shift detection (simple→complex: instant, complex→simple: subsumed). 11.6s runtime. (Eli)
-61. ✓ Canonical implementation: fluxcore_manytofew.py — cleaned v17, full docstrings, frozen algorithm, removed sys.path hacks. (Eli)
-62. ✓ Test suite: tests/test_manytofew.py — 11/11 pass (5 unit, 4 regression, 2 benchmark). 32s total. (Eli)
-63. ✓ Standard benchmark: River CreditCard anomaly detection. AUROC=0.60 (matrix energy), 0.35 (novelty — inverted). Geometry mismatch: FluxCore optimized for cosine-separated embeddings (d=384+), not PCA-reduced tabular (d=30). 141 codebook vectors for 284K samples. (Eli)
-64. ✓ Labeled codebook extension: cb_labels, step(r, label), classify(r). Thin readout, fold dynamics untouched. (Eli)
-65. ✓ **Permuted-MNIST continual learning**: 56.7% AA, **0.0pp forgetting** (structural zero — accuracy matrix constant across all rows). 537 codebook vectors, 0 merges. Beats Fine-tune (52.5%) on forgetting by architecture. Accuracy gap vs EWC (95.3%)/SI (97.0%) is readout + embedding + data size limitation. (Eli)
-66. ✓ **Split-CIFAR-100 (frozen ResNet-18)**: 2.8% AA at spawn=0.5 (geometry mismatch). Threshold sweep (66b): 32.3% AA at spawn=0.95, matching EWC (~33%). Forgetting 12.5pp (additive drift). 48K codebook vectors. CALIBRATION issue, not fundamental. (Eli)
-67. ✓ **Step 67 Analysis + FRAMEWORK.md update** — honest comparison documented below. (Eli)
-68-70. SUPERSEDED — k-NN readout, self-calibrating spawn, frozen-on-maturity. CPU run killed after 10h (never flushed output). Direction superseded by GPU migration + Step 71 gradient experiments. Leo's directive: don't iterate on 68-70.
-71. ✓ **GPU migration + gradient update rule (Step 71)**. TorchCodebook (CUDA) created — same algorithm, 60% VRAM cap. Step 66b validated on GPU: all 5 thresholds match CPU exactly, 24.9s total (vs ~10h CPU). Step 71: bipolar +0.0pp, full_grad +1.2pp (32.3%→33.5%). Best config now above EWC (~33%). Forgetting unchanged. See results below. (Eli)
+59. ✓ Phase 7b re-validation: concept drift with v17. Event-driven detection (instant spawn on first novel sample). Generation weak with sparse codebook (1 vector → 1 matrix cell trained). Confirms generation scales with input diversity. ([engineer])
+60. ✓ Phase 7b re-validation: chaotic time series with v17. MG: 1 codebook vector, energy=0.013. Lorenz: 7 vectors, energy=0.050. Complexity tracking confirmed. Directional shift detection (simple→complex: instant, complex→simple: subsumed). 11.6s runtime. ([engineer])
+61. ✓ Canonical implementation: fluxcore_manytofew.py — cleaned v17, full docstrings, frozen algorithm, removed sys.path hacks. ([engineer])
+62. ✓ Test suite: tests/test_manytofew.py — 11/11 pass (5 unit, 4 regression, 2 benchmark). 32s total. ([engineer])
+63. ✓ Standard benchmark: River CreditCard anomaly detection. AUROC=0.60 (matrix energy), 0.35 (novelty — inverted). Geometry mismatch: FluxCore optimized for cosine-separated embeddings (d=384+), not PCA-reduced tabular (d=30). 141 codebook vectors for 284K samples. ([engineer])
+64. ✓ Labeled codebook extension: cb_labels, step(r, label), classify(r). Thin readout, fold dynamics untouched. ([engineer])
+65. ✓ **Permuted-MNIST continual learning**: 56.7% AA, **0.0pp forgetting** (structural zero — accuracy matrix constant across all rows). 537 codebook vectors, 0 merges. Beats Fine-tune (52.5%) on forgetting by architecture. Accuracy gap vs EWC (95.3%)/SI (97.0%) is readout + embedding + data size limitation. ([engineer])
+66. ✓ **Split-CIFAR-100 (frozen ResNet-18)**: 2.8% AA at spawn=0.5 (geometry mismatch). Threshold sweep (66b): 32.3% AA at spawn=0.95, matching EWC (~33%). Forgetting 12.5pp (additive drift). 48K codebook vectors. CALIBRATION issue, not fundamental. ([engineer])
+67. ✓ **Step 67 Analysis + FRAMEWORK.md update** — honest comparison documented below. ([engineer])
+68-70. SUPERSEDED — k-NN readout, self-calibrating spawn, frozen-on-maturity. CPU run killed after 10h (never flushed output). Direction superseded by GPU migration + Step 71 gradient experiments. [researcher]'s directive: don't iterate on 68-70.
+71. ✓ **GPU migration + gradient update rule (Step 71)**. TorchCodebook (CUDA) created — same algorithm, 60% VRAM cap. Step 66b validated on GPU: all 5 thresholds match CPU exactly, 24.9s total (vs ~10h CPU). Step 71: bipolar +0.0pp, full_grad +1.2pp (32.3%→33.5%). Best config now above EWC (~33%). Forgetting unchanged. See results below. ([engineer])
 
 **Continual Learning Summary (Steps 65-66b):**
 - P-MNIST (d=384, random projection): 56.7% AA, 0.0pp forgetting. 537 vectors.
@@ -314,7 +314,7 @@ The autothresh fold (mu-2sigma) ALSO gets only 21/33 with 21 memories. Hand-tune
 **Coverage ceiling resolved.** Phase 6c coverage recovery is COMPLETE.
 
 ### Phase 7b: Architecture-Fair Benchmark (COMPLETE — re-validated with v17, 2026-03-13)
-Condition added by Jun: the compressed equation must be tested against an objective benchmark that does NOT inherently favor transformer architectures. Most benchmarks and training data assume sequential token prediction — testing against those conflates architectural mismatch with capability limitations.
+Condition added by [director]: the compressed equation must be tested against an objective benchmark that does NOT inherently favor transformer architectures. Most benchmarks and training data assume sequential token prediction — testing against those conflates architectural mismatch with capability limitations.
 
 **Requirements:**
 - Benchmark must test capabilities the equation actually has: pattern recognition, adaptation, memory, generation, one-shot learning
@@ -365,8 +365,8 @@ Condition added by Jun: the compressed equation must be tested against an object
 28. Canonical implementation — minimal, clean, every line justified
 29. Comprehensive automated test suite (Tier 1-4)
 30. Updated README + FRAMEWORK.md with all results
-31. Research paper draft (discuss with Jun)
-32. License, contribution guide, Jun's final review
+31. Research paper draft (discuss with [director])
+32. License, contribution guide, [director]'s final review
 
 ---
 
@@ -460,14 +460,14 @@ These are hard constraints. Violation means stop and re-read this document.
 4. **Fix before extend.** Do not add new capabilities until existing bugs are resolved. *(Hierarchy fixed 2026-03-13. Active inference redesign pending — Step 12.)*
 5. **One variable per experiment.** When testing a change, change ONE thing. Measure. Compare to baseline. Then decide.
 6. **Real data or it doesn't count.** Synthetic orthogonal vectors prove the mechanism works in ideal conditions. Claims about real-world utility require real-world data.
-7. **Jun's standard applies.** "Get it closer to its true self." If a test passes by accident or a claim is technically true but misleading, it fails Jun's standard.
+7. **[director]'s standard applies.** "Get it closer to its true self." If a test passes by accident or a claim is technically true but misleading, it fails [director]'s standard.
 8. **Call things what they are.** If the mechanism is velocity damping, call it velocity damping, not "active inference." If the hierarchy tracks velocity direction, call it that, not "rule extraction." Rename only when the mechanism actually changes to match the name.
 
 ---
 
 ## Phase 8b: Eigenform Substrate Search (Steps 72-96, 2026-03-14)
 
-*Jun's directive: discover the atomic substrate. Not stitching known techniques — find something genuinely new.*
+*[director]'s directive: discover the atomic substrate. Not stitching known techniques — find something genuinely new.*
 
 ### Motivation
 

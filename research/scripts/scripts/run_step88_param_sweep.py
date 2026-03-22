@@ -2,7 +2,7 @@
 """
 Step 88 -- Parameter sweep for denser eigenform landscape.
 
-Leo directive (mail 1210):
+[researcher] directive (mail 1210):
 Part 1: Sweep 16 (alpha, beta) combinations.
   - 1000 random 4x4 matrices, 2000 steps, dt=0.03
   - Report: convergence rate, distinct EFs, mean frob
@@ -19,7 +19,7 @@ K = 4
 DT = 0.03
 MAX_NORM = 3.0
 CONVERGE_TOL = 0.001
-LANDSCAPE_STEPS = 2000   # per Leo spec
+LANDSCAPE_STEPS = 2000   # per [researcher] spec
 LANDSCAPE_N = 1000       # matrices to test
 COMPOSE_STEPS = 2000
 BASIN_COS = 0.99
@@ -187,7 +187,7 @@ def main():
         print(f"    alpha={alpha}, beta={beta}: conv={conv_rate*100:.1f}%, n_EFs={n_efs}")
     print()
 
-    # Use top 3 by raw convergence rate for Part 2 (per Leo's spec)
+    # Use top 3 by raw convergence rate for Part 2 (per [researcher]'s spec)
     top3_for_part2 = top3_conv
 
     # ── Part 2: Composition tables for top 3 ──────────────────────────────────

@@ -2,7 +2,7 @@
 """
 Step 78 — Map eigenform landscape of Phi(M) = tanh(alpha*M + beta*M^2/k).
 
-Leo directive (mail 1188): understand basin structure before changing approach.
+[researcher] directive (mail 1188): understand basin structure before changing approach.
 10,000 random 4x4 matrices -> converge -> cluster fixed points.
 Pure math, no dataset.
 """

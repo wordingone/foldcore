@@ -172,10 +172,10 @@ The search has persistent state (git repo, constraint map, skill definitions) an
 | # | Element | Class | Evidence |
 |---|---------|-------|----------|
 | 1 | 4 modes (experiment/compress/birth/explore) | **U** | Designer-chosen. The search doesn't add or remove modes. |
-| 2 | Mode ordering (exp → comp → birth → explore) | **I-prov** | Jun caught birth-before-compress (this session: eigenform birthed from stale data). Information flow dependencies constrain ordering. Alternative orderings untested. |
+| 2 | Mode ordering (exp → comp → birth → explore) | **I-prov** | Internal review caught birth-before-compress (this session: eigenform birthed from stale data). Information flow dependencies constrain ordering. Alternative orderings untested. |
 | 3 | Hart debate protocol | **I-prov** | Pre-Hart: 8-stage inflation survived internal review. Post-Hart: 3 inflation points caught in single session (commit eb6b0d7). Simpler alternatives (checklist) untested. |
 | 4 | Constraint classification format (U/P/S/I/E) | **U** | Designer-chosen. The search doesn't modify how it classifies. |
-| 5 | Constitution (R1-R6) | **M-ext** | R1 clarification modified (Hart debate, 2026-03-21). But modification was externally triggered (Jun directed compression). Mechanism internal, activation external. |
+| 5 | Constitution (R1-R6) | **M-ext** | R1 clarification modified (Hart debate, 2026-03-21). But modification was externally triggered (directed compression). Mechanism internal, activation external. |
 | 6 | Constraint map entries | **M** | Modified every compression iteration without per-entry external approval. U27 created and killed in one session. Genuinely self-triggered. |
 | 7 | Skill definitions | **narrow U** | Content modified (compress now targets CONSTITUTION). Structure frozen (read context → act → commit). |
 | 8 | Paper format and sections | **U** | Fixed academic structure. |
@@ -183,8 +183,8 @@ The search has persistent state (git repo, constraint map, skill definitions) an
 **Score: 1 M, 1 M-ext, 2 I-prov, 4 U.** The search modifies DATA (constraint map) but not OPERATIONS (skills, modes, classification format). The LLM (interpreter) is a categorically different frozen frame than substrate operations — it's an architectural constraint (model weights), not a design choice (cosine similarity). The search's R3 situation is WORSE than the substrate's.
 
 **Testable prediction (eigenform analogy):** The eigenform series (Steps 620-629) showed self-observation identifies structure but cannot navigate to new territory (introspection ≠ foresight). If the analogy holds, this self-examination should identify frozen elements but NOT produce operational self-modification. Three outcomes in the next 5 sessions:
-1. Leo independently modifies a skill definition BECAUSE of this audit (not because Jun directs it) → analogy is productive, eigenform prediction falsified
-2. Jun reads audit → directs Leo to modify → externally triggered, same as R1 modification → proves nothing about self-modification
+1. The researcher independently modifies a skill definition BECAUSE of this audit (not because the team directs it) → analogy is productive, eigenform prediction falsified
+2. The team reads audit → directs modification → externally triggered, same as R1 modification → proves nothing about self-modification
 3. No operational modification occurs → eigenform inertness confirmed for the search
 
 **Structural analogy (not identity):** The search and the substrate share a structural position: frozen interpreter + modifiable data. Both face the same question: can everything EXCEPT the interpreter become self-modifiable? But the interpreter scales differ by orders of magnitude (22 lines vs ~200B parameters), and the modification mechanisms are categorically different (transparent program transformation vs opaque prompt engineering). "Same shape, different substance" — useful for generating hypotheses, not for importing conclusions.

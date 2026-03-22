@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Step 96 -- Temporal order discrimination.
-Leo mail 1229. k=8, spectral Phi, Formula C.
+[researcher] mail 1229. k=8, spectral Phi, Formula C.
 
 Task: sequences of length 5-10 from {A,B,C,D}.
 Class 0: A appears before B (first A before first B).

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Step 94 -- Scale the alphabet: 8 EFs, test discrimination.
-Leo mail 1225. k=8, spectral Phi, Formula C.
+[researcher] mail 1225. k=8, spectral Phi, Formula C.
 
 1. 8^3 = 512 length-3 sequences — how many distinct?
 2. 56 ordered pairs (8x7, no self) — how many distinct?

@@ -2,7 +2,7 @@
 """
 Step 86 -- Sequence encoding test.
 
-Leo directive (mail 1206): can eigenform composition encode ORDER?
+[researcher] directive (mail 1206): can eigenform composition encode ORDER?
 Vectors can't distinguish [A,B] from [B,A]. Can composition?
 
 Part 1: 6 EFs from different families, 120 ordered permutations P(6,3)
@@ -24,7 +24,7 @@ DT = 0.03
 MAX_NORM = 3.0
 CONVERGE_TOL = 0.001
 FIND_STEPS = 1000
-COMPOSE_STEPS = 1000   # keep fast per Leo "under 5 min"
+COMPOSE_STEPS = 1000   # keep fast per [researcher] "under 5 min"
 KNOWN_COS = 0.95
 BASIN_COS = 0.99
 FAMILY_COS = 0.95

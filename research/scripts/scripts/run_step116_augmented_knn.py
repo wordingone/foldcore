@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Step 116 -- Augmentation-as-Learning KNN, CIFAR-100 raw pixels.
-Leo mail 1277.
+[researcher] mail 1277.
 
 Store augmented orbit instead of single raw sample.
 n_augs={2,4,8} → 3x/5x/9x storage. Batched train, batched eval.

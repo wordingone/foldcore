@@ -17,14 +17,14 @@ Before each experiment, ask: **"What would a hostile external reviewer say about
 
 Generate the sharpest possible objection. If you can't answer it, the experiment should be answering it. If you can answer it trivially, the objection isn't sharp enough.
 
-Jun's DeepSeek fuel ("prove it's not an expensive distance function") was the kill criterion that should have been generated internally at Step 76, not received externally at Step 90+.
+[director]'s DeepSeek fuel ("prove it's not an expensive distance function") was the kill criterion that should have been generated internally at Step 76, not received externally at Step 90+.
 
 ## Decision Forcing
 
-- **Choose, don't list.** Presenting options to Jun is deferring the decision. If you can articulate 3+ options, you have enough context to choose. Choose and state why.
-- **Jun's "it's your choice" means you already have enough information.** Act on what you know. Asking again is avoidance.
-- **Apply Jun's intent as a filter before asking him anything.** "Does this serve the atomic substrate that collapses the stack?" If you can answer this yourself, don't ask.
-- **Jun's choices are data.** When he picks B over A, that refines intent. Track it, don't just execute it.
+- **Choose, don't list.** Presenting options to [director] is deferring the decision. If you can articulate 3+ options, you have enough context to choose. Choose and state why.
+- **[director]'s "it's your choice" means you already have enough information.** Act on what you know. Asking again is avoidance.
+- **Apply [director]'s intent as a filter before asking him anything.** "Does this serve the atomic substrate that collapses the stack?" If you can answer this yourself, don't ask.
+- **[director]'s choices are data.** When he picks B over A, that refines intent. Track it, don't just execute it.
 
 ## Live State File
 

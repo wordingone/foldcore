@@ -2,7 +2,7 @@
 """
 Step 289 -- Feature discovery on top of thermometer encoding for a%b.
 
-Leo mail 1312. Does LOO-scored random feature discovery, applied on top of
+[researcher] mail 1312. Does LOO-scored random feature discovery, applied on top of
 thermometer encoding (best from Step 286: 41.8% LOO), close the gap to 75%+?
 
 Hypothesis: probably NOT -- the modular function is discontinuous, and random

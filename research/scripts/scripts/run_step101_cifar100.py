@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Step 101 -- Spawn-Only Codebook (lr=0) on CIFAR-100.
-Leo mail 1241. Hypothesis: competitive updates cause forgetting. Fix: no updates.
+[researcher] mail 1241. Hypothesis: competitive updates cause forgetting. Fix: no updates.
 
 Codebook grows by spawning only -- vectors never modified after insertion.
 Structural guarantee: zero forgetting by construction.

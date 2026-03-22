@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Step 100 -- Top-K Class Vote on CIFAR-100.
-Leo mail 1237. Push harder: does top-k generalize beyond P-MNIST?
+[researcher] mail 1237. Push harder: does top-k generalize beyond P-MNIST?
 
 Split-CIFAR-100: 10 tasks, 10 classes each.
 ResNet-18 features (same as Step 71 baseline, 33.5% AA fold).

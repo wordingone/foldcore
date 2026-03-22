@@ -16,3 +16,6 @@ train_config.json
 *.npy
 analysis_results.csv
 wave_output.txt
+
+# Claude Code config (identity/operational, not research)
+.claude/

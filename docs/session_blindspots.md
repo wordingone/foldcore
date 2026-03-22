@@ -61,7 +61,7 @@ Entry 046 found tau=0.2 had d=+1.202 at 5 seeds (p=0.007). Looked significant. A
 
 **Session 16 closure (Entry 054):** Adaptive delta Phase 2 tested whether a Principle-II-compliant mechanism (state-output divergence signal) can discover delta=1.0. Result: DECISIVE FAILURE. Both adaptive conditions converge to ~0.16 regardless of initialization (started at 0.35 or 1.0). The divergence signal is an anti-signal — it drives delta toward a stable wrong attractor. Adaptive delta performs significantly worse than fixed delta=1.0 (d=-2.4, p=0.0000).
 
-**Characterization result (Jun, Session 16):** Stage 4 is NOT vacuously passed. Delta IS binding. The Living Seed is a **memoryless signal processor** — pure state replacement is architecturally optimal and is not discoverable by self-generated adaptation.
+**Characterization result ([director], Session 16):** Stage 4 is NOT vacuously passed. Delta IS binding. The Living Seed is a **memoryless signal processor** — pure state replacement is architecturally optimal and is not discoverable by self-generated adaptation.
 
 **Canonical delta updated to 1.0 in `src/the_living_seed.py` (Session 16).**
 

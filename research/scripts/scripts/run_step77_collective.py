@@ -2,7 +2,7 @@
 """
 Step 77 — Collective classification test.
 
-Leo directive (mail 1183): does coupling between elements add value?
+[researcher] directive (mail 1183): does coupling between elements add value?
 System A: EigenFold + coupling (collective inference)
 System B: Vector cosine baseline (from Step 76)
 System C: EigenFold no coupling (ablation, same as Step 76 System A)

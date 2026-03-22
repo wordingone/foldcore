@@ -161,7 +161,7 @@ Until a substrate passes a real benchmark, structural "passes" are claims, not c
 
 *2026-03-17. The constraint map (U1-U22) was run against SelfRef's 10 U elements. For each, every alternative was enumerated and tested against specific constraints. If all alternatives are killed, the element is not a choice — it's forced. Reclassify U → I.*
 
-*This section is THEORETICAL. Each reclassification requires empirical confirmation: substitute the alternative and confirm navigation breaks on LS20. Runs 0-5 are specified, sent to Eli for execution.*
+*This section is THEORETICAL. Each reclassification requires empirical confirmation: substitute the alternative and confirm navigation breaks on LS20. Runs 0-5 are specified, sent for execution.*
 
 ### Method
 
@@ -329,7 +329,7 @@ The theoretical constraint-killing logic (L1 killed by U7, growth forced by U22,
 
 ### Round C: process_novelty() baseline — PENDING
 
-6 runs replacing each frozen hyperparameter in process_novelty() with a V-derived approximation. This is the experiment that actually tests whether the feasible region is empty. Sent to Eli, awaiting results.
+6 runs replacing each frozen hyperparameter in process_novelty() with a V-derived approximation. This is the experiment that actually tests whether the feasible region is empty. Sent for execution, awaiting results.
 
 ### Updated Status of Theoretical Reclassifications
 
@@ -344,13 +344,13 @@ The theoretical constraint-killing logic (L1 killed by U7, growth forced by U22,
 
 ### Round C: Step 417 Constraint Validation — NEVER COMPLETED
 
-Script: `experiments/run_step417_constraint_validation.py` (7 variants of process_novelty() with Jun's incremental Gram optimization). Script exists but results never recorded in RESEARCH_STATE.md or returned to R3_AUDIT.md. **Status: LOST or never run.**
+Script: `experiments/run_step417_constraint_validation.py` (7 variants of process_novelty() with incremental Gram optimization). Script exists but results never recorded in RESEARCH_STATE.md or returned to R3_AUDIT.md. **Status: LOST or never run.**
 
 **This is the decisive test.** Rounds A-B proved MinimalLVQ and SelfRef don't navigate. Round C tests whether process_novelty()'s frozen hyperparameters can be replaced with V-derived approximations. If all 7 variants fail → the frozen frame is genuinely irreducible. If some navigate → specific U elements are reclassifiable to I.
 
-**Blocker (2026-03-21):** process_novelty() is a codebook substrate (cosine similarity, attract update, LVQ dynamics). The codebook ban (Jun, 2026-03-18) may prevent running this. However, the R3 audit is ABOUT the codebook — it characterizes the frozen frame of the substrate that actually navigated. Running Round C doesn't violate the ban's intent (no new codebook experiments) because it tests whether existing frozen elements are forced, not whether the codebook can be extended.
+**Blocker (2026-03-21):** process_novelty() is a codebook substrate (cosine similarity, attract update, LVQ dynamics). The codebook ban (2026-03-18) may prevent running this. However, the R3 audit is ABOUT the codebook — it characterizes the frozen frame of the substrate that actually navigated. Running Round C doesn't violate the ban's intent (no new codebook experiments) because it tests whether existing frozen elements are forced, not whether the codebook can be extended.
 
-**Critical reframing (Jun):** Step 353 found Level 1 through stochastic coverage at ~26K steps. 63 experiments after it tried to make navigation purposeful. All failed or degraded. The measurement is STEP COUNT to Level 1, not binary pass/fail. Variant < 26K = added directional signal. Variant = 26K = neutral. Variant > 26K = degraded.
+**Critical reframing:** Step 353 found Level 1 through stochastic coverage at ~26K steps. 63 experiments after it tried to make navigation purposeful. All failed or degraded. The measurement is STEP COUNT to Level 1, not binary pass/fail. Variant < 26K = added directional signal. Variant = 26K = neutral. Variant > 26K = degraded.
 
 ---
 
@@ -410,7 +410,7 @@ Three critical corrections during this session, each sharpening the analysis:
 
 1. **Wrong baseline (SelfRef → process_novelty()):** SelfRef doesn't navigate. process_novelty() does. The substrates share LVQ family but differ in argmin/labels/centering/top-K.
 
-2. **Wrong understanding of process_novelty():** Initially thought it used fixed hyperparameters (spawn_thresh=0.95, lr=0.015). Eli's code review revealed it uses V-derived threshold (Gram median) and 1-sim adaptive lr — same as SelfRef. The difference is argmin class scoring, labels, centering, top-K, seeding.
+2. **Wrong understanding of process_novelty():** Initially thought it used fixed hyperparameters (spawn_thresh=0.95, lr=0.015). Code review revealed it uses V-derived threshold (Gram median) and 1-sim adaptive lr — same as SelfRef. The difference is argmin class scoring, labels, centering, top-K, seeding.
 
 3. **Wrong location of frozen frame:** R3 audit counted substrate elements. The 300x speedup lives in the encoding, not the substrate. Step 414 proved encoding elements are discoverable through interaction. The frozen frame floor is the meta-protocol, not any individual element.
 

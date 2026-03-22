@@ -8,7 +8,7 @@ converge to the true GCD? WITHOUT the substrate being told the algorithm.
 
 This is the honest emergent decomposition test.
 
-Leo mail 1302.
+[researcher] mail 1302.
 """
 
 import numpy as np

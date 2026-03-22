@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Step 119 -- Constitutional audit, ResNet-18 features, CIFAR-100, 10 tasks.
-Leo mail 1284.
+[researcher] mail 1284.
 
 Test A: Always-spawn k=5 (baseline)
 Test B: Self-supervised eval (S1 reconfirmation, label=None during eval)

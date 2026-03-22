@@ -2,7 +2,7 @@
 """
 Step 89 -- Chaining + sequence encoding at alpha=1.1, beta=0.5.
 
-Leo directive (mail 1212): decisive test of eigenform algebra as sequence encoder.
+[researcher] directive (mail 1212): decisive test of eigenform algebra as sequence encoder.
 
 Part 1: Length-4 chains (24 permutations, same 10 EFs as Step 88)
 Part 2: 3^3=27 sequences from 3 non-commutative EFs

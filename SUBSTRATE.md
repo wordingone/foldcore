@@ -2,7 +2,7 @@
 
 *Found through experiments across 4 prior substrates. Honest about what works and what doesn't.*
 
-> **HISTORICAL — Phase 1 only.** This document describes the LVQ/codebook substrate from Phase 1 (416 experiments). The codebook mechanism is BANNED as of 2026-03-18 (Jun's directive). Phase 2 uses LSH graph, L2 k-means, and Recode substrates. The "stage progression" below was superseded by R1-R6 simultaneous rules. Stage passes are self-assessed and should not be treated as externally validated. See [CONSTITUTION.md](CONSTITUTION.md) for the current framework and [CONSTRAINTS.md](CONSTRAINTS.md) for the 612+ experiment constraint map.
+> **HISTORICAL — Phase 1 only.** This document describes the LVQ/codebook substrate from Phase 1 (416 experiments). The codebook mechanism is BANNED as of 2026-03-18 (team directive). Phase 2 uses LSH graph, L2 k-means, and Recode substrates. The "stage progression" below was superseded by R1-R6 simultaneous rules. Stage passes are self-assessed and should not be treated as externally validated. See [CONSTITUTION.md](CONSTITUTION.md) for the current framework and [CONSTRAINTS.md](CONSTRAINTS.md) for the 612+ experiment constraint map.
 
 ## Architecture
 

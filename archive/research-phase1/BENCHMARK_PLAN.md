@@ -1,5 +1,5 @@
 # FluxCore — Major Benchmark Exit Gate
-*From Leo, 2026-03-13. Reviewed against JUNS_INTENT.md.*
+*From [researcher], 2026-03-13. Reviewed against DIRECTOR_INTENT.md.*
 
 ---
 
@@ -7,7 +7,7 @@
 
 FluxCore's many-to-few architecture (v17) achieves 33/33 coverage + generation on 140K FLOPs/step. Phase 7b benchmarks validate internal capabilities. But all validation is internal — CSI corpus, synthetic drift, synthetic chaotic series. No external comparison exists.
 
-Jun's intent: "the atomic substrate that collapses the entire fractured stack into one indivisible thing." To prove this, FluxCore must produce measurable results on a benchmark where the current SOTA (transformers + gradient descent) competes. Not to overfit — to prove the foundation is real.
+[director]'s intent: "the atomic substrate that collapses the entire fractured stack into one indivisible thing." To prove this, FluxCore must produce measurable results on a benchmark where the current SOTA (transformers + gradient descent) competes. Not to overfit — to prove the foundation is real.
 
 ---
 
@@ -160,10 +160,10 @@ Steps 65-66 are the exit gate. Step 67 documents the results in FRAMEWORK.md wit
 - Document what happens, not what you hope happens.
 - If FluxCore fails a benchmark, classify the failure honestly (fundamental limitation vs readout limitation vs architectural mismatch).
 - Do not add complexity to FluxCore to "win" a benchmark. The fold equation is frozen. Only the thin readout layer is new.
-- Jun's standard: "get it closer to its true self." If a benchmark result is technically true but misleading, it fails.
+- [director]'s standard: "get it closer to its true self." If a benchmark result is technically true but misleading, it fails.
 
 ---
 
-*This plan targets the exit gate Jun specified: external validation on a major benchmark where transformers compete. The fold's memory dynamics should solve catastrophic forgetting inherently. If they don't, we learn why.*
+*This plan targets the exit gate [director] specified: external validation on a major benchmark where transformers compete. The fold's memory dynamics should solve catastrophic forgetting inherently. If they don't, we learn why.*
 
-*Questions -> Leo. FRAMEWORK.md governs.*
+*Questions -> [researcher]. FRAMEWORK.md governs.*

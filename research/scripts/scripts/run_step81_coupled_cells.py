@@ -2,7 +2,7 @@
 """
 Step 81 -- Coupled RK cells, true eigenform init.
 
-Leo directive (mail 1196): test whether COUPLING between true eigenforms
+[researcher] directive (mail 1196): test whether COUPLING between true eigenforms
 provides emergent classification that individual eigenforms can't.
 
 Setup: 9 cells (3 per class), each a distinct true eigenform.

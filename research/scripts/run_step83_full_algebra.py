@@ -2,7 +2,7 @@
 """
 Step 83 -- Full composition algebra + generators.
 
-Leo directive (mail 1200): map the full eigenform algebra.
+[researcher] directive (mail 1200): map the full eigenform algebra.
 
 Part 1: 31x31 composition table. Track novel eigenforms (cos < 0.95 to known = novel).
 Part 2: Generator closure — start with EF_0, compose until no new EFs appear.
@@ -20,7 +20,7 @@ MAX_NORM = 3.0
 CONVERGE_TOL = 0.001
 FIND_STEPS = 1000     # for finding eigenforms (k=4 needs ~1000 steps)
 COMPOSE_STEPS = 1000  # for composition convergence
-KNOWN_COS = 0.95      # cosine threshold to call a result "known" (Leo: 0.95)
+KNOWN_COS = 0.95      # cosine threshold to call a result "known" ([researcher]: 0.95)
 BASIN_COS = 0.99      # same-basin for finding distinct EFs
 
 N_TARGET_EFS = 31

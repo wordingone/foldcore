@@ -46,7 +46,7 @@
       "Stage 7 exit criterion requires outperforming the unmodified version on NOVEL inputs, not just training tasks. This is the same overfitting trap that Stage 3 amendment required addressing.",
       "The hypernetwork H adds frozen frame elements (H's own architecture). Amendment 1 applies: if H can be made adaptive without performance difference, it may be vacuously passed. But this is a Stage 8 concern, not Stage 7."
     ],
-    "recommendation": "Proceed with ANIMA substrate. Amendment 2 does not block stage progression. Stage 1 prototype should confirm ground truth compliance first (MI gap > 0 test, as assigned to Eli). Stage 7 path is validatable but not yet implemented."
+    "recommendation": "Proceed with ANIMA substrate. Amendment 2 does not block stage progression. Stage 1 prototype should confirm ground truth compliance first (MI gap > 0 test, as assigned to [engineer]). Stage 7 path is validatable but not yet implemented."
   },
   "constraints_implied": [
     "ANIMA Stage 7 requires hypernetwork H within I generating I's own update weights — do not attempt Stage 7 without this mechanism",

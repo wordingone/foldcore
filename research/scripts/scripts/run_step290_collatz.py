@@ -2,7 +2,7 @@
 """
 Step 290 -- Can the substrate discover the Collatz step from I/O?
 
-Leo mail 1308/1314. HARD TEST: the Collatz step has TWO branches:
+[researcher] mail 1308/1314. HARD TEST: the Collatz step has TWO branches:
   n even: n/2
   n odd:  3n+1
 

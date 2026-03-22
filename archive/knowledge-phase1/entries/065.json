@@ -15,7 +15,7 @@
   "content": {
     "purpose": "Meta-cognitive review of 19 sessions, 48 constraints, and 63 knowledge entries. Identify recurring patterns and extract meta-lessons for forward planning.",
     "methodology": {
-      "protocol": "Full roster review: Rune (constraint taxonomy), Mira (7+2 mapping), Jude (KB consistency), Eli (compile.py fix), Tess (baseline validation), Sage (Stage 3 plan)",
+      "protocol": "Full roster review: Rune (constraint taxonomy), Mira (7+2 mapping), Jude (KB consistency), [engineer] (compile.py fix), Tess (baseline validation), Sage (Stage 3 plan)",
       "inputs": "48 constraints, 63 entries, Han 7+2 Framework paper"
     },
     "meta_lessons": {

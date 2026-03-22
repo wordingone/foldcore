@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Step 104 -- Accumulated Outer Product substrate. P-MNIST full 10-task.
-Leo mail 1249.
+[researcher] mail 1249.
 
 Simplest possible substrate: one d×C matrix.
 No codebook. No spawning. No dynamics.

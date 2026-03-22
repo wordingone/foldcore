@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Step 112 -- Retrieval-Driven Projection. P-MNIST 10-task, raw pixels.
-Leo mail 1268.
+[researcher] mail 1268.
 
 Learn a d×d projection W from retrieval patterns. Same-class neighbors:
 suppress difference dimensions (W -= outer(diff,diff)/norm²).
@@ -171,7 +171,7 @@ def run_proj_lr(proj_lr, tasks_train, tasks_test, perms, X_te_all, y_te_all):
         for i in range(len(y_tr)):
             r_raw = F.normalize(R_tr[i], dim=0)
             label = int(y_tr[i])
-            # Update W from retrieval pattern (before storing, consistent with Leo spec)
+            # Update W from retrieval pattern (before storing, consistent with [researcher] spec)
             if proj_lr > 0.0:
                 rp.update_W(r_raw, label)
             rp.store(r_raw, label)

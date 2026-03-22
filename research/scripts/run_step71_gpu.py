@@ -170,7 +170,7 @@ def run(splits, mode, label):
 def main():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     if device.type == 'cuda':
-        torch.cuda.set_per_process_memory_fraction(0.6)  # cap at 60% VRAM, leave room for Leo
+        torch.cuda.set_per_process_memory_fraction(0.6)  # cap at 60% VRAM, leave room for [researcher]
     print('=' * 70)
     print('  Step 71 (GPU) -- Gradient-Derived Update Rule')
     print('  Split-CIFAR-100, spawn=0.95, ResNet-18 features')

@@ -6,7 +6,7 @@ Protocol (same as original Phase 7b, adapted for v17):
 - Signal 1: Mackey-Glass (tau=17): 2000 steps ingestion + 2000 gen
 - Signal 2: Lorenz-63: same protocol
 - Shift detection: feed alternate signal after settling, report first spawn event
-- d=64 (Leo's spec)
+- d=64 ([researcher]'s spec)
 
 Key questions:
 - How many codebook vectors per attractor?

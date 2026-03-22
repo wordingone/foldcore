@@ -59,7 +59,7 @@
 
 ## The Constitutional Flaw
 
-Jun's concern is well-founded. The constitution's vacuous passage mechanism (Amendment 1) was designed for stages where the frozen element is non-binding. It works correctly there. But it creates a path where a substrate-limited architecture can accumulate vacuous passages — Stage 3 (done), Stage 4 (proposed), Stage 5 (likely), Stage 6 (possible) — without ever hitting the Stage 7 wall until it's too late to course-correct.
+[director]'s concern is well-founded. The constitution's vacuous passage mechanism (Amendment 1) was designed for stages where the frozen element is non-binding. It works correctly there. But it creates a path where a substrate-limited architecture can accumulate vacuous passages — Stage 3 (done), Stage 4 (proposed), Stage 5 (likely), Stage 6 (possible) — without ever hitting the Stage 7 wall until it's too late to course-correct.
 
 The flaw: **the constitution has no early substrate ceiling test.** It was designed to catch methodological errors (skipping stages without validation), not architectural errors (the substrate cannot satisfy later stages regardless of methodology).
 
