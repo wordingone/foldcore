@@ -235,7 +235,13 @@ Step 663: Graph + random selection. 2/20 (vs pure random 4/20). GRAPH HURTS.
   Loses 4 seeds pure random reaches, gains 2. Net negative. Graph is not
   neutral infrastructure — it reshapes exploration paths, sometimes destructively.
 
-  Remaining: Steps 664-671 (POMDP pivot)
+Step 664: Outcome variability per cell. POMDP IS OPAQUE — bimodally.
+  Fast seeds (s3,s4,s6): exit cell entropy ~2.0, top 1%. Hash resolves hidden states.
+  L1 in <1000 steps. Slow seeds (s8,s9): exit cell entropy = 0.0. Hash conflates ALL
+  hidden states. L1 at 22K-24K steps. The speed gap IS hash resolution at exit cell.
+  **When the hash distinguishes hidden states: L1 is fast. When it doesn't: random stumbling.**
+
+  Remaining: Steps 665-671 (POMDP pivot continued)
 
 Step 635: Frontier-gradient action selection. L1=5/5, avg_speedup=1.15x (marginal). Frontier bias
   fires 94-98% of steps — unconditionally. 3/5 seeds 5-20x SLOWER (over-exploration: 812-938 cells).
