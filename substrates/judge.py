@@ -342,6 +342,119 @@ class ConstitutionalJudge:
         }
 
     # ------------------------------------------------------------------
+    # Dynamic R3 measurement (novel — no equivalent in published work)
+    # ------------------------------------------------------------------
+    def measure_r3_dynamics(self, substrate_cls: type,
+                            obs_sequence: list = None,
+                            n_steps: int = 1000,
+                            n_checkpoints: int = 5) -> dict:
+        """Track WHICH state components change and WHEN during processing.
+
+        This is the novel measurement: unlike static R3 (frozen_elements()),
+        dynamic R3 shows how the substrate's internal structure evolves
+        over time and whether changes are substrate-driven or externally-driven.
+
+        obs_sequence: list of np.ndarray observations. If None, uses random.
+        n_steps: total steps to run
+        n_checkpoints: number of state snapshots to take
+
+        Returns: {
+          checkpoints: [{step, state_snapshot, changed_from_prev, change_magnitude}],
+          component_change_times: {component: first_step_changed},
+          dynamics_profile: "static"|"slow"|"fast"|"chaotic",
+          r3_dynamic_score: fraction of declared-M elements that actually change
+        }
+        """
+        try:
+            sub = substrate_cls()
+            declared_elements = sub.frozen_elements()
+            m_elements = [e["name"] for e in declared_elements if e.get("class") == "M"]
+        except Exception as e:
+            return {"error": str(e)}
+
+        sub.reset(0)
+        checkpoint_interval = max(1, n_steps // n_checkpoints)
+        checkpoints = []
+        state_prev = copy.deepcopy(sub.get_state())
+        component_change_times = {}
+
+        for step in range(n_steps):
+            if obs_sequence is not None and step < len(obs_sequence):
+                obs = obs_sequence[step]
+            else:
+                obs = np.random.randn(64, 64, 3).astype(np.float32) * 0.5
+
+            sub.process(obs)
+
+            if step % checkpoint_interval == 0 or step == n_steps - 1:
+                state_now = sub.get_state()
+                changed_keys = []
+                magnitudes = {}
+                for k in state_prev:
+                    v_prev, v_now = state_prev.get(k), state_now.get(k)
+                    try:
+                        if isinstance(v_prev, np.ndarray) and isinstance(v_now, np.ndarray):
+                            if not np.array_equal(v_prev, v_now):
+                                changed_keys.append(k)
+                                magnitudes[k] = float(np.linalg.norm(
+                                    v_now.astype(float) - v_prev.astype(float)
+                                ))
+                                if k not in component_change_times:
+                                    component_change_times[k] = step
+                        elif v_prev != v_now:
+                            changed_keys.append(k)
+                            if k not in component_change_times:
+                                component_change_times[k] = step
+                    except Exception:
+                        pass
+
+                checkpoints.append({
+                    "step": step,
+                    "changed_from_prev": changed_keys,
+                    "change_magnitudes": magnitudes,
+                    "state_size": {k: (v.shape if isinstance(v, np.ndarray) else type(v).__name__)
+                                   for k, v in state_now.items()},
+                })
+                state_prev = copy.deepcopy(state_now)
+
+        # Score: fraction of declared-M elements that actually changed.
+        # Bidirectional match: element name ⊂ state key OR state key ⊂ element name.
+        # This handles naming mismatches (e.g. "aliased_set" vs "aliased_count").
+        actually_changed = set(component_change_times.keys())
+
+        def _matches(m_name: str, state_key: str) -> bool:
+            m_lower = m_name.lower().replace("_", "")
+            k_lower = state_key.lower().replace("_", "")
+            return m_lower in k_lower or k_lower in m_lower
+
+        m_verified = [m for m in m_elements
+                      if any(_matches(m, k) for k in actually_changed)]
+        r3_dynamic_score = len(m_verified) / max(len(m_elements), 1)
+
+        # Dynamics profile
+        n_changed_checkpoints = sum(1 for c in checkpoints if c["changed_from_prev"])
+        if n_changed_checkpoints == 0:
+            profile = "static"
+        elif n_changed_checkpoints < n_checkpoints * 0.3:
+            profile = "slow"
+        elif n_changed_checkpoints < n_checkpoints * 0.8:
+            profile = "fast"
+        else:
+            profile = "continuous"
+
+        return {
+            "checkpoints": checkpoints,
+            "component_change_times": component_change_times,
+            "declared_M_elements": m_elements,
+            "verified_M_elements": m_verified,
+            "r3_dynamic_score": round(r3_dynamic_score, 3),
+            "dynamics_profile": profile,
+            "detail": (f"{'PASS' if r3_dynamic_score >= 0.5 else 'PARTIAL'}: "
+                       f"{len(m_verified)}/{len(m_elements)} declared-M elements "
+                       f"verified to change. Profile: {profile}"),
+        }
+
+    # ------------------------------------------------------------------
     # Summary
     # ------------------------------------------------------------------
     def _summarize(self, results: dict) -> dict:

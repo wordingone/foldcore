@@ -5,7 +5,32 @@ Every new substrate: inherit this, implement 5 methods.
 That's all a researcher needs to do. The judge handles the rest.
 """
 from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from typing import Union
 import numpy as np
+
+
+@dataclass
+class Observation:
+    """Typed observation: raw data + modality tag + metadata.
+
+    Substrates can check obs.modality to adapt encoding.
+    For R3 substrates: modality is ignored — the substrate
+    discovers input structure from obs.data alone.
+
+    Modalities:
+      "game"   — ARC-AGI-3 game frame (variable shape)
+      "image"  — static image (CIFAR, ImageNet, etc.)
+      "atari"  — Atari frame (210×160×3 uint8)
+      "raw"    — untyped bytes or flat vector
+    """
+    data: np.ndarray
+    modality: str = "game"
+    metadata: dict = field(default_factory=dict)
+
+    def __array__(self):
+        """Allow np.array(obs) to return obs.data — backward compatibility."""
+        return self.data
 
 
 class BaseSubstrate(ABC):
@@ -19,10 +44,13 @@ class BaseSubstrate(ABC):
     """
 
     @abstractmethod
-    def process(self, observation: np.ndarray) -> int:
+    def process(self, observation: Union[np.ndarray, 'Observation']) -> int:
         """Take raw observation, return action index.
         All internal state updates happen here (F applied).
-        observation: numpy array, any shape (game-dependent).
+        observation: numpy array OR Observation dataclass.
+          - np.ndarray: backward compatible (modality assumed "game")
+          - Observation: typed with modality + metadata
+        Extract raw array: if isinstance(obs, Observation): obs = obs.data
         """
 
     @abstractmethod
