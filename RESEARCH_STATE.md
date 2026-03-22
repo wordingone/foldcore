@@ -381,9 +381,29 @@ Step 682: Transition-triggered dual-hash on LS20, extended budget (60s). L1=5/5,
   The mechanism IS adapting to the L2 game state — detecting new perceptual aliasing
   in the L2 environment. Previous L2 attempts (486-542) showed STATIC mechanisms.
   This is the FIRST dynamic response to game state changes.
-  L2 not reached in 60s — budget insufficient post-L1. Seed 3 has ~58K steps post-L1,
-  still not enough. L2 requires either longer budget or the mechanism needs to accumulate
-  counts faster in the new aliased cells.
+  L2 not reached in 60s — budget insufficient post-L1.
+
+Step 683: 674 on LS20, seed 3, 300s. L1=2402, L2=None. aliased: 48→445 over 535K steps.
+Step 686: 674 on LS20, seed 8, 300s. L1=126, L2=None. aliased: 2→439 over 572K steps.
+
+  **L2 KILL: Budget is NOT the bottleneck.** Both seeds run 530-572K steps with near-full
+  post-L1 budget. L2 never reached. Aliased cells grow MONOTONICALLY — more exploration =
+  more aliased cells = sparser fine graph = worse count accumulation. The mechanism that
+  finds L1 (aliased=87, bounded) fails at L2 (aliased=439, unbounded).
+
+  **New L2 finding:** L2's hidden-state complexity is UNBOUNDED under the transition-triggered
+  criterion. Every new region explored reveals new aliased cells. The fine graph can't
+  converge because the aliased cell count never plateaus. This is qualitatively different
+  from L1's bounded aliasing — L1 has a finite number of hidden states at the exit cell,
+  L2 has a growing frontier of aliased cells.
+
+  **Implication for the paper:** Proposition 15 (perception-action decoupling) holds for L1
+  but NOT for L2. L1's bottleneck is perception resolution (bounded aliasing). L2's bottleneck
+  is that perception resolution DIVERGES — the mechanism can't refine fast enough to keep
+  up with the growing state space. L2 requires a mechanism that can navigate DESPITE
+  unresolved aliasing, not one that resolves all aliasing before navigating. This connects
+  to the L2 energy mechanic (iri sprites, Step 556-557) — L2 requires PURPOSEFUL navigation
+  to energy sources, not exhaustive coverage.
 
 Step 635: Frontier-gradient action selection. L1=5/5, avg_speedup=1.15x (marginal). Frontier bias
   fires 94-98% of steps — unconditionally. 3/5 seeds 5-20x SLOWER (over-exploration: 812-938 cells).
