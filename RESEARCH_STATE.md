@@ -57,7 +57,7 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 717 (action discovery dead — argmin equalizes, destroying signal)
+CURRENT STEP: 718 (candidate.c characterization — plays blind, seed-invariant)
 DIRECTION (2026-03-22): Stop optimizing per-level. The goal is ALL games, ALL levels, classification — the full chain. Whole-trajectory rule: never optimize for a single level/game/task. Breaking games into levels creates a frozen frame — the substrate should handle all levels with ONE mechanism.
 L1 BAN (2026-03-22): L1 banned as metric. 674+running-mean = frozen bootloader. Every experiment states R3 hypothesis. Ban lifts when R3 produces first M reclassification.
 
@@ -1373,3 +1373,20 @@ STRUCTURAL DIAGNOSIS: Argmin is the obstacle. It prevents action discrimination
   because it ensures every action is tried equally. R3 for action discovery requires
   a mechanism that explores ACTION SUBSETS (try 4 dirs for N episodes, then 8 clicks
   for N episodes, compare outcomes). This is bandit-over-subsets, not bandit-over-actions.
+
+Step 718a: candidate.c standalone characterization (57-line C cellular automaton with memory grid).
+  R3 hypothesis: memory grid m[N] creates ℓ₁ self-modification via accumulated history.
+  Constant input: output entropy=7.956/8.0 (near-uniform), lag-1 autocorr=0.010 (near-zero).
+  Random input: entropy=7.948, autocorr=0.013. Structured input: indistinguishable from random.
+  Sensitivity: 1-bit flip at step 1000 → ZERO output divergence.
+  FINDING: candidate.c is a bulk statistics extractor. Individual inputs don't matter.
+  The XOR-of-deltas output f() whitens everything. Near-uniform regardless of input type.
+
+Step 718b: candidate.c on LS20, 5 seeds, 1K game steps. Bootloader 0/5.
+  ALL 5 SEEDS: identical statistics (unique_actions=68, dir%=6.5%, cells=66, eps=0).
+  FINDING: candidate.c plays blind. Output determined by XorShift seed (z=1), not game obs.
+  4096-byte frame stream overwhelmed by 4096-cell CA internal dynamics.
+  R3 verdict: memory m[N] self-modifies (mechanism confirmed) but modification is driven
+  by internal CA dynamics, not external game signal. ℓ₁ mechanism exists but is self-referential.
+  Action distribution near-uniform → effectively random walk. 46s/seed for 1K steps (92min/seed
+  for 120K — far over 5-min cap).
