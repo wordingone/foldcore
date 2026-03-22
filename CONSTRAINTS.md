@@ -50,6 +50,16 @@ Every navigation experiment since Step 442 uses the same graph + edge-count mech
 
 **ALL 3 GAMES LEVEL 1 SOLVED.** Unifying mechanism across 505 experiments: graph + edge-count argmin + correct action decomposition. The mapping (how observations become nodes) and the action space (how actions are decomposed) are the VARIABLES. The graph + argmin is the CONSTANT. LS20 needs 4 directional actions. FT09 needs 69 (64 grid + 5 simple). VC33 needs 3 (zone discovery). All prescribed. The frontier is: can the substrate DISCOVER the right action decomposition autonomously (I3)?
 
+**Action discovery cascade (Steps 713-716, 10 experiments, R3 hypothesis):**
+
+Two R3 mechanisms tested for autonomous action-space discovery with 68 universal actions (4 dirs + 64 clicks):
+
+*ℓ₀: State-change detection (Steps 713-714).* Track which actions produce observation changes. **LS20: perfect** (4 dirs LIVE, 64 clicks DEAD). **FT09: perfect** (8 specific clicks LIVE, 4 dirs + 56 clicks DEAD — discovers WHICH positions matter). **VC33: blind** (dead=0, all actions produce uniform delta=3.0 from game clock). Raw 64x64 encoding viable — no speed penalty vs avgpool16.
+
+*ℓ_π: Graph-novelty pruning (Steps 715-716).* Track which actions lead to new graph cells. Hash saturation kills the mechanism: k_prune=8 (256 buckets) fills at 120K steps → everything "already seen" → no discrimination. VC33 structural set is random seed-dependent subset. LS20 over-prunes (4→1 dir). FT09 saturates to all-cosmetic. **No k value works for all games at all timescales.**
+
+**Conclusion:** Observation statistics (ℓ₀) and graph topology (ℓ_π) are INSUFFICIENT for universal action discovery. VC33 requires game-semantic progress knowledge — correlation between action usage and environmental outcomes (death, level transitions). This is ℓ₁ for g: action weights modified by episode outcome data. Untested.
+
 **Level 2 reward disconnect.** Dedicated L2 investigations (LSH Steps 486-493/528-529/532, k-means Step 493) confirm: L2's reward region is beyond the argmin-reachable frontier at all tested budgets and partition granularities. Incidental confirmation in codebook (Phase 1) and Recode (Step 542, 0/5 L2). The reachable set grows sublinearly but never includes L2 reward. Growing the mapping (more cells, finer partition, self-refinement) does not unlock L2.
 
 **Centering and domain separation (Steps 543-544, 546).** Centered encoding is REQUIRED for navigation (uncentered: 62 cells, 0/5 — Step 544). Global centering kills domain separation for the chain (CIFAR and LS20 hash to shared nodes — Step 543; CIFAR accuracy 15%, 15x above chance, showing encoding has cross-domain class signal). **RESOLVED via per-domain centering (Step 546):** reset the running mean on domain switch (on_reset). Per-domain centering gives 2/3 L1 on the chain (vs 5/5 clean — partial reliability gap remains), with s0 navigating FASTER than clean (L1@12201 vs 29691). R1-compliant: on_reset is a game event, not an external domain label.
