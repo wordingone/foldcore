@@ -57,7 +57,7 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 716 (universal action discovery — k_prune=8 full run on all 3 games, pending)
+CURRENT STEP: 716 (action discovery CLOSED — neither ℓ₀ nor ℓ_π universal)
 DIRECTION (Jun, 2026-03-22): Stop optimizing per-level. The goal is ALL games, ALL levels, classification — the full chain. Whole-trajectory rule: never optimize for a single level/game/task. Breaking games into levels creates a frozen frame — the substrate should handle all levels with ONE mechanism.
 L1 BAN (Jun, 2026-03-22): L1 banned as metric. 674+running-mean = frozen bootloader. Every experiment states R3 hypothesis. Ban lifts when R3 produces first M reclassification.
 
@@ -1342,7 +1342,19 @@ Step 715e: k_prune sweep with raw (uncentered) pruning hash. FINDING:
   | VC33 | struct=0 | struct=0 | struct=7(1d+6c) | struct=0 |
   (d=direction, c=click. Warmup only — probe-limited.)
 
-Step 716/716b/716c: k_prune=8 full run on all 3 games. PENDING.
-  R3 hypothesis: graph-derived action pruning at k_prune=8 discovers correct
-  action spaces for ALL games from transition topology alone.
-  KEY QUESTION: Do VC33's 6 structural clicks include magic pixels?
+Step 716/716b/716c: k_prune=8 full run on all 3 games. KILL.
+  VC33: structural set is random seed-dependent subset (0-14), magic=(N,N) 4/5 seeds.
+  FT09: k=8 hash saturates at 120K → all cosmetic → fallback. 0/5 correct discovery.
+  LS20: correct type (dirs structural) but over-prunes (4→1 dir, can't navigate). 0/5 pass.
+  ROOT CAUSE: k_prune=8 = 256 buckets. 120K steps >> 256 → hash fills → everything "seen."
+  Works at warmup timescale, decays at long budgets. No k solves both timescales.
+
+**ACTION DISCOVERY CLOSED (Steps 713-716, 10 experiments).**
+  ℓ₀ (state-change): works for LS20/FT09, blind for VC33 (uniform delta=3.0)
+  ℓ_π (graph novelty): hash saturates at long budgets, over-prunes or under-prunes
+  Neither is a universal R3 mechanism for action space discovery.
+  VC33 requires game-semantic progress knowledge — beyond observation/graph statistics.
+
+OPEN: What R3 mechanism works universally? Action discovery from environmental
+  events (level completion, death) is the remaining path. Bandit over action subsets
+  with episode outcome as signal. R1-compliant but untested.
