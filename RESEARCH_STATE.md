@@ -241,7 +241,19 @@ Step 664: Outcome variability per cell. POMDP IS OPAQUE — bimodally.
   hidden states. L1 at 22K-24K steps. The speed gap IS hash resolution at exit cell.
   **When the hash distinguishes hidden states: L1 is fast. When it doesn't: random stumbling.**
 
-  Remaining: Steps 665-671 (POMDP pivot continued)
+Step 665: Frame-diff at exit cell (seed=8, 421 visits). HIDDEN STATE IS VISIBLE.
+  Frames cluster into 2 groups (227 vs 194, center dist=0.612). Triggering frame in
+  minority cluster. Different hidden states produce different pixels at exit cell.
+  BUT k=12 LSH hashes all 421 to same cell — signal present, hash too coarse.
+  **The POMDP is opaque at the hash level, not the pixel level.**
+  Combined with 664: fast seeds' hash resolves hidden states; slow seeds' doesn't.
+  The fix is finer perception at the exit cell, not better search strategy.
+
+Step 667: Outcome-conditioned selection. 0/10 — path key explosion.
+  (cell, prev_outcome) tuples create combinatorial explosion. Most keys visited once.
+  Right concept (arrival path carries hidden-state info) but wrong granularity.
+
+  Remaining: Steps 666, 668-671 (POMDP pivot continued)
 
 Step 635: Frontier-gradient action selection. L1=5/5, avg_speedup=1.15x (marginal). Frontier bias
   fires 94-98% of steps — unconditionally. 3/5 seeds 5-20x SLOWER (over-exploration: 812-938 cells).
