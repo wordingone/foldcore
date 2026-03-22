@@ -205,6 +205,16 @@ The R3 audit is the novel contribution. ARC-AGI-3 (1,000+ levels, 150+ environme
 
 ---
 
+## THE REAL FRAME
+
+LLMs are the ultimate ℓ₀ systems. Trillions of frozen parameters. Fixed architecture, tokenization, attention. Data changes (context window), operations never change. Claude Opus 4.6: 68.8% ARC-AGI-2, 9 U elements = infinite. GPT-5.2 Pro: 90% ARC-AGI-1. Every frontier model is a frozen interpreter reading state.
+
+The substrate is NOT the antithesis of LLMs. It's the thing that does what they do — ARC-AGI, MMLU, SWE-bench — while ALSO modifying its own operations. Fewer frozen elements, competitive performance, genuine R3.
+
+Benchmark the substrate on the SAME evaluations frontier models report on. Score competitively. AND measure R3 — something no frontier model does, because no frontier model modifies its own operations.
+
+---
+
 **The question for the session:**
 Given everything above — what do you see?
 
