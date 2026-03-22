@@ -472,9 +472,8 @@ Step 694: Plain k=12 on seeds 0, 4 (regression diagnosis). **STEP 485 BASELINE S
   s4 is now trivially easy with plain k=12 (L1@132) but 674 makes it 189x harder.
   337 aliased cells on s4 cause fine hash CONFUSION, not disambiguation.
   The 20/20 at 120K (Step 692) remains valid. Speed comparisons to Step 485 are NOT.
-  NOTE: Games are deterministic (feedback rule). If baseline changed, either LS20 version
-  changed (Eli's claim, partially corroborated by file timestamps) or setup/code changed.
-  Either way, all comparisons must use CURRENT baselines, not Step 485.
+  Game change CONFIRMED (Jun). LS20 version changed between Step 485 (March 19) and
+  current runs. All pre-change baselines are invalid. Comparisons must use current game only.
 
 Step 635: Frontier-gradient action selection. L1=5/5, avg_speedup=1.15x (marginal). Frontier bias
   fires 94-98% of steps — unconditionally. 3/5 seeds 5-20x SLOWER (over-exploration: 812-938 cells).
