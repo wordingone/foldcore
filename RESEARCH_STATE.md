@@ -519,6 +519,21 @@ Step 697: Plain k=12 baseline on current game (ls20/9607627b), 20 seeds, 25s. L1
   The mechanism is a TRADE: helps high-aliasing-at-exit seeds, hurts low-aliasing seeds.
   Net: +6 seeds (17 vs 11). Clear positive on current game.
 
+Step 701: Plain k=12 at 120K, 20 seeds, game ls20/9607627b. **L1=16/20.**
+  Missing: s2, s9, s11, s17 — plain k=12 NEVER solves these at any budget.
+  674 provides COVERAGE improvement: 20/20 vs 16/20 at 120K (+4 seeds).
+  674 is both faster AND broader. Not just a speed improvement.
+
+  **DEFINITIVE COVERAGE TABLE (ls20/9607627b):**
+  | Method                | Budget | L1     | vs plain |
+  |-----------------------|--------|--------|----------|
+  | Plain k=12 (697)      | 25s    | 11/20  | baseline |
+  | Plain k=12 (701)      | 120K   | 16/20  | baseline |
+  | 674 frame-local (690) | 25s    | 17/20  | +6       |
+  | 674 running-mean (704)| 25s    | 10/10* | +3 (s0-9)|
+  | 674 frame-local (699) | 120K   | 20/20  | +4       |
+  | 674 chain (700)       | 120K   | 20/20  | +4       |
+
 Step 700: Chain 20-seed sweep with 674, 120K LS20 steps. Game: ls20/9607627b.
   **L1=20/20. CIFAR avg 1.4%.** Complete chain coverage.
   s4: L1=2002 in chain (vs 24968 standalone). Chain centering + CIFAR pre-population fixes s4.

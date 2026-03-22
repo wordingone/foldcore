@@ -531,7 +531,7 @@ All 3 ARC-AGI-3 games solved at Level 1:
 
 | Game | Mechanism | Result | Steps |
 |---|---|---|---|
-| LS20 Level 1 | LSH k=12 + centered_enc + avgpool16, 4 actions, argmin | 10/10 at 200K; **20/20 at 120K with 674 (transition-triggered dual-hash)** | 126 (easy seed) to 65K (hard seed) |
+| LS20 Level 1 | LSH k=12 + centered_enc + avgpool16, 4 actions, argmin | Plain: 16/20 at 120K. **674: 20/20 at 120K (+4 coverage)** | 126 (easy seed) to 65K (hard seed) |
 | FT09 | k-means n=300, 69 actions (64 click grid + 5 simple), argmin | 3/3 at 50K | 157, 2035, 3840 |
 | VC33 | k-means n=50, 3 actions (zone discovery), argmin | 3/3 at 30K | 18, 82, 144 |
 
