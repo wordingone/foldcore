@@ -1,8 +1,17 @@
 """
-Step 436 — Multi/reservoir bridge experiment. Between multi_ewc_replay (435) and reservoir (437). Transition experiment. Ran inline.
+Step 436 — DEFERRED, never ran.
 
-Unrecoverable as individual script — no Write tool call or file-history entry found.
-Session JSONL searched: B--M-avir-eli, B--M-avir-leo, B--M-avir (all sessions).
+Spec (fc0de35d:L242): "Is cross-domain survival bidirectional?
+Step 433: P-MNIST->LS20->P-MNIST = 0.0pp contamination.
+Reverse: Run LS20 FIRST (10K steps), then P-MNIST (10 tasks).
+Measure: LS20 unique states, P-MNIST accuracy, codebook sizes."
+
+After Step 435 (EWC/replay comparison), Leo sent Step 437 spec
+(minimal self-modifying reservoir) and the session pivoted to the
+reservoir series (437-465). Step 436 was never placed back in queue.
+
+The cross-domain survival series closed with Step 439 (mirror-side
+conclusion: reservoir reflects back to codebook). Step 436 (reverse
+direction) was rendered less urgent and permanently deferred.
 """
-# This step ran inline and produced no persistent script file.
-# See adjacent steps for the implementation context.
+# Deferred — bidirectional survival test never run. Series closed at step 439.

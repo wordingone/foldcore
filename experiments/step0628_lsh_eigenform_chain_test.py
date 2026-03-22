@@ -1,8 +1,16 @@
 """
-Step 628 — LSH eigenform chain test. Between death (627) and L2 attempt (629). From git: "Steps 625+627: eigenform series complete. AVOID active but misaligned." Ran inline.
+Step 628 — SKIPPED: eigenform chain test not warranted after series conclusion.
 
-Unrecoverable as individual script — no Write tool call or file-history entry found.
-Session JSONL searched: B--M-avir-eli, B--M-avir-leo, B--M-avir (all sessions).
+Context: Eigenform series 617-629.
+Git f35aa87: "Steps 625+627: eigenform series complete. AVOID active
+but misaligned." Git 4136d62: "Steps 621+626: eigenform self-observation
+inert at L1."
+
+After the series conclusion (625+627), a chain test (Step 628) was not
+warranted — the mechanism was confirmed inert at L1, so L2/chain
+performance was already predicted as 0.
+
+Git shows jump: 625+627 -> 629 (eigenform L2 attempt KILL) -> 630 (delta-
+augmented graph). Step 628 number was skipped in the transition.
 """
-# This step ran inline and produced no persistent script file.
-# See adjacent steps for the implementation context.
+# Skipped — eigenform chain test not run after series found inert. See step0629.

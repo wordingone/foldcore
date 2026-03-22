@@ -1,8 +1,8 @@
 """
-Step 623 — LSH eigenform inert variant. Part of eigenform series (621-629). Between step621 and step625. Ran inline.
+Step 623 — SKIPPED: eigenform series concluded inert before this variant.
 
-Unrecoverable as individual script — no Write tool call or file-history entry found.
-Session JSONL searched: B--M-avir-eli, B--M-avir-leo, B--M-avir (all sessions).
+See step0622_lsh_eigenform_inert.py for full context.
+Part of the 622-624 block skipped after eigenform inertness confirmed
+from steps 621, 625-627.
 """
-# This step ran inline and produced no persistent script file.
-# See adjacent steps for the implementation context.
+# Skipped — eigenform series closed. See step0622.

@@ -1,8 +1,17 @@
 """
-Step 646 — LSH edge-state variant. From git: "Steps 645b+648: edge-state series CLOSED". Between self_derived_penalty (645) and outcome_transfer (648). Ran inline.
+Step 646 — SKIPPED: edge-state series closed at step 645b.
 
-Unrecoverable as individual script — no Write tool call or file-history entry found.
-Session JSONL searched: B--M-avir-eli, B--M-avir-leo, B--M-avir (all sessions).
+Context: Edge-state series 642-648.
+642+643: SIGNAL (outcome hashes differentiated, avg_distinct=3.32/4.0)
+644: Inverted (diversity preference hurt navigation)
+645: Unbounded surprise penalty
+645b: Normalized surprise-rate penalty — the R3 fix (data-derived death avoidance)
+648: Final outcome-conditioned test
+
+Git 4d13718: "Steps 645b+648: edge-state series CLOSED (9 experiments)."
+
+Steps 646-647 were planned as intermediate variants but rendered
+unnecessary when 645b (normalized surprise-rate) provided the clean result
+the series needed. The series closed cleanly at 645b+648.
 """
-# This step ran inline and produced no persistent script file.
-# See adjacent steps for the implementation context.
+# Skipped — edge-state series closed at 645b+648. See step0645b, step0648.

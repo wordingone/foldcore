@@ -1,8 +1,8 @@
 """
-Step 647 — LSH edge-state variant 2. From git: "Steps 645b+648: edge-state series CLOSED (9 experiments)". Ran inline.
+Step 647 — SKIPPED: edge-state series closed at step 645b.
 
-Unrecoverable as individual script — no Write tool call or file-history entry found.
-Session JSONL searched: B--M-avir-eli, B--M-avir-leo, B--M-avir (all sessions).
+See step0646_lsh_edge_state_b.py for full context.
+Part of the planned 646-647 variants that were skipped when 645b
+gave a clean series conclusion.
 """
-# This step ran inline and produced no persistent script file.
-# See adjacent steps for the implementation context.
+# Skipped — edge-state series closed at 645b+648. See step0646.

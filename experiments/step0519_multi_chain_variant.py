@@ -1,8 +1,14 @@
 """
-Step 519 — Multi-game chain variant. Between multi_reverse_chain (518) and multi_ngram_ls20 (521). Part of Steps 519-520. Ran inline.
+Step 519 — CANCELLED: replaced by non-codebook queue revision.
 
-Unrecoverable as individual script — no Write tool call or file-history entry found.
-Session JSONL searched: B--M-avir-eli, B--M-avir-leo, B--M-avir (all sessions).
+Original plan (f13440eb:L5246): "Multi-scale centroids (coarse + fine
+simultaneously)." Task #7 created in Leo's autonomous loop session.
+
+Leo then voided the original queue (f13440eb:L5289) per Jun's directive:
+"The fix is empirical — run ~400 non-codebook experiments, not codebook
+analysis." The new queue became Steps 514, 521-527 (LSH chain, Hebbian,
+Markov chain, etc) — all non-codebook families.
+
+Step 519 (multi-scale codebook centroids) was replaced. Number unassigned.
 """
-# This step ran inline and produced no persistent script file.
-# See adjacent steps for the implementation context.
+# Cancelled — replaced by non-codebook scale-up queue. See steps 514, 521-527.
