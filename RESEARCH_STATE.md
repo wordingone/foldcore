@@ -253,7 +253,49 @@ Step 667: Outcome-conditioned selection. 0/10 — path key explosion.
   (cell, prev_outcome) tuples create combinatorial explosion. Most keys visited once.
   Right concept (arrival path carries hidden-state info) but wrong granularity.
 
-  Remaining: Steps 666, 668-671 (POMDP pivot continued)
+Step 668: Visit-count belief accumulator. L1=5/10. MARGINAL.
+  <5 visits=argmin, 5-20=focused, >=20=random break. Lost seeds 0,1,2 (baseline found them).
+  89-297 cells triggering random = too many. Random break disrupts argmin gradient.
+  Visit-count signal IS real (high visits = attractor) but coarse intervention breaks more than it fixes.
+  Same failure pattern as 669: intervention helps some seeds, kills others.
+
+Step 669: Gaussian variance-driven refinement. L1=5/10, avg_speedup=145.77x (dominated by s3: 285x).
+  Running variance per cell, fine hash of top-16 variance pixels, prefer novel fine_hash.
+  s3: L1=220 (285x faster), s4: L1=132 (6.4x faster) — variance correctly identifies exit cell.
+  s0,s1,s2: NO_L1 — too many hi_var cells (258-286), floods with "novel" actions, breaks argmin.
+  Fewer hi_var cells → faster L1 (91 cells = 285x, 286 cells = NO_L1). Cell count is anti-correlated.
+  The mechanism WORKS for low-variance-cell-count seeds — same seeds that were already fast.
+
+Step 670: Alternating argmin/random (episodes 1-5 argmin, 6-10 random, repeat). 20 seeds, 5s cap.
+  alternating=5/20. argmin_653=4/20. random_653=4/20. union=7/20.
+  alt_only=[2,5,18] — 3 NEW seeds neither pure approach found. Temporal interleaving creates
+  different exploration regime. But lost [6,7,10,11,15] — alternating splits the budget.
+  5s cap is binding: alternating can't sustain either argmin gradient or random coverage long enough.
+  The mechanism is real (genuinely new seeds) but budget-limited.
+
+Step 671: Splatter substrate (1-step world model, argmax frame difference). L1=0/10. KILL.
+  Death rate=100%. Noisy TV: maximizing frame difference = seeking death.
+  Same wall as Steps 477-482 (targeted exploration kills navigation). Transition magnitude is not
+  direction-specific — can't distinguish "moved toward exit" from "died." Retrospective information
+  (avoid bad transitions) works (581d). Prospective prediction (seek novel transitions) fails.
+  Confirms Proposition 13: introspection ≠ foresight.
+
+  **POMDP pivot complete (Steps 652-671, 16 experiments + 666 ignored per Jun).**
+  All 8 questions answered. Summary:
+  1. L1 IS recognition (152 avg visits before trigger, Step 652)
+  2. Argmin ≈ random for conjunction (symmetric 3/3, Step 653)
+  3. Hidden state inaccessible from API (Step 654)
+  4. Temporal composition killed by timescale (Step 655)
+  5. Graph = flat counter + marginal tie-breaking (Step 660)
+  6. Hash resolution predicts L1 speed bimodally (Steps 664-665, correlation)
+  7. All interventions help some seeds, lose others (Steps 668-670)
+  8. Prospective prediction = noisy TV (Step 671, same as 477-482)
+
+  **The honest conclusion:** No mechanism consistently improves on argmin for LS20 L1.
+  Argmin is locally optimal within the graph framework. Every intervention tested (20+
+  experiments: 477-482, 581d, 620-639, 652-671) either matches argmin or trades seeds.
+  The only consistent improvement is BUDGET (more time → more seeds, Steps 459→485→542).
+  The remaining lever is PERCEPTION QUALITY (k, centering, mapping) not ACTION SELECTION.
 
 Step 635: Frontier-gradient action selection. L1=5/5, avg_speedup=1.15x (marginal). Frontier bias
   fires 94-98% of steps — unconditionally. 3/5 seeds 5-20x SLOWER (over-exploration: 812-938 cells).
