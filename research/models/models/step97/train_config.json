@@ -1,7 +1,0 @@
-{
-  "model": "step97-tier1",
-  "dataset": "/mnt/b/M/avir/research/fluxcore/scripts/run_step97_tier1.py",
-  "script": "/mnt/b/M/avir/research/fluxcore/scripts/run_step97_tier1.py",
-  "output_dir": "/mnt/b/M/avir/research/fluxcore/models/step97",
-  "hyperparams": {}
-}

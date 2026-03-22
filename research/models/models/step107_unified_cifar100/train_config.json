@@ -1,7 +1,0 @@
-{
-  "model": "none",
-  "dataset": "cifar100",
-  "script": "/mnt/b/M/avir/research/fluxcore/scripts/run_step107_unified_cifar100.py",
-  "output_dir": "/mnt/b/M/avir/research/fluxcore/models/step107_unified_cifar100",
-  "hyperparams": {}
-}

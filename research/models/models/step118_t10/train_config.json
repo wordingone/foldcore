@@ -1,7 +1,0 @@
-{
-  "model": "none",
-  "dataset": "none",
-  "script": "/mnt/b/M/avir/research/fluxcore/scripts/run_step118_rff_knn.py",
-  "output_dir": "/mnt/b/M/avir/research/fluxcore/models/step118_t10",
-  "hyperparams": {}
-}

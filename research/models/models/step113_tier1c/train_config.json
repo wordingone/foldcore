@@ -1,7 +1,0 @@
-{
-  "model": "none",
-  "dataset": "none",
-  "script": "/mnt/b/M/avir/research/fluxcore/scripts/run_step113_hebbian_pca.py",
-  "output_dir": "/mnt/b/M/avir/research/fluxcore/models/step113_tier1c",
-  "hyperparams": {}
-}

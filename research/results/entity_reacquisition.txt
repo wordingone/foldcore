@@ -1,8 +1,0 @@
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-TEST 4: Entity Reacquisition (A→B→A, DIM=64, DynamicAttractorField)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  After A+B phases: 2 memories in field
-  early A1 (50 ticks) = 0.0136239
-  early A2 (50 ticks) = 0.0124808
-  → PASS ✓

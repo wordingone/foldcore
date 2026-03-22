@@ -1,7 +1,0 @@
-{
-  "model": "step100-cifar100-sp095",
-  "dataset": "/mnt/b/M/avir/research/fluxcore/scripts/run_step100_cifar100_topk.py",
-  "script": "/mnt/b/M/avir/research/fluxcore/scripts/run_step100_cifar100_topk.py",
-  "output_dir": "/mnt/b/M/avir/research/fluxcore/models/step100",
-  "hyperparams": {}
-}

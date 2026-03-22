@@ -1,7 +1,0 @@
-{
-  "model": "step99-topk",
-  "dataset": "/mnt/b/M/avir/research/fluxcore/scripts/run_step99_topk_vote.py",
-  "script": "/mnt/b/M/avir/research/fluxcore/scripts/run_step99_topk_vote.py",
-  "output_dir": "/mnt/b/M/avir/research/fluxcore/models/step99",
-  "hyperparams": {}
-}

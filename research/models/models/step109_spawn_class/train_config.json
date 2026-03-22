@@ -1,7 +1,0 @@
-{
-  "model": "none",
-  "dataset": "pmnist",
-  "script": "/mnt/b/M/avir/research/fluxcore/scripts/run_step109_spawn_as_classification.py",
-  "output_dir": "/mnt/b/M/avir/research/fluxcore/models/step109_spawn_class",
-  "hyperparams": {}
-}

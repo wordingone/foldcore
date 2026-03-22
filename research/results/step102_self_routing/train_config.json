@@ -1,7 +1,0 @@
-{
-  "model": "none",
-  "dataset": "none",
-  "script": "/mnt/b/M/avir/research/fluxcore/scripts/run_step102_self_routing.py",
-  "output_dir": "/mnt/b/M/avir/research/fluxcore/results/step102_self_routing",
-  "hyperparams": {}
-}

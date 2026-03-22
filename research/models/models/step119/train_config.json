@@ -1,7 +1,0 @@
-{
-  "model": "none",
-  "dataset": "none",
-  "script": "/mnt/b/M/avir/research/fluxcore/scripts/run_step119_constitutional_audit.py",
-  "output_dir": "/mnt/b/M/avir/research/fluxcore/models/step119",
-  "hyperparams": {}
-}

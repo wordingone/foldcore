@@ -20,3 +20,11 @@ wave_output.txt
 # Claude Code config (identity/operational, not research)
 .claude/
 archive/
+
+# Removed directories (restructure)
+artifacts/
+docs/
+research/
+tempest/
+tests/
+llm-benchmark/

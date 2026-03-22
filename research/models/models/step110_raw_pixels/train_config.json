@@ -1,7 +1,0 @@
-{
-  "model": "none",
-  "dataset": "pmnist",
-  "script": "/mnt/b/M/avir/research/fluxcore/scripts/run_step110_raw_pixels.py",
-  "output_dir": "/mnt/b/M/avir/research/fluxcore/models/step110_raw_pixels",
-  "hyperparams": {}
-}

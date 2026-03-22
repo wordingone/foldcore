@@ -1,7 +1,0 @@
-{
-  "model": "none",
-  "dataset": "none",
-  "script": "/mnt/b/M/avir/research/fluxcore/scripts/run_step120_s1_multipass.py",
-  "output_dir": "/mnt/b/M/avir/research/fluxcore/models/step120",
-  "hyperparams": {}
-}

@@ -1,7 +1,0 @@
-{
-  "model": "none",
-  "dataset": "pmnist",
-  "script": "/mnt/b/M/avir/research/fluxcore/scripts/run_step104_accumulated_op.py",
-  "output_dir": "/mnt/b/M/avir/research/fluxcore/models/step104_aop",
-  "hyperparams": {}
-}

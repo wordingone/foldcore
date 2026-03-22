@@ -198,7 +198,7 @@ def main():
     except Exception as e:
         print(f"arcagi3: {e}"); return
 
-    print("Step 581c: Confidence-gated death avoidance (N>=3)", flush=True)
+    print("Step 581c: Confidence-gated death avoidance (N≥3)", flush=True)
     print(f"  K={K} MAX_STEPS={MAX_STEPS} DEATH_THRESHOLD={DEATH_THRESHOLD}", flush=True)
 
     print("\n--- ConfDeath ---", flush=True)

@@ -1,7 +1,0 @@
-{
-  "model": "none",
-  "dataset": "none",
-  "script": "/mnt/b/M/avir/research/fluxcore/scripts/run_step117_adaptive_k.py",
-  "output_dir": "/mnt/b/M/avir/research/fluxcore/models/step117",
-  "hyperparams": {}
-}

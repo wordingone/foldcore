@@ -1,7 +1,0 @@
-{
-  "model": "local",
-  "dataset": "/mnt/b/M/avir/research/fluxcore",
-  "script": "/mnt/b/M/avir/research/fluxcore/compile.sh",
-  "output_dir": "/mnt/b/M/avir/research/fluxcore/results",
-  "hyperparams": {}
-}

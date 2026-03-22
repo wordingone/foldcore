@@ -1,7 +1,0 @@
-{
-  "model": "none",
-  "dataset": "none",
-  "script": "/mnt/b/M/avir/research/fluxcore/scripts/run_step114_sparse_coding.py",
-  "output_dir": "/mnt/b/M/avir/research/fluxcore/models/step114_tier1",
-  "hyperparams": {}
-}
