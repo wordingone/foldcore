@@ -337,6 +337,45 @@ Steps 477-482, 539-541. 6 strategies tested, all worse than or equal to argmin.
 
 **Implication for R3:** Self-observation (Theorem 2) requires the system to extract new structure from its own state after exploration saturates. But any mechanism that TARGETS specific state structures for observation will be vulnerable to the noisy TV problem — self-referential noise (patterns that look complex but carry no usable signal). The self-observation mechanism must be as blind as argmin is to transition entropy.
 
+#### Proposition 15: Perception-Action Decoupling
+
+**Prior work:** In POMDPs, the observation function determines which hidden states the agent can distinguish. State aliasing (Whitehead & Ballard, 1991) occurs when the observation mapping conflates distinct hidden states. Computing optimal memoryless POMDP policies is NP-hard (Littman, 1994). In POMDPs with state aliasing, stochastic policies can be strictly better than deterministic ones (Singh et al., 1994). Count-based exploration (Bellemare et al., 2016; Tang et al., 2017) is robust to observation noise but sensitive to hash granularity — "important aspects of a good hash function include having appropriate granularity" (Tang et al., 2017).
+
+**Our finding (empirical):** LS20 Level 1 is a hidden-state conjunction problem: the game has hidden state variables inaccessible to the substrate (Step 654). L1 triggers when the agent is at the exit cell AND the hidden state satisfies a conjunction condition. The agent visits the exit cell avg 152 times before L1 triggers (Step 652). L1 action sequences are near-uniform (entropy $H = 1.948/2.0$, Step 657). Different seeds unlock different conjunctions under different action orderings (argmin-only: 3/20, random-only: 3/20, both: 1/20, Step 653).
+
+**Extended argmin optimality (Steps 652-671, 20+ experiments).** Beyond the 6 strategies in Section 4.5, we tested 14 additional interventions targeting the POMDP structure:
+
+| Intervention class | Steps | Result |
+|--------------------|-------|--------|
+| Edge-state enrichment (4 variants) | 640-648 | All KILL or MARGINAL. Profile uniformity under argmin destroys transfer signal. |
+| Path conditioning (2nd-order Markov) | 649 | MARGINAL. 1.09x speedup = noise. |
+| Outcome-conditioned selection | 667 | KILL 0/10. Key explosion — too many (cell, outcome) tuples. |
+| Visit-count-dependent behavior | 668 | MARGINAL 5/10. Lost 3 baseline seeds. Random break too coarse. |
+| Gaussian variance refinement | 669 | MARGINAL 5/10. 145x on successes; too many hi-var cells on failures. |
+| Alternating argmin/random | 670 | 5/20. Found 3 NEW seeds but lost 5 union seeds. Budget-limited. |
+| 1-step world model (splatter) | 671 | KILL 0/10. Noisy TV: death = max frame diff. Same wall as 477-482. |
+
+**Pattern:** Every intervention helps some seeds and loses others. No perturbation of $g$ consistently improves L1 rate. The interventions that help fastest seeds (669: s3 at 285x, s4 at 6.4x) help the seeds where hash resolution ALREADY separates hidden states at the exit cell (Step 664: exit entropy ~2.0 for fast seeds). The interventions cannot help seeds where the hash conflates all hidden states (exit entropy = 0.0).
+
+**Formalization:** Let $\pi: X \to N$ be the observation mapping (LSH hash), $h \in H$ the hidden state, and $T \subset N \times H$ the L1 target set. Define:
+- $R(\pi, g)$ = L1 rate under mapping $\pi$ and action selection $g$
+- $k_n = |\{h : (n, h) \in \text{reachable}\}|$ = number of hidden states mapped to node $n$
+- $n^* = \text{proj}_N(T)$ = exit node
+
+**Proposition 15 (Perception-Action Decoupling):** For hidden-state conjunction problems, $R(\pi, g)$ is primarily determined by $\pi$, not $g$. Specifically:
+
+1. For any $g$ satisfying asymptotic uniform coverage of $N$ (including argmin, random, and their perturbations): $R(\pi, g) \approx R(\pi)$. The L1 rate depends on whether $\pi$ resolves hidden states at the exit cell, not on the action selection strategy.
+
+2. The per-visit L1 probability at the exit cell is $\approx 1/k_{n^*}$ — the reciprocal of the number of hidden states aliased at the exit node. Fast seeds: $k_{n^*}$ is small (hash resolves, L1 in <1000 steps). Slow seeds: $k_{n^*}$ is large (hash conflates, L1 at 22K-24K steps). (Steps 664-665, correlation — causal confirmation pending.)
+
+3. No perturbation of $g$ can reduce $k_{n^*}$. Only modifications to $\pi$ (finer hash, self-refinement, centering) can improve resolution at critical cells.
+
+**Relationship to prior work:** The NP-hardness of optimal memoryless POMDP policies (Littman, 1994) explains WHY no tested intervention consistently beats argmin — there is no efficiently computable improvement. Our contribution is empirical: confirming this prediction across 20+ interventions in a specific interactive game, and identifying the observation mapping resolution at critical cells as the measurable bottleneck.
+
+**Consistency with Theorem 2:** Theorem 2 requires self-observation after exploration saturates. Proposition 15 shows the self-observation must target $\pi$ (the observation mapping), not $g$ (action selection). Recode (Step 542, Section 5.4.5) achieves exactly this — $\ell_\pi$ modification of $\pi$ from transition statistics. This is the only tested mechanism that consistently improves L1 reliability (5/5 vs 3/3). The convergence: Theorem 2 says self-observation is necessary → Proposition 15 says it must target $\pi$ → Recode demonstrates $\ell_\pi$ is achievable.
+
+**Degrees of freedom:** The specific self-refinement mechanism for $\pi$ at critical cells is undetermined. Recode uses transition statistics. The POMDP literature suggests belief-state estimation (Kaelbling et al., 1998). Whether a purely R1-compliant mechanism can achieve targeted $\pi$-refinement at the exit cell — without knowing which cells are critical — is open.
+
 ### 4.6 Constructive Characterization of the Feasible Region
 
 Combining all formalized constraints, we characterize the class of $F$ that satisfies R1-R6 + validated U-constraints simultaneously.
@@ -616,7 +655,7 @@ All formalized constraints were checked for mutual consistency. Identified tensi
 | T4: Never delete vs no redundancy | U3 + R6 | **Resolved** — irredundant growth (Sec 4.2). Every new component covers unique territory. |
 | T5: Infinite growth vs finite environment | U17 + finite $X$ | **Resolved** — Theorem 2. Growth shifts to state-derived components. |
 | T6: Navigation vs classification | U11 + U24 + U1 | Open — state-dependent behavior (DoF 11). No implementation yet. |
-| T7: Self-observation vs noisy TV | Theorem 2 + Sec 4.5 | **Sharpened** — Proposition 13 (eigenform inertness): self-observation on visited states cannot guide exploration to unvisited states. Self-observation IS necessary but provides only retrospective signal, not prospective guidance. Forward prediction required. |
+| T7: Self-observation vs noisy TV | Theorem 2 + Sec 4.5 | **Sharpened** — Proposition 13 (eigenform inertness) + Proposition 15 (perception-action decoupling): self-observation must target $\pi$ (observation mapping), not $g$ (action selection). Recode achieves this via $\ell_\pi$. Forward prediction remains required for L2. |
 | T8: Centering vs domain separation | U16 + chain benchmark | **Resolved** — per-domain centering (Step 546). R1-compliant via on_reset. |
 
 **No undiscovered contradictions.** All tensions are either resolved (T2, T4, T5, T8), constrained (T3), or identified as open questions (T1, T6, T7). The constraint system is internally consistent.
@@ -650,7 +689,8 @@ All formalized constraints were checked for mutual consistency. Identified tensi
 17. How to resolve U11 + U24 + U1 (incompatible tasks, no mode switch) in a single system (T6). Recent work (Hao et al. 2025, "Beyond the Exploration-Exploitation Trade-off," arXiv 2509.23808) argues the tradeoff is an artifact of measurement level — in hidden-state space, exploration and exploitation decouple. The eigenform mechanism (Section 4.4) may dissolve U24 similarly: at the meta-cell level, argmin naturally produces exploitation (follow meta-cell recommendations) or exploration (least-tried action) depending on state richness, without mode switching.
 18. R1-compliant classification — no substrate has achieved above-chance accuracy without external labels.
 19. **Interpreter entailment (Proposition 14).** The abstract interpreter is entailed by R1-R6. The concrete interpreter is not. Whether the constructive gap is bridgeable — whether a system can discover its own implementations of compare-select-store from interaction alone — connects to Rosen's (M,R) closure (β-map must be postulated) and Bauer's self-interpreter impossibility (total systems cannot self-interpret). The intersection of organizational closure and self-modification in non-total dynamical systems appears open.
-20. Whether the state space of compare-select-store is expressive enough to encode arbitrary self-modifications as data (the expressiveness question from Proposition 12). SUBLEQ (subtract-and-branch-if-≤-0) is Turing complete with one instruction and unbounded memory. Compare-select-store maps structurally: COMPARE → subtract, SELECT → branch, STORE → write. But our specific COMPARE (LSH hash) is a fixed random projection — not an arbitrary function. The system's expressiveness is bounded by the comparison function's expressiveness. Whether the eigenform mechanism (hashing action counts → meta-comparison) iterates toward Turing-complete comparison is the core open question. If yes, R3 is satisfiable with the current interpreter. If no, the comparison function must be extended or made adaptive ($\ell_\pi$ → $\ell_F$ in effect).
+20. **Targeted π-refinement without foreknowledge (Proposition 15).** The POMDP reframing shows the bottleneck is hash resolution at critical cells ($k_{n^*}$, the number of aliased hidden states at the exit node). Recode refines $\pi$ from transition statistics but cannot identify WHICH cells are critical without environmental feedback. Whether an R1-compliant mechanism can achieve targeted $\pi$-refinement at the exit cell — reducing $k_{n^*}$ without knowing which cells are exit-adjacent — connects to the belief-state literature (Kaelbling et al., 1998) and remains open.
+21. Whether the state space of compare-select-store is expressive enough to encode arbitrary self-modifications as data (the expressiveness question from Proposition 12). SUBLEQ (subtract-and-branch-if-≤-0) is Turing complete with one instruction and unbounded memory. Compare-select-store maps structurally: COMPARE → subtract, SELECT → branch, STORE → write. But our specific COMPARE (LSH hash) is a fixed random projection — not an arbitrary function. The system's expressiveness is bounded by the comparison function's expressiveness. Whether the eigenform mechanism (hashing action counts → meta-comparison) iterates toward Turing-complete comparison is the core open question. If yes, R3 is satisfiable with the current interpreter. If no, the comparison function must be extended or made adaptive ($\ell_\pi$ → $\ell_F$ in effect).
 
 ### 7.5 The Level 2 Problem
 
