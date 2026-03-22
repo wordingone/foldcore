@@ -134,6 +134,8 @@ Formally: does there exist a substrate (f, g, F) where F: S → (X → S) is non
 
 6. **Structural R3 vs Dynamic R3.** Structural R3 (0U in frozen_elements()) is necessary but not sufficient. Anti-inflation rule 2: "If a rule can't be tested, the system hasn't passed it." Dynamic R3 (measure_r3_dynamics(): encoding at t=0 ≠ encoding at t=N, AND change correlates with performance improvement) is the real test. The gym measures both. No published system reports dynamic R3.
 
+7. **Don't test R3 where the frozen encoding isn't the bottleneck.** L1 on LS20/FT09 is saturated (20/20). Encoding self-modification on L1 will be INERT — like the eigenform (Steps 620-629). Test on the CHAIN, where the frozen encoding fails at every transition: CIFAR needs color (channel_0 throws away 2/3 of information), VC33 needs room-boundary detection (channel_0 misses color-based transitions), L2 needs hidden-state resolution (Step 665: entropy=0.0 on slow seeds). Dynamic R3 prediction: encoding parameters differ across chain tasks. CIFAR → color channels upweighted. LS20 → position features upweighted. The same mechanism produces different adaptations for different tasks. This is the test the eigenform failed — self-modification with CONSEQUENCE, not just self-observation.
+
 ---
 
 ## DEGREES OF FREEDOM (what's NOT determined)
