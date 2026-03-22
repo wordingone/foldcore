@@ -1,7 +1,7 @@
 """
 Step 718b2 — Enhanced analysis of candidate.c on LS20.
 
-Leo's questions:
+Questions:
 1. Action distribution: uniform or structured?
 2. Action autocorrelation: does action[t] predict action[t+1]?
 3. Episode length distribution vs random baseline (~150 steps)

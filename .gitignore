@@ -25,6 +25,6 @@ archive/
 artifacts/
 docs/
 research/
-tempest/
 tests/
 llm-benchmark/
+models/
