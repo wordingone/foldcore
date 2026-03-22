@@ -16,6 +16,7 @@ Baseline (fold Step 65): 56.7% AA, 0.0pp forgetting.
 """
 
 import sys
+import os
 import math
 import random
 import time
@@ -98,9 +99,9 @@ class TopKFold:
 def load_mnist():
     import torchvision
     tr = torchvision.datasets.MNIST(
-        'C:/Users/Admin/mnist_data', train=True,  download=True)
+        os.environ.get('MNIST_DATA', './data'), train=True,  download=True)
     te = torchvision.datasets.MNIST(
-        'C:/Users/Admin/mnist_data', train=False, download=True)
+        os.environ.get('MNIST_DATA', './data'), train=False, download=True)
     X_tr = tr.data.numpy().reshape(-1, 784).astype(np.float32) / 255.0
     X_te = te.data.numpy().reshape(-1, 784).astype(np.float32) / 255.0
     return X_tr, tr.targets.numpy(), X_te, te.targets.numpy()

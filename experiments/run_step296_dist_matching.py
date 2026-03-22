@@ -2,7 +2,7 @@
 """
 Step 296 -- Per-class distribution matching on a%b.
 
-Spec. Hypothesis: per-class sorted distance vectors (φ) are Lipschitz
+Leo mail 1341. Hypothesis: per-class sorted distance vectors (φ) are Lipschitz
 even when the raw function isn't. Same-class examples should have identical φ
 (verified by hand: φ(7,3) == φ(10,3), dist²=0). Different-class examples have
 dist²=18 in distribution space.
@@ -260,7 +260,7 @@ def main():
     print(f"Distribution matching: {accd_best*100:.1f}%", flush=True)
     print(f"Step 286 baseline:     41.8% (thermometer 1-NN)", flush=True)
     print(flush=True)
-    print("KILL CRITERION (Spec):", flush=True)
+    print("KILL CRITERION (Leo mail 1341):", flush=True)
     if accd_best <= acct_best:
         print(f"  KILLED — dist match ({accd_best*100:.1f}%) <= top-K sum ({acct_best*100:.1f}%)",
               flush=True)
