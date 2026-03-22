@@ -550,6 +550,22 @@ Step 703: FT09 chain, 5 seeds, game ft09/0d8bbf25. L1=5/5, CIFAR 1.7%.
   Aliasing UNFREEZES in chain: standalone FT09 aliased=1-4 (frozen), chain aliased=6-17.
   Running-mean centering changes hash embeddings cross-game. Centering effect confirmed on FT09.
 
+Step 704: 674 + running-mean centering, 10 seeds (0-9), 25s. Game: ls20/9607627b.
+  **L1=10/10** vs frame-local 674 7/10 (on seeds 0-9 at 25s). +3 seeds rescued (s2, s4, s7).
+  Speed tradeoff: s1 3.9x slower, s3 4.1x slower, s8 52x slower (126→6564).
+  Running-mean creates MORE aliased cells (428-541 vs frame-local 50-337).
+  More aliasing = better disambiguation for hard seeds, over-disambiguates easy seeds.
+  Coverage vs speed: running-mean wins coverage, frame-local wins speed.
+
+  **UPDATED 674 TABLE (current game ls20/9607627b):**
+  | Method                      | Seeds | Budget | L1     |
+  |-----------------------------|-------|--------|--------|
+  | Plain k=12 (697)            | 20    | 25s    | 11/20  |
+  | 674 frame-local (690)       | 20    | 25s    | 17/20  |
+  | 674 running-mean (704)      | 10    | 25s    | 10/10  |
+  | 674 standalone (699)        | 20    | 120K   | 20/20  |
+  | 674 chain (700)             | 20    | 120K   | 20/20  |
+
 Step 635: Frontier-gradient action selection. L1=5/5, avg_speedup=1.15x (marginal). Frontier bias
   fires 94-98% of steps — unconditionally. 3/5 seeds 5-20x SLOWER (over-exploration: 812-938 cells).
   2/5 seeds 2-3x faster (286-399 cells — L1 in unexplored territory). Same failure mode as delta
