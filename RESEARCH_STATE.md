@@ -403,6 +403,13 @@ Step 687: Chain benchmark with 674. L1=3/3, CIFAR acc=1.4% (near chance). CHAIN-
   (1526-3463 vs 674's seeds). CIFAR accuracy consistent with Step 546 baseline — no cross-domain
   benefit from LS20 navigation, expected.
 
+Step 688: Chemotaxis-inspired biased random walk (gradient-triggered mode switching). KILL.
+  Seed 8, 300s. Discovery rate → 0 within first 500 steps. 90% tumble mode. 546 unique nodes
+  = ALL reachable topology. L2 is NOT about finding new cells — the topology is fully mapped.
+  L2 requires disambiguating hidden states within 546 existing cells + navigating to energy
+  sources at the right TIME. Exploration-based signals (novelty, discovery rate) are useless
+  because the reachable topology is saturated.
+
   **Implication for the paper:** Proposition 15 (perception-action decoupling) holds for L1
   but NOT for L2. L1's bottleneck is perception resolution (bounded aliasing). L2's bottleneck
   is that perception resolution DIVERGES — the mechanism can't refine fast enough to keep
