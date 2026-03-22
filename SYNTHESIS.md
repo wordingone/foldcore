@@ -169,6 +169,16 @@ Formally: does there exist a substrate (f, g, F) where F: S → (X → S) is non
    - step0658_lsh_decoupled.py (~1.8K) — irreducibility proof
 6. Memory MCP patterns (requires daemon): reasoning habits, Jun's corrections, blind spots
 
+## WHAT WE CAN'T MEASURE
+
+The benchmark tests NAVIGATION. Navigation is solved (674+running-mean, 20/20, 9 U elements, R3 FAIL). A system that aces the benchmark is a system that fails R3. We have no benchmark for what we're actually looking for.
+
+- Static R3 check: count U elements in code. Checks the design, not the runtime.
+- Chain benchmark: L1 rate, coverage, steps. Measures frozen-bootloader performance.
+- Missing: DYNAMIC R3 measurement. Compare operations at t=0 vs t=N. Did components change? Was the change self-directed? Did it help on tasks the substrate wasn't designed for?
+
+---
+
 **The question for the session:**
 Given everything above — what do you see?
 
