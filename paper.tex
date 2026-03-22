@@ -242,6 +242,50 @@ from this cell?'' but ``which action leads toward cells with the most
 unknown successors?'' Foresight via local gradient, not via world model.
 This is a degree of freedom (DoF 8) concretized by biological precedent.
 
+\subsubsection{2.9 Somatic hypermutation and self-modifying
+comparison}\label{somatic-hypermutation-and-self-modifying-comparison}
+
+The adaptive immune system is the clearest biological example of a
+system that discovers its own comparison operation. B cell antibodies
+bind antigens through variable regions --- the binding site IS the
+``compare'' function. Somatic hypermutation (SHM; Neuberger \& Milstein,
+1995) introduces point mutations into the variable region during
+germinal center reactions, modifying the comparison function itself.
+Clonal selection retains high-affinity mutants (the ``select''
+operation). Memory B cells persist indefinitely (the ``store''
+operation, satisfying U3). Recent work (Tan et al., 2025,
+\emph{Immunity}) demonstrates that non-cognate B cells can generate
+\emph{de novo} antigen recognition --- the system discovers entirely new
+binding specificities through mutation, not just refining existing ones.
+
+\textbf{Connection to Proposition 14:} The immune system achieves
+\(\ell_\pi\) (self-modification of the comparison function) via
+population-level mutation + selection. The frozen frame is the mutation
+mechanism itself (AID enzyme, activation-induced cytidine deaminase).
+The abstract operations \{compare, select, store, modify\} are entailed
+by the need to respond to novel pathogens. The concrete implementation
+(AID, VDJ recombination) is not --- it evolved. This is exactly the
+abstract-vs-concrete gap: the WHAT is necessary, the HOW is frozen.
+
+\textbf{Connection to Step 607 (GRN, KILLED):} Our population-level R3
+attempt failed because encodings were not diverse enough (Cov(w,z)=0 in
+the Price equation). The immune system succeeds with
+\textasciitilde{}\(10^9\) B cells and targeted mutagenesis (SHM only
+mutates variable regions, not framework regions). The lesson: population
+R3 requires (1) massive parallelism, (2) targeted variation (mutate only
+the comparison operation, not the infrastructure), and (3) genuine
+selection pressure (antigen binding is binary and environmental ---
+R5-compliant).
+
+\textbf{Germinal center regulation} (Nakagawa et al., 2025,
+\emph{Nature}): B cells modify their own mutation RATE to preserve
+high-affinity receptors. This is meta-self-modification --- the system
+modifies how fast it modifies itself. In our hierarchy: not just
+\(\ell_\pi\) (modify the comparison) but approaching \(\ell_F\) (modify
+the modification rule). Whether this constitutes genuine \(\ell_F\)
+depends on whether the rate-modification mechanism is itself fixed
+(frozen frame) or adaptive.
+
 \subsection{3. Formal Framework}\label{formal-framework}
 
 \textbf{On the status of R1-R6:} The six rules began as philosophical
@@ -1064,6 +1108,132 @@ observation will be vulnerable to the noisy TV problem ---
 self-referential noise (patterns that look complex but carry no usable
 signal). The self-observation mechanism must be as blind as argmin is to
 transition entropy.
+
+\paragraph{Proposition 15: Perception-Action
+Decoupling}\label{proposition-15-perception-action-decoupling}
+
+\textbf{Prior work:} In POMDPs, the observation function determines
+which hidden states the agent can distinguish. State aliasing (Whitehead
+\& Ballard, 1991) occurs when the observation mapping conflates distinct
+hidden states. Computing optimal memoryless POMDP policies is NP-hard
+(Littman, 1994). In POMDPs with state aliasing, stochastic policies can
+be strictly better than deterministic ones (Singh et al., 1994).
+Count-based exploration (Bellemare et al., 2016; Tang et al., 2017) is
+robust to observation noise but sensitive to hash granularity ---
+``important aspects of a good hash function include having appropriate
+granularity'' (Tang et al., 2017).
+
+\textbf{Our finding (empirical):} LS20 Level 1 is a hidden-state
+conjunction problem: the game has hidden state variables inaccessible to
+the substrate (Step 654). L1 triggers when the agent is at the exit cell
+AND the hidden state satisfies a conjunction condition. The agent visits
+the exit cell avg 152 times before L1 triggers (Step 652). L1 action
+sequences are near-uniform (entropy \(H = 1.948/2.0\), Step 657).
+Different seeds unlock different conjunctions under different action
+orderings (argmin-only: 3/20, random-only: 3/20, both: 1/20, Step 653).
+
+\textbf{Extended argmin optimality (Steps 652-671, 20+ experiments).}
+Beyond the 6 strategies in Section 4.5, we tested 14 additional
+interventions targeting the POMDP structure:
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.5714}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2286}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Intervention class
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Steps
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Result
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Edge-state enrichment (4 variants) & 640-648 & All KILL or MARGINAL.
+Profile uniformity under argmin destroys transfer signal. \\
+Path conditioning (2nd-order Markov) & 649 & MARGINAL. 1.09x speedup =
+noise. \\
+Outcome-conditioned selection & 667 & KILL 0/10. Key explosion --- too
+many (cell, outcome) tuples. \\
+Visit-count-dependent behavior & 668 & MARGINAL 5/10. Lost 3 baseline
+seeds. Random break too coarse. \\
+Gaussian variance refinement & 669 & MARGINAL 5/10. 145x on successes;
+too many hi-var cells on failures. \\
+Alternating argmin/random & 670 & 5/20. Found 3 NEW seeds but lost 5
+union seeds. Budget-limited. \\
+1-step world model (splatter) & 671 & KILL 0/10. Noisy TV: death = max
+frame diff. Same wall as 477-482. \\
+\end{longtable}
+}
+
+\textbf{Pattern:} Every intervention helps some seeds and loses others.
+No perturbation of \(g\) consistently improves L1 rate. The
+interventions that help fastest seeds (669: s3 at 285x, s4 at 6.4x) help
+the seeds where hash resolution ALREADY separates hidden states at the
+exit cell (Step 664: exit entropy \textasciitilde2.0 for fast seeds).
+The interventions cannot help seeds where the hash conflates all hidden
+states (exit entropy = 0.0).
+
+\textbf{Formalization:} Let \(\pi: X \to N\) be the observation mapping
+(LSH hash), \(h \in H\) the hidden state, and \(T \subset N \times H\)
+the L1 target set. Define: - \(R(\pi, g)\) = L1 rate under mapping
+\(\pi\) and action selection \(g\) -
+\(k_n = |\{h : (n, h) \in \text{reachable}\}|\) = number of hidden
+states mapped to node \(n\) - \(n^* = \text{proj}_N(T)\) = exit node
+
+\textbf{Proposition 15 (Perception-Action Decoupling):} For hidden-state
+conjunction problems, \(R(\pi, g)\) is primarily determined by \(\pi\),
+not \(g\). Specifically:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  For any \(g\) satisfying asymptotic uniform coverage of \(N\)
+  (including argmin, random, and their perturbations):
+  \(R(\pi, g) \approx R(\pi)\). The L1 rate depends on whether \(\pi\)
+  resolves hidden states at the exit cell, not on the action selection
+  strategy.
+\item
+  The per-visit L1 probability at the exit cell is \(\approx 1/k_{n^*}\)
+  --- the reciprocal of the number of hidden states aliased at the exit
+  node. Fast seeds: \(k_{n^*}\) is small (hash resolves, L1 in
+  \textless1000 steps). Slow seeds: \(k_{n^*}\) is large (hash
+  conflates, L1 at 22K-24K steps). (Steps 664-665, correlation ---
+  causal confirmation pending.)
+\item
+  No perturbation of \(g\) can reduce \(k_{n^*}\). Only modifications to
+  \(\pi\) (finer hash, self-refinement, centering) can improve
+  resolution at critical cells.
+\end{enumerate}
+
+\textbf{Relationship to prior work:} The NP-hardness of optimal
+memoryless POMDP policies (Littman, 1994) explains WHY no tested
+intervention consistently beats argmin --- there is no efficiently
+computable improvement. Our contribution is empirical: confirming this
+prediction across 20+ interventions in a specific interactive game, and
+identifying the observation mapping resolution at critical cells as the
+measurable bottleneck.
+
+\textbf{Consistency with Theorem 2:} Theorem 2 requires self-observation
+after exploration saturates. Proposition 15 shows the self-observation
+must target \(\pi\) (the observation mapping), not \(g\) (action
+selection). Recode (Step 542, Section 5.4.5) achieves exactly this ---
+\(\ell_\pi\) modification of \(\pi\) from transition statistics. This is
+the only tested mechanism that consistently improves L1 reliability (5/5
+vs 3/3). The convergence: Theorem 2 says self-observation is necessary →
+Proposition 15 says it must target \(\pi\) → Recode demonstrates
+\(\ell_\pi\) is achievable.
+
+\textbf{Degrees of freedom:} The specific self-refinement mechanism for
+\(\pi\) at critical cells is undetermined. Recode uses transition
+statistics. The POMDP literature suggests belief-state estimation
+(Kaelbling et al., 1998). Whether a purely R1-compliant mechanism can
+achieve targeted \(\pi\)-refinement at the exit cell --- without knowing
+which cells are critical --- is open.
 
 \subsubsection{4.6 Constructive Characterization of the Feasible
 Region}\label{constructive-characterization-of-the-feasible-region}
@@ -1940,10 +2110,11 @@ components. \\
 T6: Navigation vs classification & U11 + U24 + U1 & Open ---
 state-dependent behavior (DoF 11). No implementation yet. \\
 T7: Self-observation vs noisy TV & Theorem 2 + Sec 4.5 &
-\textbf{Sharpened} --- Proposition 13 (eigenform inertness):
-self-observation on visited states cannot guide exploration to unvisited
-states. Self-observation IS necessary but provides only retrospective
-signal, not prospective guidance. Forward prediction required. \\
+\textbf{Sharpened} --- Proposition 13 (eigenform inertness) +
+Proposition 15 (perception-action decoupling): self-observation must
+target \(\pi\) (observation mapping), not \(g\) (action selection).
+Recode achieves this via \(\ell_\pi\). Forward prediction remains
+required for L2. \\
 T8: Centering vs domain separation & U16 + chain benchmark &
 \textbf{Resolved} --- per-domain centering (Step 546). R1-compliant via
 on\_reset. \\
@@ -2078,6 +2249,16 @@ questions (T1, T6, T7). The constraint system is internally consistent.
   postulated) and Bauer's self-interpreter impossibility (total systems
   cannot self-interpret). The intersection of organizational closure and
   self-modification in non-total dynamical systems appears open.
+\item
+  \textbf{Targeted π-refinement without foreknowledge (Proposition 15).}
+  The POMDP reframing shows the bottleneck is hash resolution at
+  critical cells (\(k_{n^*}\), the number of aliased hidden states at
+  the exit node). Recode refines \(\pi\) from transition statistics but
+  cannot identify WHICH cells are critical without environmental
+  feedback. Whether an R1-compliant mechanism can achieve targeted
+  \(\pi\)-refinement at the exit cell --- reducing \(k_{n^*}\) without
+  knowing which cells are exit-adjacent --- connects to the belief-state
+  literature (Kaelbling et al., 1998) and remains open.
 \item
   Whether the state space of compare-select-store is expressive enough
   to encode arbitrary self-modifications as data (the expressiveness
