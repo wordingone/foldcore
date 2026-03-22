@@ -175,6 +175,15 @@ Step 652: Exit cell visit count diagnostic. 6/10 L1 at 30s cap. RECOGNITION CONF
   right place + right state conjunction. The interpreter visits the right cell repeatedly
   but can't encode the conjunction condition.
 
+Step 653: Seed-matched argmin vs random. 20 seeds, 5s per method. SYMMETRIC BLOCKAGE.
+  argmin_only=3, random_only=3, both=1, neither=13. Argmin prevents exactly as many
+  solutions as random misses. Seeds 3,4,6: argmin fast (132-950 steps). Seeds 7,11,15:
+  random finds L1 that argmin never reaches at 5s. Argmin's count-minimization routes
+  AWAY from some L1-triggering state sequences. Combined with 652: the conjunction
+  (right place + right hidden state) requires specific visitation ORDER, not just coverage.
+  Argmin's order is systematically different from random's order, and each unlocks
+  different conjunctions.
+
   Next experiments testing the composition hypothesis directly:
   - Does the graph implicitly encode game hidden state? (MI diagnostic, Step 654)
   - Does argmin prevent some solutions? (seed-matched comparison, Step 653)
