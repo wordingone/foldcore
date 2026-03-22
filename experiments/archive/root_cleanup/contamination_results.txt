@@ -1,6 +1,0 @@
-delta_stability: PASS
-  max|r| = 0.0000
-  correlations = [0.0, 0.0, 0.0]
-delta_correlation: PASS
-  max|r| = 0.0000
-  correlations = [0.0, 0.0, 0.0]
