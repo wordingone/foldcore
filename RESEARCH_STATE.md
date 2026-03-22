@@ -57,7 +57,7 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 696 (674 variants killed — s4 persistently broken by fine hash)
+CURRENT STEP: 696 (674 variants killed — s4 broken in standalone, fine in chain)
 
 Step 640: Meta-graph tie-breaking. L1=1/5 (s1 only, 1499 steps = 2.2x faster). tie_rate=75.7%,
   changed=8%. Ties extremely common (argmin keeps most actions at count 0 early, near-equal later).
@@ -488,6 +488,14 @@ Step 696: 674 + death penalty (BONUS=1000). KILL — L1=6/10.
   Fine hash at 337 aliased cells causes CONFUSION on s4. Binary criterion misfires —
   marks cells as ambiguous that are deterministic for navigation. No post-hoc fix helps.
   674 uncapped (9/10 at 25s, 20/20 at 120K) remains best variant. All modifications worse.
+
+Step 693: Chain benchmark with 674 at 120K. Game version: ls20/9607627b. L1=5/5, CIFAR 1.3%.
+  s0: L1=1526, s1: 2128, s2: 3463, s3: 3616, s4: 2002. All 5 seeds reach L1.
+  **s4 works fine in chain (L1=2002)** — per-domain centering (running mean reset on domain
+  switch) changes encoding enough that s4's aliasing pattern doesn't manifest. The chain
+  context normalizes differently than standalone LS20.
+  CIFAR acc near-chance (1.3%). No cross-domain transfer. 6-11 aliased cells during CIFAR.
+  LS20 aliased: 574-718 at 120K. Chain-compatible confirmed.
 
 Step 635: Frontier-gradient action selection. L1=5/5, avg_speedup=1.15x (marginal). Frontier bias
   fires 94-98% of steps — unconditionally. 3/5 seeds 5-20x SLOWER (over-exploration: 812-938 cells).
