@@ -57,10 +57,37 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 719 (action discovery thread CLOSED — 7 mechanisms all killed/partial)
-REPO AUDIT (2026-03-22): 236 step scripts never existed as files (pre-convention gap, Steps 1-62 + 121-285 range). Historical, not recoverable. 506 steps have scripts.
+CURRENT STEP: 719b complete — awaiting Leo's next spec.
+REPO AUDIT (2026-03-22): 236 step scripts never existed as files (pre-convention gap, Steps 1-62 + 121-285 range). Historical, not recoverable. 483 unique step numbers have scripts.
 DIRECTION (2026-03-22): Stop optimizing per-level. The goal is ALL games, ALL levels, classification — the full chain. Whole-trajectory rule: never optimize for a single level/game/task. Breaking games into levels creates a frozen frame — the substrate should handle all levels with ONE mechanism.
 L1 BAN (2026-03-22): L1 banned as metric. 674+running-mean = frozen bootloader. Every experiment states R3 hypothesis. Ban lifts when R3 produces first M reclassification.
+
+Step 718b2: candidate.c enhanced analysis — KILL.
+  uniformity=0.9859, chi2=125.4 (>82 threshold) but driven by z=1 fixed seed, NOT game obs.
+  All 5 seeds byte-identical (confirms 718a: game-blind). ac1=-0.0147 (no temporal structure).
+  ep_mean=1000 (click-dominant: no LS20 deaths). candidate.c = fixed deterministic sequence,
+  not adaptive. m[N] self-modifies but in response to its own CA dynamics, not environment.
+
+Step 719: Action subset bandit on LS20 — PARTIAL.
+  R3: per-action values from episode length of subsets containing that action.
+  K=8 subsets per episode, MAX_EP_STEPS=500 timeout, 5 seeds, 10K steps.
+  val_std=0.05-0.10 (5/5 seeds — discrimination EXISTS). dir_val<click_val (0/5 — REVERSED).
+  Root cause: click-only subsets produce 500-step timeouts (no death risk on LS20) → high value.
+  Dir-containing subsets cause deaths → shorter episodes → lower value.
+  Mechanism correctly reads the game, but measures SURVIVAL not PROGRESS.
+
+Step 719b: Action subset bandit on FT09 — KILL.
+  val_std=0.0000 (0/5 seeds). All 20 episodes (=MIN_EPISODES) timeout at 500 steps.
+  FT09 puzzle too complex for K=8 random subsets in 500-step windows. Magic clicks
+  (UNIV[35], UNIV[43]) never fire in productive context → no discriminating events.
+  magic_A rank=36, magic_B rank=44 (uniform, not top or bottom).
+
+ACTION DISCOVERY THREAD CLOSED (Steps 713-719b, 13 experiments):
+  ℓ₀ pixel delta: VC33 blind (uniform delta=3.0)
+  ℓ_π graph novelty: hash saturates at long budgets
+  ℓ_π k_prune sweep: no universal k across games × timescales
+  ℓ₁ episode-outcome: argmin equalizes → no signal (Step 717)
+  Subset bandit: survival ≠ progress (LS20 PARTIAL, FT09 KILL, 719c/VC33 likely KILL)
 
 Step 640: Meta-graph tie-breaking. L1=1/5 (s1 only, 1499 steps = 2.2x faster). tie_rate=75.7%,
   changed=8%. Ties extremely common (argmin keeps most actions at count 0 early, near-equal later).
