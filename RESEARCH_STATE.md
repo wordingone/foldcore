@@ -57,8 +57,8 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 711 (674 characterization complete — Steps 710, 712 pending, then pivot to full chain)
-DIRECTION (Jun, 2026-03-22): Stop optimizing per-level. The goal is ALL games, ALL levels, classification — the full chain. Whole-trajectory rule: never optimize for a single level/game/task.
+CURRENT STEP: 712 (674 characterization CLOSED — centering is dominant variable, not 674 mechanism)
+DIRECTION (Jun, 2026-03-22): Stop optimizing per-level. The goal is ALL games, ALL levels, classification — the full chain. Whole-trajectory rule: never optimize for a single level/game/task. Breaking games into levels creates a frozen frame — the substrate should handle all levels with ONE mechanism.
 
 Step 640: Meta-graph tie-breaking. L1=1/5 (s1 only, 1499 steps = 2.2x faster). tie_rate=75.7%,
   changed=8%. Ties extremely common (argmin keeps most actions at count 0 early, near-equal later).
@@ -1280,7 +1280,22 @@ Step 711: Plain k=12 on FT09, 20 seeds, 25s, ft09/0d8bbf25. L1=8/20.
   FINDING: FT09 plain k=12 coverage is binary — solvable seeds are solved fast,
   unsolvable seeds never get solved with more budget. Budget is not the variable.
 
-PENDING: Step 710 (frame-local chain, 20 seeds, 120K), Step 712 (plain+running-mean LS20 120K).
+Step 710: Frame-local 674 chain, 20 seeds, 120K, LS20 9607627b. L1=20/20. CIFAR acc=2.1%.
+  Compare: running-mean chain (Step 700) = 20/20. Chain benefit is CIFAR pre-population,
+  not centering mode. Frame-local chain = running-mean chain at 120K budget.
+
+Step 712: Plain k=12 + running-mean (NO 674), 20 seeds, 120K, LS20 9607627b. L1=19/20.
+  Missing: s12 only. FINDING: **Centering is the dominant variable.**
+  Frame-local plain = 16/20. Running-mean plain = 19/20 (+3). 674 adds only +1 (19→20, s12).
+  674's transition-inconsistency mechanism contributes ~25% of the coverage gain.
+  Running-mean centering contributes ~75%. Several seeds slow (s4=80K, s16=83K, s2=86K).
+
+**674 CHARACTERIZATION CLOSED.** Steps 690-712 (23 experiments) complete.
+Final answer: running-mean centering is the primary L1 coverage driver. 674 provides
+a genuine but marginal additional benefit (1 seed). The whole-trajectory rule (Jun, 2026-03-22)
+redirects from per-level optimization to full chain across all games.
+
+NEXT: Step 713 (universal action discovery + raw 64x64 + all games). Specs sent to Eli.
 
 L2 DIRECTION NOTES (post-674 compression, 2026-03-22):
 
