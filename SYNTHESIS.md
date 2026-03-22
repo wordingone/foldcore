@@ -138,6 +138,16 @@ Formally: does there exist a substrate (f, g, F) where F: S → (X → S) is non
 
 ---
 
+## CONSTITUTIONAL REFINEMENTS (2026-03-22 compression — interpretation, not rule changes)
+
+**R4 and growth-only systems:** R4 says "compare performance to before modification." For growth-only substrates (U3), the risk isn't deletion-based degradation — it's DILUTION. Unbounded growth (U17) means the graph accumulates task-irrelevant cells that compete for argmin's attention. On the chain: game cells dilute CIFAR representation. CIFAR cells add noise to game navigation. R4 is testable on the chain via CIFAR before/after accuracy — dilution IS the R4 failure mode for growth-only systems.
+
+**R5 scope:** R5 (one fixed ground truth) applies to interactive tasks where environmental feedback exists (game: level transitions, death). For passive tasks (CIFAR: static images, no environmental signal), R5 doesn't apply — the substrate processes blindly, the judge measures externally. In the chain, CIFAR serves as an R4 transfer test (does game experience degrade classification?), not an R5 task.
+
+**R6 sensitivity:** R6 tests "loses ALL capability." But 674's aliased_set: ablating it → 16/20 (not 0/20). R6 passes even though the component contributes 4 extra seeds. R6 catches fully-critical (ablation → 0) and fully-redundant (ablation → same) but misses components that HELP without being necessary. The chain is a better R6 test: does ablating the component degrade chain performance significantly (not totally)?
+
+---
+
 ## DEGREES OF FREEDOM (what's NOT determined)
 
 1. Action-selection beyond argmin (DoF 1)
