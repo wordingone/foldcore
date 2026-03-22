@@ -529,6 +529,23 @@ Step 700: Chain 20-seed sweep with 674, 120K LS20 steps. Game: ls20/9607627b.
   Chain vs standalone: both 20/20 at 120K. Chain doesn't add L1 count but changes speed
   distribution across seeds. s4 massively helped, s8 massively hurt by chain context.
 
+Step 699: 674 standalone 120K, 20 seeds, game ls20/9607627b. L1=20/20, L2=0/20. CONFIRMED.
+  Matches Step 692. Per-seed aliased: 117-337. s7 slowest (67359), s8 fastest (126).
+  Total time 1854.5s. Game version hash confirmed throughout all Steps 697-700.
+
+  **DEFINITIVE 674 CHARACTERIZATION (Steps 690-700, current game ls20/9607627b):**
+  | Method              | Seeds | Budget | L1    |
+  |---------------------|-------|--------|-------|
+  | Plain k=12 (697)    | 20    | 25s    | 11/20 |
+  | 674 standalone (690)| 20    | 25s    | 17/20 |
+  | 674 standalone (699)| 20    | 120K   | 20/20 |
+  | 674 chain (700)     | 20    | 120K   | 20/20 |
+
+  674 advantage: +6/20 at 25s over plain k=12. 20/20 at 120K.
+  Chain accelerates hard seeds (s4: 12.5x, s12: 19.8x) but hurts fast seeds (s8: 158x slower).
+  Centering (running-mean vs frame-local) + CIFAR pre-population are two separable effects.
+  L2=0/20 in all configurations. L2 wall is universal.
+
 Step 635: Frontier-gradient action selection. L1=5/5, avg_speedup=1.15x (marginal). Frontier bias
   fires 94-98% of steps — unconditionally. 3/5 seeds 5-20x SLOWER (over-exploration: 812-938 cells).
   2/5 seeds 2-3x faster (286-399 cells — L1 in unexplored territory). Same failure mode as delta
