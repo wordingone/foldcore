@@ -349,7 +349,27 @@ Step 679: Recode k=16 replication on current game. L1=7/10. k=16 alone reaches m
   Step 674 is the best L1 result in the search (9/10). The transition-triggered criterion
   identifies aliased cells from data (R1-compliant). The fix for seeds 0,4,7: cap aliased
   cells to top-N most inconsistent. aliased=87 → L1=126 (192x). aliased=313 → 29.5x slower.
-  The operating range is clear. Next: Step 674b with capped aliased cells.
+  The operating range is clear.
+
+Step 674b: Top-100 capped aliased cells. L1=8/10. WORSE than uncapped. Seed 8: 126→3098.
+  Capping adds wrong cells (13 extra → breaks mechanism). Ranking by inconsistency score
+  doesn't preserve the right cell subset.
+
+Step 674c: Top-50 capped. L1=8/10. Seed 7 RECOVERED (NO_L1→6253) but seed 8 LOST entirely.
+  Different seeds need different aliased-cell counts. No single cap works.
+
+Step 674d: Adaptive top-25%. L1=8/10. 23-70 aliased cells per seed. Seed 8: 126→8041.
+  Percentile threshold selects wrong 43 cells for seed 8.
+
+  **674b/c/d conclusion:** Capping HURTS. The uncapped binary criterion (|successors|>=2,
+  min_visits=3) finds the RIGHT cells naturally for each seed. Ranking by inconsistency
+  score loses critical cells. Seeds with high natural aliased count (s0=230, s4=313) are
+  inherently harder — more of the game's state space has inconsistent transitions for those
+  seed geometries. This is NOT a threshold tuning problem.
+
+  **674 at 9/10 is the ceiling for transition-triggered refinement on LS20.**
+  The 10th seed (s7, aliased=184) needs a different aliased-cell subset than the binary
+  criterion provides. Accepting 9/10 and moving forward to cross-game or L2 testing.
 
 Step 635: Frontier-gradient action selection. L1=5/5, avg_speedup=1.15x (marginal). Frontier bias
   fires 94-98% of steps — unconditionally. 3/5 seeds 5-20x SLOWER (over-exploration: 812-938 cells).
