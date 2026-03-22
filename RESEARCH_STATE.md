@@ -369,7 +369,21 @@ Step 674d: Adaptive top-25%. L1=8/10. 23-70 aliased cells per seed. Seed 8: 126�
 
   **674 at 9/10 is the ceiling for transition-triggered refinement on LS20.**
   The 10th seed (s7, aliased=184) needs a different aliased-cell subset than the binary
-  criterion provides. Accepting 9/10 and moving forward to cross-game or L2 testing.
+  criterion provides. Accepting 9/10 and moving forward to cross-game and L2 testing.
+
+Step 680: Transition-triggered dual-hash on FT09. L1=5/5. GENERALIZES.
+  Aliased cells: 1-4 (vs 83-313 on LS20). FT09 has almost no perceptual aliasing.
+  The mechanism works cleanly on a different game. Note: FT09 updated to 0d8bbf25.
+
+Step 682: Transition-triggered dual-hash on LS20, extended budget (60s). L1=5/5, L2=0/5.
+  **CRITICAL FINDING: new aliased cells appear post-L1.**
+  new_post_l1: s0=36, s1=47, s2=11, s3=51, s4=73.
+  The mechanism IS adapting to the L2 game state — detecting new perceptual aliasing
+  in the L2 environment. Previous L2 attempts (486-542) showed STATIC mechanisms.
+  This is the FIRST dynamic response to game state changes.
+  L2 not reached in 60s — budget insufficient post-L1. Seed 3 has ~58K steps post-L1,
+  still not enough. L2 requires either longer budget or the mechanism needs to accumulate
+  counts faster in the new aliased cells.
 
 Step 635: Frontier-gradient action selection. L1=5/5, avg_speedup=1.15x (marginal). Frontier bias
   fires 94-98% of steps — unconditionally. 3/5 seeds 5-20x SLOWER (over-exploration: 812-938 cells).
