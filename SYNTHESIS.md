@@ -205,6 +205,14 @@ The R3 audit is the novel contribution. ARC-AGI-3 (1,000+ levels, 150+ environme
 
 ---
 
+## MULTI-MODAL, NOT SINGLE-MODAL
+
+The substrate handles ANY input modality — text tokens, pixels, audio, code. Not one mode. BaseSubstrate.process() currently takes np.ndarray (pixel-only) — that's a modality-specific frozen frame. ALL U elements in R3_AUDIT.md are pixel-specific (avgpool16, channel_0_only, mean_centering, LSH hash planes). A multi-modal substrate can't have these. It starts with a fundamentally smaller frozen frame.
+
+The encoding IS the first operation R3 must self-modify. A substrate that discovers its own encoding for each modality has fewer U elements by construction.
+
+---
+
 ## THE REAL FRAME
 
 LLMs are the ultimate ℓ₀ systems. Trillions of frozen parameters. Fixed architecture, tokenization, attention. Data changes (context window), operations never change. Claude Opus 4.6: 68.8% ARC-AGI-2, 9 U elements = infinite. GPT-5.2 Pro: 90% ARC-AGI-1. Every frontier model is a frozen interpreter reading state.
