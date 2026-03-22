@@ -438,12 +438,19 @@ Step 681: 674 on VC33 (8×8 click grid, 5 seeds, 25s). KILL 0/5. VC33 requires p
   had 0 aliased cells (game not looping in ambiguous way). Confirms: action space IS the variable
   for VC33, not observation mapping.
 
-Step 690: 674 on LS20, 20 seeds, 25s. DEFINITIVE: L1=17/20 (85%). L2=0/20.
-  Missing: s7 (184 aliased), s12 (181), s16 (214) — high aliasing, likely budget-limited.
+Step 690: 674 on LS20, 20 seeds, 25s. L1=17/20 (85%). L2=0/20.
+  Missing: s7 (184 aliased), s12 (181), s16 (214) — high aliasing, budget-limited (confirmed by 692).
   Fastest: s8=126, s10=151, s18=746. Slowest: s11=40442, s4=24968.
-  Confirms 674 mechanism at scale. Compare: Step 674 was 9/10 on seeds 0-9. Adding seeds 10-19
-  gives 8/10 on new seeds (s12, s16 miss). Consistent mechanism across all 20 seeds.
-  Step 692 (120K budget, 20 seeds) will test if missing 3 reach L1 with more time.
+
+Step 692: 674 on LS20, 20 seeds, 120K steps. **L1=20/20. L2=0/20.**
+  COMPLETE L1 COVERAGE. All 3 missing seeds rescued: s7@67K, s12@51K, s16@65K.
+  Fastest: s8=126 (192x vs baseline). Slowest: s16=64830.
+  Two REGRESSIONS vs baseline: s0 (18401 vs 1362, 13.5x slower), s4 (24968 vs 846, 29.5x slower).
+  674 helps seeds where aliasing at exit cell is the bottleneck (s8: 192x faster).
+  674 hurts seeds where exit cell is already well-resolved (s0, s4: fine hash adds noise).
+  Binary criterion selects right cells for some seeds, wrong cells for others.
+  Comparison: Step 485 baseline = 9/10 at 120K. Step 692 = 20/20 at 120K. +11 seeds.
+  L2=0/20 confirms L2 wall is mechanism, not coverage (consistent with 686/688/689).
 
 Step 635: Frontier-gradient action selection. L1=5/5, avg_speedup=1.15x (marginal). Frontier bias
   fires 94-98% of steps — unconditionally. 3/5 seeds 5-20x SLOWER (over-exploration: 812-938 cells).

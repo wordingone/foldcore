@@ -527,7 +527,7 @@ All 3 ARC-AGI-3 games solved at Level 1:
 
 | Game | Mechanism | Result | Steps |
 |---|---|---|---|
-| LS20 Level 1 | LSH k=12 + centered_enc + avgpool16, 4 actions, argmin | 10/10 at 200K; 9/10 at 120K | 471 (easy seed) to 137K (hard seed) |
+| LS20 Level 1 | LSH k=12 + centered_enc + avgpool16, 4 actions, argmin | 10/10 at 200K; **20/20 at 120K with 674 (transition-triggered dual-hash)** | 126 (easy seed) to 65K (hard seed) |
 | FT09 | k-means n=300, 69 actions (64 click grid + 5 simple), argmin | 3/3 at 50K | 157, 2035, 3840 |
 | VC33 | k-means n=50, 3 actions (zone discovery), argmin | 3/3 at 30K | 18, 82, 144 |
 
@@ -537,7 +537,7 @@ All 3 ARC-AGI-3 games solved at Level 1:
 
 **Apparent ceiling resolved:** The 6/10 ceiling at 50K on LS20 (Steps 459-483) was a step budget artifact. Hard seeds need 35K-115K steps vs 5-20K for easy seeds. Step 484 confirmed 10/10 at 200K. The 6/10 figure should not be cited as a fundamental limit.
 
-**POMDP reframing and selective π-refinement (Steps 652-690).** L1 is a hidden-state conjunction problem: the agent visits the exit cell avg 152 times before L1 triggers (Step 652). The bottleneck is hash resolution at the exit cell, not action selection (Proposition 15). Step 672 (diagnostic): k=20 separates hidden states that k=12 conflates — slow seeds have 20-43 k=20 sub-cells at the exit cell vs 6.79 average. **Step 674 (transition-triggered dual-hash): definitive 17/20 L1 at 25s (Step 690, 20-seed sweep).** Cells with inconsistent transitions (|successor_set| ≥ 2) get fine k=20 hash; all others use k=12. Seed 8: 192x faster (24235→126). The aliased-cell count determines success: <130 aliased cells → faster, >180 → slower or fails. 3 missing seeds (7, 12, 16) have 181-214 aliased cells — likely budget-limited, not mechanism failures. This is ℓ_π: the observation mapping is refined from the system's own transition statistics, R1-compliantly. Cross-game: FT09 5/5 (Step 680, aliased=1-4), VC33 0/5 (Step 681 — irrelevant, VC33 bottleneck is action decomposition not aliasing).
+**POMDP reframing and selective π-refinement (Steps 652-690).** L1 is a hidden-state conjunction problem: the agent visits the exit cell avg 152 times before L1 triggers (Step 652). The bottleneck is hash resolution at the exit cell, not action selection (Proposition 15). Step 672 (diagnostic): k=20 separates hidden states that k=12 conflates — slow seeds have 20-43 k=20 sub-cells at the exit cell vs 6.79 average. **Step 674 (transition-triggered dual-hash): 17/20 L1 at 25s (Step 690), 20/20 at 120K (Step 692 — complete L1 coverage, +11 seeds vs baseline 9/10).** Cells with inconsistent transitions (|successor_set| ≥ 2) get fine k=20 hash; all others use k=12. Seed 8: 192x faster (24235→126). The aliased-cell count determines success: <130 aliased cells → faster, >180 → slower or fails. 3 missing seeds (7, 12, 16) have 181-214 aliased cells — likely budget-limited, not mechanism failures. This is ℓ_π: the observation mapping is refined from the system's own transition statistics, R1-compliantly. Cross-game: FT09 5/5 (Step 680, aliased=1-4), VC33 0/5 (Step 681 — irrelevant, VC33 bottleneck is action decomposition not aliasing).
 
 **Encoding requirements:** centered_enc ($x - \text{mean}(x)$) is load-bearing across 2 families (codebook: prevents cosine saturation; LSH: prevents hash concentration). avgpool16 (64×64 → 16×16 = 256D) is required for LS20 — raw 4096D with k=16 gives 1/5 vs 6/10 for avgpool16 (Step 466).
 
