@@ -37,4 +37,4 @@ cd viz && python viz.py
 
 ## License
 
-MIT
+CC-BY-NC 4.0
