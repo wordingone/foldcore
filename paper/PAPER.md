@@ -541,6 +541,95 @@ The decomposition into compare-select-store is the STRUCTURE of $F$. The specifi
 
 **Degrees of freedom:** The representational capacity of $S$ — what operations can be encoded as state that the interpreter reads and executes — determines whether interpreter entailment is achievable (DoF 9).
 
+#### Proposition 14b: CSE Uniqueness
+
+**Claim:** Compare-select-store is the unique coarsest decomposition of $F$ satisfying R1-R6 + U3.
+
+**Prior work:** Von Neumann's self-reproducing automata (1966) require a constructor + copier + controller — three components, each necessary. Minsky (1967) showed that any computation can be decomposed into match-execute-store in a production system. SUBLEQ (subtract-and-branch-if-≤-0) demonstrates that a single operation suffices for Turing completeness, but SUBLEQ's single operation implicitly performs all three: subtract (compare), branch (select), and write (store). One Instruction Set Computers (OISCs) show that FINER decomposition always maps back to CSE. Universal Turing Machines require read (compare tape against state), transition (select next state), and write (store to tape) — CSE under different names.
+
+**Argument:**
+
+1. **Individual necessity.** Each operation is entailed by a distinct rule:
+   - $\texttt{compare}$: R1 requires distinguishing inputs without external signal. Any discrimination operation maps $(s, x)$ to a score or match result. This IS comparison — testing $x$ against elements of $s$. Without compare, $f_s(x)$ is either constant in $x$ (no input processing) or independent of $s$ (no adaptation). Both violate R2.
+   - $\texttt{store}$: U3 requires $S_t \subseteq S_{t+1}$ (zero forgetting). This requires a persistent write operation that extends $s$ without removing existing structure. Without store, no memory.
+   - $\texttt{select}$: R2 requires adaptation from computation. The comparison result must determine WHICH part of $s$ to update (or whether to create a new element). Without selection, every observation updates everything globally. U17 + R6 then require every global update to produce irredundant growth — but global updates create redundancy whenever two observations have similar comparison profiles. R6 is violated.
+
+2. **Joint sufficiency.** The feasible region for CSE is non-empty (Section 5.1: graph + argmin satisfies R1, R2, U1-U3, U17, U20). CSE is sufficient for all tested navigation tasks.
+
+3. **No fourth operation.** Suppose a fourth operation $\texttt{op}_4$ is necessary. Then removing $\texttt{op}_4$ must destroy all capability (R6 applied to operations). But $\texttt{op}_4$ must be independent of $\{$compare, select, store$\}$ — otherwise it is a specialization of one of them. What independent operation could exist?
+   - **Modify** (R3): Compare stored procedures, select which to change, store the modification. This IS CSE applied at a higher abstraction level (the hierarchy collapse, Section 3.2). Not a fourth primitive — recursive application of the same three.
+   - **Predict**: Compare current state to historical patterns, select a prediction, store it. Again CSE on different data. Not independent.
+   - **Transform**: A function $T: S \to S$ not decomposable into CSE. But any $T$ that satisfies R1 (no external signal) and R2 (adaptation from computation) must consult $s$ (compare), choose a response (select), and persist the result (store). $T$ without any of these three violates the corresponding rule.
+
+4. **Uniqueness at the coarsest level.** Any alternative decomposition of $F(s)(x)$ into operations that satisfies R1-R6 + U3 either:
+   (a) Contains CSE as a sub-decomposition (a refinement: preprocess → compare → score → rank → select → validate → store), or
+   (b) Omits one of {compare, select, store}, violating the corresponding rule (step 1).
+
+   Therefore CSE is the unique decomposition at the coarsest granularity. Finer decompositions exist but are specializations.
+
+**Status:** The individual entailments (step 1) are provable from R1-R6 + U3. The uniqueness claim (step 4) rests on the exhaustiveness argument in step 3 — an informal argument that every conceivable fourth operation reduces to CSE on different data. This is not a formal proof (it would require a formal model of "operation") but a structural argument. We are not aware of a counterexample among R1-R2-compliant systems.
+
+**Relationship to prior work:** Von Neumann's constructor-copier-controller decomposition (1966) is the closest analog — three necessary components for self-reproduction. Our CSE decomposition is the analog for self-modification under R1-R6. The difference: Von Neumann's components are physically distinct (hardware); ours are functionally distinct (operations within a single dynamical system). The structural parallel suggests CSE uniqueness may be a general property of self-referential systems, not specific to our framework.
+
+**Empirical confirmation:** Every substrate family tested (12 families, 720+ experiments) decomposes into CSE:
+- Codebook/LVQ: compare=cosine similarity, select=winner-take-all, store=attract update
+- LSH: compare=hash projection, select=argmin over edge counts, store=edge increment
+- Reservoir: compare=reservoir response, select=readout, store=Hebbian update
+- k-means: compare=L2 distance, select=nearest centroid, store=centroid update
+
+No family implements a fundamentally different decomposition. The variation is in IMPLEMENTATIONS of CSE, not in alternatives to CSE.
+
+**Implication for R3:** If CSE is unique, then R3 cannot modify the STRUCTURE of the interpreter (compare-select-store) — only its IMPLEMENTATIONS. This transforms R3 from "modify the program" to "modify the implementations within a fixed program structure." The search space for R3 is the space of CSE implementations, not the space of all possible interpreters. This is a massive reduction: from searching over all dynamical systems to searching over all (compare, select, store) triples satisfying the constraint table in Section 4.6.
+
+### 4.8 R3 as Self-Directed Attention (Proposition 17)
+
+**The insight (compression, 2026-03-22):** R3 requires every aspect of the system to be self-modified. CSE uniqueness (Proposition 14b) says the interpreter structure is fixed. What remains to be self-modified? The ENCODING — the lens through which the interpreter sees. R3 is not "modify the program." R3 is "modify what the program attends to."
+
+**Prior work:**
+- **Active perception** (Bajcsy, 1988): "the problem of intelligent control of perceptual activity." Perception is not passive reception but active selection of what to observe. Our formalization makes this precise for self-modifying systems.
+- **Predictive coding** (Rao & Ballard, 1999): Neural systems encode prediction errors, not raw stimuli. The encoding adapts based on what's expected. Connection: centering ($x - \mathbb{E}[x]$, U16) IS predictive coding — the running mean is the prediction, the centered input is the prediction error. This is part of our frozen frame; R3 would make it adaptive.
+- **Perceptual learning** (Goldstone, 1998; Fahle & Poggio, 2002): Long-term changes in perception from experience. Mechanisms include attentional weighting (attending more to task-relevant features) and differentiation (distinguishing previously confusable stimuli). Both describe changes to $\pi_s$ from interaction history.
+- **Feature attention in RL** (Lehnert & Littman, 2020): State representations that adapt based on task demands. The "state abstraction" literature (Li et al., 2006) formalizes when two states can be merged without losing value information. Connection: our transition-inconsistency criterion (Proposition 16) is an R1-compliant version of bisimulation-based abstraction — cells with identical transition profiles are "equivalent" and share the coarse hash.
+
+**Formalization:** Recall $F(s)(x) = \texttt{store}(s, \texttt{select}(s, \texttt{compare}(s, x)))$. Decompose $\texttt{compare}$:
+
+$$\texttt{compare}(s, x) = d(\pi_s(x), \text{elements}(s))$$
+
+where:
+- $\pi_s: X \to Z$ is the **state-dependent encoding** (observation → feature space)
+- $d: Z \times Z^* \to D$ is the distance/similarity function (fixed, part of interpreter)
+- $\text{elements}(s) \subseteq Z$ are the stored encodings in state
+
+**Definition (Self-Directed Attention).** The system exhibits *self-directed attention* when $\pi_s$ depends on $s$ through the system's own interaction history:
+
+$$\pi_s = \pi_{T(s)}$$
+
+where $T: S \to \Sigma$ extracts transition statistics from the system's accumulated state (edge counts, successor sets, visit patterns). The encoding changes because the system's HISTORY changes, not because an external signal directs it.
+
+**Proposition 17 (R3 ≡ Self-Directed Attention).** For any system satisfying CSE uniqueness (Proposition 14b):
+
+1. R3 applied to $\texttt{compare}$ requires $\exists s_1 \neq s_2: \texttt{compare}(s_1, \cdot) \neq \texttt{compare}(s_2, \cdot)$ as functions on $X$.
+2. This holds iff either $d$ depends on $s$ (interpreter modification, $\ell_F$) or $\pi$ depends on $s$ (encoding modification, $\ell_\pi$), or both.
+3. The hierarchy collapse (Section 3.2) shows $\ell_F = $ recursive $\ell_\pi$ for CSE interpreters: modifying $d$ is equivalent to applying CSE to $d$'s parameters, which is $\ell_\pi$ at the meta-level.
+4. Therefore: **R3 for the comparison operation reduces to self-directed attention** — state-dependent $\pi_s$.
+
+**Concrete mechanism (Step 674).** TransitionTriggered674 implements self-directed attention:
+- **Channel selection:** Transition consistency ($I(n) = |\text{succ}(n)|$), not pixel variance, determines where to refine. The system attends to BEHAVIORAL features (which cells have ambiguous transitions), not sensory features (which pixels vary).
+- **Spatial resolution:** Aliased cells ($I(n) \geq 2$) get fine hash ($k = 20$); unaliased cells keep coarse hash ($k = 12$). The system INCREASES resolution where its interaction history reveals ambiguity.
+- **Region weighting:** Computational budget (hash evaluations, edge storage) concentrates at aliased cells. The system allocates attention proportional to uncertainty.
+
+All three dimensions of attention are determined by $s$ (transition statistics), satisfying R3 for $\pi$ without modifying the interpreter.
+
+**R3 applied to select and store.** Proposition 17 addresses R3 for compare. The remaining operations:
+- R3 for $\texttt{select}$: $g_s$ must depend on $s$. Argmin already satisfies this — $g(s) = \text{argmin}_a E(c, a)$ depends on edge counts in $s$. This is $\ell_0$ (data changes, not rule changes). Full R3 for select requires the RULE (argmin vs argmax vs softmax) to depend on $s$. This is the U11 + U24 tension (Section 3.4): navigation requires argmin, classification requires argmax. State-dependent switching IS R3 for select.
+- R3 for $\texttt{store}$: The update rule must depend on $s$. Currently fixed (increment edge count by 1). Full R3: the increment amount, the storage format, the growth criterion all depend on $s$. The 674 refinement mechanism partially satisfies this — whether a cell creates sub-cells depends on $I(n)$, which depends on $s$.
+
+**Testable prediction:** Any substrate achieving R3 will exhibit self-directed attention — state-dependent encoding derived from interaction history. If a substrate achieves R3 through a fundamentally different mechanism (genuine $\ell_F$ not reducible to $\ell_\pi$), Proposition 17 is falsified. Experimental test: run the chain benchmark (Split-CIFAR-100 → LS20 → FT09 → VC33 → Split-CIFAR-100) with 674 + adaptive encoding (channel weights from transition statistics) and measure dynamic R3 via ConstitutionalJudge.measure_r3_dynamics().
+
+**Relationship to prior work:** Active perception (Bajcsy 1988) is the philosophical framework; our formalization is the mathematical one. Predictive coding (Rao & Ballard 1999) shows the brain uses a specific form of self-directed attention (prediction error encoding); our framework generalizes beyond prediction error to any state-dependent $\pi$. Perceptual learning (Goldstone 1998) demonstrates long-term perception changes from experience — exactly what R3 demands. Our contribution: connecting R3 (a formal rule for self-modification) to self-directed attention (a well-studied phenomenon) and showing the equivalence for CSE interpreters.
+
+**Implication:** R3 is not an exotic requirement. It is the well-studied phenomenon of adaptive perception, formalized within the CSE interpreter framework. The 720 experiments that failed R3 did not fail because R3 is impossible — they failed because they kept the encoding fixed ($\ell_0$ or weak $\ell_\pi$) while trying to modify the action selection ($g$), which is the WRONG target (Proposition 15). The cascading next step: extend 674's transition-triggered refinement to ALL dimensions of $\pi$ — channel selection, spatial resolution, temporal integration — and test on the chain where encoding failures are exposed (CIFAR needs color, VC33 needs room detection).
+
 ## 5. Experimental Evidence
 
 ### 5.1 Navigation (720+ experiments)
