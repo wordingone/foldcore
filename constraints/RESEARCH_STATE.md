@@ -121,7 +121,10 @@ Step 920b - Graph+argmin at 6 actions (baseline_actions [17,19,15,21,65,26]). FT
 Step 921 - Alpha-filtered action space + sequence memory (K=5, K=8). FT09 L1=0. Filter selects WRONG tiles at 5K (alpha not concentrated enough). Phase 1 needs 15K+ for reliable alpha → delta signal.
 Step 922 - Long phase 1 (15K) + filtered K=6. FT09 L1=0, 10/10 zeros. DEFINITIVE: delta_per_action does NOT identify puzzle tiles. Puzzle tiles produce LOW average delta (context-dependent — only move when adjacent to empty). Background clicks produce CONSISTENT delta. Delta selects wrong actions regardless of phase 1 length. 0/10 seeds have ≥3 correct tiles in top-K.
 **FT09 DIAGNOSIS COMPLETE (Steps 895f, 914, 920, 920b, 921, 922): FT09 is structurally beyond change-tracking + alpha.** The puzzle tiles are context-dependent (only respond in sequence). Delta under random exploration favors consistency over productivity. Even correct 6 actions + graph = L1=0. FT09 requires BFS/frontier or intermediate progress signal. PIVOT TO VC33.
-Step 923 RUNNING - VC33 diagnostic with 916 + 895h. VC33 may be tractable (zone-based, not sequence-dependent).
+Step 923 - VC33 diagnostic. L1=0 both 916 and 895h (0/10 zeros each). Same root cause as FT09: magic pixel interactions context-dependent. Delta identifies wrong actions (0/7 baseline overlap).
+Step 925 - Scalar forward model on recurrent h. LS20 L1=164.7 (BELOW baseline, -43% vs 916). FT09/VC33=0. **KILLED by chain criterion: hurts LS20 without helping any game.** ANY addition to 800b action selection degrades LS20. Encoding modifications help; action modifications hurt.
+**ARCHITECTURE LOCKED (2026-03-23): 916 = recurrent h (64D echo-state) + clamped alpha (0.1-5.0) + pure 800b (L2 delta EMA + softmax T=0.1).** No additions to action selector. Encoding-only modifications.
+Step 926 RUNNING - Full chain with 916 architecture (h persists across games, W_scalar excluded).
 **Step 920 — Graph+argmin pre-ban ceiling (n_eff=10). LANDMARK RESULT.**
   LS20: L1=129.9/seed, std=124, 4/10 zeros. **895h cold (268.0) BEATS graph+argmin by 2.1×.**
   FT09: L1=0, 10/10 zeros. **Even graph can't solve FT09 at 68 actions.** Bottleneck is action space size (68^7), not graph ban.

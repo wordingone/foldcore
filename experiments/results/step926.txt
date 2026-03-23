@@ -1,0 +1,18 @@
+B:\M\the-search\experiments\step0926_chain_scalar_forward.py:235: DeprecationWarning: __array__ implementation doesn't accept a copy keyword, so passing copy=False failed. __array__ must implement 'dtype' and 'copy' keyword arguments. To learn more, see the migration guide https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword
+  images = np.array([np.array(ds[i][0]).transpose(1, 2, 0) for i in range(len(ds))],
+======================================================================
+STEP 926 — FULL CHAIN: CIFAR→LS20→FT09→VC33→CIFAR (SCALAR FORWARD MODEL)
+======================================================================
+Architecture: 916 recurrent h (persistent) + W_scalar (game-reset) + 800b
+Kill criterion: scalar helps one game but hurts another → KILL
+CIFAR-100: loaded
+
+  Seed 1:
+Traceback (most recent call last):
+  File "B:\M\the-search\experiments\step0926_chain_scalar_forward.py", line 296, in <module>
+    c1, s1, acc1 = run_cifar_phase(sub, 100, cifar_images, cifar_labels, ts * 1000, PHASE_STEPS)
+  File "B:\M\the-search\experiments\step0926_chain_scalar_forward.py", line 272, in run_cifar_phase
+    action = sub.process(obs) % n_actions
+  File "B:\M\the-search\experiments\step0926_chain_scalar_forward.py", line 161, in process
+    inp = np.concatenate([self._prev_ext * self.alpha,
+ValueError: operands could not be broadcast together with shapes (320,) (256,) 
