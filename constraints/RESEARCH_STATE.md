@@ -72,9 +72,10 @@ DIRECTION (2026-03-23, Jun): THIRD CLUSTER. Codebook=vertex 1 (recognition). Gra
     Warm alpha stable (conc=16.8 across seeds). Cold alpha unstable (seeds with sub_seed=2 over-concentrate to 61.9 → L1=0).
     FT09: L1=0 at 5K steps (insufficient budget for 68 actions). Alpha confirmed [60,51,52] (4th independent run).
     **Warm substrate navigates 3.4× better than cold.** First time warm transfer HELPS navigation.
-    ISSUES: (1) absolute L1 below plain 800b (379/seed at 25K) — budget mismatch, need 25K comparison.
-    (2) cold concentration instability — over-rapid alpha convergence kills some seeds.
-    895d SPEC'D: 25K budget, fair comparison with 800b baseline. 895e SPEC'D: alpha clamping to fix instability. 895f SPEC'D: FT09 at 25K.
+    BUDGET: 10K per test seed (confirmed). **895c warm at 10K (77.8) BEATS true 800b at 25K (72.1).** At half the budget, alpha warm is the best post-ban mechanism after 868b retraction.
+    Reliability: 895c warm std≈35, 0/5 zeros. Plain 800b std≈112, 5/10 zeros. **3× lower variance.**
+    ISSUES: cold concentration instability — over-rapid alpha convergence kills some seeds.
+    895d SPEC'D: 25K budget + W alpha-pred-acc measurement. 895g SPEC'D: dual-stream (alpha for W only, raw for 800b). Running.
 Step 896 SPEC'D - SDM forward model: Sparse Distributed Memory (Hamming on binary addresses). Non-linear prediction without neural networks. NOT codebook (no cosine, no attract).
 Step 897 - Decision tree. KILLED (tree_depth=0, splits never triggered on LS20).
 Step 898 - LZ complexity. KILLED (compression ratio variance=0, zlib can't distinguish 1-byte action append).

@@ -1420,6 +1420,16 @@ None of these systems modify their own rules. All achieve self-organization that
 
 **Implication:** $\ell_F$ as originally defined (the rule for modifying $\pi$ itself adapts) is impossible for computable systems — the highest-level rule is always fixed. But $\ell_F$ can be ACHIEVED IN EFFECT by a sufficiently expressive $\ell_1$: if the state space $S$ is rich enough to encode arbitrary comparison operations as data, and the interpreter executes them, then the system's behavior is indistinguishable from $\ell_F$ despite being formally $\ell_1$. The question shifts from "can the system modify its interpreter?" (no) to "is the interpreter + state space expressive enough to simulate any modification?" (the expressiveness question).
 
+#### Post-ban addendum (Steps 778-903)
+
+**R3 encoding self-modification ($\ell_\pi$) is achieved.** Prediction-error attention (Step 895) drives encoding weights $\alpha$ that concentrate on informative observation dimensions — FT09 puzzle tile locations discovered autonomously ($10.87\times$ concentration, 4 independent confirmations). This is the first post-ban mechanism satisfying $\ell_\pi$: the observation mapping changes based on accumulated prediction state. The mechanism is single-level predictive coding (Friston, 2009).
+
+**Navigation remains at $\sim 2\times$ random.** The 800b mechanism (per-action change tracking) was reported at $6\text{-}10\times$ random but this was a substrate\_seed=0 artifact. True performance across varied seeds: mean 72.1 L1/seed, 5/10 seeds at zero (Step 868b). No post-ban mechanism reliably exceeds $2\times$ random.
+
+**The R3 contribution is reliability, not speed.** Alpha-weighted 800b with warm transfer (Step 895c): mean 77.8 L1/seed at 10K steps (above the true 800b baseline at 25K), with $3\times$ lower variance and 0/5 seeds at zero. Warm alpha regularizes cold-start exploration, eliminating the initialization lottery that dominates plain 800b.
+
+**The gap is now quantified.** Pre-ban navigation (graph + argmin): $\sim 20\times$ random, 20/20 seeds. Post-ban navigation (best mechanism): $\sim 2\times$ random, 5-10/10 seeds. The gap is $10\times$ in speed and $2\text{-}4\times$ in reliability. The graph ban removes exactly the mechanism (per-state action memory) that makes navigation systematic. The prediction accuracy cascade (Section 4.11) is the proposed bridge: if $\alpha$-concentrated forward model accuracy exceeds a threshold, prediction-guided action selection could achieve systematic exploration without per-state memory.
+
 ### 7.7 Where the search points
 
 The 777+ experiments, 20 propositions, and 3 theorems converge on a single question: **can a substrate accumulate transferable knowledge without tracking where it has been?**
