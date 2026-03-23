@@ -902,6 +902,30 @@ The gap: $W$ trained on one environment learns global dynamics that TRANSFER (Pr
 
 **Implication:** Post-ban substrates face a fundamental tradeoff. D(s) captures transferable global dynamics (prediction R3_cf PASS). But converting global dynamics to local navigation requires per-state information — which the graph ban removes. The feasible region for PREDICTION transfer is non-empty (first confirmed). The feasible region for NAVIGATION transfer remains empty in the post-ban regime. Whether any mechanism bridges this gap without per-state tracking is the open frontier.
 
+### 4.11 Architecture Triangle and R3 Structural Possibility (Proposition 22)
+
+**Proposition 22 (Architecture Triangle).** The 800+ experiments across 12 architecture families cluster into three vertices defined by what the substrate's state encodes:
+
+1. **Recognition vertex** (codebook family, Steps 1-416). State $V = \{v_i\}$ encodes observation prototypes. Processing: $i^* = \text{argmax}_i \cos(x, v_i)$, $v_{i^*} \leftarrow v_{i^*} + \eta(x - v_{i^*})$. Action derives from nearest prototype. **R3 signal: none.** Cosine similarity is symmetric — it measures proximity but cannot distinguish informative from uninformative observation dimensions.
+
+2. **Tracking vertex** (graph family, Steps 417-777). State $G: S \times A \to \mathbb{N}$ encodes transition counts. Processing: $G(s, a) \leftarrow G(s, a) + 1$, action $= \text{argmin}_a G(s, a)$. **R3 signal: successor set inconsistency** (Step 674 — cells with $|\text{succ}(n)| \geq 2$ trigger refinement). This IS an R3 signal (encoding modified by accumulated state). But the graph ban eliminates the data structure that generates it.
+
+3. **Dynamics vertex** (prediction family, Steps 778+). State $W$ encodes a model of the transition function: $\hat{x}' = W(x, a)$. Processing: delta rule $W \leftarrow W - \eta \nabla_W \|W(x,a) - x'\|^2$. **R3 signal: prediction error distribution.** Per-dimension error $e_d = |\hat{x}_d - x_d|$ directly measures which dimensions contain learnable dynamics vs static noise. This signal is unique to the dynamics vertex: neither cosine similarity (vertex 1) nor visit counting (vertex 2) can generate it.
+
+**Corollary 22.1 (Post-Ban R3 Uniqueness).** In the post-ban regime (no per-state-action structures, no cosine-attract matching), prediction error from a dynamics model is the **unique remaining signal** for encoding self-modification. The recognition family never had such a signal. The tracking family's signal (successor inconsistency) requires the banned graph structure. Only the dynamics family survives both bans with an R3-capable signal.
+
+**Corollary 22.2 (Prediction-Error-Driven Encoding).** Define attention weights $\alpha_d \propto \sqrt{\bar{e}_d}$ where $\bar{e}_d$ is the mean absolute prediction error on dimension $d$ over a recent window. The modified encoding $\pi_\alpha(x) = \alpha \odot \pi(x)$ satisfies $\ell_\pi$: the observation mapping depends on the substrate's accumulated prediction state. As $W$ improves, $\bar{e}_d$ changes → $\alpha$ changes → the encoding changes → what $W$ observes changes → $W$ learns different dynamics → $\bar{e}_d$ changes. This is the (M,R)-system closure applied to encoding: the system's predictions produce the signal that modifies how it observes.
+
+**Testable prediction (Step 895):** On FT09 (98.7% static pixels), $\alpha$ should concentrate on the $\sim$1.3% of dynamic dimensions within 5K steps — the substrate DISCOVERS diff encoding without human prescription. On LS20 (all dimensions change in grid-world), $\alpha$ should remain approximately uniform. If confirmed, this is the first post-ban mechanism that achieves game-adaptive encoding through self-modification.
+
+**The true substrate and the triangle.** The three vertices define the search space. Vertices 1 and 2 are R3 = 0 by construction (fixed processing rules). Vertex 3 is R3 > 0 by the prediction-error signal. The true substrate is either:
+
+(a) **At vertex 3:** a pure dynamics machine. All state encodes the transition model. Navigation, exploration, and spatial awareness emerge from prediction accuracy alone. The Proposition 21 gap closes when prediction accuracy is high enough — a perfect forward model IS a compressed graph (knowing $W(s, a) = s'$ for all $a$ is equivalent to knowing the graph without storing it).
+
+(b) **Interior to the triangle:** the substrate has spatial awareness (vertex 1 property via $\alpha$-weighted encoding, not cosine matching), exploration capability (vertex 2 property via prediction novelty, not visit counting), and dynamics modeling (vertex 3 property via forward model). These three properties are achieved through a single mechanism at vertex 3 — prediction error drives all of them.
+
+In either case, the dynamics vertex is the necessary component. The search reduces to: find a forward model accurate enough that prediction error becomes a reliable signal for both navigation and encoding self-modification.
+
 ## 5. Experimental Evidence
 
 ### 5.1 Navigation (720+ experiments)

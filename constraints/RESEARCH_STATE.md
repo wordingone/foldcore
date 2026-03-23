@@ -57,7 +57,15 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: ~840 complete (incl. analysis steps 878/882/883/886/887). Steps 813-888 in progress. Step 889 (PredictiveNovelty) is the critical experiment.
+CURRENT STEP: ~840 complete (incl. analysis steps 878/882/883/886/887). Steps 813-900 in progress.
+DIRECTION (2026-03-23, Jun): THIRD CLUSTER. Codebook=vertex 1 (recognition). Graph=vertex 2 (tracking). The true substrate is at vertex 3 (dynamics/prediction) or interior to the triangle. Post-ban, prediction error is the UNIQUE remaining signal for R3 encoding self-modification (Proposition 22). Steps 889-894 (already spec'd) + Steps 895-900 (new batch) systematically explore the breadth of the dynamics vertex: MLP, CTS, ESN, prediction-error attention, SDM, decision tree, LZ complexity, population predictors, attractor landscape. Step 895 (prediction-error-driven attention) is THE priority — first mechanism that could achieve game-adaptive encoding without human prescription.
+Step 895 SPEC'D - PredErrorAttention: per-dim prediction error drives attention weights α on encoding. α concentrates on informative dims → substrate discovers diff encoding on FT09 (98.7% static → ignore) and uniform encoding on LS20 (all dims change). R3 via prediction error → encoding self-modification. THE experiment.
+Step 896 SPEC'D - SDM forward model: Sparse Distributed Memory (Hamming on binary addresses). Non-linear prediction without neural networks. NOT codebook (no cosine, no attract).
+Step 897 SPEC'D - Online decision tree predictor: symbolic, interpretable, exact for deterministic transitions. Tree growth IS self-modification.
+Step 898 SPEC'D - LZ complexity novelty: pure information theory, no model. Compressibility of observation sequence as action signal.
+Step 899 SPEC'D - Population of micro-predictors: R3 via evolutionary selection, not gradient.
+Step 900 SPEC'D - Attractor landscape navigation: energy surface over observation space, dynamical systems approach.
+Step 889 SPEC'D - PredictiveNovelty: visited_set (per-obs, allowed) + W prediction (global, allowed). Action = go where W predicts unvisited state. Bridges Proposition 21. CRITICAL TEST.
 Step 824 - D component ablation. W_only=32.4% > full_D=16.1%. Running_mean HURTS transfer (freezes at pretrain distribution). **Transfer protocol: W only, reset running_mean.**
 Step 874 - Obs diversity. LS20: collision 50.3%, 2483 unique obs. FT09: collision 98.7%, 64 unique obs. FT09 nearly static.
 Step 813 - Anti-convergence. eps=0.50 best cold (364/seed) but warm=0. eps=0.20 is sweet spot for transfer.
