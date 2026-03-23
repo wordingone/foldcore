@@ -62,6 +62,10 @@ Step 750 - K grows from entropy signal on LS20. L1=17/20 PASS. K_final avg=22.5 
 Step 751 - K grows from aliasing rate on LS20. L1≈14-16/20 (estimate). K_final range 16-24. alias_rate=0.28-0.43 even at K=24. Aliasing is STRUCTURAL in LS20 — 674 uses it by design. Cannot use aliasing rate to find natural K.
 Step 752 - K sweep K∈{4,6,8,10,12,16} on LS20. RUNNING. Will determine minimum sufficient K.
 FINDING (Steps 750-751): K_NAV=12 is a DESIGN PARAMETER, not a natural constant of the game. Neither entropy nor aliasing rate converges to a specific K value. K stays U (unjustified) unless Step 752 shows it's the minimum sufficient value (→ I, irreducible).
+Step 755 - Adaptive REFINE_EVERY on LS20. L1=5/10 KILL. Avg refine period=1625 (vs fixed 5000). Aliasing rate=0.62. Over-triggers — disrupts graph before buildup. REFINE_EVERY=5000 stays U. Cannot be derived from aliasing rate.
+Step 760 - 674 on Split-CIFAR-100. avg_accuracy=20.21% (chance=20.0%). BWT=+5.6%. R1 floor confirmed: self-organization without labels = chance. Positive BWT notable — growth-only graphs don't overwrite (anti-forgetting by construction, not by mechanism).
+Step 761 - PlainLSH on Split-CIFAR-100. avg_accuracy=20.04%, BWT=+4.3%. Nearly identical to 674. Anti-forgetting is a graph property, not refinement-specific.
+Step 752 - K sweep (partial): K=4 L1=2/10 FAIL, K=6 L1=7/10 PASS. K=8-16 pending. Minimum sufficient K appears to be 6.
 GAME VERSION FIX (2026-03-23): FT09/VC33 action_space=1 was a chain.py bug (ACTION_RESET sent on first steps). Fixed. All 3 games operational.
 
 Step 720 - 674 baseline on chain. L1=2548 (LS20 baseline for comparison).
