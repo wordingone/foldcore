@@ -1483,6 +1483,67 @@ self-referential noise (patterns that look complex but carry no usable
 signal). The self-observation mechanism must be as blind as argmin is to
 transition entropy.
 
+\paragraph{Post-Ban Resolution: Compression Progress (Schmidhuber
+1991)}\label{post-ban-resolution-compression-progress-schmidhuber-1991}
+
+\textbf{The post-ban problem:} The graph ban (post Step 777) eliminates
+per-(state, action) tracking. Argmin --- the only noisy-TV-robust action
+selection mechanism tested --- requires visit counts. The noisy TV
+barrier applies to all tested alternatives. What post-ban mechanism
+avoids the noisy TV trap?
+
+\textbf{Prior work:} Schmidhuber (1991, 2010) proposed \emph{compression
+progress} --- intrinsic reward proportional to the IMPROVEMENT in
+prediction accuracy, not the absolute prediction error. Oudeyer, Kaplan
+\& Hafner (2007) formalize this as \emph{learning progress} in
+developmental robotics. Lopes, Lang \& Toussaint (2012) prove PAC bounds
+for exploration driven by learning progress. The key property:
+compression progress is zero at irreducible transitions (error doesn't
+improve) and positive at novel learnable transitions (error decreases).
+
+\textbf{Formal argument:} Let
+\(E_t(s, a) = \mathbb{E}[\|W_t(s, a) - s'\|^2]\) be the forward model's
+prediction error at time \(t\). Decompose:
+\(E_t = E^{\text{aleatoric}} + E^{\text{epistemic}}_t\), where
+\(E^{\text{aleatoric}}\) is irreducible (stochastic transitions,
+constant in \(t\)) and \(E^{\text{epistemic}}_t\) is reducible
+(decreases with experience). Compression progress:
+\(\Delta E_t = E_{t-1} - E_t = \Delta E^{\text{epistemic}}_t\), since
+\(E^{\text{aleatoric}}\) cancels.
+
+Therefore: \(\text{argmax}_a \Delta E_t(s, a)\) selects actions that
+maximize epistemic uncertainty reduction --- exactly the useful
+exploration signal. Stochastic transitions (the ``noisy TV'') have
+\(\Delta E = 0\) and are naturally avoided.
+
+\textbf{R1 compliance:} Compression progress is computed from the
+substrate's own forward model update (\(W_{t-1}\) vs \(W_t\)). No
+external signal enters. The action selection rule is fixed (argmax of
+\(\Delta E\)); only the inputs change with state. R1: PASS.
+
+\textbf{Graph ban compliance:} \(\Delta E\) is computed from a global
+\(W\) matrix, not from per-(state, action) data. The forward model
+stores dynamics (HOW things change), not location (WHERE the substrate
+has been). Graph ban: PASS.
+
+\textbf{Connection to Section 4.5 results:} The 6 strategies that lost
+to argmin (Steps 477-482) all optimized absolute prediction error or
+novelty --- maximizing \(E_t\), not \(\Delta E_t\). Compression progress
+is qualitatively different: it selects actions where the model is
+LEARNING, not where the model is WRONG. This distinction is precisely
+the noisy TV problem restated: \(E^{\text{aleatoric}}\) is where the
+model is wrong but can't learn; \(\Delta E^{\text{epistemic}}\) is where
+the model is learning.
+
+\textbf{What is novel vs known:} Compression progress is Schmidhuber
+(1991). Its noisy TV robustness is known (Oudeyer et al.~2007, Pathak et
+al.~2017 discuss it). Our contribution: (1) connecting compression
+progress to the specific noisy TV failures in our framework (6
+strategies, Steps 477-482); (2) establishing R1 compliance under our
+constitutional framework; (3) identifying compression progress as the
+leading candidate for post-ban action selection after argmin
+elimination. \textbf{Untested:} Step 855 tests this directly.
+
 \paragraph{Proposition 15: Perception-Action
 Decoupling}\label{proposition-15-perception-action-decoupling}
 
@@ -3655,6 +3716,28 @@ open questions (T1, T9). The constraint system is internally consistent.
   R1-compliant classification --- no substrate has achieved above-chance
   accuracy without external labels.
 \item
+  \textbf{Post-ban action selection (PB4).} No known R1-compliant
+  mechanism selects actions effectively without per-(state, action)
+  tracking. Candidates: prediction-contrast, compression progress,
+  empowerment maximization, action cycling. Steps 778-888 test
+  systematically.
+\item
+  \textbf{D-only substrate feasibility.} Proposition 20 predicts
+  D(s)-only substrates could achieve positive R3 counterfactual. No
+  D-only substrate has been built or tested. Steps 778-806 are first
+  contact.
+\item
+  \textbf{Noisy TV under post-ban regime.} Prediction-error exploration
+  (the natural replacement for visit-count exploration) is vulnerable to
+  the noisy TV problem (Burda et al.~2018). Whether compression progress
+  (Schmidhuber 1991) --- rewarding prediction IMPROVEMENT, not
+  prediction error --- resolves this in our framework is untested.
+\item
+  \textbf{Post-ban constraint map.} Many ``validated universal''
+  constraints (U3, U17, U24, U25, U28) were derived within the graph
+  framework. Whether they survive, need revision, or are invalidated
+  post-ban is open. Steps 879, 887 address this.
+\item
   \textbf{Interpreter entailment --- STRENGTHENED (Proposition 14b).}
   The abstract interpreter is not just entailed but UNIQUE at the
   coarsest level: CSE is the only decomposition satisfying R1-R6 + U3
@@ -4225,40 +4308,66 @@ modification?'' (the expressiveness question).
 \subsubsection{7.7 Where the search
 points}\label{where-the-search-points}
 
-The 720+ experiments, 12 propositions, and 3 theorems converge on a
-single question: \textbf{is compare-select-store with a sufficiently
-rich state space expressive enough to simulate self-modification?}
+The 777+ experiments, 20 propositions, and 3 theorems converge on a
+single question: \textbf{can a substrate accumulate transferable
+knowledge without tracking where it has been?}
 
 The path to this question: 1. R3 requires self-modification of
 operations (the goal). 2. Proposition 11 shows the current frozen frame
 IS the navigation capability --- you can't modify one without destroying
 the other (the obstacle). 3. Proposition 12 shows the interpreter
 (compare-select-store) is irreducible --- every self-referential system
-has a top-level frozen frame (the bound). 4. But Proposition 12 also
-shows ℓ\_F is achievable IN EFFECT if the state space encodes operations
-the interpreter executes (the opening). 5. The eigenform mechanism
-(Section 4.4) shows how: \(F(s)(\text{enc}(s))\) --- the substrate
-applies its own operations to its own state, building a meta-graph that
-transfers experience across similar cells (the mechanism). 6. Zenil
-(2026) predicts this works only when interleaved with environmental
-observation --- pure self-reference degenerates (the constraint). 7.
-VERL (Hao et al.~2025) suggests the explore/exploit tradeoff dissolves
-at the right measurement level --- the eigenform's meta-cells may
-provide that level (the bonus).
+has a top-level frozen frame (the bound). 4. Proposition 12 also shows
+ℓ\_F is achievable IN EFFECT if the state space encodes operations the
+interpreter executes (the opening). 5. Proposition 19 (R3
+counterfactual) shows that the graph --- per-(state, action) visit
+tracking --- produces negative transfer: pretrained state hurts on new
+environments (Step 776, p\textless0.0001). The mechanism that makes
+navigation work is the mechanism that prevents R3 (the wall). 6.
+Proposition 20 (state decomposition) formalizes why: location-dependent
+state \(L(s)\) (visit counts, edge dicts) always transfers negatively.
+Dynamics-dependent state \(D(s)\) (forward models, transition
+predictions) could transfer positively --- if the underlying dynamics
+generalize across environments (the hypothesis). 7. The graph ban (post
+Step 777, permanent) and codebook ban (post Step 416) eliminate both
+known-working mechanisms. The search enters unexplored territory where
+R3-compliance is possible but navigation is unproven (the frontier).
 
-If the eigenform experiment (Step 617) shows that meta-graph
-tie-breaking improves navigation, Theorem 2 is validated empirically and
-the path toward R3 is: build richer state encodings that the fixed
-interpreter executes. If it fails, the interpreter itself must be
-extended --- and the question becomes what the minimal extension is.
+\textbf{Three open questions define the frontier:}
 
-Either way, the 16 levels solved via source analysis (Proposition 9) are
-the specification: 16 concrete test cases that the resulting substrate
-must solve autonomously, without prescribed pipelines, without source
-code analysis, without a human designer.
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\item
+  \textbf{Can a D-only substrate navigate?} Without per-(state, action)
+  tracking, no tested mechanism achieves better-than-random exploration.
+  Prediction-contrast (argmax of predicted state change), action
+  cycling, ensemble disagreement, and compression progress are
+  candidates. Steps 778-888 test these.
+\item
+  \textbf{Does D(s) produce positive R3 counterfactual?} A forward model
+  trained on environment A should predict dynamics in environment B
+  (same physics, different layout). Steps 806, 812, 824-827 test this
+  directly. If yes, the post-ban feasible region is non-empty. If no,
+  R3\_counterfactual may be unachievable under R1.
+\item
+  \textbf{What replaces argmin?} Argmin over visit counts was the
+  universal action selection mechanism across all tested families
+  (algorithm invariance, Steps 521-525). Post-ban, no equivalent exists.
+  The closest candidate is compression progress (Schmidhuber 1991): go
+  where prediction error is IMPROVING, not where it is high. This avoids
+  the noisy TV problem (stochastic transitions have constant error, not
+  improving). Steps 855, 858, 861 test this.
+\end{enumerate}
 
-The contribution is the walls. The substrate --- if it exists --- lives
-inside them.
+The 16 levels solved via source analysis (Proposition 9) remain the
+specification. The graph ban does not change the goal --- it removes the
+scaffolding. An R3-compliant substrate must discover navigation,
+classification, and cross-domain transfer autonomously, without
+prescribed mechanisms, without per-(state, action) tracking, without a
+human designer.
+
+The contribution is the walls. The bans are two more walls. The
+substrate --- if it exists --- lives inside all of them.
 
 \subsection{Author Attribution and
 Disclosure}\label{author-attribution-and-disclosure}
