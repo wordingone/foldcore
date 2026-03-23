@@ -431,6 +431,7 @@ class ChainRunner:
 
     def __init__(self, chain: list, n_seeds: int = 10,
                  verbose: bool = True,
+                 randomize_order: bool = False,
                  # Legacy compat
                  per_seed_time: float = None):
         """
@@ -440,6 +441,7 @@ class ChainRunner:
         self.chain = chain
         self.n_seeds = max(n_seeds, self.MIN_SEEDS)
         self.verbose = verbose
+        self.randomize_order = randomize_order
         if n_seeds < self.MIN_SEEDS:
             print(f"[ChainRunner] n_seeds={n_seeds} < minimum {self.MIN_SEEDS}. "
                   f"Using n_seeds={self.MIN_SEEDS}.")
@@ -462,7 +464,15 @@ class ChainRunner:
             if self.verbose:
                 print(f"\n=== Seed {seed} ===")
 
-            for (name, wrapper) in self.chain:
+            # Optionally randomize phase order per seed
+            seed_chain = list(self.chain)
+            if self.randomize_order:
+                rng = np.random.RandomState(seed + 10000)
+                rng.shuffle(seed_chain)
+                if self.verbose:
+                    print(f"  Order: {' → '.join(n for n, _ in seed_chain)}")
+
+            for (name, wrapper) in seed_chain:
                 r = wrapper.run_seed(sub, seed)  # SAME substrate persists
                 results[name].append(r)
                 if self.verbose:

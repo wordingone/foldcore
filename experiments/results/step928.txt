@@ -1,2 +1,28 @@
 B:\M\the-search\experiments\step0928_cifar_self_cluster.py:126: DeprecationWarning: __array__ implementation doesn't accept a copy keyword, so passing copy=False failed. __array__ must implement 'dtype' and 'copy' keyword arguments. To learn more, see the migration guide https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword
   imgs = np.array([np.array(ds[i][0]).transpose(1,2,0) for i in range(len(ds))],
+======================================================================
+STEP 928 — CIFAR SELF-CLUSTERING (alpha-weighted L2 nearest neighbor)
+======================================================================
+Split-CIFAR-100: 20 tasks, 5 classes/task, 500 imgs/task.
+Chance baseline: 20% (random over 5 classes).
+Threshold: L2 in alpha space < 0.5
+  seed=1: avg_acc=0.2008  BWT=+0.0220  n_clusters=10430  alpha_conc=4.99
+    task_accs (first 5): ['0.188', '0.192', '0.192', '0.186', '0.216']
+  seed=2: avg_acc=0.2066  BWT=+0.0140  n_clusters=10381  alpha_conc=13.01
+    task_accs (first 5): ['0.200', '0.228', '0.200', '0.216', '0.226']
+  seed=3: avg_acc=0.2084  BWT=-0.0220  n_clusters=10357  alpha_conc=7.41
+    task_accs (first 5): ['0.200', '0.198', '0.204', '0.194', '0.226']
+  seed=4: avg_acc=0.1970  BWT=-0.0160  n_clusters=10429  alpha_conc=6.79
+    task_accs (first 5): ['0.200', '0.240', '0.186', '0.204', '0.214']
+  seed=5: avg_acc=0.1990  BWT=+0.0240  n_clusters=10272  alpha_conc=11.61
+    task_accs (first 5): ['0.186', '0.198', '0.202', '0.216', '0.198']
+
+======================================================================
+STEP 928 RESULTS (Split-CIFAR-100 self-clustering):
+  avg_acc=0.2024  std=0.0044
+  avg_BWT=+0.0044
+  avg_clusters=10374
+  Chance baseline: 0.2000 (20% random over 5 classes)
+  Above chance: NO (threshold: >22% = signal)
+Total elapsed: 557.3s
+STEP 928 DONE

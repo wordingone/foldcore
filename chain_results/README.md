@@ -4,17 +4,32 @@ One system. One config. No reward. Sequential diverse tasks.
 
 The parts of the chain are one problem seen from different angles — classification, navigation, sequential puzzles, cross-domain transfer. A substrate that solves one solves all.
 
-## The Chain
+## Modes
 
+**PRISM-light** (current, through March 25):
 ```
 Split-CIFAR-100 → LS20 → FT09 → VC33 → Split-CIFAR-100
   (classify)    (navigate) (puzzle) (puzzle) (classify again)
 ```
 
+**PRISM** (post March 25, under design):
+```
+Split-CIFAR-100 → [150+ ARC-AGI-3 games] → Terminal-Bench 2.0 → BrowseComp → HLE → Split-CIFAR-100
+  (classify)       (navigate/puzzle)         (CLI interaction)   (web browse)  (Q&A)  (classify again)
+```
+
+## Order Modes
+
+- **Fixed:** phases run in declared order. Tests specific transfer directions. Use for controlled comparison.
+- **Randomized:** phases shuffled per seed (deterministic from seed RNG). Tests order-independence. A substrate that passes in ANY order is genuinely adaptive. If performance varies by order, the substrate is fragile.
+
+## Rules
+
 - **Budget:** n_steps per phase (default 25K)
 - **Seeds:** minimum 10 per run
 - **Constraint:** R1 (no reward/labels passed to substrate)
 - **Persistence:** ONE substrate instance per seed, state carries across all phases
+- **Kill criterion:** any mechanism that improves one phase at the cost of another is per-game tuning and must be killed
 
 ## How to Run
 
