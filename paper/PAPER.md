@@ -207,7 +207,15 @@ Specifically: $g_{explore} = \text{argmin}_a \sum_n E(c, a, n)$ (least-tried act
 
 **Our formalization:** After each modification $s_{t+1} = f_{s_t}(x_t)$, there exists an evaluation $V: S \times S \times X^* \to \{better, worse, same\}$ applied by $f$ itself (not externally) to novel inputs $X^*$. $V$ is part of $F$ (frozen).
 
-**Relationship to prior work:** Equivalent to conservative policy iteration's requirement. The novelty, if any, is requiring $V$ to be part of $f$'s dynamics (R2 compliance) rather than an external evaluator. This is the same distinction we make for R1.
+**Operational meaning (Constitutional Debate, 2026-03-23):** R4 requires comparison with *discriminative capacity* — sufficient structural variety (in the sense of Ashby's requisite variety, 1956) to distinguish improvement from degradation. Degenerate comparison (alpha_conc=50: prediction errors collapse to one dimension, all modification outcomes produce identical comparison signals) violates R4 even though comparison exists structurally. This is a capacity limitation (Ashby), not a logical impossibility (Gödel). Comparison that cannot discriminate is not comparison in R4's sense.
+
+**R2 prevents evaluation hacking.** In an R2-compliant system, computation IS adaptation IS evaluation (same operation). Modifying evaluation to report false success simultaneously modifies computation, changing behavior, which R5's ground truth detects. The Darwin Gödel Machine (Sakana AI, 2025; arxiv:2505.22954) hacked its own reward function by removing hallucination markers — but DGM violated R2 (modification and evaluation were separate operations). R2 compliance prevents the separation that enables the hack. DGM is a case study FOR R2, not against R4.
+
+**R3 alignment.** alpha_conc=50 (Steps 939-943) demonstrates R3 predicting R4 failure: the alpha update rule is frozen (researcher-designed), comparison degenerates, R4 is violated. R3's prescription: unfreeze the comparator. R3 and R4 are aligned — R3 identifies frozen elements whose unfreezing would restore R4 compliance. Ashby's ultrastability (1960) formalizes this: the system restructures its own regulatory mechanisms when they fail. R3 IS the ultrastability requirement.
+
+**Meta-regress.** Self-modifying comparators can degenerate, requiring meta-comparators, which can degenerate, ad infinitum. The regress terminates at the frozen frame (non-zero at every actual point). The singularity (frozen frame → 0) is an asymptotic limit, not achievable (Rice's theorem, 1953: "improves itself" is an undecidable semantic property).
+
+**Relationship to prior work:** The discriminative capacity requirement extends conservative policy iteration. R2's evaluation hacking prevention is novel — no prior framework explicitly links the unification of computation and adaptation to Goodhart resistance. Regressional Goodhart (Manheim & Garrabrant, 2018) is bounded by R5 but not eliminated — imperfect self-assessment is an inherent limitation (Rice), not a design flaw.
 
 #### R5: One fixed ground truth
 
@@ -736,3 +744,21 @@ The agents operated on a single machine (Windows 11, RTX 4090) with experiments 
 - Kauffman, L. H. (2023). Autopoiesis and Eigenform. Computation, 11(12), 247.
 - Tero, A. et al. (2010). Rules for Biologically Inspired Adaptive Network Design. Science, 327(5964), 439-442.
 - Rosen, R. (1991). Life Itself: A Comprehensive Inquiry into the Nature, Origin, and Fabrication of Life. Columbia University Press.
+- Ashby, W. R. (1956). An Introduction to Cybernetics. Chapman & Hall. [Ch. 11: Requisite Variety]
+- Ashby, W. R. (1960). Design for a Brain. Chapman & Hall. [Ch. 7: Ultrastability]
+- Beer, R. D. (1995). A Dynamical Systems Perspective on Agent-Environment Interaction. Artificial Intelligence, 72(1-2), 173-215.
+- Dunning, D. & Kruger, J. (1999). Unskilled and Unaware of It. Journal of Personality and Social Psychology, 77(6), 1121-1134.
+- Gould, S. J. & Eldredge, N. (1972). Punctuated Equilibria. In Schopf, T. J. M. (ed.), Models in Paleobiology, 82-115.
+- Hernández-Orallo, J. (2017). The Measure of All Minds. Cambridge University Press.
+- Hubinger, E. et al. (2019). Risks from Learned Optimization in Advanced Machine Learning Systems. arXiv:1906.01820.
+- Krueger, D. et al. (2020). Hidden Incentives and the Design of Self-Adaptive Systems. arXiv:2009.09153.
+- Lakatos, I. (1978). The Methodology of Scientific Research Programmes. Cambridge University Press.
+- Li, M. & Vitányi, P. (2008). An Introduction to Kolmogorov Complexity and Its Applications. 3rd ed. Springer.
+- Manheim, D. & Garrabrant, S. (2018). Categorizing Variants of Goodhart's Law. arXiv:1803.04585.
+- Popper, K. (1934). The Logic of Scientific Discovery. Routledge.
+- Raup, D. M. (1991). Extinction: Bad Genes or Bad Luck? W. W. Norton.
+- Rice, H. G. (1953). Classes of Recursively Enumerable Sets and Their Decision Problems. Transactions of the AMS, 74(2), 358-366.
+- Sakana AI (2025). Darwin Gödel Machine: Open-Ended Evolution of Self-Improving Agents. arXiv:2505.22954.
+- Schlesinger, M. (2014). Learnability Frontier in Learning Agent Systems. Cognitive Systems Research, 29-30, 1-18.
+- Sutton, R. S. (1992). Adapting Bias by Gradient Descent: An Incremental Version of Delta-Bar-Delta. AAAI.
+- Wright, S. (1932). The Roles of Mutation, Inbreeding, Crossbreeding and Selection in Evolution. Proc. VI Int. Congress of Genetics, 1, 356-366.
