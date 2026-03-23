@@ -123,6 +123,13 @@ Step 807-FT09 - Random baseline FT09 (68 actions, 25K). L1=0. FT09 NOT navigable
 Step 780-FT09 - Prediction-contrast on FT09. L1=0. Pred accuracy: cold 99.76% warm 99.98% — UNINFORMATIVE (static background → trivial prediction). Prediction-contrast blind on FT09.
 FINDING: FT09 has a DIFFERENT problem than LS20. Static background = trivial prediction = prediction signals uninformative. FT09 needs per-action change detection (which of 68 actions produce observation changes?). Step 800 (global per-action delta tracking) is the FT09 mechanism.
 FINDING: 856 shows NEGATIVE prediction transfer — entropy-maximizing actions create diverse unstructured trajectories that hurt forward model learning. D(s) transfer depends on action mechanism creating LEARNABLE trajectories.
+**Step 806v2 LS20 — FIRST L1 R3_cf PASS. cold=0, warm=390 (78/seed). Fisher p=0.0000.**
+  80% random + 20% argmax predicted change + delta rule W.
+  Mechanism: warm W breaks cold W's action-0 tie-breaking bias → adds diversity to the 20% W-guided actions → balanced persistence + diversity → navigates.
+  CAVEAT: warm=78 identical across ALL 5 test seeds (substrate_seed=0 artifact). The mechanism is "warm W differentiates actions" (shallow learning), not "warm W learned LS20 dynamics" (deep learning). Control with substrate_seeds 1,2,3 needed.
+  Pred R3_cf: ALSO PASS (cold 21.3% → warm 29.7%). DOUBLE PASS.
+Step 806v2 FT09 — INCONCLUSIVE. cold=0, warm=0. Pred: cold 90.2% warm 99.9% (uninformative — static background).
+Step 780_fam LS20 — L1=0. Pred PASS (cold 26.7% → warm 32.3%). Go-home policy doesn't navigate.
 Step 762 - D1+D3 self-directed attention on Split-CIFAR-100. avg_accuracy=19.65% (BELOW chance 20%). BWT=+1.4%. Channel weights nearly uniform [0.337, 0.325, 0.338]. D1+D3 HURTS CIFAR — adaptive K over-splits static image graph. Navigation mechanisms don't transfer to classification.
 Step 770 - SOTA chain: 674 on LS20 (10K steps) → Split-CIFAR-100. acc=20.13%, BWT=+6.5%. Compare cold baseline (Step 760): acc=20.21%, BWT=+5.6%. **Zero cross-domain transfer.** LS20 pretraining does not improve CIFAR.
 Step 771 - SOTA chain: D1+D3 on LS20 → Split-CIFAR-100. acc=19.61%, BWT=+1.9%. Below cold baseline. D1+D3 hurts in chain too.
