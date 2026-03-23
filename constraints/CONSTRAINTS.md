@@ -465,6 +465,9 @@ The feasible region was already unoccupied (0/777 substrates inside all walls). 
 - **W is a signal generator, not a predictor (PB10 CASCADE WRONG).** pred_acc negative throughout. Alpha self-modification requires differential error distribution, not prediction accuracy.
 - **FT09 navigation fails: sequential ordering bottleneck (PB13).** Alpha correctly identifies relevant dims. 800b EMA cannot learn click order. Need different action selection for sequential puzzles.
 - Third-cluster sweep (Steps 889-903): 5 families killed (ESN, CTS/graph-banned, decision tree, LZ complexity, MLP at low lr). Only prediction-error attention survived. The dynamics vertex is narrow: alpha + forward model + empirical change tracking.
+- **Action selection modification family dead (Steps 910-915, PB14).** Per-action W (157.5 vs 268.0), delta direction (166.8), recency (51.5), compression variants, temporal sequences (K=3, 8711 seq/seed) — all below 895h cold (268.0). FT09 coverage=1.0 with recency (all tiles visited), still L1=0. Bottleneck confirmed as ordering, not coverage.
+- **VC33 post-ban baseline = 0 (PB15, Step 914).** First measurement. 895h architecture fails VC33 (5/5 seeds zero). Magic pixel requires state-conditioned action.
+- **Chain test complete (Step 914).** CIFAR→LS20→FT09→VC33→CIFAR, 5 seeds. CIFAR inflates alpha_conc (36-41 vs ~9 standalone), reducing chain LS20 by 11%. Zero CIFAR transfer (delta=−0.0009). Chain order: CIFAR damages LS20; LS20 and FT09 independent (FT09 still 0); VC33 still 0.
 
 ---
 
