@@ -46,23 +46,47 @@ BAND_4  = slice(320, 336)  # 16x16 patches → 4x4
 
 
 def _enc_frame_multires(frame: np.ndarray) -> np.ndarray:
-    """Multi-resolution encoding: pool16 + pool8 + pool4."""
+    """Multi-resolution encoding: pool16 + pool8 + pool4.
+
+    Handles any input shape (flat 1D, 2D grid, 3D HxWxC) by normalizing to 2D
+    and padding to minimum 64x64 if needed.
+    """
     f = np.asarray(frame, dtype=np.float32)
-    # Channel 0, normalize to 0-1
-    a = f[:, :, 0] / 15.0 if f.max() > 1.0 else f[:, :, 0]
-    h, w = a.shape  # typically 64x64
 
-    # pool16: 4x4 patch → 16x16 = 256D
-    ph, pw = h // 16, w // 16
-    pool16 = a.reshape(16, ph, 16, pw).mean(axis=(1, 3)).flatten()
+    # Extract 2D spatial array
+    if f.ndim == 1:
+        side = max(int(np.ceil(np.sqrt(len(f)))), 1)
+        padded = np.zeros(side * side, dtype=np.float32)
+        padded[:len(f)] = f
+        a = padded.reshape(side, side)
+    elif f.ndim == 2:
+        a = f
+    else:
+        # 3D (H, W, C) — use channel 0
+        a = f[:, :, 0]
 
-    # pool8: 8x8 patch → 8x8 = 64D
-    ph8, pw8 = h // 8, w // 8
-    pool8 = a.reshape(8, ph8, 8, pw8).mean(axis=(1, 3)).flatten()
+    # Normalize to 0-1
+    mx = a.max()
+    if mx > 1.0:
+        a = a / 15.0 if mx <= 15.0 else a / 255.0
 
-    # pool4: 16x16 patch → 4x4 = 16D
-    ph4, pw4 = h // 4, w // 4
-    pool4 = a.reshape(4, ph4, 4, pw4).mean(axis=(1, 3)).flatten()
+    # Pad to minimum 64x64 so all three pools work
+    h, w = a.shape
+    H = max(h, 64); W = max(w, 64)
+    if h < H or w < W:
+        padded = np.zeros((H, W), dtype=np.float32)
+        padded[:h, :w] = a
+        a = padded
+    h, w = a.shape
+
+    # pool16: (h/16) x (w/16) tiles → 16x16 = 256D
+    pool16 = a.reshape(16, h // 16, 16, w // 16).mean(axis=(1, 3)).flatten()
+
+    # pool8: (h/8) x (w/8) tiles → 8x8 = 64D
+    pool8 = a.reshape(8, h // 8, 8, w // 8).mean(axis=(1, 3)).flatten()
+
+    # pool4: (h/4) x (w/4) tiles → 4x4 = 16D
+    pool4 = a.reshape(4, h // 4, 4, w // 4).mean(axis=(1, 3)).flatten()
 
     x = np.concatenate([pool16, pool8, pool4])  # 336D
     return x - x.mean()
