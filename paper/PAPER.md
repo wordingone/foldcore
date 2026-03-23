@@ -427,6 +427,24 @@ Steps 477-482, 539-541. 6 strategies tested, all worse than or equal to argmin.
 
 **Implication for R3:** Self-observation (Theorem 2) requires the system to extract new structure from its own state after exploration saturates. But any mechanism that TARGETS specific state structures for observation will be vulnerable to the noisy TV problem — self-referential noise (patterns that look complex but carry no usable signal). The self-observation mechanism must be as blind as argmin is to transition entropy.
 
+#### Post-Ban Resolution: Compression Progress (Schmidhuber 1991)
+
+**The post-ban problem:** The graph ban (post Step 777) eliminates per-(state, action) tracking. Argmin — the only noisy-TV-robust action selection mechanism tested — requires visit counts. The noisy TV barrier applies to all tested alternatives. What post-ban mechanism avoids the noisy TV trap?
+
+**Prior work:** Schmidhuber (1991, 2010) proposed *compression progress* — intrinsic reward proportional to the IMPROVEMENT in prediction accuracy, not the absolute prediction error. Oudeyer, Kaplan & Hafner (2007) formalize this as *learning progress* in developmental robotics. Lopes, Lang & Toussaint (2012) prove PAC bounds for exploration driven by learning progress. The key property: compression progress is zero at irreducible transitions (error doesn't improve) and positive at novel learnable transitions (error decreases).
+
+**Formal argument:** Let $E_t(s, a) = \mathbb{E}[\|W_t(s, a) - s'\|^2]$ be the forward model's prediction error at time $t$. Decompose: $E_t = E^{\text{aleatoric}} + E^{\text{epistemic}}_t$, where $E^{\text{aleatoric}}$ is irreducible (stochastic transitions, constant in $t$) and $E^{\text{epistemic}}_t$ is reducible (decreases with experience). Compression progress: $\Delta E_t = E_{t-1} - E_t = \Delta E^{\text{epistemic}}_t$, since $E^{\text{aleatoric}}$ cancels.
+
+Therefore: $\text{argmax}_a \Delta E_t(s, a)$ selects actions that maximize epistemic uncertainty reduction — exactly the useful exploration signal. Stochastic transitions (the "noisy TV") have $\Delta E = 0$ and are naturally avoided.
+
+**R1 compliance:** Compression progress is computed from the substrate's own forward model update ($W_{t-1}$ vs $W_t$). No external signal enters. The action selection rule is fixed (argmax of $\Delta E$); only the inputs change with state. R1: PASS.
+
+**Graph ban compliance:** $\Delta E$ is computed from a global $W$ matrix, not from per-(state, action) data. The forward model stores dynamics (HOW things change), not location (WHERE the substrate has been). Graph ban: PASS.
+
+**Connection to Section 4.5 results:** The 6 strategies that lost to argmin (Steps 477-482) all optimized absolute prediction error or novelty — maximizing $E_t$, not $\Delta E_t$. Compression progress is qualitatively different: it selects actions where the model is LEARNING, not where the model is WRONG. This distinction is precisely the noisy TV problem restated: $E^{\text{aleatoric}}$ is where the model is wrong but can't learn; $\Delta E^{\text{epistemic}}$ is where the model is learning.
+
+**What is novel vs known:** Compression progress is Schmidhuber (1991). Its noisy TV robustness is known (Oudeyer et al. 2007, Pathak et al. 2017 discuss it). Our contribution: (1) connecting compression progress to the specific noisy TV failures in our framework (6 strategies, Steps 477-482); (2) establishing R1 compliance under our constitutional framework; (3) identifying compression progress as the leading candidate for post-ban action selection after argmin elimination. **Untested:** Step 855 tests this directly.
+
 #### Proposition 15: Perception-Action Decoupling
 
 **Prior work:** In POMDPs, the observation function determines which hidden states the agent can distinguish. State aliasing (Whitehead & Ballard, 1991) occurs when the observation mapping conflates distinct hidden states. Computing optimal memoryless POMDP policies is NP-hard (Littman, 1994). In POMDPs with state aliasing, stochastic policies can be strictly better than deterministic ones (Singh et al., 1994). Count-based exploration (Bellemare et al., 2016; Tang et al., 2017) is robust to observation noise but sensitive to hash granularity — "important aspects of a good hash function include having appropriate granularity" (Tang et al., 2017).
