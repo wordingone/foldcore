@@ -2,7 +2,7 @@
 
 Can a system improve itself by criteria it generates?
 
-770+ experiments across 12 architecture families testing substrates for recursive self-improvement on published benchmarks and interactive games. No R3-compliant substrate found. The contributions: a formal framework (R1-R6), a constraint map from systematic falsification, and a novel R3 metric for measuring self-modification with counterfactual validation.
+777 experiments across 12 architecture families testing substrates for recursive self-improvement on published benchmarks (Split-CIFAR-100, Atari 100K) and interactive games (ARC-AGI-3). No R3-compliant substrate found. The contributions: a formal framework (R1-R6), a constraint map from systematic falsification, and a novel R3 counterfactual metric for measuring whether self-modification produces transferable knowledge.
 
 ## Results (honest)
 
@@ -13,8 +13,9 @@ Can a system improve itself by criteria it generates?
 | LS20 navigation (20 seeds, 10K steps) | 674+running-mean | 20/20 L1 | Argmin over visit counts |
 | FT09 navigation | 674+running-mean | 20/20 L1 | 7-action space |
 | Cross-domain transfer (LS20→CIFAR) | 674 | 0% improvement | Zero transfer in both directions |
-| R3 (self-modification) | 674 | FAIL (2 U elements) | 0/770 substrates pass R3 |
-| Atari 100K (no reward) | 674 | In progress | R1 mode (strictly harder than SOTA) |
+| R3 (self-modification) | 674 | FAIL (8 U elements) | 0/777 substrates pass R3 |
+| R3 counterfactual | 674 | FAIL (cold > warm, p<0.0001) | Pretraining hurts new environments |
+| Atari 100K (no reward) | 674 | 6/26 above random | RoadRunner 11x, most games at/below random |
 
 **Key findings:**
 - Navigation is solved by a trivial mechanism (graph + argmin). Not intelligence.

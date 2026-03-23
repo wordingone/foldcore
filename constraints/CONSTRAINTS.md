@@ -330,7 +330,7 @@ The task is interactive (unknown environment, no separate training phase). Any s
 
 ## The State of the Search (777 experiments, 12 families, 2 bans)
 
-*Revised 2026-03-23 session. Updated through Step 777. Infrastructure overhaul complete. SOTA baselines established. R3 counterfactual measured. Graph ban effective. Phase 3 begins.*
+*Revised 2026-03-23. Updated through Step 777. Infrastructure overhaul complete. SOTA baselines established. R3 counterfactual measured. Graph ban effective post-777.*
 
 ### What's Solved
 
@@ -348,9 +348,9 @@ The task is interactive (unknown environment, no separate training phase). Any s
 
 1. **R3 (self-modification of operations) — DEFINITIVELY OPEN, now with counterfactual measurement.**
 
-   **R3 status (Step 777):** 0/777 experiments pass R3. Table 1 (calibration): RandomAgent, FixedPolicy, TabularQ, 674 all R3 FAIL. Table 2 (killed families): all 12 fail R1. Nobody passes R1+R3 simultaneously. The gap is real.
+   **R3 status (Step 777):** 0/4 calibration targets pass R3 (Table 1: RandomAgent, FixedPolicy, TabularQ, 674 — all R3 FAIL). 0/12 killed families pass R1 (Table 2: all reward-dependent). No tested system passes both R1 and R3. The gap is real.
 
-   **R3 counterfactual (Step 776, n=20, p<0.0001):** 674 pretrained for 25K steps, tested on new environment seeds. Cold: 4054 completions. Warm: 2899 (-28%). Pretraining HURTS navigation in new environments (OR=0.713). **The G graph is exploration bookkeeping, not transferable knowledge.** Visit counts bias argmin AWAY from actions common during pretraining — if those actions are needed in the new environment, catastrophic failure. This is consistent with negative transfer in continual RL (Gao et al., ICLR 2025). Our contribution: the mechanism is clear (visit-count bias), and the R3 counterfactual protocol is a concrete operationalization.
+   **R3 counterfactual (Step 776, n=20, p<0.0001):** 674 pretrained for 25K steps, tested on new environment seeds. Cold: 4054 completions. Warm: 2899 (-28%). Pretraining HURTS navigation in new environments (OR=0.713). **The G graph is exploration bookkeeping, not transferable knowledge.** Hypothesized mechanism: visit counts from pretraining bias argmin away from actions needed in the new environment — consistent with the data but not experimentally isolated. Negative transfer in continual RL is a known phenomenon ("Prevalence of Negative Transfer in Continual Reinforcement Learning," ICLR 2025, arXiv 2403.05066). Our contribution: the R3 counterfactual protocol as a concrete operationalization of whether self-modification produces lasting value.
 
    **R3 metric limitation (Step 739):** R3_dynamic measures "did it change?" Both self-directed (Step 737, L1=1105) and random modification (Step 739, L1=4237) score R3_dynamic=1.0. The metric cannot distinguish useful from random self-modification. R3_counterfactual (modified vs cold on same task) is the discriminator. Added to judge.py.
 
@@ -360,7 +360,7 @@ The task is interactive (unknown environment, no separate training phase). Any s
 
    **Graph ban (2026-03-23, effective post Step 777).** No per-(state, action) data structures. Argmin over visit counts is dead. Permanent, no lift condition. Combined with codebook ban (2026-03-18): both known-working mechanisms are now banned. Phase 3 must find genuinely new approaches.
 
-   **Prior R3 findings still valid:** Encoding determines performance (I1, 300x game-dependent). R3 barrier precisely located (Steps 577b-577d: pixel statistics navigate WRONG cells). Eigenform inert for L1 (Steps 620-629: introspection ≠ foresight). All Phase 2 substrates killed in <5 experiments except LSH family.
+   **Prior R3 findings still valid (full detail in RESEARCH_STATE.md):** Encoding determines performance not R3 (I1, 300x game-dependent, Steps 377-414). R3 barrier precisely located (Steps 577b-577d: pixel statistics navigate to MORE cells but WRONG cells — reward-correlated features needed, not visual saliency). Eigenform series inert for L1 (Steps 620-629: self-observation via graph statistics produces non-zero output but introspection ≠ foresight — the graph stores the past, L2 requires the future). All Phase 2 substrates killed in <5 experiments except LSH family (~180 experiments).
 
    **SOTA baselines (Steps 760-766):** CIFAR = chance (20.21%, R1 floor). Atari 100K = 6/26 above random (RoadRunner 11x standout). Zero cross-domain transfer (Steps 770-773, symmetric). Anti-forgetting (BWT=+5.6%) is a growth-only graph property, not a learned capability.
 
