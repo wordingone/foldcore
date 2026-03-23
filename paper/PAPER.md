@@ -928,6 +928,16 @@ The gap: $W$ trained on one environment learns global dynamics that TRANSFER (Pr
 
 In either case, the dynamics vertex is the necessary component. The search reduces to: find a forward model accurate enough that prediction error becomes a reliable signal for both navigation and encoding self-modification.
 
+**Prediction accuracy cascade (theoretical).** Alpha concentration creates a self-reinforcing loop that may close the Proposition 21 gap:
+
+1. $\alpha$ concentrates on $k \ll d$ informative dimensions (Step 895 confirmed: $k \approx 3$ on FT09).
+2. $W$ trains on $\alpha$-weighted observations with effective dimensionality $k$. Parameter count drops from $d(d + n_a) = 66{,}560$ to $k(k + n_a) \approx 213$ (for $k = 3$, $n_a = 68$).
+3. At 25K training steps, each parameter receives $\sim$25000/213 $\approx 117$ gradient updates instead of $\sim$0.4 updates. Convergence is $\sim$300× faster.
+4. $W$ becomes accurate in the $\alpha$-weighted space. Prediction-contrast action selection ($\text{argmax}_a \|\hat{x}' - x\|_\alpha$) produces meaningful rankings.
+5. Accurate local predictions from the current state $\approx$ implicit graph: knowing $W(s, a)$ for all $a$ from the current $s$ is equivalent to knowing the transition graph locally, without storing it.
+
+This cascade predicts that the Proposition 21 gap (global dynamics $\neq$ local navigation) closes as $\alpha$ concentration increases — because concentrated $\alpha$ makes local predictions accurate. The gap is not structural; it is a prediction-accuracy gap that $\alpha$ dissolves. Testable by measuring $W$ accuracy in $\alpha$-weighted space (Step 895c).
+
 ## 5. Experimental Evidence
 
 ### 5.1 Navigation (720+ experiments)
