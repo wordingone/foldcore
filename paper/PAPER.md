@@ -1576,7 +1576,7 @@ The path to this question:
 
 (b) **Does D(s) produce positive R3 counterfactual? YES.** Prediction accuracy transfer confirmed: 5/7 PASS, first positive R3_cf in 787+ experiments (Steps 780v5, 778v5, 855v3, 809b, 855b). Forward model $W$ trained on seeds 1-5 predicts better on seeds 6-10 (+15-73% accuracy improvement). Transfer is robust across action mechanisms. NAVIGATION transfer remains zero — the gap is structural (Proposition 21).
 
-(c) **What replaces argmin? OPEN.** Compression progress: KILLED (action collapse, Step 855). Per-action change tracking: works on LS20 only. Prediction-guided novelty: UNTESTED with correct implementation (enc_hash bug invalidated Steps 889-892; MSE-based novelty buffer is the fix). The argmin replacement is the deepest open question.
+(c) **What replaces argmin? PARTIALLY RESOLVED (Proposition 24).** Per-action change tracking (800b): works on LS20 only. Proposition 23b proves global-EMA selectors are structurally position-blind — they CANNOT solve sequential games (FT09). Proposition 24 derives epistemic action selection from active inference: replace delta-EMA with $G_t(a) = \|\hat{x}^{(a)} - x_t\| / \text{conf}_a$, which is position-dependent through $h$ and accounts for model uncertainty. Theoretically dissolves the monotonic/sequential distinction (Prop 23). Experimentally untested (Step 934). The substrate already implements active inference components ($\alpha$ = precision, $W$ = generative model, $h$ = temporal context). The action selector is the final missing piece.
 
 **The architecture triangle (Proposition 22) reframes the search:**
 
@@ -1584,13 +1584,15 @@ The 800+ experiments across 12 families cluster into three vertices: recognition
 
 **Four new questions at the dynamics vertex:**
 
-(d) **Does prediction-error attention achieve R3?** Per-dimension prediction error can drive encoding weights $\alpha_d$ that concentrate on informative dimensions (Corollary 22.2). On FT09 (98.7% static), $\alpha$ should discover the ~1.3% dynamic signal without human prescription. Step 895 tests this.
+(d) **Does prediction-error attention achieve R3? YES (confirmed).** Steps 895-895h confirmed: $\alpha_d \propto \sqrt{\bar{e}_d}$ universally discovers game-informative dimensions. FT09: dims [60,51,52] across all seeds. LS20: clamped $\alpha$ cold = 268.0/seed (+32% over baseline). R3 encoding self-modification is solved. **RESOLVED.**
 
 (e) **What model family achieves sufficient prediction accuracy?** Linear $W$ reaches 19.9% (MSE-based). MLP underperforms at online learning rates (Step 890). ELM (random non-linear features + convex readout) and online decision trees are untested. The model accuracy bottleneck may be the primary constraint on navigation from prediction.
 
 (f) **Can cross-game forward model transfer work?** Different games have different action spaces: LS20 (4), FT09 (68), VC33 (7). Forward model $W$ has shape $(d, d + n_a)$ — different $n_a$ prevents direct weight transfer (Step 812). Action-space-independent forward models (action encoded as observation delta, not one-hot) are the proposed fix.
 
 (g) **Is the interior point of the triangle achievable?** The substrate needs spatial awareness (vertex 1 property via $\alpha$-weighted encoding), exploration (vertex 2 property via prediction novelty), and dynamics modeling (vertex 3 mechanism). All three achieved through dynamics-vertex mechanisms, since the other two vertices are banned. Steps 889-902 test this systematically.
+
+**(h) Does epistemic action selection crack the chain?** Proposition 24 predicts that replacing 800b's delta-EMA with $G_t(a) = \|\hat{x}^{(a)} - x_t\| / \text{conf}_a$ dissolves the monotonic/sequential barrier. The non-convergent $W$ maintains position-dependent prediction errors indefinitely (unlike ICM, which converges and dies). Step 934 tests this on the full PRISM-light chain. If FT09 $> 0$ on ANY seed, it would be the first post-ban navigation on a sequential game — and the first evidence that the "one door" (one mechanism for all chain phases) exists.
 
 The 16 levels solved via source analysis (Proposition 9) remain the specification. The bans do not change the goal — they remove the scaffolding. The dynamics vertex is the only remaining territory where R3 can structurally exist. The contribution is the walls. The substrate — if it exists — lives inside all of them.
 
