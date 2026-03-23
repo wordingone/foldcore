@@ -681,6 +681,16 @@ Self-directed attention (Proposition 17) operates on the encoding $\pi_s: X \to 
 - **DoF 11 (revised):** State-dependent action selection. Argmin over composite edge data (visit counts + death costs + value estimates). The edge-data COMPOSITION is the attention parameter for action selection.
 - **DoF 12:** Encoding-statistics coupling strength. How quickly do encoding parameters respond to transition statistics? Too fast → instability. Too slow → mismatched encoding. Optimal coupling is a degree of freedom that may itself be state-dependent (meta-attention).
 
+#### Caveats and Scope Limitations
+
+**Caveat 1: CSE uniqueness is informal.** The argument in Proposition 14b relies on exhaustive enumeration of alternatives (step 3). A formal proof would require a formal model of "operation" that we do not provide. The claim is: no counterexample has been found among 12 tested families. This is consistent with uniqueness but does not prove it.
+
+**Caveat 2: Self-directed attention does NOT solve L2.** L2 requires predicting unvisited states (Proposition 13). Self-directed attention addresses PERCEPTION of visited states — resolving ambiguity, adapting to new domains. These are different problems. The chain benchmark tests cross-domain adaptation (self-directed attention's domain). L2 tests within-game forward prediction (not addressed by D1-D5). Conflating the two would be inflation.
+
+**Caveat 3: The search reduction is conditional.** The claim that R3 reduces to D1-D5 adaptation depends on: (a) CSE uniqueness holding, (b) hierarchy collapse ($\ell_F$ = recursive $\ell_\pi$) holding, and (c) D1-D5 being sufficient for the chain. All three are testable. If any fails, the search space expands beyond D1-D5. The 30 experiment specs (Groups A-E) are designed to test these conditions.
+
+**Caveat 4: T6 dissolution is theoretical.** The claim that U11 + U24 + U1 are dissolved by composite edge data has no empirical support yet. No substrate has implemented state-dependent edge-data composition. The dissolution is a prediction from Proposition 17 applied to action selection. Experiments E5 and D2 test this directly.
+
 ## 5. Experimental Evidence
 
 ### 5.1 Navigation (720+ experiments)
