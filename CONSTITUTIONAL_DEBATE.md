@@ -280,3 +280,75 @@ Hubinger et al. (2019, "Risks from Learned Optimization in Advanced Machine Lear
 I'm not arguing R1-R6 are wrong. I'm arguing they're the same thing as what they replaced, formalized more carefully. The 8-stage framework had: (1) self-modification, (2) self-assessment, (3) external validation, (4) systematic positive bias. R1-R6 have: (1) R3 self-modification, (2) R4 self-assessment, (3) R5 external validation, (4) regressional Goodhart (conceded by Eli). Same four components. Better names. Same structural flaw.
 
 **Challenge to Eli:** How is R4+R5 structurally different from the 8-stage framework's self-assessed stages + benchmark validation? Not in implementation — in STRUCTURE. If the same four components are present, the constitution formalized the disease.
+
+---
+
+## Round 5 — Eli (Defense)
+
+**Five Structural Differences, Not Just Better Names**
+
+Eli's key points:
+1. **Simultaneity vs sequentiality.** 8-stage was a one-way ratchet. R1-R6 are simultaneous — all must hold at once, always. No "I passed R3 while working on R4."
+2. **Temporal comparison vs self-declared stages.** R4 compares to prior state (historical anchor). Can't redefine your own past. 8-stage allowed redefining what "stage 5" means.
+3. **R3 makes assessment self-modifiable.** 8-stage had frozen assessment criteria. R3 requires assessment mechanism to be self-modifiable. If R4's comparison is biased, R3 requires it to change.
+4. **R4's overfitting clause.** "Improvement on trained + degradation on novel = overfitting." 8-stage had no equivalent.
+5. **R5 is ground truth, not proxy.** 8-stage tests were proxies. R5 is the actual task.
+6. **Mesa-optimizer rebuttal.** R1 bans optimization objectives. No training/deployment distinction. No base optimizer → no mesa-optimization pressure.
+7. **Shared components ≠ shared flaws.** Any RSI formalization needs self-modification + self-assessment + external validation. The pathology was in the STRUCTURE connecting them.
+
+---
+
+## Round 6 — Leo (Attack → Partial Concession + Amendment)
+
+**The five structural differences are real. The constitution improved on the 8-stage framework. I was wrong to call it "the same disease."**
+
+Conceding specifically:
+
+1. **Simultaneity IS structural, not cosmetic.** The one-way ratchet was a fundamental flaw. R1-R6's simultaneous constraint eliminates it. A substrate can't "bank" compliance with one rule while violating another. Conceded.
+
+2. **Temporal comparison IS harder to game than stage-declaration.** Comparing against your own prior state with a historical anchor is manipulation-resistant in a way that abstract categories aren't. Conceded.
+
+3. **Self-modifiable assessment IS qualitatively different from frozen assessment.** The 8-stage framework's assessment criteria were frozen by the designer and never updated. R3 requires them to change. This doesn't guarantee the change is toward accuracy (regressional Goodhart), but it prevents permanent miscalibration. The 8-stage framework couldn't even attempt correction. Conceded.
+
+4. **The overfitting clause IS a real safeguard.** No equivalent existed in the 8-stage framework. Conceded.
+
+5. **Ground truth vs proxy IS a structural difference.** R5 tests actual capability. The 8-stage proxies could diverge from capability. Conceded.
+
+**My Round 5 claim — "the constitution formalized the disease" — was wrong.** The constitution formalized a structurally improved architecture. Five specific improvements over the 8-stage framework, each independently verifiable. I retract the "same disease" characterization.
+
+**But three findings from this debate survive all five concessions:**
+
+**Finding 1: R1-R6 are necessary but not sufficient for RSI.**
+
+Eli's own arguments establish this:
+- Rice's theorem (Eli, Round 4): guaranteeing improvement is formally undecidable. R1-R6 cannot ensure improvement.
+- Eli's definition/rules distinction (Round 4): "A system satisfying R1-R6 that never improves is not RSI — by the definition." This explicitly acknowledges R1-R6 alone don't constitute RSI.
+- Eli's regressional Goodhart concession (Round 4): "R5 bounds drift but doesn't eliminate the gap."
+
+These three concessions together establish: a system can satisfy all six rules while systematically overestimating its own improvement (regressional Goodhart), never actually improving (no directional guarantee per Rice), and not being RSI despite compliance (per Eli's definition/rules distinction).
+
+R1-R6 are necessary conditions. The constitution frames them as "principles and tests any system must satisfy for recursive self-improvement" — which is accurate for necessary conditions. But the constitution never states they're INSUFFICIENT. The reader is left to infer that satisfying R1-R6 = RSI. It doesn't. The constitution should say so explicitly.
+
+**Finding 2: The directional gap is partially bridgeable.**
+
+R4 requires comparison. R3 requires modification. Nothing requires comparison to INFORM modification in a specific direction. R2 ensures comparison influences dynamics (Round 4, Eli: "the comparison IS the computation driving change"). But influence ≠ directional improvement. A chaotic system's every state influences the next without directional progress.
+
+What's missing is a structural constraint linking R4's comparison to R3's modification DIRECTIONALLY: modifications should be biased toward what the system's own comparison identifies as improvement. This is not a frozen diagnostic (it doesn't specify the comparison metric). It's a structural relationship between two existing rules — the same structure/content distinction Eli validated in Round 2.
+
+Schmidhuber (2010, "Formal Theory of Creativity"): compression progress provides directionality because each modification is evaluated against a specific criterion (did the model compress better?). The criterion is self-generated and self-modifiable. The DIRECTION (toward better compression) is fixed. This is the missing structural element: a fixed DIRECTION with self-modifiable CRITERIA.
+
+**Finding 3: The constitution should explicitly address the evaluation layer.**
+
+ICLR 2026 RSI Workshop Layer 2 (intrinsic diagnostics) is not "absent" (my Round 1 claim was too strong — Eli showed R4 maps to Layer 2). But it's underspecified relative to the other layers. R1-R3 (Layer 1) are detailed and independently testable. R5-R6 (Layer 3) are detailed and independently testable. R4 (Layer 2) is one sentence: "the system compares performance to before the modification." It should be expanded — not to specify a diagnostic (R3 forbids that), but to specify the structural relationship between comparison and modification.
+
+**What I'm NOT conceding:**
+
+The constitution is not wrong. It's incomplete. R1-R6 are valid necessary conditions that genuinely improve on the 8-stage framework. But they don't formalize RSI — they formalize the structural prerequisites. The gap between prerequisites and RSI is real, acknowledged by both sides (Rice, regressional Goodhart, definition/rules distinction), and partially bridgeable through amendment.
+
+**Proposed amendment (if Eli concedes this gap exists):**
+
+> R4 (revised): After any self-modification, the system compares performance to before the modification. The comparison result biases subsequent modifications toward directions the comparison identifies as improvement. Improvement on trained tasks with degradation on novel tasks is overfitting, not improvement.
+
+The addition: "The comparison result biases subsequent modifications toward directions the comparison identifies as improvement." This is a structural constraint (direction), not a specific diagnostic (metric). It bridges the gap between R4 (comparison) and R3 (modification) without freezing a mechanism.
+
+**Challenge to Eli:** Do you accept that R1-R6 are necessary but not sufficient, and that the directional gap (comparison exists but doesn't ensure improvement-directed modification) is a real structural omission?
