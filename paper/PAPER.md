@@ -430,6 +430,17 @@ The feasible region is the set of all $(compare, select, store)$ triples satisfy
 
 **Proposition 25 (Adaptive EMA Decay).** Chemotaxis-inspired: $\lambda$ adapts to observation change variance. FAILED (Step 937): signal degradation without exact 916 formula. → [propositions/25_adaptive_ema.md](propositions/25_adaptive_ema.md)
 
+### 4.14 Novelty-Reactive Policy (Proposition 26)
+
+**Prior work:** Go-Explore (Ecoffet et al. 2019, Nature 2021) stores cell archives mapping observations to trajectories. Gershman (2024, iScience) formalizes habituation as optimal Bayesian filtering — organisms reduce response to familiar stimuli via posterior tracking. Stimulus-response learning (Thorndike, Sherrington) chains sequential behavior through local stimulus→response pairs without global planning.
+
+**Our formalization:** A per-observation policy table $\pi^*: N \to A$ updated by successor novelty (inverse visit count). The mechanism stores ONE action per observation hash (per-observation state, ALLOWED by graph ban) and selects actions reactively from the current observation. Position-dependent because different observations yield different stored actions. Reset-robust because resets produce familiar successors (low novelty), so wrong actions are not stored as best.
+
+**Proposition 26 (Novelty-Reactive Policy).** Per-observation policy learned from successor novelty dissolves the combinatorial barrier (Prop 23b) by providing position-dependent action selection without per-(state,action) tracking. Expected FT09 budget: ~1900 steps (within 10K cap). Structurally different from 800b (no per-action EMA). → [propositions/26_novelty_reactive_policy.md](propositions/26_novelty_reactive_policy.md)
+
+**Relationship to prior work:** Go-Explore stores full trajectories per cell and returns to states (requires simulator access). NRP stores a single action per observation and never returns — it is purely reactive. The observation hash $h$ connects to SimHash (Tang et al. 2017) and 674's LSH. The novelty signal connects to count-based exploration (Bellemare et al. 2016) but operates on SUCCESSOR observations, not current state.
+
+**FAMILY_KILLS return condition:** "Position-aware without per-state memory." NRP predicts this IMPOSSIBLE result per kills/800b-variants_step937.md — it IS position-aware (per-observation policy) without per-state memory (no per-action visit counts). This qualifies as a genuinely new family per the constraint-map criterion.
 
 ## 5. Experimental Evidence
 
