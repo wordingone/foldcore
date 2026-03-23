@@ -430,17 +430,22 @@ The feasible region is the set of all $(compare, select, store)$ triples satisfy
 
 **Proposition 25 (Adaptive EMA Decay).** Chemotaxis-inspired: $\lambda$ adapts to observation change variance. FAILED (Step 937): signal degradation without exact 916 formula. → [propositions/25_adaptive_ema.md](propositions/25_adaptive_ema.md)
 
-### 4.14 Novelty-Reactive Policy (Proposition 26)
+### 4.14 Action Selection Closure (Steps 938-938e)
 
-**Prior work:** Go-Explore (Ecoffet et al. 2019, Nature 2021) stores cell archives mapping observations to trajectories. Gershman (2024, iScience) formalizes habituation as optimal Bayesian filtering — organisms reduce response to familiar stimuli via posterior tracking. Stimulus-response learning (Thorndike, Sherrington) chains sequential behavior through local stimulus→response pairs without global planning.
+**Proposition 26 (Novelty-Reactive Policy).** REJECTED — gate 5 (per-observation conditioning). Per-observation policy table stores action per observation hash = per-observation conditioning, same violation as Step 931 (PB20). → [propositions/26_novelty_reactive_policy.md](propositions/26_novelty_reactive_policy.md)
 
-**Our formalization:** A per-observation policy table $\pi^*: N \to A$ updated by successor novelty (inverse visit count). The mechanism stores ONE action per observation hash (per-observation state, ALLOWED by graph ban) and selects actions reactively from the current observation. Position-dependent because different observations yield different stored actions. Reset-robust because resets produce familiar successors (low novelty), so wrong actions are not stored as best.
+**Steps 938b-938e tested four remaining mechanism classes:**
 
-**Proposition 26 (Novelty-Reactive Policy).** Per-observation policy learned from successor novelty dissolves the combinatorial barrier (Prop 23b) by providing position-dependent action selection without per-(state,action) tracking. Expected FT09 budget: ~1900 steps (within 10K cap). Structurally different from 800b (no per-action EMA). → [propositions/26_novelty_reactive_policy.md](propositions/26_novelty_reactive_policy.md)
+| Step | Family | Mechanism | LS20 | Kill cause |
+|------|--------|-----------|------|------------|
+| 938b | Reactive-global | alpha-anomaly → action | 0 | Same high-alpha dims dominate → constant action |
+| 938c | Trajectory-conditioned | raw enc delta + R@h | 65.5 | Removing alpha from delta kills discrimination |
+| 938d | Trajectory-conditioned | alpha enc-only delta + R@h | 71.0 | Alpha on enc-only still no discrimination. h IN ext_enc IS the discrimination signal. |
+| 938e | Trajectory-additive | full 916 delta + R@h | 21.5 | Random R maps h to arbitrary biases. Even beta=0.01 corrupts softmax ordering. |
 
-**Relationship to prior work:** Go-Explore stores full trajectories per cell and returns to states (requires simulator access). NRP stores a single action per observation and never returns — it is purely reactive. The observation hash $h$ connects to SimHash (Tang et al. 2017) and 674's LSH. The novelty signal connects to count-based exploration (Bellemare et al. 2016) but operates on SUCCESSOR observations, not current state.
+**Key diagnostic (938c-938e):** $h$ provides real position-dependent variance ($h\_spr = 0.37\text{-}0.43$). The information exists. The problem: mapping $h \to$ actions requires either (1) learned $R$ (needs reward, R1 violation), (2) $W$-based $R$ (prediction family, killed), or (3) per-observation memory (gate 5). No gate-compliant mapping from trajectory state to action exists under current constraints.
 
-**FAMILY_KILLS return condition:** "Position-aware without per-state memory." NRP predicts this IMPOSSIBLE result per kills/800b-variants_step937.md — it IS position-aware (per-observation policy) without per-state memory (no per-action visit counts). This qualifies as a genuinely new family per the constraint-map criterion.
+**Conclusion:** Under gates 3-5 + codebook/graph bans, 800b is the unique working action selector. All tested alternatives degrade LS20. The action selection degree of freedom is closed at 800b for the current constitutional framework.
 
 ## 5. Experimental Evidence
 
@@ -659,18 +664,17 @@ The feasible region for L1 navigation is occupied — graph + argmin + correct e
 
 **Proposition 12 (Interpreter Bound).** Every self-referential system has an irreducible top-level interpreter. The frozen frame floor > 0. But $\ell_F$ achievable if state encodes operations the interpreter executes. → [propositions/12_interpreter_bound.md](propositions/12_interpreter_bound.md)
 
-**Post-ban addendum (Steps 778-937):** 800b achieves 2x random on LS20. FT09 = 0 for all mechanisms. CIFAR = chance. R3 encoding self-modification CONFIRMED (alpha, Step 895). Action selection exhausted after 160 experiments in 800b family. Architecture is irreducible local minimum (Step 937). See kills/800b-variants_step937.md.
-
+**Post-ban addendum (Steps 778-938e):** 800b achieves 2x random on LS20. FT09 = 0 for all mechanisms. CIFAR = chance. R3 encoding self-modification CONFIRMED (alpha, Step 895). Action selection CLOSED after 938 series: per-observation (gate 5), reactive-global (constant action), trajectory-conditioned (unmappable h→action), trajectory-additive (noise corrupts delta). 800b is the unique working selector under current constraints. See kills/800b-variants_step937.md, Section 4.14.
 
 ### 7.7 Where the search points
 
 **Central question:** Can a substrate accumulate transferable knowledge without tracking where it has been?
 
-**Resolved:** (a) D-only substrate navigates at 2x random (800b). (b) D(s) produces positive R3_cf (5/7 PASS). (d) Prediction-error attention achieves R3 encoding (alpha, CONFIRMED). (e) W is sufficient for encoding but useless for action selection. (h) Epistemic action selection FAILS (Steps 934-937, 800b family KILLED).
+**Resolved:** (a) D-only substrate navigates at 2x random (800b). (b) D(s) produces positive R3_cf (5/7 PASS). (d) Prediction-error attention achieves R3 encoding (alpha, CONFIRMED). (e) W is sufficient for encoding but useless for action selection. (h) Epistemic action selection FAILS (Steps 934-938e). **(c) Action selection is CLOSED at 800b under current constraints (Section 4.14).**
 
-**Open:** (c) What replaces argmin? 800b-variant family exhausted. → kills/800b-variants_step937.md. (g) Interior point of architecture triangle: encoding achieved, action selection open. (i) FT09 solvable under current constraints? ALL tested mechanisms score 0. Combinatorial barrier (Prop 23b: $P \approx 10^{-11}$) is benchmark-level.
+**Open:** (g) Interior point of architecture triangle: encoding achieved, action selection frozen at 800b. (i) FT09 solvable under current constraints? Gates 4+5 combined with Prop 23b block all position-dependent learned action selection. This may be a genuine impossibility result, not a failure to find the mechanism. **(j) NEW: Does the search need new substrate families (not action selector variants) to add constraint surfaces?** The 938 series exhausted selector-level modifications. The next direction may be a structurally different substrate architecture that changes the encoding-action-learning relationship entirely.
 
-**Architecture triangle (Proposition 22):** Recognition (banned), tracking (banned), dynamics (current frontier). Post-ban, the substrate lives at the dynamics vertex — the only vertex where circular causation creates (M,R)-system closure for R3.
+**Architecture triangle (Proposition 22):** Recognition (banned), tracking (banned), dynamics (current frontier). Post-ban, the substrate lives at the dynamics vertex. The 938 series proves: the action selection degree of freedom at the dynamics vertex is exhausted. The remaining degrees of freedom are in the SUBSTRATE ARCHITECTURE itself — how encoding, action, and learning interact.
 
 
 ## Author Attribution and Disclosure
