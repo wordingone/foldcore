@@ -57,7 +57,13 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: ~812 complete + Step 878 (Table 3 audit). Steps 813-888 in progress. Target: step 888.
+CURRENT STEP: ~840 complete (incl. analysis steps 878/882/883/886/887). Steps 813-888 in progress. Step 889 (PredictiveNovelty) is the critical experiment.
+Step 824 - D component ablation. W_only=32.4% > full_D=16.1%. Running_mean HURTS transfer (freezes at pretrain distribution). **Transfer protocol: W only, reset running_mean.**
+Step 874 - Obs diversity. LS20: collision 50.3%, 2483 unique obs. FT09: collision 98.7%, 64 unique obs. FT09 nearly static.
+Step 813 - Anti-convergence. eps=0.50 best cold (364/seed) but warm=0. eps=0.20 is sweet spot for transfer.
+Step 827 - Budget sweep. Even N=1K gives +11.33% pred transfer. Transfer starts immediately.
+Step 834 - Capacity sweep. Even d=16 transfers (+3.64%). Low capacity sufficient.
+Step 889 SPEC'D - PredictiveNovelty: visited_set (per-obs, allowed) + W prediction (global, allowed). Action = go where W predicts unvisited state. Bridges Proposition 21. CRITICAL TEST.
   Graph ban (permanent, 2026-03-23): no per-(state,action) data. Codebook ban (2026-03-18): no cosine+attract.
   Steps 778-787 RESULT: ALL INCONCLUSIVE — 0 level completions for all 10 D-only substrates at 10K steps.
   L(s) is load-bearing for navigation but kills transfer. D(s) alone insufficient for LS20 navigation.
