@@ -111,6 +111,10 @@ CRITICAL BUG: Hebbian W diverges. W += ETA * outer(x, inp) grows unboundedly →
   L1 R3_cf: INCONCLUSIVE (prediction-contrast can't navigate LS20 — separate problem).
   Root causes of prior failures: (1) Hebbian divergence, (2) pred accuracy bug, (3) 10K budget.
   Next: confirm with random actions (778v5), cross-game transfer (LS20→FT09), action selection that navigates.
+Step 778v5 - Random action + delta W. Pred R3_cf: PASS. cold=27.7%, warm=31.9% (+15%). D(s) transfer confirmed with random actions — robust and independent of action mechanism.
+Step 855b - Epsilon-compression + delta W. Pred R3_cf: PASS. cold=50.2%, warm=54.6% (+8.7%).
+Step 809b - Cycling + forward model + delta W. Pred R3_cf: PASS. cold=21.2%, warm=25.8% (+21.7%).
+FINDING: D(s) = {W, running_mean} UNIVERSALLY transfers (4/4 PASS). Independent of action mechanism (random, prediction-contrast, epsilon, cycling all show warm > cold). Forward model captures environment-general dynamics. L1 navigation transfer remains 0 on LS20 for all post-ban substrates. Step 780inv (argmin predicted change = seek familiarity) running — tests if W enables navigation, not just prediction.
 Step 762 - D1+D3 self-directed attention on Split-CIFAR-100. avg_accuracy=19.65% (BELOW chance 20%). BWT=+1.4%. Channel weights nearly uniform [0.337, 0.325, 0.338]. D1+D3 HURTS CIFAR — adaptive K over-splits static image graph. Navigation mechanisms don't transfer to classification.
 Step 770 - SOTA chain: 674 on LS20 (10K steps) → Split-CIFAR-100. acc=20.13%, BWT=+6.5%. Compare cold baseline (Step 760): acc=20.21%, BWT=+5.6%. **Zero cross-domain transfer.** LS20 pretraining does not improve CIFAR.
 Step 771 - SOTA chain: D1+D3 on LS20 → Split-CIFAR-100. acc=19.61%, BWT=+1.9%. Below cold baseline. D1+D3 hurts in chain too.
