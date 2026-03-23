@@ -71,7 +71,7 @@ Fix 4 (calibration) DONE — revealed 3 judge bugs. Fix 8 (game-specificity cave
 Step 777 - Table 2: Full judge audit on all 12 killed families. ALL fail R1 (reward-dependent). U counts: SelfRef/Tape/Temporal=5, Expr/Anima/TopK/Candidate=7, EigenFold=8, LivingSeed=10, FoldCore=11, FluxCore=12. R1 is the sharpest discriminator — no killed family passes it.
 Step 776 - R3 counterfactual on 674 (v3, 25K steps, different seeds, n=20). COMPLETE. cold=4054 completions, warm=2899 completions (500K test steps). Fisher OR=0.713, p<0.0001. R3_counterfactual: FAIL — pretraining HURTS (cold > warm in 11/20 seeds). cold≡pretrain for all seeds (G graph is exploration budget, not transferable structure). Once exhausted on env A, substrate cannot freely explore env B.
 AdaptiveLSH (bonus): PCA-derived planes = random planes. R3_cf FAIL. JL lemma: random projections sufficient. Failure is structural.
-GRAPH BAN announced (Jun, 2026-03-23). Effective post Step 777. No per-(state, action) data structures. Argmin over visit counts is dead. Permanent, no lift condition.
+GRAPH BAN announced (2026-03-23). Effective post Step 777. No per-(state, action) data structures. Argmin over visit counts is dead. Permanent, no lift condition.
 Step 762 - D1+D3 self-directed attention on Split-CIFAR-100. avg_accuracy=19.65% (BELOW chance 20%). BWT=+1.4%. Channel weights nearly uniform [0.337, 0.325, 0.338]. D1+D3 HURTS CIFAR — adaptive K over-splits static image graph. Navigation mechanisms don't transfer to classification.
 Step 770 - SOTA chain: 674 on LS20 (10K steps) → Split-CIFAR-100. acc=20.13%, BWT=+6.5%. Compare cold baseline (Step 760): acc=20.21%, BWT=+5.6%. **Zero cross-domain transfer.** LS20 pretraining does not improve CIFAR.
 Step 771 - SOTA chain: D1+D3 on LS20 → Split-CIFAR-100. acc=19.61%, BWT=+1.9%. Below cold baseline. D1+D3 hurts in chain too.
@@ -98,7 +98,7 @@ Step 731 - CIFAR with RGB channels. NMI=0.375 vs 0.013 greyscale-only. 29x impro
 Step 732 - Spatial resolution (D2) on LS20. L1=10/20 KILL.
 Step 733 - Hash resolution (D3) on LS20. L1=14/20 MARGINAL.
 Step 734 - Frame stacking (D4) on LS20. L1=7/20 KILL.
-Step 735 - Atari frame stacking. Skipped — env not available in Eli's setup.
+Step 735 - Atari frame stacking. Skipped — env not available.
 Step 736 - Adaptive centering rate (D5) on LS20. KILL. Alpha collapse.
 Step 737 - Self-directed attention (D1+D3) on full chain. **PROPOSITION 18 CONFIRMED.** R3_dynamic=1.0 at ALL chain phases. Both M elements (inconsistency_map, channel_weights) genuinely self-directed. LS20 L1=1105 (2.3x faster than 674 baseline).
 Step 738 - Self-directed attention + centering (D1+D3+D5) on full chain. L1=None on all games. Alpha collapsed 2.0→0.10 on FT09/VC33. **D5 permanently excluded.** Channel weights adapted correctly (ch0=1.0, ch1/2=0.05). CIFAR BWT=+0.007. Best combination = Step 737 config (D1+D3 only).

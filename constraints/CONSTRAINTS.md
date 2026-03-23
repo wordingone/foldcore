@@ -328,9 +328,9 @@ The task is interactive (unknown environment, no separate training phase). Any s
 
 ---
 
-## The State of the Search (770+ experiments, 12 families)
+## The State of the Search (777 experiments, 12 families, 2 bans)
 
-*Revised 2026-03-21 session. Updated with Steps 494-612. 16 levels via source analysis (R3 specification). GRN killed (607). LS20 L4 bootstrap in progress (612).*
+*Revised 2026-03-23 session. Updated through Step 777. Infrastructure overhaul complete. SOTA baselines established. R3 counterfactual measured. Graph ban effective. Phase 3 begins.*
 
 ### What's Solved
 
@@ -346,17 +346,25 @@ The task is interactive (unknown environment, no separate training phase). Any s
 
 ### What's Open
 
-1. **R3 (self-modification of operations):** The frozen frame and navigation capability are structurally coupled (R3_AUDIT.md). R3 audit Rounds A-B (2026-03-17, codebook-specific) found: most "unjustified" elements in the codebook are actually FORCED by the constraint map — every tested alternative is killed by a specific universal constraint. This is analogous to frozen variables in CSP theory (Zdeborová & Krzakala 2007), though the R3 audit enumerates a finite set of designer-chosen alternatives rather than proving all alternatives fail. **Round C (the decisive test) was never completed** — blocked by codebook ban. The methodology (enumerate alternatives, kill with constraints) is substrate-agnostic; the specific results are codebook-specific. **LSH frozen element enumeration is queued as the next R3 audit target.**
+1. **R3 (self-modification of operations) — DEFINITIVELY OPEN, now with counterfactual measurement.**
 
-   **Encoding determines performance (I1), not R3.** The encoding pipeline (avgpool, centering, normalization, action mapping) accounts for 300x difference in step count across games (LS20: 26K, FT09: 82, VC33: 283 — same substrate). This is an I1 issue (representation discovery), not R3 (operational self-modification). R3_AUDIT encoding compilation: 3I/2M/1 narrow U — the encoding is mostly R3-compliant. The 300x impact is about WHAT to process (I1), not HOW to process (R3). Anti-inflation rule 7 still applies: audit the full system (substrate + encoding) for frozen frame accounting (R4).
+   **R3 status (Step 777):** 0/777 experiments pass R3. Table 1 (calibration): RandomAgent, FixedPolicy, TabularQ, 674 all R3 FAIL. Table 2 (killed families): all 12 fail R1. Nobody passes R1+R3 simultaneously. The gap is real.
 
-   **No Phase 2 substrate has been formally R3-audited** — expected given kill velocity (SelfRef, Tape, Expr, Temporal, GRN all killed in <5 experiments). LSH has been active since Step 453 (~180 experiments) with frozen elements (random hyperplanes, k, centering, argmin) not yet enumerated. Recode's self-refinement (Step 542) is the closest to R3 compliance. Op-code definitions (Steps 581d, 582: PENALTY=100, death/surprise semantics) are frozen value judgments — R4 says they must be adaptive or irreducible. Hart debate (2026-03-21): computational parameters (R4) vs value parameters (R1) are different axes.
+   **R3 counterfactual (Step 776, n=20, p<0.0001):** 674 pretrained for 25K steps, tested on new environment seeds. Cold: 4054 completions. Warm: 2899 (-28%). Pretraining HURTS navigation in new environments (OR=0.713). **The G graph is exploration bookkeeping, not transferable knowledge.** Visit counts bias argmin AWAY from actions common during pretraining — if those actions are needed in the new environment, catastrophic failure. This is consistent with negative transfer in continual RL (Gao et al., ICLR 2025). Our contribution: the mechanism is clear (visit-count bias), and the R3 counterfactual protocol is a concrete operationalization.
 
-   **The R3 barrier precisely located (Steps 577b-577d):** Evolutionary R3 (577b): 0/1000 random programs find the pipeline. Buffer navigation (577d): 0 L1s across ALL buffers — pixel statistics navigate to MORE cells but WRONG cells. R3 requires reward-correlated features, not visually salient features. Without a feedback loop linking strategy to outcomes, no pixel statistic discovers the exit.
+   **R3 metric limitation (Step 739):** R3_dynamic measures "did it change?" Both self-directed (Step 737, L1=1105) and random modification (Step 739, L1=4237) score R3_dynamic=1.0. The metric cannot distinguish useful from random self-modification. R3_counterfactual (modified vs cold on same task) is the discriminator. Added to judge.py.
 
-   **Eigenform series (Steps 620-629, 10 experiments):** Self-observation via graph statistics — substrate reads its own edge count distribution, computes percentile thresholds, assigns AVOID/PREFER/NEUTRAL op codes. Mechanism works mechanically (AVOID grows 0→8%), but is INERT for L1 (argmin-solvable, no room for improvement). Self-observation self-terminates at L1 (Step 621: M→2000). L2=0/5 (Step 629: reflective only, can't reach unknown territory). P3 7-53x SLOWER (Step 625: AVOID contaminates known paths). **Eigenform points INWARD (avoid known graph) not OUTWARD (toward unknown states).** L2 requires predicting unseen states — a world model. The graph stores the past; L2 requires the future. This is the same wall as the exploration series (477-482) from a different angle: introspection ≠ foresight.
+   **Self-directed attention (Steps 730-738):** D1 (channel selection) + D3 (hash resolution) = R3_dynamic=1.0, L1=1105 (2.3x faster than baseline). But: (a) random attention also scores R3_dynamic=1.0, (b) D1+D3 HURTS CIFAR (Step 762: 19.65%, below chance), (c) R3_counterfactual FAIL. The self-modification is real but domain-specific and non-transferable.
 
-   **R4 testable formulation:** R4 (frozen frame must be minimal) is tested by the R3 audit methodology — enumerate every frozen element, classify as M (modified), I (irreducible), or U (unjustified). R4 passes when U=0. The R3 audit IS the R4 benchmark. No separate R4 test needed.
+   **Argmin purity confirmed (Step 759, n=20):** argmin 14/20, epsilon 11/20, softmax(0.5) 9/20, softmax(1.0) 7/20, random 6/20. Fisher p<0.05. Any stochasticity degrades. Argmin is I (irreducible for graph-based navigation).
+
+   **Graph ban (2026-03-23, effective post Step 777).** No per-(state, action) data structures. Argmin over visit counts is dead. Permanent, no lift condition. Combined with codebook ban (2026-03-18): both known-working mechanisms are now banned. Phase 3 must find genuinely new approaches.
+
+   **Prior R3 findings still valid:** Encoding determines performance (I1, 300x game-dependent). R3 barrier precisely located (Steps 577b-577d: pixel statistics navigate WRONG cells). Eigenform inert for L1 (Steps 620-629: introspection ≠ foresight). All Phase 2 substrates killed in <5 experiments except LSH family.
+
+   **SOTA baselines (Steps 760-766):** CIFAR = chance (20.21%, R1 floor). Atari 100K = 6/26 above random (RoadRunner 11x standout). Zero cross-domain transfer (Steps 770-773, symmetric). Anti-forgetting (BWT=+5.6%) is a growth-only graph property, not a learned capability.
+
+   **R4 testable formulation (updated):** R4 = R3 counterfactual. Modified state must outperform cold state on same task (Step 776 protocol). The R3 audit (enumerate U/I/M) is the static test; R3_counterfactual is the dynamic test. Both needed.
 
 2. **R1-compliant classification:** No substrate classifies without external labels. LSH k=16 achieves 36.2% with self-labels (Step 573, 4x above codebook's 9.8%), but still far below supervised. Classification under R1 remains unsolved.
 
