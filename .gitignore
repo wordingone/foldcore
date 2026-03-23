@@ -30,3 +30,6 @@ tests/
 llm-benchmark/
 models/
 substrates/archive/
+
+# Build scripts (operational, not research)
+paper/compress_paper.py
