@@ -79,6 +79,9 @@ DIRECTION (2026-03-23, Jun): THIRD CLUSTER. Codebook=vertex 1 (recognition). Gra
 Step 896 SPEC'D - SDM forward model: Sparse Distributed Memory (Hamming on binary addresses). Non-linear prediction without neural networks. NOT codebook (no cosine, no attract).
 Step 897 - Decision tree. KILLED (tree_depth=0, splits never triggered on LS20).
 Step 898 - LZ complexity. KILLED (compression ratio variance=0, zlib can't distinguish 1-byte action append).
+Step 903 - ELM forward model. L1=0 (all seeds, both cold and warm). MSE novelty action selection fails on LS20 (same as 889, 892, 780). **KILLED for navigation.** ELM architecture may improve prediction accuracy but novelty-based action selection is universally dead on LS20.
+FINDING (Steps 780/889/892/903): **Action selection is the bottleneck, not model architecture.** ALL novelty-seeking selectors (prediction-contrast, visited_set, MSE buffer, LZ) achieve L1=0 on LS20. LS20 requires persistence (repeat productive action). Only change-tracking (800b delta EMA + softmax) navigates. This is universal across 6+ model architectures.
+EMERGING ARCHITECTURE: Three decoupled components: (1) alpha for R3 encoding self-modification, (2) 800b change-tracking for navigation, (3) W forward model for prediction transfer. Each operates independently. Alpha doesn't touch navigation. 800b doesn't use predictions. W trains in alpha-weighted space for better convergence.
 Step 899 - Population predictors. Functionally DEAD (L1=0, hash issue). Diversity=0.37 (alive by criterion but useless).
 Step 896 - SDM. BROKEN (Hamming radius=80 too small for 256-bit, zero addresses activated). Deprioritized.
 Step 900 - Attractor landscape. Running but slow. Deprioritized.
