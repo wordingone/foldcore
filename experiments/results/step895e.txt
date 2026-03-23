@@ -1,0 +1,39 @@
+======================================================================
+STEP 895e — ALPHA-800b CLAMPED (clip 0.1-5.0, max/min ≤ 50)
+======================================================================
+Game version: ls20/9607627b
+25K steps, 10 seeds, sub_seed=seed%4 (n_eff=4)
+
+Pretrain: alpha_conc=16.52, pred_acc=-1601.590
+
+  seed=1: cold L1= 323 warm L1= 312  cold_conc=12.60  (sub_seed=1)
+  seed=2: cold L1= 328 warm L1= 265  cold_conc=24.86  (sub_seed=2)
+  seed=3: cold L1= 171 warm L1= 330  cold_conc=14.51  (sub_seed=3)
+  seed=4: cold L1= 247 warm L1= 353  cold_conc=16.56  (sub_seed=0)
+  seed=5: cold L1= 323 warm L1= 312  cold_conc=12.60  (sub_seed=1, repeat)
+  seed=6: cold L1= 328 warm L1= 265  cold_conc=24.86  (sub_seed=2, repeat)
+  seed=7: cold L1= 171 warm L1= 330  cold_conc=14.51  (sub_seed=3, repeat)
+  seed=8: cold L1= 247 warm L1= 353  cold_conc=16.56  (sub_seed=0, repeat)
+  seed=9: cold L1= 323 warm L1= 312  cold_conc=12.60  (sub_seed=1, repeat)
+  seed=10: cold L1= 328 warm L1= 265  cold_conc=24.86  (sub_seed=2, repeat)
+
+cold: L1=278.9/seed  std=62.0  zero=0/10  alpha_conc=17.45  pred_acc=-1883.623
+warm: L1=309.7/seed  std=32.5  zero=0/10  alpha_conc=16.87  pred_acc=-3382.555
+L1 delta: warm-cold = +30.8/seed
+
+Unique results (n_eff=4):
+  sub_seed=0: cold=247, warm=353 (warm >> cold, +106)
+  sub_seed=1: cold=323, warm=312 (≈ equal, -11)
+  sub_seed=2: cold=328, warm=265 (warm < cold, -63)
+  sub_seed=3: cold=171, warm=330 (warm >> cold, +159)
+
+Comparison:
+  868b (squared-sum, 25K):      72.1/seed  std=112  zero=5/10
+  868d (L2-norm, 25K, n_eff=10): 203.9/seed std=106  zero=1/10 ← TRUE BASELINE
+  895e cold (clamped alpha):     278.9/seed std=62   zero=0/10 → +37% over 868d
+  895e warm (clamped alpha):     309.7/seed std=32.5 zero=0/10 → +52% over 868d
+  895g warm (dual-stream, n_eff=4): 213.9/seed std=67  zero=0/10
+
+VERDICT: Clamped alpha-weighted delta (0.1-5.0) outperforms raw L2 norm by ~52% warm.
+n_eff=4 CONFOUND: need rerun with substrate_seed=seed to confirm.
+Warm > cold: R3_cf transfer CONFIRMED with clamped alpha.

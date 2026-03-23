@@ -1,0 +1,39 @@
+======================================================================
+STEP 868d — PLAIN 800b WITH L2 NORM DELTA (CONTROL FOR 895g)
+======================================================================
+Game version: ls20/9607627b
+substrate_seed=seed (n_eff=10, truly varied)
+
+  seed=  1: L1= 284
+  seed=  2: L1= 149
+  seed=  3: L1= 277
+  seed=  4: L1= 140
+  seed=  5: L1= 163
+  seed=  6: L1= 146
+  seed=  7: L1= 376
+  seed=  8: L1= 174
+  seed=  9: L1=   0
+  seed= 10: L1= 330
+
+Mean L1: 203.9/seed  std=105.8  zero=1/10
+  [284, 149, 277, 140, 163, 146, 376, 174, 0, 330]
+
+Comparison:
+  868b (squared-sum, 25K):      mean=72.1   std=112   zero=5/10
+  868d (L2-norm, 25K):          mean=203.9  std=105.8  zero=1/10
+  895g (dual-stream L2, 25K):   mean=213.9  std=67.4   zero=0/10  [n_eff=4]
+
+VERDICT: 868d ≈ 895g. The 3× improvement over 868b is FROM L2 NORM, not dual-stream.
+Dual-stream adds marginal ~10/seed mean + std reduction (105.8→67.4) + 1→0 zero seed.
+BUT 895g has n_eff=4 (sub_seed=seed%4) vs 868d n_eff=10 (sub_seed=seed).
+Std comparison is confounded by n_eff difference.
+
+CRITICAL IMPLICATION: 868b baseline was wrong metric, not bad seeds.
+The real 800b L2 norm baseline is 203.9/seed (2.8× better than what we reported).
+
+CRITICAL IMPLICATION FOR 895c:
+  895c warm=77.8/seed vs new baseline 868d=203.9/seed
+  → 895c WARM (alpha-weighted delta) is 2.6× WORSE than plain 800b L2 norm
+  → Alpha weighting in navigation pathway HURTS
+
+Total elapsed: 207.8s
