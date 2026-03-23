@@ -1,0 +1,41 @@
+======================================================================
+STEP 923 — VC33 DIAGNOSTIC (916 recurrent + 895h comparison)
+======================================================================
+VC33 baseline_actions=[6, 13, 31, 59, 92, 24, 82]  N_ACTIONS=68
+VC33 is zone-based (not tile-puzzle). 800b may work if zones produce visible change.
+
+--- 916 Recurrent h (ext_enc=320D) ---
+2026-03-23 09:33:18 | INFO | Got anonymous API key: 3fe02786-9bda-492e-a0e9-a26348c8492f
+2026-03-23 09:33:18 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-23 09:33:19 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-23 09:33:19 | INFO | Created new scorecard: 5e4e6de5-bae5-4377-8777-2b6ba3dcc5a0
+2026-03-23 09:33:19 | INFO | Successfully fetched metadata for game vc33
+2026-03-23 09:33:19 | INFO | Successfully loaded game class Vc33 from environment_files\vc33\9851e02b\vc33.py
+    seed=1: L1=   0  alpha_conc=28.42  top7_delta=[np.int64(61), np.int64(19), np.int64(26), np.int64(12), np.int64(47), np.int64(54), np.int64(33)]  baseline_overlap=[]
+2026-03-23 09:33:27 | INFO | Got anonymous API key: 5200945d-bced-43e9-ba47-550cd7690973
+2026-03-23 09:33:27 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-23 09:33:28 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-23 09:33:28 | INFO | Created new scorecard: 9bdb0a29-d8f5-4ff4-a1be-ae1996e6ae27
+2026-03-23 09:33:28 | INFO | Successfully fetched metadata for game vc33
+2026-03-23 09:33:28 | INFO | Successfully loaded game class Vc33 from environment_files\vc33\9851e02b\vc33.py
+    seed=2: L1=   0  alpha_conc=27.36  top7_delta=[np.int64(12), np.int64(61), np.int64(19), np.int64(33), np.int64(26), np.int64(54), np.int64(5)]  baseline_overlap=[]
+2026-03-23 09:33:36 | INFO | Got anonymous API key: 8c503782-507a-47f8-ae07-23a6b7148bd3
+2026-03-23 09:33:36 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-23 09:33:36 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-23 09:33:36 | INFO | Created new scorecard: d0e7609b-43af-44ed-8978-c8969974eba7
+2026-03-23 09:33:37 | INFO | Successfully fetched metadata for game vc33
+2026-03-23 09:33:37 | INFO | Successfully loaded game class Vc33 from environment_files\vc33\9851e02b\vc33.py
+    seed=3: L1=   0  alpha_conc=50.00  top7_delta=[np.int64(5), np.int64(40), np.int64(33), np.int64(26), np.int64(47), np.int64(54), np.int64(19)]  baseline_overlap=[]
+2026-03-23 09:33:45 | INFO | Got anonymous API key: 07ae897a-25e7-45aa-b56e-8a31580d8e65
+2026-03-23 09:33:45 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-23 09:33:45 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-23 09:33:45 | INFO | Created new scorecard: f8e7ce32-c079-4150-973f-0637d1bb0763
+2026-03-23 09:33:45 | INFO | Successfully fetched metadata for game vc33
+2026-03-23 09:33:45 | INFO | Successfully loaded game class Vc33 from environment_files\vc33\9851e02b\vc33.py
+    seed=4: L1=   0  alpha_conc=33.65  top7_delta=[np.int64(19), np.int64(26), np.int64(54), np.int64(47), np.int64(40), np.int64(12), np.int64(33)]  baseline_overlap=[]
+2026-03-23 09:33:54 | INFO | Got anonymous API key: 23d7fd92-16c3-45d1-98ae-90548bdf2648
+2026-03-23 09:33:54 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-23 09:33:54 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-23 09:33:54 | INFO | Created new scorecard: 7d89caed-f2b3-43ef-81a5-7338f495dfba
+2026-03-23 09:33:54 | INFO | Successfully fetched metadata for game vc33
+2026-03-23 09:33:54 | INFO | Successfully loaded game class Vc33 from environment_files\vc33\9851e02b\vc33.py
