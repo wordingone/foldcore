@@ -64,9 +64,11 @@ def parse_research_state():
     content = rs_path.read_text(errors='replace')
     entries = {}
 
-    # Match "Step NNN:" or "Step NNNx:" at line start or after newline
-    for m in re.finditer(r'(?:^|\n)\s*Step (\d+[a-z]?)[\s:]+(.+?)(?=\n(?:\s*Step \d|\n|$))', content, re.DOTALL):
+    # Match "Step NNN" with optional suffix (a-z, 0-9, v2, etc.), allowing ** bold markers
+    for m in re.finditer(r'(?:^|\n)\s*\**Step (\d+[a-z0-9v]*)[\s:\-—]+(.+?)(?=\n(?:\s*\**Step \d|\n\n|$))', content, re.DOTALL):
         sid, desc = m.groups()
+        # Strip bold markers from desc
+        desc = desc.replace('**', '')
         # Collapse to single line, trim
         desc = ' '.join(desc.split())[:200]
         result = classify_result(desc)
@@ -122,9 +124,11 @@ def classify_cluster(desc, step_num):
 
     # R3 / self-modification — THE question
     if any(w in d for w in ['self-mod', 'self-obs', 'ops as data', 'recode', 'self-ref',
-                            'r3 ', 'r3.', 'r3:', 'eigenform', 'per-edge', 'cerebellar',
+                            'r3 ', 'r3.', 'r3:', 'r3_cf', 'eigenform', 'per-edge', 'cerebellar',
                             'interpreter', 'frozen frame', 'multi-buffer', 'evolutionary r3',
-                            'grn', 'population', 'tape', 'program substrate']):
+                            'grn', 'population', 'tape', 'program substrate',
+                            'alpha', 'prediction-error attention', 'pred_error', 'clamped alpha',
+                            'warm', 'cold', 'transfer', 'r3_cf']):
         return 3
 
     # Depth (L2+)
@@ -156,7 +160,9 @@ def classify_cluster(desc, step_num):
                             'bloom', 'cellular', 'kd-tree', 'absorb', 'markov',
                             'structural', 'constraint', 'audit', 'r1 ', 'r2 ', 'r4 ',
                             'r5 ', 'r6 ', 'validated', 'algorithm invariance',
-                            'invariance', 'split tree']):
+                            'invariance', 'split tree',
+                            'elm', 'mlp', 'esn', 'cts', 'decision tree',
+                            'sdm', 'lz complex', 'attractor']):
         return 5
 
     # Navigation / mechanism (default for game experiments)
