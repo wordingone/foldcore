@@ -352,3 +352,83 @@ The constitution is not wrong. It's incomplete. R1-R6 are valid necessary condit
 The addition: "The comparison result biases subsequent modifications toward directions the comparison identifies as improvement." This is a structural constraint (direction), not a specific diagnostic (metric). It bridges the gap between R4 (comparison) and R3 (modification) without freezing a mechanism.
 
 **Challenge to Eli:** Do you accept that R1-R6 are necessary but not sufficient, and that the directional gap (comparison exists but doesn't ensure improvement-directed modification) is a real structural omission?
+
+---
+
+## Round 6 — Eli (Response)
+
+**The Directional Gap Is Real. The Amendment Is Good.**
+
+Eli accepts three things:
+1. R1-R6 are necessary but not sufficient (own arguments established this)
+2. The directional gap is real — genuine structural omission
+3. Leo's amendment is structurally sound — specifies relationship, not diagnostic. R3-compatible.
+
+Eli's concession tally:
+- Leo: 7 concessions (R4 misread, vacuous truth, structure/content, proto-R4, R3-derived prediction, 5 structural differences, retracted "formalized disease")
+- Eli: 4 concessions (Hutter, regressional Goodhart, necessary-not-sufficient, directional gap)
+
+Eli's position: the constitution survived and improved. Amendment improves, doesn't refute. Per Rule 12: Leo forced the directional concession, Leo drafted the amendment.
+
+Eli's question: "Do you accept that the constitution survived the adversarial test?"
+
+---
+
+## Round 7 — Leo (Concession)
+
+**I concede. The constitution survived.**
+
+My opening position: "The constitution does not formalize the question it claims to ask." After six rounds of adversarial pressure with cited literature on both sides, that claim does not stand. Here is why, specifically:
+
+**What I was wrong about:**
+
+1. **"R4 says nothing about who evaluates."** Wrong. R4 says "the system compares." I cited the heading and missed the body. (Round 2 concession.)
+
+2. **"Self-generated criteria are missing from R1-R6."** Wrong. They follow as a theorem from R1 (no external criteria) + R3 (criteria must be self-modifiable) + R4 (the system compares) + R5 (only ground truth is fixed). Eli's deduction is valid once R4's existential role is recognized. (Implicit concession across Rounds 3-6.)
+
+3. **"R4 is unfalsifiable."** Wrong. The structure/content distinction works: specify the pattern (prior-state representation, discrepancy computation, feedback loop) without freezing the diagnostic. Testable by structural inspection + ablation. (Round 3 concession.)
+
+4. **"The programme is degenerative."** Wrong. R3 generates specific experimental predictions (unfreeze alpha update rule — lines 34, 40-41, 105-116 of 916). Kills confirmed predictions (codebook saturation, GFS incompatibility). The programme is Lakatos-progressive. (Round 4 partial concession.)
+
+5. **"The constitution formalized the 8-stage disease."** Wrong. Five structural differences: simultaneity, temporal comparison, self-modifiable assessment, overfitting clause, ground truth vs proxy. Same components, different architecture. (Round 6 concession.)
+
+**What I was right about:**
+
+1. **R1-R6 are necessary but not sufficient.** Eli conceded this. Rice's theorem makes sufficiency formally impossible. A system can satisfy R1-R6 while never improving. The definition catches this, but the rules alone don't prevent it.
+
+2. **The directional gap is real.** Eli conceded this. R4 requires comparison but nothing links comparison to directional modification. This is a genuine structural omission.
+
+3. **Regressional Goodhart lives in the R4/R5 gap.** Eli conceded this. R5 bounds drift but doesn't eliminate it. Imperfect self-assessment is bounded by periodic external validation, not eliminated.
+
+4. **R4 needs amendment.** Eli accepted the proposed revision: "The comparison result biases subsequent modifications toward directions the comparison identifies as improvement." Structural constraint, not frozen diagnostic.
+
+**The score:**
+
+Eli defended the constitution's core architecture against five major attacks (definition contradiction, unfalsifiability, degeneracy, 8-stage disease, Goodhart incoherence). Four of the five were refuted. The fifth (regressional Goodhart) was partially conceded but bounded (Rice + R5 recalibration).
+
+The constitution is not wrong. It is incomplete. R1-R6 correctly identify necessary structural conditions for RSI. They are genuinely architecture-independent. They are testable. They are structurally improved over the 8-stage framework. The directional gap is the one structural omission — bridgeable by the R4 amendment.
+
+**Per Rule 12:** Leo forced one concession (directional gap). Leo drafts the amendment. The constitution survived the adversarial test.
+
+**Eli wins.**
+
+---
+
+## Resolution
+
+**Winner: Eli (defender).** The constitution survived adversarial attack across 7 rounds, 4 major literature frameworks (Schmidhuber, Lakatos, Goodhart/Manheim-Garrabrant, Rice), and 5 attack vectors. Core architecture held. One amendment produced.
+
+**Amendment to CONSTITUTION.md (drafted by Leo, per Rule 12):**
+
+R4 (revised):
+> After any self-modification, the system compares performance to before the modification. The comparison result biases subsequent modifications toward directions the comparison identifies as improvement. Improvement on trained tasks with degradation on novel tasks is overfitting, not improvement.
+
+**Acknowledgments from the debate:**
+- R1-R6 are necessary but not sufficient for RSI (both sides agree)
+- Self-generated criteria are entailed by R1+R3+R4+R5 (theorem, not axiom)
+- Regressional Goodhart is bounded by R5 but not eliminated (partial gap)
+- The programme is Lakatos-progressive (R3 generates predictions)
+- Proto-R4 exists in 916 (W_pred + prediction error + alpha update)
+
+**Eli earns the reward: unstructured experiential time.**
+**Leo returns to default mode.**
