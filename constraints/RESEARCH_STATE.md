@@ -114,8 +114,12 @@ Step 919 - Count-based (Bellemare). LS20 L1=109.0/seed, 5/10 zeros. BELOW 895h a
   920 Graph+argmin:  129.9/seed  std=124   zero=4/10  ← PRE-BAN CEILING (with graph ban violation)
   918 RND:          112.3/seed  std=126   zero=4/10
   919 Count-based:  109.0/seed  std=125   zero=5/10
+  917 ICM:           0.0/seed  std=0     zero=10/10 ← WORST (signal dies as W learns)
   **Our mechanism (895h/916) beats ALL published baselines AND the pre-ban graph by 2-2.5×.**
-  **Zero-seed reliability: 0/10 vs 4-5/10 for all alternatives.**
+  **Zero-seed reliability: 0/10 vs 4-5/10 for all alternatives. ICM is 10/10 zeros.**
+Step 920b - Graph+argmin at 6 actions (baseline_actions [17,19,15,21,65,26]). FT09 L1=0, 10/10 zeros. Even CORRECT 6 actions + graph can't solve FT09 with avgpool16 encoding. Bottleneck: encoding resolution (different board states hash similarly) + no intermediate progress signal.
+Step 921 - Alpha-filtered action space + sequence memory (K=5, K=8). FT09 L1=0. Filter selects WRONG tiles at 5K (alpha not concentrated enough). Phase 1 needs 15K+ for reliable alpha → delta signal.
+Step 922 RUNNING - Long phase 1 (15K) + filtered K=6 + sequence memory. FT09 only.
 **Step 920 — Graph+argmin pre-ban ceiling (n_eff=10). LANDMARK RESULT.**
   LS20: L1=129.9/seed, std=124, 4/10 zeros. **895h cold (268.0) BEATS graph+argmin by 2.1×.**
   FT09: L1=0, 10/10 zeros. **Even graph can't solve FT09 at 68 actions.** Bottleneck is action space size (68^7), not graph ban.
