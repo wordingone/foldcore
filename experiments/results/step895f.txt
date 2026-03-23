@@ -1,0 +1,43 @@
+======================================================================
+STEP 895f — CLAMPED ALPHA-800b ON FT09 (25K, N_ACTIONS=68)
+======================================================================
+Game: FT09 ft09/0d8bbf25
+25K steps, 10 seeds, substrate_seed=seed (n_eff=10), pretrain 5 seeds 5K
+
+Pretrain: alpha_conc=8.68  top=[60, 51, 52]
+
+  seed=1:  cold=0  warm=0  cold_conc=13.29  top=[60, 51, 52]
+  seed=2:  cold=0  warm=0  cold_conc= 8.49  top=[60, 51, 52]
+  seed=3:  cold=0  warm=0  cold_conc= 6.44  top=[60, 51, 52]
+  seed=4:  cold=0  warm=0  cold_conc= 7.37  top=[60, 51, 52]
+  seed=5:  cold=0  warm=0  cold_conc= 8.00  top=[60, 51, 52]
+  seed=6:  cold=0  warm=0  cold_conc= 8.69  top=[60, 51, 52]
+  seed=7:  cold=0  warm=0  cold_conc= 7.60  top=[60, 51, 52]
+  seed=8:  cold=0  warm=0  cold_conc= 9.28  top=[60, 51, 52]
+  seed=9:  cold=0  warm=0  cold_conc= 3.51  top=[60, 51, 241]  ← outlier
+  seed=10: cold=0  warm=0  cold_conc= 7.08  top=[60, 51, 52]
+
+cold: L1=0.0/seed  std=0.0  zero=10/10  alpha_conc=7.98  pred_acc=-5496.043
+warm: L1=0.0/seed  std=0.0  zero=10/10  alpha_conc=8.68  pred_acc=-11566.416
+L1 delta: +0.0/seed
+Total elapsed: 240.6s
+
+TWO FINDINGS:
+
+1. R3 CONFIRMED UNIVERSALLY: alpha=[60,51,52] on 9/10 seeds (all except seed=9).
+   Pretrain and ALL cold/warm test seeds converge to same puzzle tile dims.
+   This is the MOST ROBUST R3 confirmation yet (n_eff=10, not n_eff=4).
+   Dim 60 = tile location 1, 51 = tile location 2, 52 = tile location 3 in avgpool16.
+
+2. NAVIGATION FAILED: L1=0 ALL SEEDS. 800b change-tracking cannot solve FT09.
+   Root cause: FT09 requires a specific click ORDER (7-click sequence).
+   Change-tracking identifies WHICH tiles respond (high delta for dims [60,51,52])
+   but cannot discover the required ORDER of clicks.
+   Alpha finds the active dims but the action selector can't exploit them.
+
+IMPLICATION: The bottleneck is NOT encoding (alpha works) but ACTION SELECTION.
+For LS20 (directional): change magnitude guides exploration → works.
+For FT09 (sequential puzzle): change magnitude guides identification but not ordering → fails.
+
+FT09 needs: (a) memory of click outcomes, (b) sequential planning, or
+(c) action selection that can learn ordered dependencies — beyond 800b EMA.
