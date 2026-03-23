@@ -57,10 +57,11 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 939b spec'd. Step 939 GFS KILLED (LS20=0, bootstrap failure). 939b = warm-up fix (isolate root cause).
-DIRECTION (2026-03-23, post-939 kill):
-  **ENCODING ARCHITECTURE FAMILY (GFS, Prop 27).** 939 proved PCA discovers structure (10-16 dims added). Kill cause: zero-init W_pred → alpha concentrates on new dims → navigation signal drowned. NOT a family kill — mechanism fires but integration fails. 939b tests warm-up exclusion (one variable). If warm-up works → GFS family alive.
-  **ACTION SELECTION (closed):** Steps 933-938e exhausted all families. 800b irreducible under gates 3-5 + bans.
+CURRENT STEP: 942 spec'd. GFS family KILLED (939+939b). Pivoting to observation preprocessing.
+DIRECTION (2026-03-23, post-GFS kill):
+  **NEW FAMILY: Observation preprocessing.** GFS proved PCA discovers structure but dynamic dim growth is incompatible with alpha/W_pred (bootstrap failure + cross-game alpha contamination). Constraint: alpha system assumes fixed dimensionality. Next: change encoding INPUT without changing dims. Step 942 = frame differencing, Step 943 = running pixel variance.
+  **ACTION SELECTION (closed):** Steps 933-938e. 800b irreducible.
+  **ENCODING ARCHITECTURE (closed):** Steps 939-939b. Fixed-dim under 916. Dynamic growth kills alpha.
   **CHAIN:** LS20=290.7 best (916). FT09/VC33/CIFAR=0. PRISM-light incomplete.
 PREVIOUS DIRECTION (2026-03-23, post-compression):
   **ENCODING (solved):** Alpha-weighted prediction-error attention (Prop 22, confirmed Steps 895-895h). R3 encoding self-modification works universally. Carry forward to ALL future families.
@@ -153,7 +154,8 @@ Step 938c - Trajectory-conditioned action perturbation (h-projection). **KILLED:
 Step 938d - Alpha-weighted enc-only delta + h perturbation. **KILLED: LS20=71.0 best (beta=0.1).** Alpha on enc-only didn't restore discrimination (delta_spr=0.013). Key insight: h IN ext_enc IS the trajectory discrimination signal. Stripping h from delta loses the feature, not just contamination.
 Step 938e - Full 916 delta + beta * |R@h|. **KILLED: LS20=21.5 best (beta=0.01).** h_spr=0.41 (real variance). Kill cause: random R maps h to arbitrary action biases. Even beta=0.01 corrupts softmax T=0.1 ordering. Fixed R cannot produce meaningful action biases from h. Learned R requires reward (R1 violation) or per-obs memory (gate 5).
 **938 SERIES COMPLETE (938-938e): ALL action selector families exhausted under current constraints.** 800b is irreducible. Action selection problem closed. Next direction: new substrate family entirely (not action selector variant).
-Step 939 - GFS (Growing Feature Space, Prop 27). **KILLED: LS20=0, FT09=0, VC33=0, CIFAR=chance.** PCA features discovered (10 in LS20, 16 max by FT09). Kill cause: zero-init W_pred rows for new dims → huge prediction errors → alpha concentrates on new dims (alpha_conc=50 from step 1) → navigation signal in original 320D drowned. Evidence: CIFAR-2 delta_spr=14-21 (PCA dims generate massive apparent changes). **CONSTRAINT: encoding expansion via zero-init W_pred = fatal to alpha. Mid-stream encoding changes require warm-up before entering alpha/delta.** Step 939b tests warm-up exclusion fix.
+Step 939 - GFS (Growing Feature Space, Prop 27). **KILLED: LS20=0, FT09=0, VC33=0, CIFAR=chance.** PCA features discovered (10 in LS20, 16 max by FT09). Kill cause: zero-init W_pred rows → alpha concentrates on new dims (alpha_conc=50 from step 1) → navigation signal drowned.
+Step 939b - GFS + warm-up exclusion. **KILLED: LS20=17.5 (seed2=35, seed1=0), FT09=0, VC33=0.** Warm-up partially helped but root cause is deeper: (1) more dims → harder W_pred training → faster alpha concentration even in base dims, (2) cross-game alpha contamination — LS20 extra features carry miscalibrated alpha into FT09 (alpha_conc=43.7 at FT09 step 100, before any new features). **GFS FAMILY KILLED. CONSTRAINT: dynamic dim growth incompatible with alpha/W_pred. Alpha system assumes fixed dimensionality.**
 **ARCHITECTURE ASSESSMENT (Steps 933-938b):** 800b with alpha-weighted ext_enc change (916 formula) is IRREDUCIBLE. Reactive-global selectors also fail (938b: anomaly collapses to constant). The remaining untested mechanism class: trajectory-conditioned (h-based) action perturbation — h is position-dependent via recurrent dynamics, global (single state), and gate-5 compliant. Step 938c tests this.
 **Step 920 — Graph+argmin pre-ban ceiling (n_eff=10). LANDMARK RESULT.**
   LS20: L1=129.9/seed, std=124, 4/10 zeros. **895h cold (268.0) BEATS graph+argmin by 2.1×.**

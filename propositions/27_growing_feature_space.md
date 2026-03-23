@@ -1,6 +1,6 @@
 # Proposition 27: Growing Feature Space
-Status: OPEN (pending experimental confirmation)
-Steps: 939+
+Status: FALSIFIED (Steps 939, 939b — incompatible with alpha/W_pred)
+Steps: 939, 939b
 
 ## Statement
 A substrate whose encoding dimensionality grows from its own observation statistics achieves deeper R3 than alpha re-weighting alone. Alpha modifies feature WEIGHTS within a fixed space; GFS modifies the feature SPACE itself. If $d(t_2) > d(t_1)$ where $d$ is encoding dimensionality, the substrate has self-modified its encoding architecture — structural R3, not parametric R3.
