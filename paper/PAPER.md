@@ -932,15 +932,20 @@ The gap: $W$ trained on one environment learns global dynamics that TRANSFER (Pr
 
 In either case, the dynamics vertex is the necessary component. The search reduces to: find a forward model accurate enough that prediction error becomes a reliable signal for both navigation and encoding self-modification.
 
-**Prediction accuracy cascade (theoretical).** Alpha concentration creates a self-reinforcing loop that may close the Proposition 21 gap:
+**~~Prediction accuracy cascade (theoretical).~~** **REVISED after Step 895d.** The original cascade theory predicted $\alpha$ concentration would improve $W$'s prediction accuracy by reducing effective dimensionality. Step 895d **falsifies** this: $W$ does not converge in $\alpha$-weighted space (pred\_acc = $-2383$, cold; $-3382$, warm). The cascade does not produce accurate predictions.
 
-1. $\alpha$ concentrates on $k \ll d$ informative dimensions (Step 895 confirmed: $k \approx 3$ on FT09).
-2. $W$ trains on $\alpha$-weighted observations with effective dimensionality $k$. Parameter count drops from $d(d + n_a) = 66{,}560$ to $k(k + n_a) \approx 213$ (for $k = 3$, $n_a = 68$).
-3. At 25K training steps, each parameter receives $\sim$25000/213 $\approx 117$ gradient updates instead of $\sim$0.4 updates. Convergence is $\sim$300× faster.
-4. $W$ becomes accurate in the $\alpha$-weighted space. Prediction-contrast action selection ($\text{argmax}_a \|\hat{x}' - x\|_\alpha$) produces meaningful rankings.
-5. Accurate local predictions from the current state $\approx$ implicit graph: knowing $W(s, a)$ for all $a$ from the current $s$ is equivalent to knowing the transition graph locally, without storing it.
+**However, $\alpha$ works anyway.** The mechanism is simpler than predicted:
 
-This cascade predicts that the Proposition 21 gap (global dynamics $\neq$ local navigation) closes as $\alpha$ concentration increases — because concentrated $\alpha$ makes local predictions accurate. The gap is not structural; it is a prediction-accuracy gap that $\alpha$ dissolves. Testable by measuring $W$ accuracy in $\alpha$-weighted space (Step 895c).
+**Proposition 22.3 (Differential Error Sufficiency).** Alpha-weighted attention requires DIFFERENTIAL prediction error across dimensions, not ACCURATE prediction. Define $\bar{e}_d = \mathbb{E}[|\hat{x}_d - x_d|]$ as the mean absolute error on dimension $d$. Even when $\sum_d \bar{e}_d \gg \sum_d |x_d|$ (predictions are worse than zero), the DISTRIBUTION $\{\bar{e}_d\}_{d=1}^D$ encodes which dimensions are dynamic:
+
+- Static dimensions ($x_d$ constant): $\hat{x}_d$ converges to the constant → $\bar{e}_d \to 0$.
+- Dynamic dimensions ($x_d$ varies): $\hat{x}_d$ tracks a moving target → $\bar{e}_d > 0$.
+
+The attention weights $\alpha_d \propto \sqrt{\bar{e}_d}$ therefore concentrate on dynamic dimensions REGARDLESS of $W$'s overall accuracy. $W$ functions as a signal generator for $\alpha$, not as a predictor. The transfer value in warm start is 100% from $\alpha$ (pre-concentrated attention), not from $W$ (non-convergent predictions).
+
+**Experimental evidence (Step 895d):** $W$ pred\_acc negative throughout training ($\ll 0$). Warm $\alpha$ transfer still provides +129.2 L1/seed over cold. The warm state contains $W + \alpha$, but $W$ contributes nothing (predictions are noise). Only $\alpha$ concentration carries the transfer signal.
+
+**Implication:** The Proposition 21 gap is NOT closed by prediction accuracy (as originally theorized). It remains structural: accurate local predictions would enable per-state action selection, but $W$ does not achieve this accuracy even with $\alpha$ concentration. The $\alpha$ mechanism's contribution to navigation is through the CHANGE DETECTION metric (800b weighted by $\alpha$), not through prediction-guided action selection.
 
 ## 5. Experimental Evidence
 
