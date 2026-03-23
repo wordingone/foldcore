@@ -130,7 +130,9 @@ Step 928 - CIFAR self-clustering (alpha-weighted L2 NN, thresh=0.5). avg_acc=0.2
 Step 929 - FT09 alpha-indexed action grouping. L1=0. ALL 68 actions map to dim 51 (degenerate). Alpha dims don't differentiate actions, only states. Sequential ordering invisible from random exploration.
 Step 930 - Game-only chain (no CIFAR), 895h, 10K. LS20=58.4/seed. Beats baselines (44.8 ICM) but below standalone estimate. Budget mismatch (10K vs 25K), not CIFAR interference.
 Step 931 - Observation-action memory. **KILLED BEFORE RUN — graph-banned.** Per-observation action memory IS per-state conditioning. "If you have to ask about the ban, you're reaching." (Jun, 2026-03-23).
-Step 932 RUNNING - Unclamped alpha (clip 0.0-5.0, dims can die). PRISM-light chain. Tests adaptive encoding dimensionality.
+Step 932 - Unclamped alpha (clip 0.0-5.0, dims can die). PRISM-light chain, 25K, 5 seeds. LS20=257.6 (+3.6% vs 914). FT09=0, VC33=0, CIFAR=chance. alive_dims=256/256 throughout — normalization prevents true zero. Sharper alpha_conc (107-123 vs ~36). Effect is attention sharpening, not dim pruning.
+Step 933 - Multi-resolution encoding (avgpool16+8+4=336D). PRISM-light, 10K, 5 seeds. **KILLED: LS20=6.6 (kill<200).** Extra dims dilute alpha signal. Alpha shows NO resolution preference (all bands ≈1.0). Encoding expansion = dead direction.
+Step 934 SPEC'D - Model-based action selection via W_pred. Replace 800b EMA with direct forward-model novelty: for each action, predict next state, prefer highest predicted change. Motivated by adversary challenge: h already makes delta position-dependent but EMA destroys the signal. Temporal barrier, not structural.
 **Step 920 — Graph+argmin pre-ban ceiling (n_eff=10). LANDMARK RESULT.**
   LS20: L1=129.9/seed, std=124, 4/10 zeros. **895h cold (268.0) BEATS graph+argmin by 2.1×.**
   FT09: L1=0, 10/10 zeros. **Even graph can't solve FT09 at 68 actions.** Bottleneck is action space size (68^7), not graph ban.
