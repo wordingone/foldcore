@@ -1,0 +1,40 @@
+======================================================================
+STEP 895h — CLAMPED ALPHA n_eff=10 (substrate_seed=seed)
+======================================================================
+Game version: ls20/9607627b
+25K steps, 10 seeds, sub_seed=seed (n_eff=10), pretrain 5 seeds 5K
+
+  seed=1:  cold=323  warm=312  cold_conc=12.60
+  seed=2:  cold=328  warm=265  cold_conc=24.86
+  seed=3:  cold=171  warm=330  cold_conc=14.51
+  seed=4:  cold=311  warm=  0  cold_conc=33.51  ← warm FAILS
+  seed=5:  cold=154  warm=284  cold_conc=40.05
+  seed=6:  cold=340  warm=129  cold_conc=26.51  ← cold >> warm
+  seed=7:  cold=378  warm=351  cold_conc=22.47
+  seed=8:  cold=199  warm=  0  cold_conc=32.25  ← warm FAILS
+  seed=9:  cold=268  warm=337  cold_conc=35.63
+  seed=10: cold=208  warm= 84  cold_conc=17.72  ← cold >> warm
+
+cold: L1=268.0/seed  std=75.2   zero=0/10  alpha_conc=26.01  pred_acc=-2194.689
+warm: L1=209.2/seed  std=134.1  zero=2/10  alpha_conc=16.90  pred_acc=-3355.634
+L1 delta: -58.8/seed (COLD > WARM)
+
+REVERSAL from 895e:
+  895e (n_eff=4): warm=309.7, cold=278.9, zero=0/10 → warm > cold
+  895h (n_eff=10): cold=268.0, warm=209.2, zero=2/10 → cold > warm
+
+ANALYSIS:
+1. n_eff=4 was a biased favorable sample. n_eff=10 shows the real distribution.
+2. Cold is GOOD: 268.0 vs 868d=203.9 (+32%). Clamped alpha helps cold navigation.
+3. Warm transfer is UNRELIABLE: seeds 4,8 fail completely (warm=0).
+   Pretrained alpha (from seeds 1-5) misaligns with sub_seeds 4,8.
+   Alpha concentration is ENVIRONMENT-SPECIFIC, not universally transferable.
+4. L1 delta = -58.8: warm HURTS on average with diverse seeds.
+
+REVISED RANKING (LS20, 25K, n_eff=10):
+  895h cold (clamped alpha): 268.0/seed std=75.2  zero=0/10 ← BEST
+  868d (raw L2 norm):        203.9/seed std=105.8 zero=1/10 ← TRUE BASELINE
+  895h warm (clamped):       209.2/seed std=134.1 zero=2/10 ← UNRELIABLE
+
+CONCLUSION: Clamped alpha R3 self-modification helps COLD navigation (+32%).
+But warm R3_cf transfer (pretrained alpha) does NOT generalize reliably.
