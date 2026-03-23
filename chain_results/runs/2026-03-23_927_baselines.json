@@ -1,0 +1,50 @@
+{
+  "substrate": "baselines_comparison",
+  "timestamp": "2026-03-23T17:02:06Z",
+  "step": 927,
+  "chain": ["CIFAR-100", "LS20", "FT09", "VC33", "CIFAR-100"],
+  "budget_per_phase": 10000,
+  "n_seeds": 5,
+  "config": {
+    "note": "Four baselines compared. 10K/game (not 25K). Same substrate persists across games."
+  },
+  "results": {
+    "Random": {
+      "CIFAR-100-before": {"avg_accuracy": 0.010},
+      "LS20": {"mean_l1_per_seed": 26.2, "l1_rate": 1.0},
+      "FT09": {"mean_l1_per_seed": 0.0, "l1_rate": 0.0},
+      "VC33": {"mean_l1_per_seed": 0.0, "l1_rate": 0.0},
+      "CIFAR-100-after": {"avg_accuracy": 0.010}
+    },
+    "Count-based": {
+      "CIFAR-100-before": {"avg_accuracy": 0.011},
+      "LS20": {"mean_l1_per_seed": 32.6, "l1_rate": 1.0},
+      "FT09": {"mean_l1_per_seed": 0.0, "l1_rate": 0.0},
+      "VC33": {"mean_l1_per_seed": 0.0, "l1_rate": 0.0},
+      "CIFAR-100-after": {"avg_accuracy": 0.011}
+    },
+    "RND": {
+      "CIFAR-100-before": {"avg_accuracy": 0.009},
+      "LS20": {"mean_l1_per_seed": 38.2, "l1_rate": 1.0},
+      "FT09": {"mean_l1_per_seed": 0.0, "l1_rate": 0.0},
+      "VC33": {"mean_l1_per_seed": 0.0, "l1_rate": 0.0},
+      "CIFAR-100-after": {"avg_accuracy": 0.009}
+    },
+    "ICM": {
+      "CIFAR-100-before": {"avg_accuracy": 0.010},
+      "LS20": {"mean_l1_per_seed": 44.8, "l1_rate": 1.0},
+      "FT09": {"mean_l1_per_seed": 0.0, "l1_rate": 0.0},
+      "VC33": {"mean_l1_per_seed": 0.0, "l1_rate": 0.0},
+      "CIFAR-100-after": {"avg_accuracy": 0.010}
+    }
+  },
+  "chain_score": {
+    "phases_passed": 1,
+    "phases_total": 5,
+    "chain_complete": false,
+    "notes": "All baselines pass LS20 at 10K. None pass FT09/VC33. 916 chain (212.6 at 25K) >> all baselines at 10K (max ICM=44.8). Kill criterion not triggered."
+  },
+  "compute": {
+    "total_elapsed_s": 258.6
+  }
+}

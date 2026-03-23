@@ -1,0 +1,61 @@
+{
+  "substrate": "916_recurrent_h",
+  "timestamp": "2026-03-23T16:58:42Z",
+  "step": 926,
+  "chain": ["CIFAR-100", "LS20", "FT09", "VC33", "CIFAR-100"],
+  "budget_per_phase": 25000,
+  "n_seeds": 5,
+  "config": {
+    "enc_dim": 256,
+    "h_dim": 64,
+    "alpha_clamp": [0.1, 5.0],
+    "softmax_T": 0.1,
+    "epsilon": 0.2,
+    "eta_w": 0.01,
+    "w_h_scale": 0.1,
+    "w_x_scale": 0.1,
+    "h_persistent": true,
+    "alpha_persistent": true,
+    "w_reset_per_game": true
+  },
+  "results": {
+    "CIFAR-100-before": {
+      "avg_accuracy": 0.0104,
+      "l1_rate": 0.0,
+      "per_seed": [0.010, 0.011, 0.010, 0.010, 0.011]
+    },
+    "LS20": {
+      "l1_rate": 1.0,
+      "mean_l1_per_seed": 212.6,
+      "std": 125.2,
+      "zero_seeds": 0,
+      "per_seed": [349, 177, 126, 365, 46]
+    },
+    "FT09": {
+      "l1_rate": 0.0,
+      "mean_l1_per_seed": 0.0,
+      "zero_seeds": 5,
+      "per_seed": [0, 0, 0, 0, 0]
+    },
+    "VC33": {
+      "l1_rate": 0.0,
+      "mean_l1_per_seed": 0.0,
+      "zero_seeds": 5,
+      "per_seed": [0, 0, 0, 0, 0]
+    },
+    "CIFAR-100-after": {
+      "avg_accuracy": 0.0093,
+      "l1_rate": 0.0,
+      "per_seed": [0.011, 0.009, 0.009, 0.010, 0.009]
+    }
+  },
+  "chain_score": {
+    "phases_passed": 1,
+    "phases_total": 5,
+    "chain_complete": false,
+    "notes": "916 recurrent h. h persists across games. CIFAR disrupts h for LS20 (-14% vs 895h chain). High variance (std=125.2). Seeds 1,4 excellent (349/365), seeds 2,3,5 collapse."
+  },
+  "compute": {
+    "total_elapsed_s": 227.6
+  }
+}

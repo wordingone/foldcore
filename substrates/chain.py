@@ -1,5 +1,9 @@
 """
-chain.py — Chain benchmark runner.
+chain.py — PRISM: Progressive Recursive Intelligence Sequence Metric.
+
+The benchmark for self-modifying substrates. One system, one config, no reward,
+sequential diverse tasks. The parts of the chain are one problem seen from
+different angles — classification, navigation, sequential puzzles, transfer.
 
 Sequences a substrate through multiple environments in order.
 Handles LS20/FT09/VC33 (ARC games), CIFAR-100, and any gymnasium env.
@@ -489,10 +493,81 @@ class ChainRunner:
 
         return aggregated
 
+    def save_results(self, aggregated: dict, substrate_name: str,
+                     step: int = 0, config: dict = None,
+                     output_dir: str = None) -> str:
+        """Save chain results as structured JSON to chain_results/runs/.
 
-def make_standard_chain(n_steps: int = DEFAULT_STEPS,
-                        safety_timeout: float = 300.0) -> list:
-    """Standard chain: Split-CIFAR-100 → LS20 → FT09 → VC33 → Split-CIFAR-100.
+        Returns path to saved file.
+        """
+        import json
+        from datetime import datetime
+
+        if output_dir is None:
+            output_dir = os.path.join(os.path.dirname(__file__), '..', 'chain_results', 'runs')
+        os.makedirs(output_dir, exist_ok=True)
+
+        timestamp = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+        date_str = datetime.now().strftime("%Y-%m-%d")
+        filename = f"{date_str}_{step}_{substrate_name}.json"
+
+        # Build chain score
+        phases_passed = sum(1 for v in aggregated.values()
+                           if isinstance(v, dict) and v.get('l1_rate', 0) > 0)
+        phases_total = len(aggregated)
+
+        output = {
+            "substrate": substrate_name,
+            "timestamp": timestamp,
+            "step": step,
+            "chain": [name for name, _ in self.chain],
+            "budget_per_phase": self.chain[0][1].n_steps if self.chain else 0,
+            "n_seeds": self.n_seeds,
+            "config": config or {},
+            "results": {},
+            "chain_score": {
+                "phases_passed": phases_passed,
+                "phases_total": phases_total,
+                "chain_complete": phases_passed == phases_total,
+            },
+        }
+
+        for name, data in aggregated.items():
+            if isinstance(data, dict):
+                # Strip per-seed raw data for compactness, keep summary
+                output["results"][name] = {
+                    k: v for k, v in data.items() if k != "seeds"
+                }
+                # Add per-seed L1 list
+                if "seeds" in data:
+                    output["results"][name]["per_seed_l1"] = [
+                        s.get("l1") or s.get("level_reached", 0)
+                        for s in data["seeds"]
+                    ]
+
+        filepath = os.path.join(output_dir, filename)
+        with open(filepath, 'w') as f:
+            json.dump(output, f, indent=2, default=str)
+
+        # Update latest.json
+        latest_path = os.path.join(os.path.dirname(output_dir), 'latest.json')
+        with open(latest_path, 'w') as f:
+            json.dump(output, f, indent=2, default=str)
+
+        if self.verbose:
+            print(f"\nResults saved to {filepath}")
+            print(f"Chain score: {phases_passed}/{phases_total}"
+                  f"{' — CHAIN COMPLETE' if phases_passed == phases_total else ''}")
+
+        return filepath
+
+
+def make_prism(n_steps: int = DEFAULT_STEPS,
+               safety_timeout: float = 300.0) -> list:
+    """PRISM: Progressive Recursive Intelligence Sequence Metric.
+
+    Standard chain: Split-CIFAR-100 → LS20 → FT09 → VC33 → Split-CIFAR-100.
+    One problem, many angles. The substrate that solves one solves all.
 
     n_steps: primary step budget per env (not time).
     safety_timeout: watchdog (not primary budget).

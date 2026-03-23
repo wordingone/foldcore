@@ -1,0 +1,54 @@
+{
+  "substrate": "895h_clamped_alpha",
+  "timestamp": "2026-03-23T00:00:00Z",
+  "step": 914,
+  "chain": ["CIFAR-100", "LS20", "FT09", "VC33", "CIFAR-100"],
+  "budget_per_phase": 25000,
+  "n_seeds": 5,
+  "config": {
+    "enc_dim": 256,
+    "alpha_clamp": [0.1, 5.0],
+    "softmax_T": 0.1,
+    "epsilon": 0.2,
+    "eta_w": 0.01,
+    "h_dim": null
+  },
+  "results": {
+    "CIFAR-100-before": {
+      "avg_accuracy": 0.0100,
+      "l1_rate": 0.0
+    },
+    "LS20": {
+      "l1_rate": 1.0,
+      "mean_l1_per_seed": 248.6,
+      "std": null,
+      "zero_seeds": 0,
+      "per_seed": null
+    },
+    "FT09": {
+      "l1_rate": 0.0,
+      "mean_l1_per_seed": 0.0,
+      "zero_seeds": 5,
+      "per_seed": [0, 0, 0, 0, 0]
+    },
+    "VC33": {
+      "l1_rate": 0.0,
+      "mean_l1_per_seed": 0.0,
+      "zero_seeds": 5,
+      "per_seed": [0, 0, 0, 0, 0]
+    },
+    "CIFAR-100-after": {
+      "avg_accuracy": 0.0110,
+      "l1_rate": 0.0
+    }
+  },
+  "chain_score": {
+    "phases_passed": 1,
+    "phases_total": 5,
+    "chain_complete": false,
+    "notes": "895h cold baseline. CIFAR pre/post ~chance. LS20 passes. FT09/VC33 fail."
+  },
+  "compute": {
+    "total_elapsed_s": null
+  }
+}
