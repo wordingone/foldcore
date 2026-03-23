@@ -57,12 +57,14 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 942 spec'd. GFS family KILLED (939+939b). Pivoting to observation preprocessing.
-DIRECTION (2026-03-23, post-GFS kill):
-  **NEW FAMILY: Observation preprocessing.** GFS proved PCA discovers structure but dynamic dim growth is incompatible with alpha/W_pred (bootstrap failure + cross-game alpha contamination). Constraint: alpha system assumes fixed dimensionality. Next: change encoding INPUT without changing dims. Step 942 = frame differencing, Step 943 = running pixel variance.
+CURRENT STEP: 943. ALL degrees of freedom under 916 base now closed.
+DIRECTION (2026-03-23, post-943 kill):
+  **EVERY MODIFICATION TO 916 KILLS IT.** Action selection (933-938e), encoding expansion (939-939b), observation preprocessing (942-943) — all closed. 916 is a fixed point under current constraints + bans.
   **ACTION SELECTION (closed):** Steps 933-938e. 800b irreducible.
   **ENCODING ARCHITECTURE (closed):** Steps 939-939b. Fixed-dim under 916. Dynamic growth kills alpha.
+  **OBSERVATION PREPROCESSING (closed):** Steps 942-943. Replacement preprocessing destroys positional signal. Additive would need growing dims (→ GFS → killed).
   **CHAIN:** LS20=290.7 best (916). FT09/VC33/CIFAR=0. PRISM-light incomplete.
+  **CONSTITUTIONAL QUESTION (Jun, 2026-03-23):** R1-R6 may have drifted from the original question. They constrain improvement operators but miss the evaluation layer. Awaiting Jun's directive.
 PREVIOUS DIRECTION (2026-03-23, post-compression):
   **ENCODING (solved):** Alpha-weighted prediction-error attention (Prop 22, confirmed Steps 895-895h). R3 encoding self-modification works universally. Carry forward to ALL future families.
   **ACTION SELECTION (open — family exhausted):** 800b (per-action delta EMA + softmax) is the best post-ban selector (2-2.5x baselines). But: position-blind (Prop 23b), reset-inverted (delta inversion), and every modification degrades (Steps 912-937, 25+ experiments). The 916 architecture is a local minimum. Next family must use ACTUAL observation changes but NOT per-action delta EMA. See FAMILY_KILLS.md.
@@ -156,6 +158,8 @@ Step 938e - Full 916 delta + beta * |R@h|. **KILLED: LS20=21.5 best (beta=0.01).
 **938 SERIES COMPLETE (938-938e): ALL action selector families exhausted under current constraints.** 800b is irreducible. Action selection problem closed. Next direction: new substrate family entirely (not action selector variant).
 Step 939 - GFS (Growing Feature Space, Prop 27). **KILLED: LS20=0, FT09=0, VC33=0, CIFAR=chance.** PCA features discovered (10 in LS20, 16 max by FT09). Kill cause: zero-init W_pred rows → alpha concentrates on new dims (alpha_conc=50 from step 1) → navigation signal drowned.
 Step 939b - GFS + warm-up exclusion. **KILLED: LS20=17.5 (seed2=35, seed1=0), FT09=0, VC33=0.** Warm-up partially helped but root cause is deeper: (1) more dims → harder W_pred training → faster alpha concentration even in base dims, (2) cross-game alpha contamination — LS20 extra features carry miscalibrated alpha into FT09 (alpha_conc=43.7 at FT09 step 100, before any new features). **GFS FAMILY KILLED. CONSTRAINT: dynamic dim growth incompatible with alpha/W_pred. Alpha system assumes fixed dimensionality.**
+Step 942 - Frame differencing. **KILLED: LS20=0, FT09=0, VC33=0, CIFAR=chance.** obs_t' = |obs_t - obs_{t-1}|. Frame diffs dominated by static background → enc near-constant → alpha_conc=50. Destroys positional scene structure that 916 uses for navigation.
+Step 943 - Running pixel variance. **KILLED: LS20=0, FT09=0, VC33=0, CIFAR=chance.** ema_var converges to static map within ~100 steps → enc near-constant → delta_spr→0.005 → alpha_conc=50. Same failure mode as 942. **OBSERVATION PREPROCESSING (REPLACEMENT) FAMILY KILLED. CONSTRAINT: replacing raw obs with derivative statistics removes positional information required for navigation. Preprocessing must be additive, not replacement — but additive requires growing dims → GFS → killed.**
 **ARCHITECTURE ASSESSMENT (Steps 933-938b):** 800b with alpha-weighted ext_enc change (916 formula) is IRREDUCIBLE. Reactive-global selectors also fail (938b: anomaly collapses to constant). The remaining untested mechanism class: trajectory-conditioned (h-based) action perturbation — h is position-dependent via recurrent dynamics, global (single state), and gate-5 compliant. Step 938c tests this.
 **Step 920 — Graph+argmin pre-ban ceiling (n_eff=10). LANDMARK RESULT.**
   LS20: L1=129.9/seed, std=124, 4/10 zeros. **895h cold (268.0) BEATS graph+argmin by 2.1×.**
