@@ -1,0 +1,38 @@
+======================================================================
+STEP 895d — ALPHA-800b 25K (FAIR COMPARISON + W PRED_ACC)
+======================================================================
+Game version: ls20/9607627b
+25K steps, 10 seeds, sub_seed=seed%4 (n_eff=4), pretrain 5 seeds 5K
+
+Pretrain: alpha_conc=16.52, alpha-pred_acc=-1601.590
+
+cold: L1=180.5/seed  alpha-pred_acc=-2383.746
+      [323, 0, 171, 247, 323, 0, 171, 247, 323, 0]
+      3/10 zero seeds! (sub_seed=2 → alpha runaway, unclamped)
+warm: L1=309.7/seed  alpha-pred_acc=-3382.555
+      [312, 265, 330, 353, 312, 265, 330, 353, 312, 265]
+      0/10 zero seeds
+L1 delta: +129.2/seed
+
+Total elapsed: 490.8s (8.2 min — violates 5-min cap)
+
+KEY FINDINGS:
+1. pred_acc NEGATIVE: W model not converging in alpha-weighted space.
+   alpha-pred_acc = 1 - norm(error)/norm(alpha*enc). Negative means error > target.
+   W IS NOT helping prediction. Transfer value is from alpha alone, not W.
+
+2. warm >> cold (+129.2): warm alpha (pre-concentrated, 16.52×) greatly helps navigation.
+   Cold alpha (unclamped, can hit 61.93×) causes 3/10 zero seeds.
+
+3. same warm as 895e: 895d warm=[312,265,330,353,...] = 895e warm=[312,265,330,353,...]
+   Identical pretrain → identical W+alpha → identical warm transfer.
+
+4. Clamping (895e) fixes cold: 895d cold=180.5 (3/10 zeros) → 895e cold=278.9 (0/10 zeros)
+
+Comparison (corrected baselines):
+  868b (squared-sum):          72.1/seed   zero=5/10  ← wrong metric
+  868d (L2 norm, n_eff=10):  203.9/seed  zero=1/10  ← TRUE baseline
+  895d cold (unclamped):      180.5/seed  zero=3/10  ← alpha HURTS cold
+  895d warm (unclamped):      309.7/seed  zero=0/10  ← transfer compensates
+  895e cold (clamped 0.1-5.0):278.9/seed  zero=0/10  ← clamping fixes cold
+  895e warm (clamped 0.1-5.0):309.7/seed  zero=0/10  ← same warm as 895d

@@ -80,8 +80,17 @@ Step 896 SPEC'D - SDM forward model: Sparse Distributed Memory (Hamming on binar
 Step 897 - Decision tree. KILLED (tree_depth=0, splits never triggered on LS20).
 Step 898 - LZ complexity. KILLED (compression ratio variance=0, zlib can't distinguish 1-byte action append).
 Step 903 - ELM forward model. L1=0 (all seeds, both cold and warm). MSE novelty action selection fails on LS20 (same as 889, 892, 780). **KILLED for navigation.** ELM architecture may improve prediction accuracy but novelty-based action selection is universally dead on LS20.
-FINDING (Steps 780/889/892/903): **Action selection is the bottleneck, not model architecture.** ALL novelty-seeking selectors (prediction-contrast, visited_set, MSE buffer, LZ) achieve L1=0 on LS20. LS20 requires persistence (repeat productive action). Only change-tracking (800b delta EMA + softmax) navigates. This is universal across 6+ model architectures.
-EMERGING ARCHITECTURE: Three decoupled components: (1) alpha for R3 encoding self-modification, (2) 800b change-tracking for navigation, (3) W forward model for prediction transfer. Each operates independently. Alpha doesn't touch navigation. 800b doesn't use predictions. W trains in alpha-weighted space for better convergence.
+FINDING (Steps 780/889/892/903): ALL novelty-seeking selectors (prediction-contrast, visited_set, MSE buffer, LZ) achieve L1=0 on LS20. Only change-tracking (800b delta EMA + softmax) navigates. Universal across 6+ model architectures.
+**Step 868d — TRUE 800b baseline with L2 norm (n_eff=10):** mean=203.9/seed, std=106, 1/10 zeros. The 868b 72.1/seed was squared-sum metric underperforming, NOT seed lottery. L2 norm = 2.8× improvement over squared-sum.
+**Step 895e — CLAMPED ALPHA (clip 0.1-5.0) + 800b softmax — BEST POST-BAN MECHANISM.**
+  cold: 278.9/seed, std=62, 0/10 zeros (+37% vs 868d baseline)
+  warm: 309.7/seed, std=32.5, 0/10 zeros (+52% vs 868d baseline)
+  R3_cf: warm-cold = +30.8/seed. Clamped alpha prevents runaway concentration (max 17.5×).
+  Alpha weighting HELPS navigation when properly clamped. 895c's failure was clamp too loose (0.01-10 → 61× runaway).
+  ~62% of pre-ban graph+argmin performance. With R3. With warm transfer. With 0 zero-seeds.
+  CAVEAT: n_eff=4 (seed%4). 895e-v2 (n_eff=10) pending for validation.
+**Step 895g — DUAL-STREAM ≈ BASELINE (213.9 ≈ 203.9).** Decoupling alpha from navigation adds nothing. The coupling IS the benefit.
+EMERGING ARCHITECTURE: Clamped alpha-weighted 800b. (1) Alpha from prediction error, clamped 0.1-5.0 (R3 encoding self-modification). (2) 800b per-action L2 delta EMA + softmax T=0.1 on ALPHA-WEIGHTED encoding (navigation). (3) Linear W forward model in alpha-weighted space (prediction transfer). Alpha couples to both navigation and prediction.
 Step 899 - Population predictors. Functionally DEAD (L1=0, hash issue). Diversity=0.37 (alive by criterion but useless).
 Step 896 - SDM. BROKEN (Hamming radius=80 too small for 256-bit, zero addresses activated). Deprioritized.
 Step 900 - Attractor landscape. Running but slow. Deprioritized.
