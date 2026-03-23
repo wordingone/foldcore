@@ -1,0 +1,361 @@
+"""
+step0934b_epistemic_action.py -- Epistemic action selection (Prop 24, active inference).
+
+R3 hypothesis: Epistemic action selection via non-convergent forward model provides
+position-aware exploration through trajectory-conditioned predictions. The model's
+persistent non-convergence is a FEATURE — it maintains position-dependent prediction
+patterns that enable continued exploration, unlike ICM which converges and kills curiosity.
+
+Architecture: Same as 916 (recurrent h + clamped alpha). ONLY change: action selector.
+
+Current (800b): delta_per_action EMA — position-blind average across trajectory.
+New (epistemic): G[a] = predicted_change[a] / confidence[a]
+  - predicted_change[a] = ||W_pred @ [alpha*ext_enc, one_hot(a)] - alpha*ext_enc||
+  - confidence[a] = 1 / (pred_error_ema[a] + 0.01)
+  - pred_error_ema[a] tracks ACTUAL error for action a (global per-action, not per-state)
+
+Why this cracks FT09 (theoretically):
+- Reset actions (position 0): model has many samples → low pred_error_ema → HIGH confidence
+  → G = predicted_change / high = LOW. Penalized.
+- Correct click (novel position): few samples → high pred_error_ema → LOW confidence
+  → G = predicted_change / low = HIGH. Rewarded.
+- Deeper positions: even fewer samples → even lower confidence → G increases with depth.
+  Information gain INCREASES deeper in sequence. Exactly what FT09 needs.
+
+Key difference from 934 (raw novelty):
+- 934: G[a] = predicted_change → all ~20K in games, 2% relative spread → random.
+- 934b: G[a] = predicted_change × (pred_error_ema[a]+0.01) → 20x discrimination after
+  calibration (~500 steps). Reset actions 1K error, novel 20K error → 20x ratio in G.
+
+Kill criteria:
+1. LS20 L1/seed < 200 → KILL
+2. Chain kill from judge (auto)
+3. FT09 L1 > 0 on ANY seed = historic breakthrough (never happened post-ban)
+
+Run: PRISM-light Mode C (randomized), 10K steps/phase, 5 seeds.
+Diagnostics: G[a] at steps 1K, 5K, 10K (check position-dependence); conf[a] at same.
+"""
+import sys, time
+sys.path.insert(0, 'B:/M/the-search')
+sys.path.insert(0, 'B:/M/the-search/experiments')
+
+import numpy as np
+from collections import deque
+from substrates.step0674 import _enc_frame
+
+ENC_DIM = 256
+H_DIM = 64
+EXT_DIM = ENC_DIM + H_DIM   # 320
+ETA_W = 0.01
+ALPHA_UPDATE_DELAY = 50
+EPSILON = 0.20
+SOFTMAX_TEMP = 0.10
+ALPHA_LO = 0.10
+ALPHA_HI = 5.00
+CONF_ALPHA = 0.10        # EMA decay for pred_error_ema per action
+TEST_SEEDS = list(range(1, 6))
+PHASE_STEPS = 10_000
+DIAG_STEPS = {1_000, 5_000, 10_000}   # snapshot G and conf at these steps
+
+
+def one_hot(a, n):
+    v = np.zeros(n, dtype=np.float32); v[a] = 1.0; return v
+
+
+def softmax_action(vals, temp, rng):
+    x = vals / temp; x -= np.max(x); e = np.exp(x)
+    return int(rng.choice(len(vals), p=e / (e.sum() + 1e-12)))
+
+
+class Chain934b:
+    """916 recurrent h + clamped alpha. Action selector: epistemic G[a] = change/conf.
+
+    Alpha + running_mean persist across games.
+    W_pred + h + pred_error_ema reset per game.
+    """
+
+    def __init__(self, seed=0):
+        self._rng = np.random.RandomState(seed)
+        rs = np.random.RandomState(seed + 10000)
+
+        # Fixed random recurrent weights
+        self.W_h = rs.randn(H_DIM, H_DIM).astype(np.float32) * 0.1
+        self.W_x = rs.randn(H_DIM, ENC_DIM).astype(np.float32) * 0.1
+
+        # Persists across games
+        self.alpha = np.ones(EXT_DIM, dtype=np.float32)
+        self._running_mean = np.zeros(ENC_DIM, dtype=np.float32)
+        self._n_obs = 0
+        self._pred_errors = deque(maxlen=200)
+
+        # Per-game state
+        self._n = None
+        self.W_pred = None
+        self.h = np.zeros(H_DIM, dtype=np.float32)
+        self._pred_error_ema = None  # per-action prediction error EMA
+        self._prev_ext = None
+        self._prev_action = None
+        self._prev_predicted = None  # prediction stored for pred_error_ema update
+
+        # Diagnostics
+        self._phase_step = 0
+        self._diag_log = {}  # step → {G_min, G_max, G_spread, conf_min, conf_max}
+        self._pred_err_sum = 0.0
+        self._pred_err_n = 0
+
+    def set_game(self, n_actions):
+        self._n = n_actions
+        self.W_pred = np.zeros((EXT_DIM, EXT_DIM + n_actions), dtype=np.float32)
+        self.h = np.zeros(H_DIM, dtype=np.float32)
+        self._pred_error_ema = np.ones(n_actions, dtype=np.float32)  # init at 1.0
+        self._prev_ext = None
+        self._prev_action = None
+        self._prev_predicted = None
+        self._phase_step = 0
+        self._diag_log = {}
+        self._pred_err_sum = 0.0
+        self._pred_err_n = 0
+
+    def reset_seed(self, seed):
+        self._rng = np.random.RandomState(seed)
+        rs = np.random.RandomState(seed + 10000)
+        self.W_h = rs.randn(H_DIM, H_DIM).astype(np.float32) * 0.1
+        self.W_x = rs.randn(H_DIM, ENC_DIM).astype(np.float32) * 0.1
+        self.alpha = np.ones(EXT_DIM, dtype=np.float32)
+        self._running_mean = np.zeros(ENC_DIM, dtype=np.float32)
+        self._n_obs = 0
+        self._pred_errors.clear()
+        self._n = None; self.W_pred = None
+        self.h = np.zeros(H_DIM, dtype=np.float32)
+        self._pred_error_ema = None
+        self._prev_ext = None; self._prev_action = None; self._prev_predicted = None
+        self._phase_step = 0; self._diag_log = {}
+        self._pred_err_sum = 0.0; self._pred_err_n = 0
+
+    def _encode(self, obs):
+        enc_raw = _enc_frame(np.asarray(obs, dtype=np.float32))
+        self._n_obs += 1
+        a = 1.0 / self._n_obs
+        self._running_mean = (1 - a) * self._running_mean + a * enc_raw
+        enc = enc_raw - self._running_mean
+        self.h = np.tanh(self.W_h @ self.h + self.W_x @ enc)
+        return np.concatenate([enc, self.h]).astype(np.float32)
+
+    def _update_alpha(self):
+        if len(self._pred_errors) < ALPHA_UPDATE_DELAY:
+            return
+        me = np.mean(self._pred_errors, axis=0)
+        if np.any(np.isnan(me)) or np.any(np.isinf(me)):
+            return
+        ra = np.sqrt(np.clip(me, 0, 1e6) + 1e-8)
+        mr = np.mean(ra)
+        if mr < 1e-8 or np.isnan(mr):
+            return
+        self.alpha = np.clip(ra / mr, ALPHA_LO, ALPHA_HI)
+
+    def _compute_epistemic(self, ext_enc):
+        """Epistemic value G[a] = predicted_change[a] / confidence[a].
+
+        confidence[a] = 1 / (pred_error_ema[a] + 0.01)
+        predicted_change[a] = ||W_pred @ [alpha*ext_enc, one_hot(a)] - alpha*ext_enc||
+
+        Returns: G (n_actions), predicted_nexts (n × 320), confidence (n_actions).
+        """
+        weighted = ext_enc * self.alpha   # 320D
+        one_hots = np.eye(self._n, dtype=np.float32)
+        tiled = np.tile(weighted, (self._n, 1))  # n × 320
+        inputs = np.concatenate([tiled, one_hots], axis=1)  # n × (320+n)
+        predicted_nexts = inputs @ self.W_pred.T  # n × 320
+        changes = np.linalg.norm(predicted_nexts - weighted[np.newaxis, :], axis=1)  # n
+
+        confidence = 1.0 / (self._pred_error_ema + 0.01)  # n
+        G = changes / confidence  # n: high when change large AND confidence low
+
+        return G, predicted_nexts, confidence
+
+    def process(self, obs):
+        ext_enc = self._encode(obs)
+        self._phase_step += 1
+
+        if self._prev_ext is not None and self._prev_action is not None:
+            # W_pred training: predict alpha*ext_enc from (alpha*prev_ext, action)
+            inp = np.concatenate([self._prev_ext * self.alpha,
+                                   one_hot(self._prev_action, self._n)])
+            pred = self.W_pred @ inp
+            error = (ext_enc * self.alpha) - pred
+            en = float(np.linalg.norm(error))
+            if en > 10.0:
+                error = error * (10.0 / en)
+            if not np.any(np.isnan(error)):
+                self.W_pred -= ETA_W * np.outer(error, inp)
+                self._pred_errors.append(np.abs(error))
+                self._update_alpha()
+                self._pred_err_sum += en
+                self._pred_err_n += 1
+
+            # Update pred_error_ema for the action we actually took
+            if self._prev_predicted is not None:
+                actual_next = ext_enc * self.alpha
+                actual_error = float(np.linalg.norm(actual_next - self._prev_predicted))
+                a = self._prev_action
+                self._pred_error_ema[a] = ((1 - CONF_ALPHA) * self._pred_error_ema[a]
+                                            + CONF_ALPHA * actual_error)
+
+        # Compute epistemic value
+        G, predicted_nexts, confidence = self._compute_epistemic(ext_enc)
+
+        # Diagnostic snapshots
+        if self._phase_step in DIAG_STEPS:
+            self._diag_log[self._phase_step] = {
+                "G_min": float(G.min()), "G_max": float(G.max()),
+                "G_spread": float(G.max() - G.min()),
+                "G_rel_spread": float((G.max() - G.min()) / (G.mean() + 1e-8)),
+                "conf_min": float(confidence.min()), "conf_max": float(confidence.max()),
+                "err_ema_min": float(self._pred_error_ema.min()),
+                "err_ema_max": float(self._pred_error_ema.max()),
+            }
+
+        # Action selection
+        if self._rng.random() < EPSILON:
+            action = int(self._rng.randint(0, self._n))
+        else:
+            action = softmax_action(G, SOFTMAX_TEMP, self._rng)
+
+        # Store prediction for the action we selected (for pred_error_ema update next step)
+        self._prev_predicted = predicted_nexts[action].copy()
+        self._prev_ext = ext_enc.copy()
+        self._prev_action = action
+        return action
+
+    def on_level_transition(self):
+        self._prev_ext = None
+        self._prev_action = None
+        self._prev_predicted = None
+        # h persists — trajectory context accumulates
+
+    def alpha_conc(self):
+        return float(np.max(self.alpha) / (np.min(self.alpha) + 1e-8))
+
+    def pred_acc(self):
+        if self._pred_err_n == 0:
+            return 0.0
+        return self._pred_err_sum / self._pred_err_n
+
+    def diag_str(self):
+        parts = []
+        for step in sorted(self._diag_log):
+            d = self._diag_log[step]
+            parts.append(f"@{step//1000}K: G_rel={d['G_rel_spread']:.2f}"
+                         f" conf=[{d['conf_min']:.3f},{d['conf_max']:.3f}]"
+                         f" ema=[{d['err_ema_min']:.0f},{d['err_ema_max']:.0f}]")
+        return "  ".join(parts) if parts else "n/a"
+
+
+def make_env(name):
+    try:
+        import arcagi3; return arcagi3.make(name)
+    except:
+        import util_arcagi3; return util_arcagi3.make(name)
+
+
+def load_cifar():
+    try:
+        import torchvision, torchvision.transforms as T
+        ds = torchvision.datasets.CIFAR100('B:/M/the-search/data', train=False,
+                                            download=True, transform=T.ToTensor())
+        imgs = np.array([np.array(ds[i][0]).transpose(1, 2, 0)
+                         for i in range(len(ds))], dtype=np.float32)
+        lbls = np.array([ds[i][1] for i in range(len(ds))], dtype=np.int32)
+        return imgs, lbls
+    except Exception as e:
+        print(f"CIFAR load failed: {e}"); return None, None
+
+
+def run_cifar(sub, imgs, lbls, seed, n_steps):
+    if imgs is None: return 0.0
+    sub.set_game(100)
+    rng = np.random.RandomState(seed)
+    idx = rng.permutation(len(imgs))[:n_steps]
+    correct = sum(1 for i in idx if sub.process(imgs[i]) % 100 == lbls[i])
+    return correct / len(idx)
+
+
+def run_arc(sub, game, n_actions, seed, n_steps):
+    sub.set_game(n_actions)
+    env = make_env(game)
+    obs = env.reset(seed=seed); step = 0; completions = 0; level = 0
+    while step < n_steps:
+        if obs is None:
+            obs = env.reset(seed=seed); sub.on_level_transition(); continue
+        action = sub.process(np.asarray(obs, dtype=np.float32)) % n_actions
+        obs, _, done, info = env.step(action); step += 1
+        cl = info.get('level', 0) if isinstance(info, dict) else 0
+        if cl > level:
+            completions += cl - level; level = cl; sub.on_level_transition()
+        if done:
+            obs = env.reset(seed=seed); level = 0; sub.on_level_transition()
+    return completions
+
+
+print("=" * 70)
+print("STEP 934b — EPISTEMIC ACTION SELECTION (G[a]=change/confidence, Prop 24)")
+print("=" * 70)
+print("R3: G[a] = predicted_change[a] / confidence[a]. conf[a] = 1/(pred_error_ema[a]+0.01).")
+print("Architecture: 916 recurrent h + clamped alpha. ONLY change: action selector.")
+print("Key: reset actions → low error → high conf → LOW G. Novel positions → high error → low conf → HIGH G.")
+t0 = time.time()
+
+cifar_imgs, cifar_lbls = load_cifar()
+cifar1 = []; ls20 = []; ft09 = []; vc33 = []; cifar2 = []
+
+for seed in TEST_SEEDS:
+    sub = Chain934b(seed=seed)
+    sub.reset_seed(seed)
+    print(f"\n  Seed {seed}:")
+
+    c1 = run_cifar(sub, cifar_imgs, cifar_lbls, seed * 1000, PHASE_STEPS)
+    cifar1.append(c1)
+    print(f"    CIFAR-1: acc={c1:.4f}  alpha_conc={sub.alpha_conc():.2f}"
+          f"  pred_acc={sub.pred_acc():.0f}")
+    print(f"             diag: {sub.diag_str()}")
+
+    l = run_arc(sub, "LS20", 4, seed * 1000, PHASE_STEPS)
+    ls20.append(l)
+    print(f"    LS20:    L1={l:4d}  alpha_conc={sub.alpha_conc():.2f}"
+          f"  pred_acc={sub.pred_acc():.0f}")
+    print(f"             diag: {sub.diag_str()}")
+
+    f = run_arc(sub, "FT09", 68, seed * 1000, PHASE_STEPS)
+    ft09.append(f)
+    print(f"    FT09:    L1={f:4d}  alpha_conc={sub.alpha_conc():.2f}"
+          f"  pred_acc={sub.pred_acc():.0f}")
+    print(f"             diag: {sub.diag_str()}")
+
+    v = run_arc(sub, "VC33", 68, seed * 1000, PHASE_STEPS)
+    vc33.append(v)
+    print(f"    VC33:    L1={v:4d}  alpha_conc={sub.alpha_conc():.2f}"
+          f"  pred_acc={sub.pred_acc():.0f}")
+    print(f"             diag: {sub.diag_str()}")
+
+    c2 = run_cifar(sub, cifar_imgs, cifar_lbls, seed * 1000 + 1, PHASE_STEPS)
+    cifar2.append(c2)
+    print(f"    CIFAR-2: acc={c2:.4f}  alpha_conc={sub.alpha_conc():.2f}"
+          f"  pred_acc={sub.pred_acc():.0f}")
+    print(f"             diag: {sub.diag_str()}")
+
+print(f"\n{'=' * 70}")
+print(f"STEP 934b RESULTS (epistemic G, PRISM-light, 10K/phase, 5 seeds):")
+print(f"  CIFAR-1 acc: {np.mean(cifar1):.4f}  {[f'{x:.3f}' for x in cifar1]}")
+print(f"  LS20  L1:    {np.mean(ls20):.1f}/seed  std={np.std(ls20):.1f}  zero={sum(1 for x in ls20 if x == 0)}/5  {ls20}")
+print(f"  FT09  L1:    {np.mean(ft09):.1f}/seed  zero={sum(1 for x in ft09 if x == 0)}/5  {ft09}")
+print(f"  VC33  L1:    {np.mean(vc33):.1f}/seed  zero={sum(1 for x in vc33 if x == 0)}/5  {vc33}")
+print(f"  CIFAR-2 acc: {np.mean(cifar2):.4f}  {[f'{x:.3f}' for x in cifar2]}")
+print(f"\nComparison (chain, 5 seeds):")
+print(f"  916 (800b EMA, 25K):   LS20=290.7  FT09=0  VC33=0")
+print(f"  932 (alpha_lo=0, 10K): LS20=257.6  FT09=0  VC33=0")
+print(f"  914 (baseline, 10K):   LS20=248.6  FT09=0  VC33=0")
+print(f"  934 (raw novelty, 10K): LS20=0.0  KILLED")
+print(f"  934b (epistemic, 10K): LS20={np.mean(ls20):.1f}  FT09={np.mean(ft09):.1f}  VC33={np.mean(vc33):.1f}")
+print(f"\nKill criterion: LS20 < 200 → KILL. FT09 L1>0 any seed = major signal.")
+print(f"Total elapsed: {time.time() - t0:.1f}s")
+print("STEP 934b DONE")
