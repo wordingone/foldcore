@@ -66,6 +66,17 @@ Step 898 SPEC'D - LZ complexity novelty: pure information theory, no model. Comp
 Step 899 SPEC'D - Population of micro-predictors: R3 via evolutionary selection, not gradient.
 Step 900 SPEC'D - Attractor landscape navigation: energy surface over observation space, dynamical systems approach.
 Step 889 SPEC'D - PredictiveNovelty: visited_set (per-obs, allowed) + W prediction (global, allowed). Action = go where W predicts unvisited state. Bridges Proposition 21. CRITICAL TEST.
+Step 901 SPEC'D - MLP + PredErrorAttention combination. Run after 890 and 895 report.
+Step 902 SPEC'D - SINDy-Lite symbolic dynamics discovery. Transition rule dictionary.
+**CRITICAL BUG (2026-03-23): enc_hash collapse.** enc_hash quantizes centered enc[:32]×4 → int8. After centering, values near-zero → all hash to same value → 2-8 unique hashes. ALL results using enc_hash for pred_acc or visited_set novelty are INVALID. Affected: 889, 892, 893. MSE-based pred_acc (step835 protocol) is the correct metric. Fix: replace visited_set with NoveltyBuffer (L2 distance to nearest stored observation).
+Step 890 - MLP forward model. cold=-12.46%, warm=1.95%, R3_cf PASS (+14.41%). **MLP WORSE than linear W at eta=0.001.** Underfitting — MLP needs higher learning rate or the capacity is wrong for 5K pretrain. Step 890b spec'd with eta=0.01.
+Step 893 - CTS. pred_acc=99.8% (ARTIFACT — hash collapse, dict_size=8 = hash collision count). **KILL: CTS is graph-banned** (stores per-(context, action) transitions, equivalent to transition table).
+Step 894 - Diff encoding. FT09 L1=0, pred_acc=-12%. LS20 L1=71.3 (2x random, but 4 effective seeds). Diff encoding does NOT expose FT09 clicks at avgpool16 granularity. CLOSED for FT09.
+Step 891 - ESN + delta rule. cold=-22.42%, warm=-19.15%. KILL. ESN family closed.
+Step 889 - PredictiveNovelty. L1=4/seed (BELOW random). pred_acc=98% (ARTIFACT). Hash collapse kills visited_set. Needs re-run as 889b with MSE-based NoveltyBuffer.
+Step 892 - MLP PredictiveNovelty. L1=0-4 (ARTIFACT). Same hash failure as 889.
+Step 868 - Opponent process softmax. softmax_01=379/seed (BEST post-ban navigation). BUT n_eff=1 (substrate_seed=0 for all). Needs 868b with varied seeds for validation.
+FINDING: enc_hash is fundamentally broken for centered encodings. ALL hash-based novelty detection is invalid. MSE-based NoveltyBuffer (L2 distance to buffered observations) is the fix. Prediction transfer (MSE-based) remains CONFIRMED. Navigation via prediction→novelty is UNTESTED with correct metric.
 Step 824 - D component ablation. W_only=32.4% > full_D=16.1%. Running_mean HURTS transfer (freezes at pretrain distribution). **Transfer protocol: W only, reset running_mean.**
 Step 874 - Obs diversity. LS20: collision 50.3%, 2483 unique obs. FT09: collision 98.7%, 64 unique obs. FT09 nearly static.
 Step 813 - Anti-convergence. eps=0.50 best cold (364/seed) but warm=0. eps=0.20 is sweet spot for transfer.
