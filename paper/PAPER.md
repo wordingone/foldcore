@@ -636,6 +636,32 @@ All three dimensions of attention are determined by $s$ (transition statistics),
 
 **Implication:** R3 is not an exotic requirement. It is the well-studied phenomenon of adaptive perception, formalized within the CSE interpreter framework. The 720 experiments that failed R3 did not fail because R3 is impossible — they failed because they kept the encoding fixed ($\ell_0$ or weak $\ell_\pi$) while trying to modify the action selection ($g$), which is the WRONG target (Proposition 15). The cascading next step: extend 674's transition-triggered refinement to ALL dimensions of $\pi$ — channel selection, spatial resolution, temporal integration — and test on the chain where encoding failures are exposed (CIFAR needs color, VC33 needs room detection).
 
+#### Proposition 18: Eigenform Reactivation
+
+**Prior work:** Steps 620-629 tested the eigenform $F(s)(\text{enc}(s))$ applied to ACTION recommendations (AVOID/PREFER ops computed from graph statistics). Result: INERT. 94-99% NEUTRAL ops; freezing at 5000 steps has zero effect on L1 (Step 626); L2 = 0/5 (Step 629). Proposition 13 showed this is structural: self-observation of the existing graph cannot produce information about unvisited states.
+
+**The correction:** Propositions 15 and 17 identify the error. The eigenform targeted ACTION selection ($g$), but L1 is perception-limited, not action-limited (Proposition 15). The encoding ($\pi$) is the bottleneck (Proposition 17). Applying the eigenform to encoding parameters rather than action recommendations targets the actual bottleneck.
+
+**Proposition 18 (Eigenform Reactivation via Encoding Attention).** Let $\text{enc}_\pi: S \to \mathbb{R}^p$ extract encoding-relevant statistics from $s$ — per-channel transition variance, per-region inconsistency, temporal autocorrelation. Define the encoding eigenform as:
+
+$$\pi_{s_{t+1}} = \Pi(F(s_t)(\text{enc}_\pi(s_t)))$$
+
+where $\Pi$ maps updated state to encoding parameters (channel weights $w \in \mathbb{R}^C$, resolution parameters $K \in \mathbb{N}^{|N|}$, temporal window $\tau \in \mathbb{N}$). Then:
+
+1. **The eigenform is non-inert when it targets the bottleneck.** On the chain, the encoding bottleneck CHANGES at each phase transition: CIFAR needs color (channels), LS20 needs spatial layout (resolution), VC33 needs room structure (coarse regions). If $\text{enc}_\pi$ detects these differences via transition statistics, the eigenform produces encoding changes at phase transitions — non-zero R3 dynamics.
+
+2. **The mechanism is identical to 674.** Transition-triggered refinement IS the encoding eigenform restricted to spatial resolution: $K(n) = 20$ if $I(n) \geq 2$, else $K(n) = 12$. Proposition 18 extends this to ALL encoding dimensions (channels, resolution, temporal window) using the SAME transition-statistics signal.
+
+3. **Eigenform inertness (Proposition 13) does not apply** because the encoding eigenform targets $\pi$ (perception), not $g$ (action). Proposition 13 proved: self-observation cannot guide navigation to unvisited states. But encoding modification doesn't need to guide navigation — it needs to RESOLVE AMBIGUITY at already-visited states. This is backward-looking (improve perception of visited states), not forward-looking (predict unvisited states). The eigenform is active because the bottleneck it targets — perception of visited states — is addressable from historical data.
+
+**Testable prediction:** Compare two eigenform variants on the chain:
+- (A) Action eigenform: $F(s)(\text{enc}_g(s))$ → AVOID/PREFER ops on graph nodes (Steps 620-629 mechanism)
+- (B) Encoding eigenform: $F(s)(\text{enc}_\pi(s))$ → channel weights, resolution parameters from transition statistics
+
+Measure R3 dynamics (ConstitutionalJudge.measure_r3_dynamics()) at each phase transition. Prediction: (A) shows R3 ≈ 0 throughout (Proposition 13 confirmed). (B) shows R3 > 0 at phase transitions where the encoding must change. If confirmed, the eigenform is reactivated — the same mechanism works when it targets the right bottleneck.
+
+**Connection to Proposition 13 (scope limitation):** Proposition 13 proved eigenform inertness for ACTION modifications on L1 navigation. Proposition 18 does NOT claim the eigenform works for L2 navigation — the L2 problem remains forward-looking (predict unvisited states). Proposition 18 claims it works for encoding adaptation on the CHAIN — a different problem (adapt perception across domains).
+
 ## 5. Experimental Evidence
 
 ### 5.1 Navigation (720+ experiments)
