@@ -91,7 +91,8 @@ Step 894 - Diff encoding. FT09 L1=0, pred_acc=-12%. LS20 L1=71.3 (2x random, but
 Step 891 - ESN + delta rule. cold=-22.42%, warm=-19.15%. KILL. ESN family closed.
 Step 889 - PredictiveNovelty. L1=4/seed (BELOW random). pred_acc=98% (ARTIFACT). Hash collapse kills visited_set. Needs re-run as 889b with MSE-based NoveltyBuffer.
 Step 892 - MLP PredictiveNovelty. L1=0-4 (ARTIFACT). Same hash failure as 889.
-Step 868 - Opponent process softmax. softmax_01=379/seed (BEST post-ban navigation). BUT n_eff=1 (substrate_seed=0 for all). Needs 868b with varied seeds for validation.
+Step 868 - Opponent process softmax. softmax_01=379/seed — **RETRACTED: n_eff=1 artifact.** substrate_seed=0 for all seeds.
+**Step 868b - 800b softmax varied seeds: TRUE mean=72.1/seed (2× random, NOT 10×).** Per-seed: [199, 7, 0, 0, 0, 27, 200, 288, 0, 0]. std≈112. 5/10 seeds at L1=0. The "best post-ban mechanism" depended on lucky substrate_seed=0 RNG. ALL single-substrate-seed results in the log are suspect.
 FINDING: enc_hash is fundamentally broken for centered encodings. ALL hash-based novelty detection is invalid. MSE-based NoveltyBuffer (L2 distance to buffered observations) is the fix. Prediction transfer (MSE-based) remains CONFIRMED. Navigation via prediction→novelty is UNTESTED with correct metric.
 **BREAKTHROUGH FINDING (Step 895): Prediction-error attention achieves R3.** Alpha weights self-modify to concentrate on informative observation dimensions. FT09 alpha_conc=10.87× (discovers puzzle tile locations [60,51,209]). LS20 alpha_conc=5.73× (all dims active). Game-adaptive encoding without human prescription. FIRST POST-BAN R3.
 THIRD CLUSTER SWEEP RESULT: 895 ALIVE, 897/898 KILLED, 899 DEAD, 896 BROKEN, 900 pending. Only the prediction-error attention mechanism survives. Next: 895b (alpha-weighted 800b navigation) and 895c (warm transfer).
@@ -175,7 +176,7 @@ Step 800 LS20 - Per-action change tracking (argmax delta). L1=0. ACTION COLLAPSE
 Step 809 FT09 - Action cycling (68 actions). L1=0. Hash collisions prevent systematic coverage. FT09 may require multi-click sequences.
 **FINDING (806v2 control + step800): NO post-ban mechanism produces consistent L1 improvement over random on LS20 or FT09.** D(s) prediction transfer is confirmed (robust across 4 substrate seeds). Navigation transfer does not exist in any tested post-ban substrate. The gap is structural.
 Step 800 FT09 - Per-action change tracking. ALL 68 actions converge to delta=0.0083 (uniform). Productive clicks are position-dependent — large change only when at the right game position. Global per-action averaging masks the signal. **Global per-action tracking is dead for FT09.**
-**Step 800b LS20 - CONFIRMED: first post-ban navigation mechanism (6.5-10× random).**
+**Step 800b LS20 - REVISED: 2× random, not 10×. 6.5-10× was substrate_seed=0 artifact (Step 868b).**
   80% argmax(delta_per_action) + 20% random. Control: seed=0 327/seed, seed=1 261/seed, seed=2 237/seed, seed=3 377/seed. ALL above random (36.4). Robust.
   L1 R3_cf: INCONSISTENT (2/4 seeds pass, 2/4 warm hurts). Warm transfer direction depends on substrate seed.
   Mechanism: learn which action produces most observation change, use it 80%. On LS20, movement = change → navigates.
