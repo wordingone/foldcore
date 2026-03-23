@@ -248,6 +248,31 @@ from this cell?'' but ``which action leads toward cells with the most
 unknown successors?'' Foresight via local gradient, not via world model.
 This is a degree of freedom (DoF 8) concretized by biological precedent.
 
+\textbf{Post-ban biological parallel: E. coli chemotaxis.} E. coli
+navigates chemical gradients WITHOUT spatial memory via run-and-tumble:
+alternating straight-line swimming (runs) and random reorientations
+(tumbles). Run duration is modulated by a TEMPORAL comparison ---
+extending runs when nutrient concentration is increasing, tumbling when
+decreasing (Celani \& Vergassola, 2010; Frankel et al.~2014). No map. No
+visit counts. Only ``is it getting better?''
+
+This is compression progress (Schmidhuber 1991) in biology: persist when
+the gradient is positive (learning is happening), reorient when the
+gradient is zero (nothing new). Near-optimal for exploration in gradient
+environments (Celani \& Vergassola, 2010: ``directional persistence and
+the optimality of run-and-tumble'').
+
+\textbf{Connection to the graph ban (Steps 778-787):} The graph ban
+removes stigmergic memory (ant-like per-state tracking). The post-ban
+substrate must be bacteria-like: temporal comparison only, no spatial
+memory. Compression progress IS the E. coli strategy applied to
+prediction error: extend the current action when prediction is improving
+(\(\Delta E > 0\)), switch when stagnant (\(\Delta E = 0\)). The
+biological precedent suggests this is sufficient for exploration in
+structured environments --- E. coli finds nutrients efficiently with
+this mechanism alone. Steps 855, 858 test whether compression progress
+enables navigation in ARC-AGI-3 games.
+
 \subsubsection{2.9 Somatic hypermutation and self-modifying
 comparison}\label{somatic-hypermutation-and-self-modifying-comparison}
 
@@ -622,13 +647,19 @@ substrate optimizes toward uncertain predictions'' (R1 violation) or
 compliant)? This distinction --- between optimization and dynamics ---
 is the theoretical frontier for post-ban substrates.
 
-\textbf{Connection to Step 776 (R3 counterfactual FAIL):} The graph
-stored WHERE the substrate has been (visit counts), producing negative
-transfer when the destination changed. A forward model stores HOW things
-change (transition dynamics), which could generalize across environments
---- the same physics applies in different rooms. Whether a forward
-model's state produces positive R3 counterfactual (warm \textgreater{}
-cold) is the critical open question for post-ban work.
+\textbf{Connection to Step 776 (R3 counterfactual FAIL) and Steps
+780/855b/809b (R3 counterfactual PASS):} The graph stored WHERE the
+substrate has been (visit counts), producing negative transfer when the
+destination changed (Step 776: cold \textgreater{} warm,
+\(p < 0.0001\)). A forward model stores HOW things change (transition
+dynamics), which generalizes across environments --- \textbf{confirmed
+(Steps 780v5, 855b, 809b): warm prediction accuracy \textgreater{} cold
+prediction accuracy on unseen seeds.} Three independent D-only
+substrates show positive dynamics transfer: prediction-contrast (+73\%),
+epsilon-compression (+8.7\%), cycling+forward model (+21.7\%). This is
+the first positive R3 counterfactual in 787+ experiments. Navigation
+transfer remains open (L1 = 0 for all post-ban substrates on LS20), but
+prediction accuracy transfer is confirmed.
 
 \textbf{The deepest connection:} In Physarum, the network IS both the
 memory AND the processor. There is no separate ``brain'' that interprets
@@ -1487,19 +1518,46 @@ transition entropy.
 1991)}\label{post-ban-resolution-compression-progress-schmidhuber-1991}
 
 \textbf{The post-ban problem:} The graph ban (post Step 777) eliminates
-per-(state, action) tracking. Argmin --- the only noisy-TV-robust action
-selection mechanism tested --- requires visit counts. The noisy TV
-barrier applies to all tested alternatives. What post-ban mechanism
-avoids the noisy TV trap?
+per-(state, action) tracking. This has a formal consequence: \textbf{no
+PAC-MDP algorithm exists that does not use visit counts or a provably
+equivalent quantity} (Strehl 2009; Kakade 2003). The lower bound proofs
+construct hard MDPs where any algorithm unable to distinguish ``visited
+0 times'' from ``visited \(k\) times'' for specific \((s, a)\) pairs
+fails with constant probability. The graph ban forces the substrate into
+territory where no formal exploration guarantee exists.
 
-\textbf{Prior work:} Schmidhuber (1991, 2010) proposed \emph{compression
-progress} --- intrinsic reward proportional to the IMPROVEMENT in
-prediction accuracy, not the absolute prediction error. Oudeyer, Kaplan
-\& Hafner (2007) formalize this as \emph{learning progress} in
-developmental robotics. Lopes, Lang \& Toussaint (2012) prove PAC bounds
-for exploration driven by learning progress. The key property:
-compression progress is zero at irreducible transitions (error doesn't
-improve) and positive at novel learnable transitions (error decreases).
+\textbf{The landscape of count-free exploration:} - \textbf{RND} (Burda
+et al.~2018): prediction error on random features. State-level only (not
+state-action). No PAC guarantee. Noisy TV vulnerable. -
+\textbf{Pseudo-counts} (Bellemare et al.~2016): density model derivative
+gives asymptotic consistency for tabular models --- the closest bridge
+to formal guarantees. But still state-level, not state-action level. -
+\textbf{BYOL-Explore} (Guo et al.~2022): world model prediction error,
+no counts, strong empirical results on DM-HARD-8 and hard Atari. No PAC
+guarantee. - \textbf{SimHash} (Tang et al.~2017): LSH + counting in hash
+space --- functionally identical to our 674 substrate. The connection is
+direct: 674 IS a SimHash exploration method.
+
+All count-free methods operate at the STATE level
+(\texttt{this\ state\ is\ novel\textquotesingle{}\textquotesingle{})\ but\ cannot\ distinguish}I've
+been to this state but never took action 3'\,' from ``I've fully
+explored this state.'\,' This is the fundamental limitation the graph
+ban creates.
+
+\textbf{The empirical counterpoint:} Despite the theoretical
+impossibility, BYOL-Explore achieves superhuman exploration on the
+hardest Atari games without any count mechanism. Formal PAC guarantees
+may be unnecessary for practical exploration in structured environments.
+
+\textbf{Prior work on compression progress:} Schmidhuber (1991, 2010)
+proposed \emph{compression progress} --- intrinsic reward proportional
+to the IMPROVEMENT in prediction accuracy, not the absolute prediction
+error. Oudeyer, Kaplan \& Hafner (2007) formalize this as \emph{learning
+progress} in developmental robotics. Lopes, Lang \& Toussaint (2012)
+prove PAC bounds for exploration driven by learning progress. The key
+property: compression progress is zero at irreducible transitions (error
+doesn't improve) and positive at novel learnable transitions (error
+decreases).
 
 \textbf{Formal argument:} Let
 \(E_t(s, a) = \mathbb{E}[\|W_t(s, a) - s'\|^2]\) be the forward model's
@@ -1542,7 +1600,24 @@ progress to the specific noisy TV failures in our framework (6
 strategies, Steps 477-482); (2) establishing R1 compliance under our
 constitutional framework; (3) identifying compression progress as the
 leading candidate for post-ban action selection after argmin
-elimination. \textbf{Untested:} Step 855 tests this directly.
+elimination.
+
+\textbf{Experimental result (Step 855): ACTION COLLAPSE.} Compression
+progress achieves 0 L1 at 25K steps on LS20 (vs random baseline 364 L1,
+Step 807). The mechanism locks onto a single action with the highest
+learning rate and never diversifies. This is a U22 variant: convergent
+ACTION SELECTION (not convergent state). The theoretical analysis above
+is correct --- \(\Delta E\) avoids the noisy TV --- but introduces a NEW
+failure mode: the gradient is too steep, creating an action attractor.
+The E. coli analogy (Section 2.8) breaks for the same reason: E. coli
+tumbles RANDOMLY when the gradient is zero, maintaining diversity. Pure
+compression progress does not.
+
+\textbf{Fix candidates (untested):} (a) Epsilon-compression: 80\%
+compression progress, 20\% random. Maintains diversity. (b) Action
+cycling + compression: deterministic cycling for coverage (Step 809),
+compression progress to guide priority. (c) Entropy regularization:
+\(\text{score}(a) = \Delta E(a) + \lambda H(\text{action\_history})\).
 
 \paragraph{Proposition 15: Perception-Action
 Decoupling}\label{proposition-15-perception-action-decoupling}
@@ -2706,6 +2781,18 @@ seeds, \(N\) = 25K steps, \(P\) = level completion count. Whether
 positive counterfactual is achievable under ANY \((\mathcal{T}, N, P)\)
 for an R1-compliant substrate remains open.
 
+\textbf{R3\_cf is metric-dependent (Steps 780v5, 855b, 809b).} With
+\(P\) = prediction accuracy (forward model accuracy on held-out
+transitions): R3\_cf PASSES for three D-only substrates (cold
+11.5-50.2\%, warm 19.9-54.6\%). With \(P\) = level completion count:
+R3\_cf is INCONCLUSIVE on LS20 (0 completions for all post-ban
+substrates; LS20 rewards action persistence, making it uninformative for
+diverse-exploration mechanisms). The forward model captures transferable
+dynamics (Proposition 20b confirmed), but whether this transfer improves
+NAVIGATION performance depends on the game and action selection
+mechanism. Cross-game testing (FT09, where diverse actions are
+productive) is pending.
+
 \subsubsection{4.10 State Decomposition: Location vs Dynamics
 (Proposition
 20)}\label{state-decomposition-location-vs-dynamics-proposition-20}
@@ -2849,6 +2936,67 @@ Ablation: on a substrate with both \(L\) and \(D\), independently reset
 \(L(s_N) \to L(s_0)\) and \(D(s_N) \to D(s_0)\) before testing. If
 Proposition 20 holds, resetting \(L\) improves performance and resetting
 \(D\) degrades it.
+
+\textbf{Corollary 20.1 (Generalized Negative Transfer).} Proposition
+20(a) extends beyond \(L(s)\) to ANY accumulated component that couples
+to action selection. Let \(c(s)\) be a state component that (a) changes
+over time (\(c(s_N) \neq c(s_0)\)) and (b) influences action selection
+(\(g(s) = g(c(s), \ldots)\)). Then pretraining on \(\mathcal{T}\)
+produces negative transfer on \(\mathcal{T}' \neq \mathcal{T}\) via
+\(c\).
+
+\textbf{Experimental evidence (Steps 776, 788, 803):} - Visit counts
+\(N(n,a)\) → negative transfer (Step 776: OR=0.713, \(p<0.0001\)). -
+Per-observation cycling counters → negative transfer (Step 803:
+cold=226/seed, warm=0/seed). Cold cycling starts at action 0 (dominant
+in LS20); pretraining shifts counters away from action 0 → performance
+collapses on new seeds. - Global round-robin index → KILL (Step 788: 0
+L1, worse than random). - Forward model \(W\) with random action
+selection → NEUTRAL (Step 778v3: tied). \(D(s)\) accumulates but does
+not couple to action selection during random-action training, avoiding
+the coupling that produces negative transfer.
+
+\textbf{Implication:} R3\_counterfactual requires that accumulated state
+improves performance on new tasks. Corollary 20.1 shows this is
+impossible for any component that couples to action selection AND
+carries environment-specific information. The forward model is the
+unique candidate: it accumulates dynamics (environment-general) and can
+couple to action selection at TEST time without carrying
+environment-specific action biases from training (because training used
+random actions).
+
+\textbf{Proposition 21 (Global-Local Gap).} Navigation requires
+per-state action selection: the productive action at state \(s\) depends
+on \(s\) itself (\(g^*(s) \neq g^*(s')\) for \(s \neq s'\)). The forward
+model \(W\) learns GLOBAL dynamics: \(\hat{s}' = W(s, a)\) aggregated
+over all visited states. But action selection from \(W\) is LOCAL:
+\(g(s) = \text{argmax}_a f(W, s, a)\) depends on both \(W\) and the
+current state \(s\).
+
+The gap: \(W\) trained on one environment learns global dynamics that
+TRANSFER (Proposition 20b confirmed, Steps 778-855b). But \(g(s)\)
+computed from \(W\) at a new state \(s\) in a new environment produces
+the wrong action --- because which action is productive depends on the
+LOCAL state, not on the global dynamics.
+
+\textbf{Experimental evidence (Steps 780-806v2, 800):} -
+Prediction-contrast (\(\text{argmax}_a \|W(s,a) - s\|\)): L1=0 on LS20
+(novelty-seeking avoids navigable paths). L1=0 on FT09 (static
+background = uniform predictions). - Per-action change tracking: uniform
+\(\delta \approx 0.008\) for all 68 FT09 actions (position-dependent
+signal masked by global averaging). - 806v2: L1 PASS at
+substrate\_seed=0 retracted after control (seeds 1-3 show 0 or
+negative). - Random baseline: 36.4 L1/seed on LS20 (better than any
+D(s)-guided mechanism).
+
+\textbf{Implication:} Post-ban substrates face a fundamental tradeoff.
+D(s) captures transferable global dynamics (prediction R3\_cf PASS). But
+converting global dynamics to local navigation requires per-state
+information --- which the graph ban removes. The feasible region for
+PREDICTION transfer is non-empty (first confirmed). The feasible region
+for NAVIGATION transfer remains empty in the post-ban regime. Whether
+any mechanism bridges this gap without per-state tracking is the open
+frontier.
 
 \subsection{5. Experimental Evidence}\label{experimental-evidence}
 
@@ -3420,6 +3568,122 @@ advantage over fixed \(\ell_0\) at 20 seeds.
 \textbf{Non-codebook experiment count:} \textasciitilde177 (vs
 \textasciitilde435 codebook). Ongoing scale-up.
 
+\subsubsection{5.5 Post-Ban Experiments (Steps 778-812, Phase
+3)}\label{post-ban-experiments-steps-778-812-phase-3}
+
+The graph ban (post Step 777, permanent) and codebook ban (Step 416)
+remove both known-working mechanisms. Phase 3 tests D-only substrates:
+forward models, Hebbian networks, reservoir computing, population
+mechanisms, compression progress --- all without per-(state, action)
+tracking.
+
+\textbf{Baselines established (Steps 807, 817):} - Random + 674 encoding
+on LS20: 36.4 L1/seed at 25K steps. Post-ban navigation floor. - 674
+encoding vs random projection: identical L1 (encoding irrelevant without
+action mechanism). - Random + 68 actions on FT09: 0 L1 at 25K (FT09 not
+navigable by random).
+
+\textbf{D(s) prediction transfer --- confirmed (5/7 PASS, Steps 778v5,
+780v5, 855b, 809b, 855v3):}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1833}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1833}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1833}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2833}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Substrate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Cold acc.
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Warm acc.
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Transfer
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Action mechanism
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+778v5 (random action) & 27.7\% & 31.9\% & +15\% & Random \\
+780v5 (prediction-contrast) & 11.5\% & 19.9\% & +73\% &
+Novelty-seeking \\
+809b (cycling + W) & 21.2\% & 25.8\% & +22\% & Deterministic cycling \\
+855b (epsilon-compression) & 50.2\% & 54.6\% & +9\% & 80\% compression,
+20\% random \\
+855v3 (compression progress) & 90.1\% & 99.7\% & +10\% &
+Learning-progress-seeking \\
+\end{longtable}
+}
+
+Forward model W (delta rule, not Hebbian) trained on LS20 seeds 1-5
+predicts better on unseen seeds 6-10 across all five action mechanisms.
+D(s) transfer is robust and independent of action selection.
+
+\textbf{Negative findings (2/7 FAIL):} Step 856 (state entropy): warm
+DEGRADES prediction (cold 53\% → warm 26\%). Entropy-maximizing actions
+create unstructured trajectories that hurt forward model learning. Step
+840 (anti-pheromone): FAIL. Not all action mechanisms produce learnable
+trajectories.
+
+\textbf{L1 navigation transfer --- ZERO confirmed (Step 806v2
+retracted):} 806v2 (80\% random + 20\% prediction-contrast): original
+claim cold=0, warm=78/seed (\(p \approx 0\)) with substrate\_seed=0.
+\textbf{RETRACTED after control:} seed=1 warm=0, seed=2 warm=0, seed=3
+cold=315 warm=0 (warm HURTS). The L1 PASS was a substrate\_seed=0
+artifact. Prediction accuracy R3\_cf remains PASS across all seeds (cold
+21-25\%, warm 26-30\%). \textbf{No post-ban mechanism produces
+consistent L1 improvement over random on any tested game.} D(s)
+prediction transfer is real; navigation transfer is not.
+
+\textbf{Compression progress action collapse (Step 855):} 0 L1. The
+compression progress gradient creates action collapse (U22 variant) ---
+the substrate locks onto a single action with the highest learning rate.
+Epsilon-compression (80/20) fixes the collapse but still achieves 0 L1
+on LS20.
+
+\textbf{LS20 rewards persistence (Steps 778-788):} All novelty-seeking
+mechanisms (prediction-contrast, ensemble disagreement, cycling,
+round-robin, compression progress) achieve 0 L1 on LS20. Only substrates
+with near-random or momentum-based action selection navigate. LS20
+requires sustained repetition of specific actions (action persistence),
+not diversity. This is a game-specific property, not a universal
+constraint.
+
+\textbf{First post-ban navigation mechanism (Step 800b, confirmed):}
+80\% argmax of global per-action observation change EMA + 20\% random.
+Cold start (no pretraining): 237-377 L1/seed across 4 substrate seeds
+(6.5-10× random baseline of 36.4/seed). Robust. Mechanism: learn which
+action produces the most observation change, use it 80\% of the time. On
+LS20, this converges to the most productive movement direction. R3\_cf
+(warm vs cold): inconsistent (2/4 seeds pass, 2/4 warm hurts).
+\textbf{This is a navigation finding, not a transfer finding.} The
+mechanism works cold --- pretraining is not needed and may hurt. The
+mechanism is LS20-specific: on FT09, global per-action change is uniform
+across all 68 actions (Step 800), so the heuristic degenerates to
+random.
+
+\textbf{Hebbian W diverges (all pre-delta-rule results invalid):} The
+Hebbian update (\(W \mathrel{+}= \eta \cdot x \otimes \text{inp}\))
+grows unboundedly. After 25K steps, \(\|W\| \gg 1\) and predictions
+explode. The delta rule
+(\(W \mathrel{-}= \eta \cdot (W \cdot \text{inp} - x) \otimes \text{inp}\))
+converges. R2 tension: the delta rule IS a gradient on prediction error,
+but it is self-supervised (target = next environmental observation), not
+externally supervised.
+
+\textbf{Corollary 20.1 confirmed (Steps 776, 803, 788):} Negative
+transfer extends beyond visit counts to ANY accumulated state that
+couples to action selection: per-(state, action) visit counts (Step
+776), per-observation cycling counters (Step 803), global round-robin
+index (Step 788). The forward model is the unique candidate for positive
+transfer because it accumulates dynamics (environment-general) without
+coupling to action selection during training (random actions).
+
 \subsection{6. Degrees of Freedom}\label{degrees-of-freedom}
 
 The formalization identifies what the constraints REQUIRE but also what
@@ -3696,9 +3960,18 @@ open questions (T1, T9). The constraint system is internally consistent.
   tighter impossibility result is needed.
 \item
   What self-observation mechanism satisfies R6 (irredundancy) while
-  avoiding noisy TV traps (T7). The eigenform mechanism (Section 4.4) is
-  a concrete candidate; Zenil's degeneration constraint (2026) predicts
-  interleaving with environment observation is required.
+  avoiding noisy TV traps (T7). The eigenform mechanism (Section 4.4)
+  was inert when targeting action selection (Proposition 13).
+  \textbf{Predicted resolution: compression progress} (Section 4.5) ---
+  the substrate observes its own forward model's learning rate
+  (\(\Delta E_t\)). This is (a) R6-compliant if the forward model drives
+  action selection, (b) noisy-TV-robust because \(\Delta E\) cancels
+  irreducible stochasticity, (c) self-observing --- the substrate tracks
+  its own learning dynamics. Pending empirical confirmation (Step 855).
+  Zenil's degeneration constraint (2026) is satisfied by construction:
+  compression progress interleaves self-observation (\(\Delta E\)) with
+  environment observation (prediction targets come from actual
+  transitions).
 \item
   \st{How to resolve U11 + U24 + U1} \textbf{DISSOLVED (Proposition 17,
   Section 4.8).} R3 for select: argmin is the fixed interpreter for
@@ -3737,6 +4010,27 @@ open questions (T1, T9). The constraint system is internally consistent.
   constraints (U3, U17, U24, U25, U28) were derived within the graph
   framework. Whether they survive, need revision, or are invalidated
   post-ban is open. Steps 879, 887 address this.
+\item
+  \textbf{Observability determines post-ban mechanism viability (Steps
+  778-784v2).} Prediction-contrast action selection achieves 0 L1 on
+  LS20 (POMDP: progress invisible in observations, action 0 dominance
+  via hidden state). Predicted to work on FT09 (progress visible:
+  productive clicks produce observation changes). The open question: for
+  which class of environments do D(s)-based action selection mechanisms
+  outperform random? Hypothesis: environments where observation change
+  correlates with progress (visible MDPs). Environments where progress
+  depends on hidden state (POMDPs) require additional mechanisms ---
+  either per-state tracking (banned) or inference over hidden state
+  (untested post-ban).
+\item
+  \textbf{Compression progress action collapse (Step 855).} Compression
+  progress (Schmidhuber 1991) is noisy-TV-robust in theory but produces
+  action collapse in practice --- locking onto the single action with
+  highest learning rate. The E. coli analogy (Section 2.8) breaks
+  because E. coli tumbles RANDOMLY when gradient is zero, maintaining
+  diversity. Fix candidates: epsilon-compression, entropy
+  regularization, action cycling + compression priority. Whether any fix
+  maintains both noisy-TV robustness AND action diversity is open.
 \item
   \textbf{Interpreter entailment --- STRENGTHENED (Proposition 14b).}
   The abstract interpreter is not just entailed but UNIQUE at the
@@ -4402,11 +4696,17 @@ infrastructure are documented in the repository.
   Bellemare, M. et al.~(2016). Unifying Count-Based Exploration and
   Intrinsic Motivation. NeurIPS.
 \item
+  Burda, Y. et al.~(2018). Exploration by Random Network Distillation.
+  arXiv:1810.12894.
+\item
   Burda, Y. et al.~(2019). Large-Scale Study of Curiosity-Driven
   Learning. ICLR.
 \item
   Fritzke, B. (1995). A Growing Neural Gas Network Learns Topologies.
   NeurIPS.
+\item
+  Guo, Z. et al.~(2022). BYOL-Explore: Exploration by Bootstrapped
+  Prediction. arXiv:2206.08332.
 \item
   Givan, R., Dean, T. \& Greig, M. (2003). Equivalence Notions and Model
   Minimization in Markov Decision Processes. Artificial Intelligence,
@@ -4420,8 +4720,19 @@ infrastructure are documented in the repository.
   Kirsch, L. \& Schmidhuber, J. (2022). Self-Referential Meta Learning.
   ICML.
 \item
+  Kakade, S. (2003). On the Sample Complexity of Reinforcement Learning.
+  PhD thesis, University College London.
+\item
   Kohonen, T. (1988). Self-Organization and Associative Memory.
   Springer.
+\item
+  Lopes, M., Lang, T. \& Toussaint, M. (2012). Exploration in
+  Model-based Reinforcement Learning by Empirically Estimating Learning
+  Progress. NeurIPS.
+\item
+  Oudeyer, P.-Y., Kaplan, F. \& Hafner, V. (2007). Intrinsic Motivation
+  Systems for Autonomous Mental Development. IEEE Trans. Evolutionary
+  Computation, 11(2).
 \item
   Maturana, H. \& Varela, F. (1972). Autopoiesis and Cognition: The
   Realization of the Living.
@@ -4444,13 +4755,22 @@ infrastructure are documented in the repository.
   Exploration for ARC-AGI-3 Interactive Reasoning Tasks.
   arXiv:2512.24156.
 \item
+  Schmidhuber, J. (1991). Curious Model-Building Control Systems. IEEE
+  Int. Joint Conf. on Neural Networks.
+\item
   Schmidhuber, J. (2003). Gödel Machines: Self-Referential Universal
   Problem Solvers Making Provably Optimal Self-Improvements.
   arXiv:cs/0309048.
 \item
+  Schmidhuber, J. (2010). Formal Theory of Creativity, Fun, and
+  Intrinsic Motivation. IEEE Trans. Autonomous Mental Development, 2(3).
+\item
   Strehl, A. L. \& Littman, M. L. (2008). An Analysis of Model-Based
   Interval Estimation for Markov Decision Processes. JCSS, 74(8),
   1309-1331.
+\item
+  Tang, H. et al.~(2017). \#Exploration: A Study of Count-Based
+  Exploration for Deep RL. NeurIPS.
 \item
   van de Ven, G. M. \& Tolias, A. S. (2024). Continual Learning and
   Catastrophic Forgetting. arXiv:2403.05175.
