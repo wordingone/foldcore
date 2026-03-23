@@ -429,9 +429,19 @@ Steps 477-482, 539-541. 6 strategies tested, all worse than or equal to argmin.
 
 #### Post-Ban Resolution: Compression Progress (Schmidhuber 1991)
 
-**The post-ban problem:** The graph ban (post Step 777) eliminates per-(state, action) tracking. Argmin — the only noisy-TV-robust action selection mechanism tested — requires visit counts. The noisy TV barrier applies to all tested alternatives. What post-ban mechanism avoids the noisy TV trap?
+**The post-ban problem:** The graph ban (post Step 777) eliminates per-(state, action) tracking. This has a formal consequence: **no PAC-MDP algorithm exists that does not use visit counts or a provably equivalent quantity** (Strehl 2009; Kakade 2003). The lower bound proofs construct hard MDPs where any algorithm unable to distinguish "visited 0 times" from "visited $k$ times" for specific $(s, a)$ pairs fails with constant probability. The graph ban forces the substrate into territory where no formal exploration guarantee exists.
 
-**Prior work:** Schmidhuber (1991, 2010) proposed *compression progress* — intrinsic reward proportional to the IMPROVEMENT in prediction accuracy, not the absolute prediction error. Oudeyer, Kaplan & Hafner (2007) formalize this as *learning progress* in developmental robotics. Lopes, Lang & Toussaint (2012) prove PAC bounds for exploration driven by learning progress. The key property: compression progress is zero at irreducible transitions (error doesn't improve) and positive at novel learnable transitions (error decreases).
+**The landscape of count-free exploration:**
+- **RND** (Burda et al. 2018): prediction error on random features. State-level only (not state-action). No PAC guarantee. Noisy TV vulnerable.
+- **Pseudo-counts** (Bellemare et al. 2016): density model derivative gives asymptotic consistency for tabular models — the closest bridge to formal guarantees. But still state-level, not state-action level.
+- **BYOL-Explore** (Guo et al. 2022): world model prediction error, no counts, strong empirical results on DM-HARD-8 and hard Atari. No PAC guarantee.
+- **SimHash** (Tang et al. 2017): LSH + counting in hash space — functionally identical to our 674 substrate. The connection is direct: 674 IS a SimHash exploration method.
+
+All count-free methods operate at the STATE level (``this state is novel'') but cannot distinguish ``I've been to this state but never took action 3'' from ``I've fully explored this state.'' This is the fundamental limitation the graph ban creates.
+
+**The empirical counterpoint:** Despite the theoretical impossibility, BYOL-Explore achieves superhuman exploration on the hardest Atari games without any count mechanism. Formal PAC guarantees may be unnecessary for practical exploration in structured environments.
+
+**Prior work on compression progress:** Schmidhuber (1991, 2010) proposed *compression progress* — intrinsic reward proportional to the IMPROVEMENT in prediction accuracy, not the absolute prediction error. Oudeyer, Kaplan & Hafner (2007) formalize this as *learning progress* in developmental robotics. Lopes, Lang & Toussaint (2012) prove PAC bounds for exploration driven by learning progress. The key property: compression progress is zero at irreducible transitions (error doesn't improve) and positive at novel learnable transitions (error decreases).
 
 **Formal argument:** Let $E_t(s, a) = \mathbb{E}[\|W_t(s, a) - s'\|^2]$ be the forward model's prediction error at time $t$. Decompose: $E_t = E^{\text{aleatoric}} + E^{\text{epistemic}}_t$, where $E^{\text{aleatoric}}$ is irreducible (stochastic transitions, constant in $t$) and $E^{\text{epistemic}}_t$ is reducible (decreases with experience). Compression progress: $\Delta E_t = E_{t-1} - E_t = \Delta E^{\text{epistemic}}_t$, since $E^{\text{aleatoric}}$ cancels.
 
@@ -1302,21 +1312,29 @@ The agents operated on a single machine (Windows 11, RTX 4090) with experiments 
 
 - Abraham, W. C. & Robins, A. (2005). Memory retention — the synaptic stability versus plasticity dilemma. Trends in Neurosciences, 28(2), 73-78.
 - Bellemare, M. et al. (2016). Unifying Count-Based Exploration and Intrinsic Motivation. NeurIPS.
+- Burda, Y. et al. (2018). Exploration by Random Network Distillation. arXiv:1810.12894.
 - Burda, Y. et al. (2019). Large-Scale Study of Curiosity-Driven Learning. ICLR.
 - Fritzke, B. (1995). A Growing Neural Gas Network Learns Topologies. NeurIPS.
+- Guo, Z. et al. (2022). BYOL-Explore: Exploration by Bootstrapped Prediction. arXiv:2206.08332.
 - Givan, R., Dean, T. & Greig, M. (2003). Equivalence Notions and Model Minimization in Markov Decision Processes. Artificial Intelligence, 147(1-2), 163-223.
 - Graves, A. et al. (2014). Neural Turing Machines. arXiv:1410.5401.
 - Jin, C. et al. (2020). Reward-Free Exploration for Reinforcement Learning. ICML.
 - Kirsch, L. & Schmidhuber, J. (2022). Self-Referential Meta Learning. ICML.
+- Kakade, S. (2003). On the Sample Complexity of Reinforcement Learning. PhD thesis, University College London.
 - Kohonen, T. (1988). Self-Organization and Associative Memory. Springer.
+- Lopes, M., Lang, T. & Toussaint, M. (2012). Exploration in Model-based Reinforcement Learning by Empirically Estimating Learning Progress. NeurIPS.
+- Oudeyer, P.-Y., Kaplan, F. & Hafner, V. (2007). Intrinsic Motivation Systems for Autonomous Mental Development. IEEE Trans. Evolutionary Computation, 11(2).
 - Maturana, H. & Varela, F. (1972). Autopoiesis and Cognition: The Realization of the Living.
 - McCloskey, M. & Cohen, N. J. (1989). Catastrophic interference in connectionist networks. Psychology of Learning and Motivation, 24, 109-165.
 - Pathak, D. et al. (2017). Curiosity-driven Exploration by Self-Supervised Prediction. ICML.
 - Ravindran, B. & Barto, A. G. (2004). Approximate Homomorphisms: A Framework for Non-Exact Minimization in Markov Decision Processes. ICML Workshop.
 - Rosenstein, M. et al. (2005). To Transfer or Not To Transfer. NIPS Workshop on Inductive Transfer.
 - Rudakov, E., Shock, J. & Cowley, B. U. (2025). Graph-Based Exploration for ARC-AGI-3 Interactive Reasoning Tasks. arXiv:2512.24156.
+- Schmidhuber, J. (1991). Curious Model-Building Control Systems. IEEE Int. Joint Conf. on Neural Networks.
 - Schmidhuber, J. (2003). Gödel Machines: Self-Referential Universal Problem Solvers Making Provably Optimal Self-Improvements. arXiv:cs/0309048.
+- Schmidhuber, J. (2010). Formal Theory of Creativity, Fun, and Intrinsic Motivation. IEEE Trans. Autonomous Mental Development, 2(3).
 - Strehl, A. L. & Littman, M. L. (2008). An Analysis of Model-Based Interval Estimation for Markov Decision Processes. JCSS, 74(8), 1309-1331.
+- Tang, H. et al. (2017). #Exploration: A Study of Count-Based Exploration for Deep RL. NeurIPS.
 - van de Ven, G. M. & Tolias, A. S. (2024). Continual Learning and Catastrophic Forgetting. arXiv:2403.05175.
 - Wang, Z. et al. (2019). Characterizing and Avoiding Negative Transfer. CVPR.
 - Zenil, H. (2026). On the Limits of Self-Improving in Large Language Models: The Singularity Is Not Near Without Symbolic Model Synthesis. arXiv:2601.05280.
