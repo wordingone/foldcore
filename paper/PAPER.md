@@ -112,6 +112,19 @@ Astronomical adaptive optics (AO) is the clearest engineered example of Proposit
 
 **Connection to encoding dimensions (D1-D5):** A deformable mirror with $N$ actuators has $N$ degrees of freedom. GMT's DM has 4,000+ actuators. Our encoding has 5 dimensions (D1-D5). The AO lesson: more actuators (finer correction) requires faster wavefront sensing AND more photons from the guide star. Our analog: more encoding dimensions require richer transition statistics AND more interaction with the environment. There is an information-theoretic budget — the system can only adapt as many encoding parameters as its interaction history can constrain.
 
+### 2.14 Physarum polycephalum: memory in the encoding
+
+*Physarum polycephalum* (slime mold) is a unicellular organism that solves shortest-path problems, builds near-optimal transport networks, and encodes memory in its morphology — all without a nervous system or centralized controller (review: Alim, 2024, Annual Reviews of Condensed Matter Physics). The organism is a tubular network through which cytoplasm oscillates via pressure-driven flow.
+
+**Connection to Proposition 17 and CSE uniqueness:** Physarum IS a CSE system with self-directed attention:
+- **Fixed interpreter:** Hagen-Poiseuille fluid dynamics. Cytoplasm flows through tubes proportional to $\Delta P \cdot r^4$ (pressure gradient × tube radius to the fourth power). This physics is the frozen frame — Physarum cannot modify fluid mechanics.
+- **Adaptive encoding ($\pi_s$):** Tube diameter hierarchy. Kramar & Bhatt (2021, PNAS) showed that memory about nutrient location is encoded in tube diameters: a nutrient source releases a softening agent transported by cytoplasmic flows, causing tubes receiving more softening agent to grow. The tube diameter hierarchy IS the encoding — it determines how sensory signals (nutrient gradients) propagate through the network.
+- **Self-directed attention:** Thick tubes amplify signals from nutrient-rich regions (attention toward food). Thin tubes attenuate signals from nutrient-poor regions (attention away from waste). The diameter hierarchy adapts from the organism's own interaction history (nutrient encounters), not from external instruction. This is $\pi_s$ depending on $T(s)$ — exactly Proposition 17.
+
+**Connection to U3 and R6:** Tube growth is persistent (U3) and irredundant (R6 — each tube carries unique flow). The network only grows and reinforces; tubes that carry no flow eventually shrink but are never deleted. The structural trace of past encounters persists as a diameter pattern, readable by future flows.
+
+**The deepest connection:** In Physarum, the network IS both the memory AND the processor. There is no separate "brain" that interprets the network — the tube topology IS the computation. CSE is performed by the same physical medium that stores the results. Compare = flow convergence at junctions (signals from different tubes meet). Select = pressure-driven branching (flow follows the path of least resistance). Store = tube diameter growth (successful paths get reinforced). The interpreter (fluid dynamics) is inseparable from the encoding (tube diameters). This is the limiting case of Proposition 14b: when the interpreter and encoding share a single physical substrate, CSE uniqueness is not just a logical necessity but a physical one — there is literally no room for a fourth operation.
+
 ## 3. Formal Framework
 
 **On the status of R1-R6:** The six rules began as philosophical commitments. The experiments validated them — each rule is justified by what fails when it is violated:
