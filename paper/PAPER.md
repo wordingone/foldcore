@@ -447,6 +447,18 @@ The feasible region is the set of all $(compare, select, store)$ triples satisfy
 
 **Conclusion:** Under gates 3-5 + codebook/graph bans, 800b is the unique working action selector. All tested alternatives degrade LS20. The action selection degree of freedom is closed at 800b for the current constitutional framework.
 
+### 4.15 Growing Feature Space (Proposition 27, Step 939)
+
+After action selection closure, the search pivoted to encoding architecture — growing the feature space from observation statistics. → [propositions/27_growing_feature_space.md](propositions/27_growing_feature_space.md)
+
+**Step 939:** Online PCA on rolling 1000-observation window. When dominant eigenvalue $> 2\times$ second eigenvalue, top eigenvector becomes a new feature dimension. $W$, $\alpha$ grow correspondingly. Max 16 extra dimensions (320D → 336D).
+
+**Result: KILLED (LS20=0, FT09=0, VC33=0).** PCA features were discovered (10 in LS20, 16 by FT09) — the mechanism fires. Kill cause: zero-initialized $W_{pred}$ rows for new dimensions generate huge prediction errors → $\alpha$ concentrates on new dims ($\alpha_{conc}=50$ from step 1) → navigation signal in original 320D drowned out. Evidence: CIFAR Phase 2 $\delta_{spr}=14\text{-}21$ (PCA dims generate massive apparent changes vs LS20 $\delta_{spr}=0.037\text{-}0.140$).
+
+**Constraint extracted:** Encoding expansion via zero-initialized prediction weights is fatal to alpha-weighted attention. Any mid-stream encoding change requires warm-up before entering alpha/delta computation. Step 939b tests warm-up exclusion (new dims excluded from alpha for 1000 steps while $W_{pred}$ trains on them).
+
+**Implication:** GFS family not yet killed — the mechanism discovers structure but the integration fails. If warm-up fixes bootstrap → encoding architecture is a viable new degree of freedom (structural R3: growing the feature space, not just re-weighting it).
+
 ## 5. Experimental Evidence
 
 ### 5.1 Navigation (900+ experiments)
