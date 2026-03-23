@@ -49,6 +49,12 @@
 % Allow footnotes in longtable head/foot
 \IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
 \makesavenoteenv{longtable}
+\ifLuaTeX
+  \usepackage{luacolor}
+  \usepackage[soul]{lua-ul}
+\else
+  \usepackage{soul}
+\fi
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
@@ -286,6 +292,48 @@ the modification rule). Whether this constitutes genuine \(\ell_F\)
 depends on whether the rate-modification mechanism is itself fixed
 (frozen frame) or adaptive.
 
+\textbf{Connection to Steps 720-752 (self-directed attention
+experiments).} Our experimental findings recapitulate the immune
+system's architecture in detail:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \emph{SHM targets the encoding, not the interpreter.} AID mutates CDR
+  (the antigen-binding site = encoding \(\pi\)) while leaving framework
+  regions (the Ig scaffold = interpreter CSE) unchanged. Proposition 17
+  states exactly this: R3 reduces to state-dependent encoding \(\pi_s\)
+  with a fixed interpreter. The immune system discovered this solution
+  through evolution; our experiments rediscovered it through
+  falsification (Steps 720-749: modifying the interpreter fails,
+  modifying the encoding works).
+\item
+  \emph{Targeted variation in specific dimensions.} SHM targets
+  CDR1/CDR2/CDR3 specifically --- not random positions across the
+  genome. Our experiments found D1 (channel selection) and D3 (hash
+  resolution) are productive encoding dimensions while D2 (spatial
+  resolution) and D4 (temporal integration) are killed (Steps 730-734).
+  The immune system's ``encoding dimensions'' are the CDR loops; ours
+  are the hash hyperplanes and channel weights.
+\item
+  \emph{Affinity maturation IS R4.} The germinal center tests each
+  mutant B cell against antigen --- modifications are compared to prior
+  state. Higher-affinity mutants survive; lower-affinity die. This is
+  the R4 metric Step 739 identified as missing: R3 measures ``does it
+  change?'' (both self-directed and random score R3=1.0), but R4
+  measures ``does the change help?'' (self-directed 4x faster than
+  random, L1=1105 vs 4237). Affinity maturation is the biological R4.
+\item
+  \emph{Population vs single-agent.} The immune system's R3 works
+  because \(\sim 10^9\) B cells mutate independently with strong
+  selection. Our single-agent substrate cannot parallelize. Step 738
+  (D5, adaptive mutation rate) failed --- alpha collapsed to 0.10
+  because without population-level selection, there is no signal to
+  calibrate mutation rate. The immune system calibrates mutation rate
+  via competitive binding in germinal centers --- a population mechanism
+  unavailable to a single agent.
+\end{enumerate}
+
 \subsubsection{2.10 Retinal contrast adaptation and selective
 π-refinement}\label{retinal-contrast-adaptation-and-selective-ux3c0-refinement}
 
@@ -336,6 +384,64 @@ low variability maintain coarse resolution (adaptation). The
 intervention is determined by local cell statistics, not global analysis
 --- R1-compliant by construction.
 
+\subsubsection{2.11 Work hardening and the strength-ductility
+coupling}\label{work-hardening-and-the-strength-ductility-coupling}
+
+Metals under stress face a structural analog of the R3-navigation
+coupling. Work hardening increases yield strength (via dislocation
+pile-up at grain boundaries) but decreases ductility --- the
+modification that improves one capability degrades another. The frozen
+frame is the crystal lattice type (FCC/BCC/HCP); the state is the
+microstructure (grain size, dislocation density, boundary
+configuration). The microstructure determines HOW the material responds
+to stress, and stress modifies the microstructure --- a self-referential
+update rule \(F(s)\).
+
+Recent work (Li et al., 2025, \emph{Nature Communications}) demonstrates
+that segregation-dislocation self-organized structures at grain
+boundaries can increase strength WITHOUT compromising ductility. The
+resolution to the coupling is LOCAL self-organization at boundaries
+where dislocations interact with segregated solutes, creating
+configurations that accommodate both properties simultaneously.
+
+\textbf{Connection to the search:} Every R3 attempt that modified action
+selection globally (Steps 477-482, 713-719) killed navigation. The
+metallurgical precedent suggests the resolution may be LOCAL
+modification at the boundaries where the encoding fails (aliased cells,
+high-entropy transitions) rather than global modification of the
+selection rule. The material doesn't change its crystal structure
+everywhere --- it self-organizes at the grain boundaries where stress
+concentrates.
+
+\subsubsection{2.12 Dissipative structures and far-from-equilibrium
+dynamics}\label{dissipative-structures-and-far-from-equilibrium-dynamics}
+
+Prigogine's dissipative structures (1977 Nobel) are systems that
+maintain order through continuous energy/matter exchange with their
+environment while existing far from thermodynamic equilibrium. They
+self-organize through local fluctuations that get amplified via
+nonlinear interactions. At equilibrium, no structure. Far from
+equilibrium, spontaneous symmetry breaking and complex order.
+
+\textbf{Connection to Theorem 1:} R3 + U7 + U22 + U17 → no fixed point.
+The substrate CANNOT reach equilibrium --- convergence kills exploration
+(U22), but growth must be unbounded (U17). This is the thermodynamic
+signature of a dissipative structure: the system must stay far from
+equilibrium to function. The continuous input of observations is the
+energy flux that maintains the structure. If input stops, the graph
+stops growing, exploration ceases, the system equilibrates --- and dies
+(per U17).
+
+\textbf{Connection to level transitions:} Dissipative structures
+transition between ordered states via bifurcations --- small
+fluctuations amplified by nonlinear dynamics. Level transitions in our
+substrate (L1 → L2) may be analogous: a small state change (finding the
+right action sequence) cascades into a qualitatively different
+exploration regime. The substrate doesn't gradually improve toward L2
+--- it bifurcates when sufficient structure accumulates. This is
+consistent with the empirical observation that L1 occurs after
+\textasciitilde97\% graph coverage (Step 600), not via gradual approach.
+
 \subsubsection{2.11 Renormalization group and the Level 2 phase
 transition}\label{renormalization-group-and-the-level-2-phase-transition}
 
@@ -382,6 +488,113 @@ at WHICH scale, and the system discovers this mapping from interaction.
 The RG framing sharpens Q21: not ``can compare-select-store encode
 arbitrary modifications?'' but ``can compare-select-store encode the
 RELEVANT operators at each scale?''
+
+\subsubsection{2.13 Adaptive optics and the deformable
+mirror}\label{adaptive-optics-and-the-deformable-mirror}
+
+Astronomical adaptive optics (AO) is the clearest engineered example of
+Proposition 17 (R3 ≡ self-directed attention). A ground-based telescope
+faces atmospheric turbulence that distorts incoming wavefronts. The
+solution: a deformable mirror (DM) with thousands of actuators that
+reshape the mirror surface in real-time (500+ Hz correction rate),
+compensating for atmospheric distortion. The science instrument (CCD
+detector, spectrograph) is FIXED --- it processes whatever photons
+arrive. The DM is the adaptive encoding --- it transforms the wavefront
+before the detector sees it. The wavefront sensor (Shack-Hartmann
+lenslet array) provides the feedback signal by measuring distortion from
+a guide star.
+
+\textbf{Connection to Proposition 17:} The telescope IS a CSE system
+with self-directed attention: - \textbf{Fixed interpreter:} The science
+instrument. It compares incoming photons against calibration data
+(compare), selects integration parameters (select), and records the
+image (store). None of this changes during correction. -
+\textbf{Adaptive encoding (\(\pi_s\)):} The deformable mirror
+configuration. Each actuator position determines how the wavefront is
+transformed before reaching the detector. The mirror IS the lens. It
+adapts from wavefront sensor data (transition statistics), not from
+external commands. - \textbf{Feedback signal (\(T(s)\)):} The wavefront
+sensor measures how the CURRENT mirror shape distorts the guide star
+image. This is transition statistics --- the system observes the EFFECT
+of its own encoding on a known reference. Shack-Hartmann sensors
+decompose the wavefront into a grid of local tilts, directly analogous
+to our per-cell transition inconsistency. - \textbf{Ground truth (R5):}
+The guide star. A point source whose true wavefront is known (flat, for
+a sufficiently distant star). Without it, the system cannot distinguish
+atmospheric distortion from optical error. Natural guide stars are
+environmental (R5-compliant). Laser guide stars are self-generated
+references --- the system creates its own ground truth, analogous to the
+eigenform (\(F(s)(\text{enc}(s))\), Section 4.4).
+
+\textbf{Connection to T9 (encoding-statistics coupling):} The AO
+correction rate (500 Hz for modern systems, up to 3 kHz for extreme AO)
+IS the encoding-statistics coupling rate. Too slow: the atmosphere
+changes between corrections (blurry images). Too fast: noise
+amplification (the mirror chases sensor noise). The optimal rate depends
+on the atmospheric coherence time \(\tau_0 \approx 10\) ms --- the
+timescale over which the turbulence decorrelates. Our DoF 12
+(encoding-statistics coupling strength) has the same structure: too slow
+→ mismatched encoding; too fast → instability. The AO community's
+decades of engineering the correction rate may inform our D1-D5
+adaptation rates.
+
+\textbf{Connection to encoding dimensions (D1-D5):} A deformable mirror
+with \(N\) actuators has \(N\) degrees of freedom. GMT's DM has 4,000+
+actuators. Our encoding has 5 dimensions (D1-D5). The AO lesson: more
+actuators (finer correction) requires faster wavefront sensing AND more
+photons from the guide star. Our analog: more encoding dimensions
+require richer transition statistics AND more interaction with the
+environment. There is an information-theoretic budget --- the system can
+only adapt as many encoding parameters as its interaction history can
+constrain.
+
+\subsubsection{2.14 Physarum polycephalum: memory in the
+encoding}\label{physarum-polycephalum-memory-in-the-encoding}
+
+\emph{Physarum polycephalum} (slime mold) is a unicellular organism that
+solves shortest-path problems, builds near-optimal transport networks,
+and encodes memory in its morphology --- all without a nervous system or
+centralized controller (review: Alim, 2024, Annual Reviews of Condensed
+Matter Physics). The organism is a tubular network through which
+cytoplasm oscillates via pressure-driven flow.
+
+\textbf{Connection to Proposition 17 and CSE uniqueness:} Physarum IS a
+CSE system with self-directed attention: - \textbf{Fixed interpreter:}
+Hagen-Poiseuille fluid dynamics. Cytoplasm flows through tubes
+proportional to \(\Delta P \cdot r^4\) (pressure gradient × tube radius
+to the fourth power). This physics is the frozen frame --- Physarum
+cannot modify fluid mechanics. - \textbf{Adaptive encoding (\(\pi_s\)):}
+Tube diameter hierarchy. Kramar \& Bhatt (2021, PNAS) showed that memory
+about nutrient location is encoded in tube diameters: a nutrient source
+releases a softening agent transported by cytoplasmic flows, causing
+tubes receiving more softening agent to grow. The tube diameter
+hierarchy IS the encoding --- it determines how sensory signals
+(nutrient gradients) propagate through the network. -
+\textbf{Self-directed attention:} Thick tubes amplify signals from
+nutrient-rich regions (attention toward food). Thin tubes attenuate
+signals from nutrient-poor regions (attention away from waste). The
+diameter hierarchy adapts from the organism's own interaction history
+(nutrient encounters), not from external instruction. This is \(\pi_s\)
+depending on \(T(s)\) --- exactly Proposition 17.
+
+\textbf{Connection to U3 and R6:} Tube growth is persistent (U3) and
+irredundant (R6 --- each tube carries unique flow). The network only
+grows and reinforces; tubes that carry no flow eventually shrink but are
+never deleted. The structural trace of past encounters persists as a
+diameter pattern, readable by future flows.
+
+\textbf{The deepest connection:} In Physarum, the network IS both the
+memory AND the processor. There is no separate ``brain'' that interprets
+the network --- the tube topology IS the computation. CSE is performed
+by the same physical medium that stores the results. Compare = flow
+convergence at junctions (signals from different tubes meet). Select =
+pressure-driven branching (flow follows the path of least resistance).
+Store = tube diameter growth (successful paths get reinforced). The
+interpreter (fluid dynamics) is inseparable from the encoding (tube
+diameters). This is the limiting case of Proposition 14b: when the
+interpreter and encoding share a single physical substrate, CSE
+uniqueness is not just a logical necessity but a physical one --- there
+is literally no room for a fourth operation.
 
 \subsection{3. Formal Framework}\label{formal-framework}
 
@@ -532,11 +745,12 @@ R3?
 over edge counts & Weak only \\
 \(\ell_1\) & \(g_s\) and data in \(u_s\) & Codebook: entries move via
 attract, but attract rule fixed & Weak only \\
-\(\ell_\pi\) & \(\pi_s\) changes structure & Recode: hash routes through
-learned hyperplanes from transition statistics & \textbf{Partial} \\
+\(\ell_\pi\) & \(\pi_s\) changes structure & 674: refinement hyperplanes
+learned from transition statistics (layer 2). Recode: hash routes
+through learned hyperplanes. & \textbf{Partial} \\
 \(\ell_F\) & The rule for modifying \(\pi\) itself adapts & No substrate
-yet. Schmidhuber's SRWM is Level \(\ell_F\) for neural systems. &
-\textbf{Strong} \\
+yet. Schmidhuber's SRWM is Level \(\ell_F\) for neural systems. See
+hierarchy collapse note below. & \textbf{Strong} \\
 \end{longtable}
 }
 
@@ -569,13 +783,29 @@ predictive claim --- that higher levels produce measurably better
 outcomes --- is not supported at 20 seeds (Step 589). The hierarchy
 describes what is modified, not whether modification helps.
 
+\textbf{Hierarchy collapse (2026-03-22 compression):} For non-neural
+substrates using compare-select-store as the interpreter, \(\ell_F\) is
+structurally identical to \(\ell_\pi\) applied at the meta-level. The
+interpreter at every level is compare-select-store; only the input state
+differs. Level 0: compare observations, select actions, store
+transitions. Level 1 (\(\ell_\pi\)): compare transition patterns, select
+encoding parameters, store the encoding. Level 2 (\(\ell_F\) in effect):
+compare encoding performance patterns, select meta-parameters, store the
+meta-protocol. This mirrors Schmidhuber's (1993) collapse of
+meta-learning levels into one self-referential system, but for our
+non-neural decomposition. The practical implication: \(\ell_F\) may not
+require a qualitatively different mechanism --- recursive application of
+compare-select-store at increasing abstraction levels may suffice.
+Pending empirical test: does multi-level \(\ell_\pi\) produce measurable
+R3 on the chain benchmark?
+
 \textbf{Implication for Theorem 2:} Self-observation (Section 4.3)
 requires extracting new irredundant structure from \(s\). At \(\ell_0\),
 the system cannot encode this new structure into \(\pi\) --- it can only
 add edges. At \(\ell_\pi\), it can modify \(\pi\) to distinguish states
-that were previously confused. \(\ell_\pi\) is necessary but may not be
-sufficient for full self-observation --- the system also needs to modify
-its update and selection rules (\(\ell_F\)).
+that were previously confused. The hierarchy collapse suggests
+\(\ell_\pi\) applied recursively MAY be sufficient --- but this is
+unconfirmed.
 
 \subsubsection{3.3 Growth Topology (U3, U17, U20,
 R6)}\label{growth-topology-u3-u17-u20-r6}
@@ -1743,6 +1973,554 @@ what operations can be encoded as state that the interpreter reads and
 executes --- determines whether interpreter entailment is achievable
 (DoF 9).
 
+\paragraph{Proposition 14b: CSE
+Uniqueness}\label{proposition-14b-cse-uniqueness}
+
+\textbf{Claim:} Compare-select-store is the unique coarsest
+decomposition of \(F\) satisfying R1-R6 + U3.
+
+\textbf{Prior work:} Von Neumann's self-reproducing automata (1966)
+require a constructor + copier + controller --- three components, each
+necessary. Minsky (1967) showed that any computation can be decomposed
+into match-execute-store in a production system. SUBLEQ
+(subtract-and-branch-if-≤-0) demonstrates that a single operation
+suffices for Turing completeness, but SUBLEQ's single operation
+implicitly performs all three: subtract (compare), branch (select), and
+write (store). One Instruction Set Computers (OISCs) show that FINER
+decomposition always maps back to CSE. Universal Turing Machines require
+read (compare tape against state), transition (select next state), and
+write (store to tape) --- CSE under different names.
+
+\textbf{Argument:}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Individual necessity.} Each operation is entailed by a
+  distinct rule:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\texttt{compare}\): R1 requires distinguishing inputs without
+    external signal. Any discrimination operation maps \((s, x)\) to a
+    score or match result. This IS comparison --- testing \(x\) against
+    elements of \(s\). Without compare, \(f_s(x)\) is either constant in
+    \(x\) (no input processing) or independent of \(s\) (no adaptation).
+    Both violate R2.
+  \item
+    \(\texttt{store}\): U3 requires \(S_t \subseteq S_{t+1}\) (zero
+    forgetting). This requires a persistent write operation that extends
+    \(s\) without removing existing structure. Without store, no memory.
+  \item
+    \(\texttt{select}\): R2 requires adaptation from computation. The
+    comparison result must determine WHICH part of \(s\) to update (or
+    whether to create a new element). Without selection, every
+    observation updates everything globally. U17 + R6 then require every
+    global update to produce irredundant growth --- but global updates
+    create redundancy whenever two observations have similar comparison
+    profiles. R6 is violated.
+  \end{itemize}
+\item
+  \textbf{Joint sufficiency.} The feasible region for CSE is non-empty
+  (Section 5.1: graph + argmin satisfies R1, R2, U1-U3, U17, U20). CSE
+  is sufficient for all tested navigation tasks.
+\item
+  \textbf{No fourth operation.} Suppose a fourth operation
+  \(\texttt{op}_4\) is necessary. Then removing \(\texttt{op}_4\) must
+  destroy all capability (R6 applied to operations). But
+  \(\texttt{op}_4\) must be independent of \(\{\)compare, select,
+  store\(\}\) --- otherwise it is a specialization of one of them. What
+  independent operation could exist?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{Modify} (R3): Compare stored procedures, select which to
+    change, store the modification. This IS CSE applied at a higher
+    abstraction level (the hierarchy collapse, Section 3.2). Not a
+    fourth primitive --- recursive application of the same three.
+  \item
+    \textbf{Predict}: Compare current state to historical patterns,
+    select a prediction, store it. Again CSE on different data. Not
+    independent.
+  \item
+    \textbf{Transform}: A function \(T: S \to S\) not decomposable into
+    CSE. But any \(T\) that satisfies R1 (no external signal) and R2
+    (adaptation from computation) must consult \(s\) (compare), choose a
+    response (select), and persist the result (store). \(T\) without any
+    of these three violates the corresponding rule.
+  \end{itemize}
+\item
+  \textbf{Uniqueness at the coarsest level.} Any alternative
+  decomposition of \(F(s)(x)\) into operations that satisfies R1-R6 + U3
+  either:
+
+  \begin{enumerate}
+  \def\labelenumii{(\alph{enumii})}
+  \tightlist
+  \item
+    Contains CSE as a sub-decomposition (a refinement: preprocess →
+    compare → score → rank → select → validate → store), or
+  \item
+    Omits one of \{compare, select, store\}, violating the corresponding
+    rule (step 1).
+  \end{enumerate}
+
+  Therefore CSE is the unique decomposition at the coarsest granularity.
+  Finer decompositions exist but are specializations.
+\end{enumerate}
+
+\textbf{Status:} The individual entailments (step 1) are provable from
+R1-R6 + U3. The uniqueness claim (step 4) rests on the exhaustiveness
+argument in step 3 --- an informal argument that every conceivable
+fourth operation reduces to CSE on different data. This is not a formal
+proof (it would require a formal model of ``operation'') but a
+structural argument. We are not aware of a counterexample among
+R1-R2-compliant systems.
+
+\textbf{Relationship to prior work (literature survey, 8 domains):} No
+prior work names compare-select-store as a formal object, derives it
+axiomatically from self-referential constraints, or proves uniqueness.
+Each domain independently arrives at structures that \emph{contain} CSE:
+- Von Neumann (1966): constructor implicitly performs CSE, but no
+decomposition into abstract primitives or minimality proof - Schmidhuber
+(2003): Gödel machine's proof searcher performs CSE, but Schmidhuber
+never asked ``what is the minimal set of operations the proof searcher
+requires?'' - Graves et al.~(2014): NTM explicitly has key-read-write (=
+CSE), but no minimality proof - SUBLEQ/OISC: every one-instruction-set
+computer contains compare+branch, confirming compare and select are
+necessary for universal computation - Rosen (1991): (M,R)-system's
+three-component decomposition parallels CSE; Letelier et al.~(2006)
+proved the closure must be postulated, not derived --- analogous to our
+Proposition 14 (abstract entailment vs constructive production) -
+Kauffman RAF: irreducible networks (iRAFs) at the \emph{reaction} level,
+not at the \emph{operation} level
+
+The axiomatic derivation --- each operation entailed by a different
+rule, removal of any one violating the corresponding rule --- appears to
+be genuinely novel. The structural parallel with Von Neumann (three
+necessary components for self-reproduction → three necessary operations
+for self-modification) suggests CSE uniqueness may be a general property
+of self-referential systems.
+
+\textbf{Empirical confirmation:} Every substrate family tested (12
+families, 720+ experiments) decomposes into CSE: - Codebook/LVQ:
+compare=cosine similarity, select=winner-take-all, store=attract update
+- LSH: compare=hash projection, select=argmin over edge counts,
+store=edge increment - Reservoir: compare=reservoir response,
+select=readout, store=Hebbian update - k-means: compare=L2 distance,
+select=nearest centroid, store=centroid update
+
+No family implements a fundamentally different decomposition. The
+variation is in IMPLEMENTATIONS of CSE, not in alternatives to CSE.
+
+\textbf{Implication for R3:} If CSE is unique, then R3 cannot modify the
+STRUCTURE of the interpreter (compare-select-store) --- only its
+IMPLEMENTATIONS. This transforms R3 from ``modify the program'' to
+``modify the implementations within a fixed program structure.'' The
+search space for R3 is the space of CSE implementations, not the space
+of all possible interpreters. This is a massive reduction: from
+searching over all dynamical systems to searching over all (compare,
+select, store) triples satisfying the constraint table in Section 4.6.
+
+\subsubsection{4.8 R3 as Self-Directed Attention (Proposition
+17)}\label{r3-as-self-directed-attention-proposition-17}
+
+\textbf{The insight (compression, 2026-03-22):} R3 requires every aspect
+of the system to be self-modified. CSE uniqueness (Proposition 14b) says
+the interpreter structure is fixed. What remains to be self-modified?
+The ENCODING --- the lens through which the interpreter sees. R3 is not
+``modify the program.'' R3 is ``modify what the program attends to.''
+
+\textbf{Prior work:} - \textbf{Active perception} (Bajcsy, 1988): ``the
+problem of intelligent control of perceptual activity.'' Perception is
+not passive reception but active selection of what to observe. Aloimonos
+et al.~(1988) proved that problems ill-posed for a passive observer
+become well-posed for an active one. Our formalization extends this from
+physical sensor control to learned feature encoding. - \textbf{Attention
+as precision weighting} (Friston, 2010): In active inference, attention
+IS the optimization of precision --- the inverse variance of sensory
+channels. Precision is encoded by synaptic gain, modulating how sensory
+signals are weighted in a state-dependent manner. This is the closest
+existing framework to our ``self-directed attention.'' The key
+difference: Friston adapts the entire generative hierarchy; our claim
+constrains R3 to encoding adaptation only, with a FIXED interpreter.
+Friston's precision weighting IS self-directed attention, but without
+the architectural constraint. - \textbf{Predictive coding} (Rao \&
+Ballard, 1999): Neural systems encode prediction errors, not raw
+stimuli. The encoding adapts based on what's expected. Connection:
+centering (\(x - \mathbb{E}[x]\), U16) IS predictive coding --- the
+running mean is the prediction, the centered input is the prediction
+error. Difference: predictive coding adapts both generative model and
+error representation; we hold the interpreter fixed. -
+\textbf{Perceptual learning} (Goldstone, 1998; Fahle \& Poggio, 2002):
+Four mechanisms: attentional weighting, imprinting, differentiation, and
+unitization. Attentional weighting maps to our D1 (channel selection).
+Differentiation --- stimuli that were indistinguishable become separated
+--- maps to our D3 (hash resolution refinement). Both describe changes
+to \(\pi_s\) from interaction history. - \textbf{Efficient coding}
+(Barlow, 1961; Laughlin, 1981): Sensory neurons adapt their response
+properties to local stimulus statistics. Our mechanism uses
+\emph{transition} statistics rather than stimulus statistics --- a more
+specific signal driven by the system's own actions, not passive
+observation. - \textbf{Adaptive receptive fields} (Fritz et al., 2003,
+2005): Spectrotemporal receptive fields in auditory cortex change within
+minutes during task performance. Task-relevant features are retained,
+irrelevant ones discarded. This is biological evidence for ``modify the
+lens'' --- history-dependent encoding modification. Already cited in
+Section 2.10 for retinal ganglion cells. - \textbf{Active adaptive
+perception} (Schmidhuber lineage, 2019): Closest computational precedent
+--- explicitly proposes modifying perception modules via self-modifying
+policies. But uses Schmidhuber's full self-modifying policy framework
+(everything adapts). Our claim is the restriction: only the encoding
+adapts. - \textbf{Self-referential weight matrix} (Schmidhuber, 1993;
+Irie et al., 2022): Modifies everything including the modifier. Our
+claim is that a RESTRICTED version --- encoding-only self-modification
+--- suffices for R3. Schmidhuber's framework is the general case; ours
+is the specific, tractable instantiation.
+
+\textbf{Formalization:} Recall
+\(F(s)(x) = \texttt{store}(s, \texttt{select}(s, \texttt{compare}(s, x)))\).
+Decompose \(\texttt{compare}\):
+
+\[\texttt{compare}(s, x) = d(\pi_s(x), \text{elements}(s))\]
+
+where: - \(\pi_s: X \to Z\) is the \textbf{state-dependent encoding}
+(observation → feature space) - \(d: Z \times Z^* \to D\) is the
+distance/similarity function (fixed, part of interpreter) -
+\(\text{elements}(s) \subseteq Z\) are the stored encodings in state
+
+\textbf{Definition (Self-Directed Attention).} The system exhibits
+\emph{self-directed attention} when \(\pi_s\) depends on \(s\) through
+the system's own interaction history:
+
+\[\pi_s = \pi_{T(s)}\]
+
+where \(T: S \to \Sigma\) extracts transition statistics from the
+system's accumulated state (edge counts, successor sets, visit
+patterns). The encoding changes because the system's HISTORY changes,
+not because an external signal directs it.
+
+\textbf{Proposition 17 (R3 ≡ Self-Directed Attention).} For any system
+satisfying CSE uniqueness (Proposition 14b):
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  R3 applied to \(\texttt{compare}\) requires
+  \(\exists s_1 \neq s_2: \texttt{compare}(s_1, \cdot) \neq \texttt{compare}(s_2, \cdot)\)
+  as functions on \(X\).
+\item
+  This holds iff either \(d\) depends on \(s\) (interpreter
+  modification, \(\ell_F\)) or \(\pi\) depends on \(s\) (encoding
+  modification, \(\ell_\pi\)), or both.
+\item
+  The hierarchy collapse (Section 3.2) shows \$\ell\_F = \$ recursive
+  \(\ell_\pi\) for CSE interpreters: modifying \(d\) is equivalent to
+  applying CSE to \(d\)'s parameters, which is \(\ell_\pi\) at the
+  meta-level.
+\item
+  Therefore: \textbf{R3 for the comparison operation reduces to
+  self-directed attention} --- state-dependent \(\pi_s\).
+\end{enumerate}
+
+\textbf{Concrete mechanism (Step 674).} TransitionTriggered674
+implements self-directed attention: - \textbf{Channel selection:}
+Transition consistency (\(I(n) = |\text{succ}(n)|\)), not pixel
+variance, determines where to refine. The system attends to BEHAVIORAL
+features (which cells have ambiguous transitions), not sensory features
+(which pixels vary). - \textbf{Spatial resolution:} Aliased cells
+(\(I(n) \geq 2\)) get fine hash (\(k = 20\)); unaliased cells keep
+coarse hash (\(k = 12\)). The system INCREASES resolution where its
+interaction history reveals ambiguity. - \textbf{Region weighting:}
+Computational budget (hash evaluations, edge storage) concentrates at
+aliased cells. The system allocates attention proportional to
+uncertainty.
+
+All three dimensions of attention are determined by \(s\) (transition
+statistics), satisfying R3 for \(\pi\) without modifying the
+interpreter.
+
+\textbf{The encoding-statistics coupling (Tension T9).} Self-directed
+attention creates a feedback loop: \(\pi_s \to\) observations \(\to\)
+transitions \(\to T(s) \to \pi_{s'}\). The encoding determines what the
+system sees; what it sees determines the encoding. Define the
+encoding-statistics operator \(\Phi = \Pi \circ T\) where
+\(\Pi: \Sigma \to (X \to Z)\) maps statistics to encodings and
+\(T: (X \to Z) \to \Sigma\) maps encodings to statistics via the
+observation stream. Theorem 1 says \(\Phi\) has no global fixed point.
+But locally, the loop can reach quasi-steady-states: on LS20 L1 with
+bounded aliasing (83-313 cells), the aliased set stabilizes after
+\textasciitilde5K steps. On the chain, phase transitions (CIFAR → LS20 →
+FT09) disrupt the encoding-statistics equilibrium, forcing
+re-adaptation. This is the dissipative structure (Section 2.12)
+concretized: the encoding is maintained far from equilibrium by the flow
+of new observations, with bifurcations at domain boundaries.
+
+\textbf{Testable prediction for T9:} Measure the aliased cell set
+\(A(t)\) over time on the chain. Within each phase, \(|A(t)|\) should
+stabilize (quasi-steady-state). At phase transitions, \(|A(t)|\) should
+change discontinuously (bifurcation). If the encoding-statistics loop is
+productive, post-transition performance should IMPROVE over time as the
+encoding re-adapts. If the loop is chaotic, performance should fluctuate
+without convergence.
+
+\textbf{R3 applied to select and store.} Proposition 17 addresses R3 for
+compare. The remaining operations:
+
+\textbf{R3 for select (dissolution of T6: U11 + U24 + U1).} The argmin
+rule \(g(s) = \text{argmin}_a E(c, a)\) is fixed --- part of the
+interpreter. But WHAT gets counted is state-dependent. Currently,
+\(E(c, a, n)\) counts visit transitions only. Self-directed attention
+for action selection: the system adds new TYPES of edge data (death
+costs, transition rewards, uncertainty estimates) to \(E\), and argmin
+integrates over all of them. When only visit counts are available,
+argmin = exploration. When death costs are available (Step 581d), argmin
+= avoid-death-and-explore. When task-completion signals are accumulated,
+argmin over ``total expected cost'' becomes exploitation. The argmin
+rule is fixed; the inputs to argmin are self-modified. This is
+\(\ell_\pi\) for action selection --- the encoding of action VALUES
+changes, not the selection rule. No mode switch (U1 satisfied).
+Navigation and classification use the same argmin (U11 dissolved).
+Exploration and exploitation emerge from different edge-data
+compositions (U24 dissolved as a design constraint --- they are still
+opposite at any fixed composition, but the composition itself adapts).
+
+\begin{itemize}
+\tightlist
+\item
+  R3 for \(\texttt{store}\): The update rule must depend on \(s\).
+  Currently fixed (increment edge count by 1). Full R3: the increment
+  amount, the storage format, the growth criterion all depend on \(s\).
+  The 674 refinement mechanism partially satisfies this --- whether a
+  cell creates sub-cells depends on \(I(n)\), which depends on \(s\).
+\end{itemize}
+
+\textbf{Testable prediction:} Any substrate achieving R3 will exhibit
+self-directed attention --- state-dependent encoding derived from
+interaction history. If a substrate achieves R3 through a fundamentally
+different mechanism (genuine \(\ell_F\) not reducible to \(\ell_\pi\)),
+Proposition 17 is falsified. Experimental test: run the chain benchmark
+(Split-CIFAR-100 → LS20 → FT09 → VC33 → Split-CIFAR-100) with 674 +
+adaptive encoding (channel weights from transition statistics) and
+measure dynamic R3 via ConstitutionalJudge.measure\_r3\_dynamics().
+
+\textbf{Relationship to prior work (literature survey, 9 sources):}
+Three aspects of Proposition 17 are novel: 1. \textbf{The architectural
+split:} No prior work claims that a \emph{fixed} interpreter combined
+with \emph{only} encoding adaptation is sufficient for
+self-modification. Friston (2010) adapts the whole hierarchy.
+Schmidhuber (1993) adapts everything. Predictive coding adapts both
+generative model and error representation. Our claim holds the
+interpreter constant. 2. \textbf{The equivalence:} R3 (self-modification
+of all operations) ≡ self-directed attention (history determines
+features). Prior work treats self-modification (Schmidhuber) and
+attention (Friston) as separate topics. This connection is novel. 3.
+\textbf{The signal:} Transition statistics \(T(s)\) drive encoding
+adaptation. This is more specific than stimulus statistics (Barlow 1961,
+efficient coding) and more general than reward-driven feature selection
+(RL). The system's own actions create the signal.
+
+What has clear precedent: encoding adapts from experience (Barlow 1961,
+Goldstone 1998), attention as precision weighting (Friston 2010), active
+perception (Bajcsy 1988). Our contribution is the synthesis: these
+well-studied phenomena, when combined with the CSE uniqueness
+constraint, are EQUIVALENT to R3.
+
+\textbf{Implication:} R3 is not an exotic requirement. It is the
+well-studied phenomenon of adaptive perception, formalized within the
+CSE interpreter framework. The 720 experiments that failed R3 did not
+fail because R3 is impossible --- they failed because they kept the
+encoding fixed (\(\ell_0\) or weak \(\ell_\pi\)) while trying to modify
+the action selection (\(g\)), which is the WRONG target (Proposition
+15). The cascading next step: extend 674's transition-triggered
+refinement to ALL dimensions of \(\pi\) --- channel selection, spatial
+resolution, temporal integration --- and test on the chain where
+encoding failures are exposed (CIFAR needs color, VC33 needs room
+detection).
+
+\paragraph{Proposition 18: Eigenform
+Reactivation}\label{proposition-18-eigenform-reactivation}
+
+\textbf{Prior work:} Steps 620-629 tested the eigenform
+\(F(s)(\text{enc}(s))\) applied to ACTION recommendations (AVOID/PREFER
+ops computed from graph statistics). Result: INERT. 94-99\% NEUTRAL ops;
+freezing at 5000 steps has zero effect on L1 (Step 626); L2 = 0/5 (Step
+629). Proposition 13 showed this is structural: self-observation of the
+existing graph cannot produce information about unvisited states.
+
+\textbf{The correction:} Propositions 15 and 17 identify the error. The
+eigenform targeted ACTION selection (\(g\)), but L1 is
+perception-limited, not action-limited (Proposition 15). The encoding
+(\(\pi\)) is the bottleneck (Proposition 17). Applying the eigenform to
+encoding parameters rather than action recommendations targets the
+actual bottleneck.
+
+\textbf{Proposition 18 (Eigenform Reactivation via Encoding Attention).}
+Let \(\text{enc}_\pi: S \to \mathbb{R}^p\) extract encoding-relevant
+statistics from \(s\) --- per-channel transition variance, per-region
+inconsistency, temporal autocorrelation. Define the encoding eigenform
+as:
+
+\[\pi_{s_{t+1}} = \Pi(F(s_t)(\text{enc}_\pi(s_t)))\]
+
+where \(\Pi\) maps updated state to encoding parameters (channel weights
+\(w \in \mathbb{R}^C\), resolution parameters
+\(K \in \mathbb{N}^{|N|}\), temporal window \(\tau \in \mathbb{N}\)).
+Then:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{The eigenform is non-inert when it targets the bottleneck.} On
+  the chain, the encoding bottleneck CHANGES at each phase transition:
+  CIFAR needs color (channels), LS20 needs spatial layout (resolution),
+  VC33 needs room structure (coarse regions). If \(\text{enc}_\pi\)
+  detects these differences via transition statistics, the eigenform
+  produces encoding changes at phase transitions --- non-zero R3
+  dynamics.
+\item
+  \textbf{The mechanism is identical to 674.} Transition-triggered
+  refinement IS the encoding eigenform restricted to spatial resolution:
+  \(K(n) = 20\) if \(I(n) \geq 2\), else \(K(n) = 12\). Proposition 18
+  extends this to ALL encoding dimensions (channels, resolution,
+  temporal window) using the SAME transition-statistics signal.
+\item
+  \textbf{Eigenform inertness (Proposition 13) does not apply} because
+  the encoding eigenform targets \(\pi\) (perception), not \(g\)
+  (action). Proposition 13 proved: self-observation cannot guide
+  navigation to unvisited states. But encoding modification doesn't need
+  to guide navigation --- it needs to RESOLVE AMBIGUITY at
+  already-visited states. This is backward-looking (improve perception
+  of visited states), not forward-looking (predict unvisited states).
+  The eigenform is active because the bottleneck it targets ---
+  perception of visited states --- is addressable from historical data.
+\end{enumerate}
+
+\textbf{Testable prediction:} Compare two eigenform variants on the
+chain: - (A) Action eigenform: \(F(s)(\text{enc}_g(s))\) → AVOID/PREFER
+ops on graph nodes (Steps 620-629 mechanism) - (B) Encoding eigenform:
+\(F(s)(\text{enc}_\pi(s))\) → channel weights, resolution parameters
+from transition statistics
+
+Measure R3 dynamics (ConstitutionalJudge.measure\_r3\_dynamics()) at
+each phase transition. Prediction: (A) shows R3 ≈ 0 throughout
+(Proposition 13 confirmed). (B) shows R3 \textgreater{} 0 at phase
+transitions where the encoding must change. If confirmed, the eigenform
+is reactivated --- the same mechanism works when it targets the right
+bottleneck.
+
+\textbf{Connection to Proposition 13 (scope limitation):} Proposition 13
+proved eigenform inertness for ACTION modifications on L1 navigation.
+Proposition 18 does NOT claim the eigenform works for L2 navigation ---
+the L2 problem remains forward-looking (predict unvisited states).
+Proposition 18 claims it works for encoding adaptation on the CHAIN ---
+a different problem (adapt perception across domains).
+
+\paragraph{Encoding Dimension
+Taxonomy}\label{encoding-dimension-taxonomy}
+
+Self-directed attention (Proposition 17) operates on the encoding
+\(\pi_s: X \to Z\). The encoding decomposes into five independently
+modifiable dimensions:
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1467}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2267}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2933}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1067}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2267}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Dimension
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Current (frozen)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Self-directed version
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Signal
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Chain prediction
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{D1: Channel selection} & channel\_0 only (greyscale) & Weight
+\(w_c \in [0,1]\) per channel from per-channel transition discrimination
+& \(w_c \propto \text{Var}(\text{transitions under channel } c)\) &
+CIFAR improves (color restored); games neutral (greyscale sufficient) \\
+\textbf{D2: Spatial resolution} & avgpool16 everywhere & Pool size per
+region from local transition inconsistency & Regions with high \(I(n)\)
+→ finer pool & Click games improve; coarse games neutral \\
+\textbf{D3: Hash resolution} & Binary k=12/k=20 (674) & Continuous
+\(K(n) \in [8, 24]\) from \(I(n)\) &
+\(K(n) = K_{\min} + (K_{\max} - K_{\min}) \cdot \min(1, I(n)/I_{\max})\)
+& Smoother attention; fewer edge-case failures \\
+\textbf{D4: Temporal integration} & Single frame & Frame stack depth
+\(\tau(n)\) from temporal autocorrelation & \$\tau(n) \propto \$
+autocorrelation of transition patterns at cell \(n\) & Atari benefits
+(partial observability); ARC neutral \\
+\textbf{D5: Centering baseline} & Running mean, fixed EMA rate
+\(\alpha=0.01\) & EMA rate \(\alpha(t)\) from transition stability &
+\$\alpha \propto \$ rate of new-cell discovery & Fast adaptation for new
+domains; slow for stable ones \\
+\end{longtable}
+}
+
+\textbf{Key insight:} All five dimensions use the SAME signal source ---
+transition statistics \(T(s)\). The mechanism is always: compare
+transition patterns, select encoding parameters, store the updated
+encoding. CSE at the encoding level. This is Proposition 17 concretized:
+self-directed attention IS CSE applied to the encoding dimensions, using
+the system's own interaction history as input.
+
+\textbf{Degrees of freedom (DoF 10-12):} - \textbf{DoF 10:} Which
+dimensions are state-dependent. All five can be independently toggled.
+The MINIMUM viable self-directed attention substrate uses D3 only (674's
+transition-triggered refinement). The MAXIMUM uses all five. -
+\textbf{DoF 11 (revised):} State-dependent action selection. Argmin over
+composite edge data (visit counts + death costs + value estimates). The
+edge-data COMPOSITION is the attention parameter for action selection. -
+\textbf{DoF 12:} Encoding-statistics coupling strength. How quickly do
+encoding parameters respond to transition statistics? Too fast →
+instability. Too slow → mismatched encoding. Optimal coupling is a
+degree of freedom that may itself be state-dependent (meta-attention).
+
+\paragraph{Caveats and Scope
+Limitations}\label{caveats-and-scope-limitations}
+
+\textbf{Caveat 1: CSE uniqueness is informal.} The argument in
+Proposition 14b relies on exhaustive enumeration of alternatives (step
+3). A formal proof would require a formal model of ``operation'' that we
+do not provide. The claim is: no counterexample has been found among 12
+tested families. This is consistent with uniqueness but does not prove
+it.
+
+\textbf{Caveat 2: Self-directed attention does NOT solve L2.} L2
+requires predicting unvisited states (Proposition 13). Self-directed
+attention addresses PERCEPTION of visited states --- resolving
+ambiguity, adapting to new domains. These are different problems. The
+chain benchmark tests cross-domain adaptation (self-directed attention's
+domain). L2 tests within-game forward prediction (not addressed by
+D1-D5). Conflating the two would be inflation.
+
+\textbf{Caveat 3: The search reduction is conditional.} The claim that
+R3 reduces to D1-D5 adaptation depends on: (a) CSE uniqueness holding,
+(b) hierarchy collapse (\(\ell_F\) = recursive \(\ell_\pi\)) holding,
+and (c) D1-D5 being sufficient for the chain. All three are testable. If
+any fails, the search space expands beyond D1-D5. The 30 experiment
+specs (Groups A-E) are designed to test these conditions.
+
+\textbf{Caveat 4: T6 dissolution is theoretical.} The claim that U11 +
+U24 + U1 are dissolved by composite edge data has no empirical support
+yet. No substrate has implemented state-dependent edge-data composition.
+The dissolution is a prediction from Proposition 17 applied to action
+selection. Experiments E5 and D2 test this directly.
+
 \subsection{5. Experimental Evidence}\label{experimental-evidence}
 
 \subsubsection{5.1 Navigation (720+
@@ -2374,14 +3152,27 @@ feature triggers the switch? & Sec 3.4 \\
 compliance (Sec 3.2) & How deep: \(\ell_\pi\) (Recode) vs \(\ell_F\)
 (full self-reference). Which component of \(F\) adapts, and by what
 trigger? & Sec 3.2 \\
+13 & Encoding channel selection & Must preserve transition signal
+(R1-compliant) & Which channels: greyscale, RGB, subset? Weights from
+per-channel transition discrimination & Sec 4.8 (D1) \\
+14 & Encoding spatial resolution & Must be Lipschitz (U20); finer is not
+always better (Step 597: K=16/10K, random beats argmin) & Pool size per
+region from local transition inconsistency & Sec 4.8 (D2) \\
+15 & Encoding temporal depth & Single frame or multi-frame & Frame stack
+depth from temporal autocorrelation at each cell & Sec 4.8 (D4) \\
+16 & Encoding-statistics coupling rate & Must be non-zero (R3) and
+finite (stability) & How quickly encoding parameters respond to
+transition statistics & Sec 4.8 (T9, DoF 12) \\
 \end{longtable}
 }
 
-\textbf{The central experimental question (DoF 8-9, 12):} What specific
-self-observation mechanism produces irredundant growth after exploration
-saturates, and at what self-modification level? Recode shows
-\(\ell_\pi\) is achievable; whether \(\ell_F\) is necessary or
-achievable is the open question.
+\textbf{The central experimental question (REVISED):} Propositions 14b,
+17, and 18 reduce the search: R3 = self-directed attention within the
+CSE interpreter. The search space is the space of encoding dimensions
+(DoF 13-16) that can be made state-dependent via transition statistics.
+Each dimension is independently testable. The cascading experiment: test
+all 5 encoding dimensions (D1-D5, Section 4.8) on the chain benchmark,
+measuring dynamic R3 at each phase transition.
 
 \subsection{7. Discussion}\label{discussion}
 
@@ -2411,8 +3202,9 @@ Status
 T1: Stationarity vs self-modification & U7 + R3 & Open --- U7 needs
 reformulation as instantaneous, not asymptotic \\
 T2: Weak vs strong R3 & R3 interpretation & \textbf{Resolved} ---
-self-modification hierarchy (Sec 3.2). \(\ell_\pi\) is partial,
-\(\ell_F\) is full. \\
+self-modification hierarchy (Sec 3.2) + Proposition 17: R3 ≡
+self-directed attention. Not ``modify the program'' but ``modify the
+lens.'' \(\ell_\pi\) is the correct target. \\
 T3: Continuity vs self-modification & U20 + R3 & Constrained --- metric
 can refine but not rearrange topology \\
 T4: Never delete vs no redundancy & U3 + R6 & \textbf{Resolved} ---
@@ -2421,14 +3213,21 @@ territory. \\
 T5: Infinite growth vs finite environment & U17 + finite \(X\) &
 \textbf{Resolved} --- Theorem 2. Growth shifts to state-derived
 components. \\
-T6: Navigation vs classification & U11 + U24 + U1 & Open ---
-state-dependent behavior (DoF 11). No implementation yet. \\
+T6: Navigation vs classification & U11 + U24 + U1 & \textbf{Dissolved}
+(Proposition 17, Sec 4.8) --- R3 for select: argmin rule is fixed, but
+WHAT gets counted is state-dependent. Visit counts → exploration. Death
+costs → avoidance. Value estimates → exploitation. One rule, different
+inputs. No mode switch needed. \\
 T7: Self-observation vs noisy TV & Theorem 2 + Sec 4.5 &
-\textbf{Sharpened} --- Proposition 13 (eigenform inertness) +
-Proposition 15 (perception-action decoupling): self-observation must
-target \(\pi\) (observation mapping), not \(g\) (action selection).
-Recode achieves this via \(\ell_\pi\). Forward prediction remains
-required for L2. \\
+\textbf{Resolved} --- Proposition 17: self-directed attention via
+transition statistics is robust to noisy TV (count-based, same reason as
+argmin). Self-observation targets \(\pi\) (Proposition 15). Forward
+prediction remains required for L2. \\
+T9: Encoding-statistics coupling & Proposition 17 + Theorem 1 & Open ---
+\(\pi_s\) depends on \(T(s)\); \(T(s)\) is computed under \(\pi_s\).
+Feedback loop. No global fixed point (Theorem 1). Local
+quasi-steady-states with bifurcations at domain transitions (Sec 4.8).
+Productive vs chaotic oscillation untested. \\
 T8: Centering vs domain separation & U16 + chain benchmark &
 \textbf{Resolved} --- per-domain centering (Step 546). R1-compliant via
 on\_reset. \\
@@ -2436,8 +3235,8 @@ on\_reset. \\
 }
 
 \textbf{No undiscovered contradictions.} All tensions are either
-resolved (T2, T4, T5, T8), constrained (T3), or identified as open
-questions (T1, T6, T7). The constraint system is internally consistent.
+resolved (T2, T4, T5, T6, T7, T8), constrained (T3), or identified as
+open questions (T1, T9). The constraint system is internally consistent.
 
 \subsubsection{7.2 What is proven}\label{what-is-proven}
 
@@ -2510,6 +3309,23 @@ questions (T1, T6, T7). The constraint system is internally consistent.
   620-629). Self-observation is necessary (Theorem 2) but not sufficient
   for L2+. The gap is informational: the graph stores the past; L2
   requires predicting the future. Introspection \(\neq\) foresight.
+\item
+  \textbf{CSE uniqueness (Proposition 14b).} Compare-select-store is the
+  unique coarsest decomposition of \(F\) satisfying R1-R6 + U3.
+  Individual entailments provable (R1→compare, U3→store, R2+R6→select).
+  Uniqueness argument informal but no counterexample found among 12
+  tested families.
+\item
+  \textbf{R3 ≡ self-directed attention (Proposition 17).} For CSE
+  interpreters, R3 for the comparison operation reduces to
+  state-dependent encoding \(\pi_s\). The interpreter is fixed; the lens
+  adapts. Connected to active perception (Bajcsy 1988), predictive
+  coding (Rao \& Ballard 1999), perceptual learning (Goldstone 1998).
+\item
+  \textbf{Eigenform reactivation (Proposition 18).} The eigenform
+  \(F(s)(\text{enc}(s))\) is inert when targeting actions (Proposition
+  13) but predicted to be active when targeting encoding parameters,
+  because encoding IS the bottleneck on the chain (Proposition 15).
 \end{enumerate}
 
 \subsubsection{7.3 What is conjectured}\label{what-is-conjectured}
@@ -2529,6 +3345,14 @@ questions (T1, T6, T7). The constraint system is internally consistent.
   bridge the ℓ₁→ℓ\_F gap without optimization. Step 607 tested: KILLED
   (Cov(w,z)=0). Framework sound but requires behaviorally diverse
   encodings.
+\item
+  \textbf{Search reduction (Propositions 14b + 17 + 18 combined).} The
+  path to R3 is not building a new interpreter --- it's building
+  self-directed attention into the existing CSE interpreter. The search
+  space reduces from ``all self-modifying dynamical systems'' to ``5
+  encoding dimensions (D1-D5) that can be made state-dependent via
+  transition statistics.'' Each dimension is independently testable in 5
+  minutes. Conditional on CSE uniqueness and hierarchy collapse holding.
 \end{enumerate}
 
 \subsubsection{7.4 What is open}\label{what-is-open}
@@ -2547,31 +3371,35 @@ questions (T1, T6, T7). The constraint system is internally consistent.
   a concrete candidate; Zenil's degeneration constraint (2026) predicts
   interleaving with environment observation is required.
 \item
-  How to resolve U11 + U24 + U1 (incompatible tasks, no mode switch) in
-  a single system (T6). Recent work (Hao et al.~2025, ``Beyond the
-  Exploration-Exploitation Trade-off,'' arXiv 2509.23808) argues the
-  tradeoff is an artifact of measurement level --- in hidden-state
-  space, exploration and exploitation decouple. The eigenform mechanism
-  (Section 4.4) may dissolve U24 similarly: at the meta-cell level,
-  argmin naturally produces exploitation (follow meta-cell
-  recommendations) or exploration (least-tried action) depending on
-  state richness, without mode switching.
+  \st{How to resolve U11 + U24 + U1} \textbf{DISSOLVED (Proposition 17,
+  Section 4.8).} R3 for select: argmin is the fixed interpreter for
+  action selection. What gets counted --- visit frequency, death costs,
+  value estimates --- is state-dependent. When the system accumulates
+  task-completion signals alongside visit counts, argmin over the
+  composite score produces exploitation without changing the rule. No
+  mode switch (U1). One mechanism for both tasks (U11). Exploration and
+  exploitation emerge from different edge-data compositions (U24
+  dissolved as a constraint --- they are still opposite at fixed
+  composition, but the composition adapts). Pending empirical
+  confirmation: no substrate has implemented state-dependent edge-data
+  composition yet.
 \item
   R1-compliant classification --- no substrate has achieved above-chance
   accuracy without external labels.
 \item
-  \textbf{Interpreter entailment (Proposition 14).} The abstract
-  interpreter is entailed by R1-R6. The concrete interpreter is not. The
-  computability question is resolved: Mossio \& Longo (2009) showed
-  closure to efficient causation IS computable in reflexive domains. The
-  remaining question is expressiveness: can a specific interpreter +
-  state space combination encode enough operations to discover its own
-  implementations? Rosen's β-map must be postulated (Letelier et
-  al.~2006); our interpreter is analogously postulated. Whether the
-  constructive gap is bridgeable --- transitioning from externally
-  imposed constraints (R1-R6) to internally maintained constraint
-  closure (Montévil \& Mossio 2015) --- connects to the ℓ\_1 → ℓ\_F
-  bridge and remains the central open problem.
+  \textbf{Interpreter entailment --- STRENGTHENED (Proposition 14b).}
+  The abstract interpreter is not just entailed but UNIQUE at the
+  coarsest level: CSE is the only decomposition satisfying R1-R6 + U3
+  (Proposition 14b). The computability question is resolved (Mossio \&
+  Longo 2009). The expressiveness question is REFRAMED by Proposition
+  17: the system does not need to modify the interpreter (which is fixed
+  and unique). It needs to modify the ENCODING --- the input to the
+  interpreter. The expressiveness question becomes: can \(S\) encode a
+  sufficiently rich set of input transformations \(\pi_s\)? This is a
+  weaker requirement than encoding arbitrary self-modifications.
+  \textbf{Remaining open:} can the transition-statistics signal \(T(s)\)
+  drive encoding adaptation rich enough for the full chain? The 5
+  encoding dimensions (D1-D5) are concrete, testable answers.
 \item
   \textbf{Targeted π-refinement without foreknowledge --- RESOLVED
   (Proposition 16).} Transition-inconsistency refinement (Step 674,
@@ -2586,19 +3414,23 @@ questions (T1, T6, T7). The constraint system is internally consistent.
   approach generalizes beyond navigation to classification or other
   tasks.
 \item
-  Whether the state space of compare-select-store is expressive enough
-  to encode arbitrary self-modifications as data (the expressiveness
-  question from Proposition 12). SUBLEQ (subtract-and-branch-if-≤-0) is
-  Turing complete with one instruction and unbounded memory.
-  Compare-select-store maps structurally: COMPARE → subtract, SELECT →
-  branch, STORE → write. But our specific COMPARE (LSH hash) is a fixed
-  random projection --- not an arbitrary function. The system's
-  expressiveness is bounded by the comparison function's expressiveness.
-  Whether the eigenform mechanism (hashing action counts →
-  meta-comparison) iterates toward Turing-complete comparison is the
-  core open question. If yes, R3 is satisfiable with the current
-  interpreter. If no, the comparison function must be extended or made
-  adaptive (\(\ell_\pi\) → \(\ell_F\) in effect).
+  \textbf{Expressiveness --- REFRAMED by Proposition 17.} The original
+  question: ``can CSE's state space encode arbitrary self-modifications
+  as data?'' Proposition 17 reframes: the system doesn't need arbitrary
+  self-modifications. It needs state-dependent encoding \(\pi_s\). The
+  effective comparison
+  \(\texttt{compare}(s, x) = d(\pi_s(x), \text{elements}(s))\) is
+  state-dependent because \(\pi_s\) changes, not \(d\). The
+  expressiveness question becomes: is
+  \(\{\pi_s \circ \text{LSH} : s \in S\}\) a rich enough class of hash
+  functions? For 674 (binary k=12/k=20), no --- it's too coarse. For
+  full D1-D5 (channel weights, spatial resolution, hash K, temporal
+  depth, centering rate), the class is much richer. \textbf{The
+  practical question is not universality but sufficiency:} can D1-D5
+  adaptation handle the chain benchmark? This is testable (Group B
+  experiments). The SUBLEQ connection remains valid in principle but may
+  be unnecessary in practice if self-directed attention across 5
+  dimensions provides enough flexibility.
 \end{enumerate}
 
 \subsubsection{7.5 The Level 2 Problem}\label{the-level-2-problem}
