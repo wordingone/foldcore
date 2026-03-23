@@ -662,6 +662,25 @@ Measure R3 dynamics (ConstitutionalJudge.measure_r3_dynamics()) at each phase tr
 
 **Connection to Proposition 13 (scope limitation):** Proposition 13 proved eigenform inertness for ACTION modifications on L1 navigation. Proposition 18 does NOT claim the eigenform works for L2 navigation — the L2 problem remains forward-looking (predict unvisited states). Proposition 18 claims it works for encoding adaptation on the CHAIN — a different problem (adapt perception across domains).
 
+#### Encoding Dimension Taxonomy
+
+Self-directed attention (Proposition 17) operates on the encoding $\pi_s: X \to Z$. The encoding decomposes into five independently modifiable dimensions:
+
+| Dimension | Current (frozen) | Self-directed version | Signal | Chain prediction |
+|-----------|-----------------|----------------------|--------|-----------------|
+| **D1: Channel selection** | channel_0 only (greyscale) | Weight $w_c \in [0,1]$ per channel from per-channel transition discrimination | $w_c \propto \text{Var}(\text{transitions under channel } c)$ | CIFAR improves (color restored); games neutral (greyscale sufficient) |
+| **D2: Spatial resolution** | avgpool16 everywhere | Pool size per region from local transition inconsistency | Regions with high $I(n)$ → finer pool | Click games improve; coarse games neutral |
+| **D3: Hash resolution** | Binary k=12/k=20 (674) | Continuous $K(n) \in [8, 24]$ from $I(n)$ | $K(n) = K_{\min} + (K_{\max} - K_{\min}) \cdot \min(1, I(n)/I_{\max})$ | Smoother attention; fewer edge-case failures |
+| **D4: Temporal integration** | Single frame | Frame stack depth $\tau(n)$ from temporal autocorrelation | $\tau(n) \propto $ autocorrelation of transition patterns at cell $n$ | Atari benefits (partial observability); ARC neutral |
+| **D5: Centering baseline** | Running mean, fixed EMA rate $\alpha=0.01$ | EMA rate $\alpha(t)$ from transition stability | $\alpha \propto $ rate of new-cell discovery | Fast adaptation for new domains; slow for stable ones |
+
+**Key insight:** All five dimensions use the SAME signal source — transition statistics $T(s)$. The mechanism is always: compare transition patterns, select encoding parameters, store the updated encoding. CSE at the encoding level. This is Proposition 17 concretized: self-directed attention IS CSE applied to the encoding dimensions, using the system's own interaction history as input.
+
+**Degrees of freedom (DoF 10-12):**
+- **DoF 10:** Which dimensions are state-dependent. All five can be independently toggled. The MINIMUM viable self-directed attention substrate uses D3 only (674's transition-triggered refinement). The MAXIMUM uses all five.
+- **DoF 11 (revised):** State-dependent action selection. Argmin over composite edge data (visit counts + death costs + value estimates). The edge-data COMPOSITION is the attention parameter for action selection.
+- **DoF 12:** Encoding-statistics coupling strength. How quickly do encoding parameters respond to transition statistics? Too fast → instability. Too slow → mismatched encoding. Optimal coupling is a degree of freedom that may itself be state-dependent (meta-attention).
+
 ## 5. Experimental Evidence
 
 ### 5.1 Navigation (720+ experiments)
