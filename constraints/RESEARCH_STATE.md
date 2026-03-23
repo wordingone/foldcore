@@ -132,6 +132,11 @@ Step 800 LS20 - Per-action change tracking (argmax delta). L1=0. ACTION COLLAPSE
 Step 809 FT09 - Action cycling (68 actions). L1=0. Hash collisions prevent systematic coverage. FT09 may require multi-click sequences.
 **FINDING (806v2 control + step800): NO post-ban mechanism produces consistent L1 improvement over random on LS20 or FT09.** D(s) prediction transfer is confirmed (robust across 4 substrate seeds). Navigation transfer does not exist in any tested post-ban substrate. The gap is structural.
 Step 800 FT09 - Per-action change tracking. ALL 68 actions converge to delta=0.0083 (uniform). Productive clicks are position-dependent — large change only when at the right game position. Global per-action averaging masks the signal. **Global per-action tracking is dead for FT09.**
+**Step 800b LS20 - CONFIRMED: first post-ban navigation mechanism (6.5-10× random).**
+  80% argmax(delta_per_action) + 20% random. Control: seed=0 327/seed, seed=1 261/seed, seed=2 237/seed, seed=3 377/seed. ALL above random (36.4). Robust.
+  L1 R3_cf: INCONSISTENT (2/4 seeds pass, 2/4 warm hurts). Warm transfer direction depends on substrate seed.
+  Mechanism: learn which action produces most observation change, use it 80%. On LS20, movement = change → navigates.
+  NOT an R3 finding (no self-modification transfer). Standalone navigation heuristic. LS20-specific (FT09 pending).
 **DEEPEST FINDING (session 888 sprint): Navigation is a per-state problem. Productive actions depend on which state you're in. Without per-state tracking (graph ban), substrates can only learn GLOBAL dynamics — which don't tell you what to do from the current state. Global dynamics ≠ local navigation. This is the structural explanation for why D(s) transfers (global dynamics generalize) but doesn't improve navigation (which requires local, per-state action selection).**
 Step 806v2 FT09 — INCONCLUSIVE. cold=0, warm=0. Pred: cold 90.2% warm 99.9% (uninformative — static background).
 Step 780_fam LS20 — L1=0. Pred PASS (cold 26.7% → warm 32.3%). Go-home policy doesn't navigate.
