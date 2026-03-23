@@ -1,5 +1,5 @@
 # Proposition 26: Novelty-Reactive Policy
-Status: OPEN (theoretical, pending experimental confirmation)
+Status: REJECTED (gate 5 failure — per-observation conditioning)
 Steps: 938+
 
 ## Statement
