@@ -57,7 +57,7 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 737 complete (B8, key test). Steps 720-737 = R3 dynamics, baselines, self-directed attention.
+CURRENT STEP: 749 complete (batch 3 done, 3 running: B9/738, D5/744, E4/748). Steps 720-749 = R3 dynamics, baselines, self-directed attention, L2 exploration, cross-domain controls.
 GAME VERSION FIX (2026-03-23): FT09/VC33 action_space=1 was a chain.py bug (ACTION_RESET sent on first steps). Fixed. All 3 games operational.
 **PROPOSITION 18 CONFIRMED (Step 737, B8):** R3_dynamic=1.0 at ALL chain phases. Both M elements (inconsistency_map, channel_weights) genuinely self-directed. LS20 L1=1105 (2.3x faster than 674 baseline 2548).
 **R3 METRIC LIMITATION (Step 739, B10):** Random modification ALSO scores R3=1.0 (L1=4237, 4x slower). R3 measures "does it change?" not "does it change usefully?" Self-direction matters (4x speedup) but R3 metric is blind to it. R4 (test modifications against prior state) is what distinguishes useful from random.
@@ -71,6 +71,22 @@ KEY FINDINGS (Steps 720-729):
   POSITIVE BWT +0.096: anti-forgetting. Growth-only state helps later tasks (A2).
   Atari Montezuma: patches=181, rooms=1. Stayed in room 0 (A3).
   R3 measurement: metric biased toward fewer M elements. Need window>REFINE_EVERY (C4).
+BATCH 3 RESULTS (Steps 740-749):
+  D1 (740): Multi-episode retention. L1=4/5, L2=0/5 at 60s. Graph persists across game-overs but L2 unreachable. L2 structural, not retention-limited.
+  D2 (741): Death-edge penalty (DEATH_COST=5). L1=10/20 KILL. Deaths=390.5. Penalty blocks useful paths — argmin geometry fragile to additional weight terms.
+  D3 (742): Blocked action detection (BLOCK_THRESH=0.082). L1=0/20 KILL. Pooled enc diff≈0.002 per move; threshold=0.082 blocks everything. Mechanism non-viable with avgpool16 encoding.
+  D4 (743): Extended budget (60s). L1=5/5, L2=0/5. Aliased cells grow 189→346 over 80K steps, L2 never reached. L2 not budget-limited — requires structural mechanism.
+  E1 (745): Recode k=16 on new gym. L1=5/10 PASS. Prior 5/5 on old gym. Degradation from 7-action space expansion. ref_count≈90/seed, refinement fires regularly.
+  E2 (746): Non-argmin selectors on 674. argmin=5/10, epsilon(0.1)=5/10, random=4/10, softmax(T=1)=3/10. **ARGMIN LOAD-BEARING** — not interchangeable. Compare Step 653 (plain k=12): argmin=random=3/20. With 674 perception: argmin pulls ahead. Perception quality UNLOCKS the argmin advantage. Prop 15 nuanced, not falsified.
+  E3 (747): VC33 action diagnostic. All 7 actions equally distributed (72-120 edges each). Edge entropy=0.06-0.12. avgpool16 creates flat hash space — canal lock needs spatial discrimination that random hyperplanes can't provide.
+  E5 (749): Composite edge (visits + λ=1.0 deaths). L1=11/20 KILL. Deaths=197.1. Even λ=1.0 hurts. Death penalty at ANY weight disrupts exploration geometry. Confirms U28 + D2 pattern.
+  Still running: B9 (738, D1+D3+D5 combined chain), D5 (744, frontier meta-graph), E4 (748, raw 64x64 vs avgpool16).
+BATCH 3 SYNTHESIS:
+  1. Argmin is I (irreducible), not just invariant. Cannot be replaced by stochastic policy. But argmin advantage requires good perception (Step 653 vs E2).
+  2. Death penalties universally damage navigation (D2, E5). Visits-only is the correct argmin signal. DEATH_COST frozen element should be removed, not made adaptive.
+  3. L2 is structural (D1, D4) — 6th independent confirmation. Neither retention nor budget helps.
+  4. VC33 is encoding-limited (E3). avgpool16 creates flat hash space. Canal lock needs discriminative encoding.
+  5. Recode transfers to new gym at 5/10 (E1). Action space expansion (4→7) costs performance.
 REPO AUDIT (2026-03-22): 236 step scripts never existed as files (pre-convention gap, Steps 1-62 + 121-285 range). Historical, not recoverable. 483 unique step numbers have scripts.
 DIRECTION (2026-03-22): Stop optimizing per-level. The goal is ALL games, ALL levels, classification — the full chain. Whole-trajectory rule: never optimize for a single level/game/task. Breaking games into levels creates a frozen frame — the substrate should handle all levels with ONE mechanism.
 L1 BAN (2026-03-22): L1 banned as metric. 674+running-mean = frozen bootloader. Every experiment states R3 hypothesis. Ban lifts when R3 produces first M reclassification.
