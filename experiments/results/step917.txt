@@ -145,3 +145,17 @@ Forward model + intrinsic reward accumulation. No learned features, no inverse m
 2026-03-23 09:14:26 | INFO | Created new scorecard: 7cb4fba2-2291-4fc2-afb4-75a271a294d6
 2026-03-23 09:14:27 | INFO | Successfully fetched metadata for game ls20
 2026-03-23 09:14:27 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+    seed=10: L1=   0  mean_pred_error=2776.059
+
+======================================================================
+STEP 917 RESULTS (ICM simplified):
+  FT09: L1=0.0/seed  std=0.0  zero=10/10
+  LS20: L1=0.0/seed  std=0.0  zero=10/10
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+Comparison:
+  895h cold LS20: 268.0/seed  FT09: 0/10
+  917 ICM  LS20: 0.0/seed  FT09: 0.0/seed
+Total elapsed: 324.9s
+STEP 917 DONE

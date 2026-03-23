@@ -104,6 +104,18 @@ Step 912 - Delta direction novelty. LS20 L1=166.8 (BELOW baseline). FT09 L1=0. D
 Step 913 - Recency cycling. LS20 L1=51.5 (catastrophic, 7/10 zeros). FT09 L1=0. Recency overwhelms delta → round-robin.
 Step 914 - Full chain test (895h cold). CIFAR=chance, LS20=237.6 (degraded by CIFAR alpha inflation), FT09=0, VC33=0, CIFAR-2=chance. Chain: 1/4 at best.
 Step 915 - Temporal action patterns (K=3, FT09). L1=0. 8711 sequences learned but no discovery of 7-click solution. Exploitation without discovery.
+Step 916 - Recurrent trajectory encoding (echo-state h 64D + alpha + 800b). LS20 L1=290.7/seed, std=70.1, 0/10 zeros. **NEW LS20 BEST.** +8.5% over 895h cold. Trajectory hidden state differentiates movement context. FT09 L1=0 (68-action bottleneck).
+Step 918 - RND simplified. LS20 L1=112.3/seed, 4/10 zeros. BELOW 895h and graph.
+Step 919 - Count-based (Bellemare). LS20 L1=109.0/seed, 5/10 zeros. BELOW 895h and graph.
+**BASELINE COMPARISON (LS20, 25K, n_eff=10):**
+  916 Recurrent h:  290.7/seed  std=70.1  zero=0/10  ← NEW BEST
+  895h cold:        268.0/seed  std=75.2  zero=0/10  ← PREVIOUS BEST
+  868d L2 baseline: 203.9/seed  std=106   zero=1/10
+  920 Graph+argmin:  129.9/seed  std=124   zero=4/10  ← PRE-BAN CEILING (with graph ban violation)
+  918 RND:          112.3/seed  std=126   zero=4/10
+  919 Count-based:  109.0/seed  std=125   zero=5/10
+  **Our mechanism (895h/916) beats ALL published baselines AND the pre-ban graph by 2-2.5×.**
+  **Zero-seed reliability: 0/10 vs 4-5/10 for all alternatives.**
 **Step 920 — Graph+argmin pre-ban ceiling (n_eff=10). LANDMARK RESULT.**
   LS20: L1=129.9/seed, std=124, 4/10 zeros. **895h cold (268.0) BEATS graph+argmin by 2.1×.**
   FT09: L1=0, 10/10 zeros. **Even graph can't solve FT09 at 68 actions.** Bottleneck is action space size (68^7), not graph ban.
