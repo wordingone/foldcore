@@ -100,6 +100,15 @@ SYNTHESIS (Steps 720-749, 30 experiments):
   6. Self-directed attention (Step 737) confirmed Proposition 18: R3=1.0, 2.3x speedup. But random attention (Step 739) also R3=1.0 — metric blind to utility.
   7. D5 (centering rate) permanently excluded. D2 (spatial) and D4 (temporal) killed. D1 (channels) and D3 (hash) marginal individually, effective combined.
   8. Remaining U elements to convert: K_NAV, K_FINE, REFINE_EVERY. Batch 4 targets these.
+SOTA BENCHMARK SUITE (2026-03-23, Steps 760-775):
+  The paper needs numbers on benchmarks other people use. Our proprietary games are validation, not primary evidence. This was always the plan (SYNTHESIS.md) and we drifted. Fixing now.
+  Block 1 (760-762): Split-CIFAR-100 — THE CL standard. 20 tasks, 5 classes/task. 674 vs PlainLSH vs self-directed attention. Compare to DER++/EWC/iCaRL. R1 mode (no labels) = strictly harder.
+  Block 2 (763-766): Atari 100K — RL standard. Hard exploration subset first (Montezuma, Pitfall, Private Eye, Venture, Gravitar), then full 26 games. R1 mode (no reward). Compare to DQN/Rainbow/CURL.
+  Block 3 (767-769): ProcGen — generalization standard. 16 procedural environments. R1 mode.
+  Block 4 (770-773): Cross-benchmark chain — THE NOVEL CONTRIBUTION. Single substrate instance: Split-CIFAR-100 → Atari → ARC games → Split-CIFAR-100. No reset. No other published system does this.
+  Block 5 (774-775): R3 audit on SOTA benchmarks. Static + dynamic R3 measurement. The genuinely novel metric.
+  Priority: 760 → 761 → 762 → 763 (install Atari) → 764 → 770 (chain) → rest.
+  Batch 4 (Steps 750-759) PAUSED until SOTA suite complete.
 REPO AUDIT (2026-03-22): 236 step scripts never existed as files (pre-convention gap, Steps 1-62 + 121-285 range). Historical, not recoverable. 483 unique step numbers have scripts.
 DIRECTION (2026-03-22): Stop optimizing per-level. The goal is ALL games, ALL levels, classification — the full chain. Whole-trajectory rule: never optimize for a single level/game/task. Breaking games into levels creates a frozen frame — the substrate should handle all levels with ONE mechanism.
 L1 BAN (2026-03-22): L1 banned as metric. 674+running-mean = frozen bootloader. Every experiment states R3 hypothesis. Ban lifts when R3 produces first M reclassification.
