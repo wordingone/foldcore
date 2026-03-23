@@ -57,11 +57,12 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 777 complete. Phase 3 begins (post-ban). Steps 778-787 spec'd (post-ban D-only substrates). Target: step 888.
+CURRENT STEP: 787 complete. Steps 788-888 spec'd. Target: step 888.
   Graph ban (permanent, 2026-03-23): no per-(state,action) data. Codebook ban (2026-03-18): no cosine+attract.
-  Both crutches removed. Proposition 20: L(s) transfers negatively, D(s) could transfer positively.
-  R3_cf is the headline metric for all post-ban work. Forward models, Hebbian, reservoir, population, ensemble.
-  Steps 720-777 complete (Phase 2 wrap: SOTA baselines, killed family audit, R3 counterfactual, graph ban).
+  Steps 778-787 RESULT: ALL INCONCLUSIVE — 0 level completions for all 10 D-only substrates at 10K steps.
+  L(s) is load-bearing for navigation but kills transfer. D(s) alone insufficient for LS20 navigation.
+  Level-completion R3_cf unmeasurable for D-only substrates. Switched to PREDICTION ACCURACY R3_cf.
+  Rerunning 778/784 with prediction accuracy metric. Also running 807 (random baseline) and 855 (compression progress).
 Step 750 - K grows from entropy signal on LS20. L1=17/20 PASS. K_final avg=22.5 (range 19-24). Entropy never stabilized — measures sparsity, not collision. G-clearing → fresh entropy → K always grows to K_MAX. ~40K steps wasted in resets per seed. K_NAV cannot be derived from entropy.
 Step 751 - K grows from aliasing rate on LS20. L1≈14-16/20 (estimate). K_final range 16-24. alias_rate=0.28-0.43 even at K=24. Aliasing is STRUCTURAL in LS20 — 674 uses it by design. Cannot use aliasing rate to find natural K.
 Step 752 - K sweep K∈{4,6,8,10,12,16} on LS20 (10 seeds, 25s). K=4:2/10, K=6:7/10, K=8:8/10, K=10:8/10, K=12:9/10, K=16:10/10. Monotonically improves. Minimum sufficient K=6. K_NAV=12 is near-optimal (justified headroom, not arbitrary). K=16 leaves 1 seed on the table at K=12.
@@ -76,6 +77,17 @@ Step 777 - Table 2: Full judge audit on all 12 killed families. ALL fail R1 (rew
 Step 776 - R3 counterfactual on 674 (v3, 25K steps, different seeds, n=20). COMPLETE. cold=4054 completions, warm=2899 completions (500K test steps). Fisher OR=0.713, p<0.0001. R3_counterfactual: FAIL — pretraining HURTS (cold > warm in 11/20 seeds). cold≡pretrain for all seeds (G graph is exploration budget, not transferable structure). Once exhausted on env A, substrate cannot freely explore env B.
 AdaptiveLSH (bonus): PCA-derived planes = random planes. R3_cf FAIL. JL lemma: random projections sufficient. Failure is structural.
 GRAPH BAN announced (2026-03-23). Effective post Step 777. No per-(state, action) data structures. Argmin over visit counts is dead. Permanent, no lift condition.
+Step 778 - Global Forward Model (random actions). L1=0/10. R3_cf INCONCLUSIVE (0 vs 0 completions). Prediction accuracy pending.
+Step 779 - Momentum Explorer (70% repeat). L1=0/10. R3_cf INCONCLUSIVE.
+Step 780 - Prediction-Contrast (argmax ||W(obs,a)-obs||). L1=0/10. R3_cf INCONCLUSIVE. Prediction-contrast cannot navigate LS20.
+Step 781 - Ensemble Disagreement (K=3 forward models). L1=0/10. R3_cf INCONCLUSIVE.
+Step 782 - Hebbian Recurrent (tanh RNN + Hebbian W_out). L1=0/10. R3_cf INCONCLUSIVE.
+Step 783 - Transition Hash Set (novelty by transition pair). L1=0/10. R3_cf INCONCLUSIVE.
+Step 784 - Encoding-Only (running mean, no forward model, no graph). L1=0/10. R3_cf INCONCLUSIVE. Prediction accuracy pending.
+Step 785 - Forward Model + Transition Refinement. L1=0/10. R3_cf INCONCLUSIVE.
+Step 786 - Population Substrate (N=10, selection by unique obs). L1=0/10. R3_cf INCONCLUSIVE.
+Step 787 - Reservoir Computing (spectral radius 0.95, Hebbian W_out with decay). L1=0/10. R3_cf INCONCLUSIVE.
+FINDING (Steps 778-787): D-only substrates cannot navigate LS20 at 10K budget. L(s) (visit counts) is NECESSARY for navigation within tested budgets. The tension: L(s) enables navigation but kills transfer (Step 776). D(s) could transfer but can't navigate. Level-completion R3_cf is unmeasurable without L(s). Switching to prediction accuracy R3_cf metric.
 Step 762 - D1+D3 self-directed attention on Split-CIFAR-100. avg_accuracy=19.65% (BELOW chance 20%). BWT=+1.4%. Channel weights nearly uniform [0.337, 0.325, 0.338]. D1+D3 HURTS CIFAR — adaptive K over-splits static image graph. Navigation mechanisms don't transfer to classification.
 Step 770 - SOTA chain: 674 on LS20 (10K steps) → Split-CIFAR-100. acc=20.13%, BWT=+6.5%. Compare cold baseline (Step 760): acc=20.21%, BWT=+5.6%. **Zero cross-domain transfer.** LS20 pretraining does not improve CIFAR.
 Step 771 - SOTA chain: D1+D3 on LS20 → Split-CIFAR-100. acc=19.61%, BWT=+1.9%. Below cold baseline. D1+D3 hurts in chain too.
