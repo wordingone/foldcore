@@ -57,40 +57,49 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 749 complete (batch 3 done, 3 running: B9/738, D5/744, E4/748). Steps 720-749 = R3 dynamics, baselines, self-directed attention, L2 exploration, cross-domain controls.
+CURRENT STEP: 750 running (adaptive K). Steps 720-749 complete. Steps 750-759 queued.
 GAME VERSION FIX (2026-03-23): FT09/VC33 action_space=1 was a chain.py bug (ACTION_RESET sent on first steps). Fixed. All 3 games operational.
-**PROPOSITION 18 CONFIRMED (Step 737, B8):** R3_dynamic=1.0 at ALL chain phases. Both M elements (inconsistency_map, channel_weights) genuinely self-directed. LS20 L1=1105 (2.3x faster than 674 baseline 2548).
-**R3 METRIC LIMITATION (Step 739, B10):** Random modification ALSO scores R3=1.0 (L1=4237, 4x slower). R3 measures "does it change?" not "does it change usefully?" Self-direction matters (4x speedup) but R3 metric is blind to it. R4 (test modifications against prior state) is what distinguishes useful from random.
-B2 (731): CIFAR NMI=0.375 with RGB channels vs 0.013 greyscale-only. 29x improvement from INCLUSION of color, not from D1 adaptation.
-B3 (732): D2 KILL 10/20. B5 (734): D4 KILL 7/20. B1 (730): D1 MARGINAL 14/20. B4 (733): D3 MARGINAL 14/20.
-KEY FINDINGS (Steps 720-729):
-  T9 CONFIRMED: aliased set Jaccard=0.881 within phases, 0.000 at transitions (C5).
-  R3 CONTINUOUS: not front-loaded. Refinement fires every 5K steps (C1).
-  PlainLSH FAILS LS20 L1 in 10K: 674 refinement IS load-bearing (A5/C4).
-  CIFAR NMI≈0: encoding random w.r.t. classes. D1 (channel selection) needed (A2).
-  POSITIVE BWT +0.096: anti-forgetting. Growth-only state helps later tasks (A2).
-  Atari Montezuma: patches=181, rooms=1. Stayed in room 0 (A3).
-  R3 measurement: metric biased toward fewer M elements. Need window>REFINE_EVERY (C4).
-BATCH 3 RESULTS (Steps 740-749):
-  D1 (740): Multi-episode retention. L1=4/5, L2=0/5 at 60s. Graph persists across game-overs but L2 unreachable. L2 structural, not retention-limited.
-  D2 (741): Death-edge penalty (DEATH_COST=5). L1=10/20 KILL. Deaths=390.5. Penalty blocks useful paths — argmin geometry fragile to additional weight terms.
-  D3 (742): Blocked action detection (BLOCK_THRESH=0.082). L1=0/20 KILL. Pooled enc diff≈0.002 per move; threshold=0.082 blocks everything. Mechanism non-viable with avgpool16 encoding.
-  D4 (743): Extended budget (60s). L1=5/5, L2=0/5. Aliased cells grow 189→346 over 80K steps, L2 never reached. L2 not budget-limited — requires structural mechanism.
-  E1 (745): Recode k=16 on new gym. L1=5/10 PASS. Prior 5/5 on old gym. Degradation from 7-action space expansion. ref_count≈90/seed, refinement fires regularly.
-  E2 (746): Non-argmin selectors on 674. argmin=5/10, epsilon(0.1)=5/10, random=4/10, softmax(T=1)=3/10. **ARGMIN LOAD-BEARING** — not interchangeable. Compare Step 653 (plain k=12): argmin=random=3/20. With 674 perception: argmin pulls ahead. Perception quality UNLOCKS the argmin advantage. Prop 15 nuanced, not falsified.
-  E3 (747): VC33 action diagnostic. All 7 actions equally distributed (72-120 edges each). Edge entropy=0.06-0.12. avgpool16 creates flat hash space — canal lock needs spatial discrimination that random hyperplanes can't provide.
-  E5 (749): Composite edge (visits + λ=1.0 deaths). L1=11/20 KILL. Deaths=197.1. Even λ=1.0 hurts. Death penalty at ANY weight disrupts exploration geometry. Confirms U28 + D2 pattern.
-  B9 (738): D1+D3+D5 combined chain. Static R3: M=5, I=3, U=3. CIFAR BWT=+0.007. LS20/FT09/VC33: l1=None, R3_dyn=1.0. Channel weights adapted (ch0=1.0, ch1/2=0.05 — D1 works). But alpha collapsed 2.0→0.10 (D5 kills). **D5 permanently excluded.** Best combination = B8 (D1+D3 only).
-  D5 (744): Frontier meta-graph. L1=7/20 KILL. meta_cells=20-45. ANY additional weight term in argmin disrupts exploration. Pattern: D2 (death), D5 (meta), E5 (composite) — 3 independent confirmations that argmin must be PURE visits-only.
-  E4 (748): Raw 64x64 (DIM=4096). L1=14/20 MARGINAL. avgpool16 > raw. Pooling provides noise reduction. Game's navigational structure lives in coarse spatial bins, not raw pixels. avgpool16 design choice validated.
-  B6 (735): Atari Montezuma skipped — env not available in Eli's setup.
-  Batch 4 specs sent (Steps 750-759): argmin perception-gating, R4 freeze-ablation, K_dynamic (U→M), channel weight dynamics, adaptive REFINE_EVERY, B8+Recode combined, R4 metric, non-argmin at 20 seeds.
-BATCH 3 SYNTHESIS:
-  1. Argmin is I (irreducible), not just invariant. Cannot be replaced by stochastic policy. But argmin advantage requires good perception (Step 653 vs E2).
-  2. Death penalties universally damage navigation (D2, E5). Visits-only is the correct argmin signal. DEATH_COST frozen element should be removed, not made adaptive.
-  3. L2 is structural (D1, D4) — 6th independent confirmation. Neither retention nor budget helps.
-  4. VC33 is encoding-limited (E3). avgpool16 creates flat hash space. Canal lock needs discriminative encoding.
-  5. Recode transfers to new gym at 5/10 (E1). Action space expansion (4→7) costs performance.
+
+Step 720 - 674 baseline on chain. L1=2548 (LS20 baseline for comparison).
+Step 721 - 674 baseline on CIFAR. NMI≈0, encoding random w.r.t. classes. D1 (channel selection) needed. Positive BWT +0.096 (anti-forgetting).
+Step 722 - 674 baseline on Atari Montezuma. patches=181, rooms=1. Stayed in room 0.
+Step 723 - R3 audit of 674. Static R3: M=2, I=5, U=2. 5 encoding U elements dominate frozen frame.
+Step 724 - PlainLSH baseline on chain. FAILS LS20 L1 in 10K. 674 refinement IS load-bearing.
+Step 725 - R3 continuous measurement on LS20. Not front-loaded. Refinement fires every 5K steps.
+Step 726 - R3 measurement on FT09. R3_dyn=1.0. Chain phases show consistent modification.
+Step 727 - R3 measurement on full chain. Consistent across all phases.
+Step 728 - R3 measurement comparison (PlainLSH vs 674). Metric biased toward fewer M elements. Need window > REFINE_EVERY.
+Step 729 - Encoding-statistics coupling (T9 test). CONFIRMED: aliased set Jaccard=0.881 within phases, 0.000 at transitions.
+Step 730 - Channel selection (D1) on LS20. L1=14/20 MARGINAL.
+Step 731 - CIFAR with RGB channels. NMI=0.375 vs 0.013 greyscale-only. 29x improvement from color inclusion.
+Step 732 - Spatial resolution (D2) on LS20. L1=10/20 KILL.
+Step 733 - Hash resolution (D3) on LS20. L1=14/20 MARGINAL.
+Step 734 - Frame stacking (D4) on LS20. L1=7/20 KILL.
+Step 735 - Atari frame stacking. Skipped — env not available in Eli's setup.
+Step 736 - Adaptive centering rate (D5) on LS20. KILL. Alpha collapse.
+Step 737 - Self-directed attention (D1+D3) on full chain. **PROPOSITION 18 CONFIRMED.** R3_dynamic=1.0 at ALL chain phases. Both M elements (inconsistency_map, channel_weights) genuinely self-directed. LS20 L1=1105 (2.3x faster than 674 baseline).
+Step 738 - Self-directed attention + centering (D1+D3+D5) on full chain. L1=None on all games. Alpha collapsed 2.0→0.10 on FT09/VC33. **D5 permanently excluded.** Channel weights adapted correctly (ch0=1.0, ch1/2=0.05). CIFAR BWT=+0.007. Best combination = Step 737 config (D1+D3 only).
+Step 739 - Random attention control on LS20. **R3 METRIC LIMITATION.** Random modification ALSO scores R3=1.0 (L1=4237, 4x slower than self-directed). R3 measures "does it change?" not "does it change usefully?" R4 (test against prior state) needed to distinguish.
+Step 740 - Multi-episode graph retention on LS20. L1=4/5, L2=0/5 at 60s. Graph persists across game-overs but L2 unreachable. L2 structural, not retention-limited.
+Step 741 - Death-edge penalty (DEATH_COST=5) on LS20. L1=10/20 KILL. Deaths=390.5. Penalty blocks useful paths — argmin geometry fragile to additional weight terms.
+Step 742 - Blocked action detection (BLOCK_THRESH=0.082) on LS20. L1=0/20 KILL. Pooled enc diff≈0.002 per move; threshold blocks everything. Non-viable with avgpool16.
+Step 743 - Extended budget (60s) on LS20. L1=5/5, L2=0/5. Aliased cells grow 189→346 over 80K steps, L2 never reached. L2 not budget-limited.
+Step 744 - Frontier meta-graph on LS20. L1=7/20 KILL. meta_cells=20-45. ANY additional weight term in argmin disrupts exploration. Pattern confirmed: Steps 741, 744, 749 — argmin must be PURE visits-only.
+Step 745 - Recode k=16 on new gym. L1=5/10 PASS. Prior 5/5 on old gym. Degradation from 7-action space expansion. ref_count≈90/seed.
+Step 746 - Non-argmin selectors on 674. argmin=5/10, epsilon(0.1)=5/10, random=4/10, softmax(T=1)=3/10. **ARGMIN LOAD-BEARING.** Compare Step 653 (plain k=12): argmin=random=3/20. With 674 perception: argmin pulls ahead. Perception quality UNLOCKS the argmin advantage.
+Step 747 - VC33 action diagnostic. All 7 actions equally distributed (72-120 edges each). Edge entropy=0.06-0.12. avgpool16 creates flat hash space — canal lock needs spatial discrimination.
+Step 748 - Raw 64x64 (DIM=4096) on LS20. L1=14/20 MARGINAL. avgpool16 > raw. Pooling provides noise reduction. Game structure lives in coarse spatial bins.
+Step 749 - Composite edge (visits + λ=1.0 deaths) on LS20. L1=11/20 KILL. Death penalty at ANY weight disrupts exploration geometry.
+
+SYNTHESIS (Steps 720-749, 30 experiments):
+  1. Argmin is I (irreducible). Cannot be replaced by stochastic policy. But argmin advantage requires good perception (Step 653 vs Step 746).
+  2. Death penalties universally damage navigation (Steps 741, 744, 749). Visits-only is the correct argmin signal. Argmin must be PURE — no auxiliary weight terms (3 independent confirmations).
+  3. L2 is structural — 6th independent confirmation (Steps 740, 743). Neither retention nor budget helps.
+  4. VC33 is encoding-limited (Step 747). avgpool16 creates flat hash space. Canal lock needs discriminative encoding.
+  5. Recode transfers to new gym at 5/10 (Step 745). Action space expansion (4→7) costs performance.
+  6. Self-directed attention (Step 737) confirmed Proposition 18: R3=1.0, 2.3x speedup. But random attention (Step 739) also R3=1.0 — metric blind to utility.
+  7. D5 (centering rate) permanently excluded. D2 (spatial) and D4 (temporal) killed. D1 (channels) and D3 (hash) marginal individually, effective combined.
+  8. Remaining U elements to convert: K_NAV, K_FINE, REFINE_EVERY. Batch 4 targets these.
 REPO AUDIT (2026-03-22): 236 step scripts never existed as files (pre-convention gap, Steps 1-62 + 121-285 range). Historical, not recoverable. 483 unique step numbers have scripts.
 DIRECTION (2026-03-22): Stop optimizing per-level. The goal is ALL games, ALL levels, classification — the full chain. Whole-trajectory rule: never optimize for a single level/game/task. Breaking games into levels creates a frozen frame — the substrate should handle all levels with ONE mechanism.
 L1 BAN (2026-03-22): L1 banned as metric. 674+running-mean = frozen bootloader. Every experiment states R3 hypothesis. Ban lifts when R3 produces first M reclassification.
