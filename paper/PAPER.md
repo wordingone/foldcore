@@ -965,6 +965,37 @@ The attention weights $\alpha_d \propto \sqrt{\bar{e}_d}$ therefore concentrate 
 
 **Biological analogue: DNA polymerase proofreading.** DNA replication is a sequential problem (copy bases in order) solved WITHOUT global sequence memory via "bolt-action" local correction (Nature Comms, 2023): check current base pair against template → if mismatch, backtrack one step → retry. Three cascaded mechanisms (selectivity, exonuclease proofreading, mismatch repair) each improve fidelity $10^2\text{-}10^3\times$ through LOCAL error detection, not global sequence planning. The substrate analogue would be: predict expected change from current action → detect mismatch between predicted and actual → try alternative action. But DNA polymerase has a TEMPLATE (the complementary strand). The substrate has no template — it must discover the correct sequence from scratch. Local error detection requires a reference signal that the current action was "wrong," which post-ban substrates lack for sequential games.
 
+### 4.13 Active Inference as the Action Selection Framework (Proposition 24)
+
+**Prior work:** Active inference (Friston, 2009; Friston et al., 2017) replaces reward maximization with free energy minimization. Agents select actions to minimize Expected Free Energy (EFE), which decomposes into pragmatic value (reaching preferred states) and epistemic value (reducing model uncertainty). Under the R1 constraint (no external objectives), pragmatic value vanishes and EFE reduces to pure epistemic value: prefer actions that maximize information gain about the world model. Sajid et al. (2021) provide a comprehensive comparison; Da Costa et al. (2020) derive EFE from variational principles.
+
+**Connection to existing components:** The substrate already implements active inference components under different names:
+- **Precision-weighting** ($\alpha$): Friston's precision is $1/\sigma^2$ (inverse variance). Our $\alpha_d \propto \sqrt{\bar{e}_d}$ weights dimensions by prediction error magnitude. In deterministic environments (our ARC games), magnitude-based and variance-based precision are monotonically related (Section 4.11). $\alpha$ IS precision-weighting.
+- **Generative model** ($W_{\text{pred}}$): The forward model predicts next observation from (current state, action). This is the substrate's world model in active inference terms.
+- **Trajectory encoding** ($h$): The echo-state hidden state provides temporal context — equivalent to the sufficient statistics of the posterior in a partially observed environment.
+
+**What's missing:** The action selection mechanism. 800b selects by maximizing observation change (global-EMA of $\|\Delta x\|$ per action). Active inference selects by maximizing expected information gain. These diverge on sequential games (Proposition 23b): resets produce large $\|\Delta x\|$ but zero information gain (the model already knows what $P_0$ looks like).
+
+**Proposition 24 (Epistemic Action Selection).** Define the epistemic value of action $a$ at time $t$:
+
+$$G_t(a) = \frac{\|\hat{x}_{t+1}^{(a)} - x_t\|}{\text{conf}_a + \epsilon}$$
+
+where $\hat{x}_{t+1}^{(a)} = W_{\text{pred}} \cdot [\alpha \odot s_t,\; \text{one\_hot}(a)]$ is the model's predicted next state, $x_t = \alpha \odot s_t$ is the current precision-weighted state, and $\text{conf}_a = 1 / (\bar{e}_a + \epsilon)$ is the model's inverse prediction error for action $a$ (a proxy for confidence). $\epsilon > 0$ prevents division by zero.
+
+The numerator captures predicted novelty: how much change does the model expect? The denominator captures model uncertainty: how confident is the model about action $a$?
+
+**Why this dissolves Proposition 23b.** At position $P_0$: the correct first click $a_1$ produces predicted change toward $P_1$ (novel). Wrong clicks predict change toward $P_0$ (familiar). Both may have similar predicted magnitudes. But $\text{conf}_{a_{\text{wrong}}}$ is HIGH (many resets modeled accurately) while $\text{conf}_{a_1}$ is LOW (few transitions to $P_1$ observed). So $G_t(a_1) \gg G_t(a_{\text{wrong}})$: the substrate explores $a_1$.
+
+At position $P_1$: the correct second click $a_2$ predicts change toward $P_2$ (never seen). $\text{conf}_{a_2}$ is VERY LOW. Wrong clicks predict $P_0$ (well-modeled). $G_t(a_2) \gg G_t(a_{\text{wrong}})$ — even more strongly than at $P_0$, because the model has ZERO data on $P_2$.
+
+Crucially: $G_t(a)$ is computed from $W_{\text{pred}}(s_t, a)$, where $s_t$ includes the trajectory encoding $h_t$. The prediction is position-dependent through $h$ — no EMA averaging, no position-blindness. Each action is evaluated at the CURRENT trajectory state, not from global statistics.
+
+**Relationship to prior work:** Equation for $G_t(a)$ is a computationally tractable approximation of the expected free energy (Da Costa et al., 2020). Full EFE requires Bayesian posterior updates per action; our version uses point estimates (model prediction + running error average). The key simplification: $\text{conf}_a$ is a per-action GLOBAL statistic (like 800b), but the numerator $\|\hat{x}^{(a)} - x_t\|$ is a per-position LOCAL computation (through $h$). This hybrid avoids per-state storage while retaining position-dependent action discrimination.
+
+**What's genuinely new:** Active inference typically assumes a CONVERGENT generative model (the model eventually learns the environment). Our $W_{\text{pred}}$ has $\text{pred\_acc} = -2383$ (never converges). Proposition 22.3 showed this is CORRECT for encoding ($\alpha$). Proposition 24 extends this to action selection: the non-convergent model maintains position-dependent prediction patterns indefinitely, preventing the curiosity collapse that kills ICM (Step 917: ICM scores 0.0/seed on LS20 because its model converges and curiosity vanishes). Active inference with a non-convergent generative model is, to our knowledge, unexplored in the literature.
+
+**Degrees of freedom:** The temperature $T$ in $\text{softmax}(G/T)$ and the EMA rate for $\text{conf}_a$ are free parameters. The epsilon exploration rate balances exploitation of high-$G$ actions with random sampling. These are the same degrees of freedom as 800b — no additional frozen frame elements.
+
 ## 5. Experimental Evidence
 
 ### 5.1 Navigation (900+ experiments)
