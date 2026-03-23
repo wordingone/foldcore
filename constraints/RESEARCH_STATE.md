@@ -57,7 +57,7 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 787 complete. Steps 788-888 spec'd. Target: step 888.
+CURRENT STEP: ~812 complete + Step 878 (Table 3 audit). Steps 813-888 in progress. Target: step 888.
   Graph ban (permanent, 2026-03-23): no per-(state,action) data. Codebook ban (2026-03-18): no cosine+attract.
   Steps 778-787 RESULT: ALL INCONCLUSIVE — 0 level completions for all 10 D-only substrates at 10K steps.
   L(s) is load-bearing for navigation but kills transfer. D(s) alone insufficient for LS20 navigation.
