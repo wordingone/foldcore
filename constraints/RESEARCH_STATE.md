@@ -57,8 +57,14 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: ~840 complete (incl. analysis steps 878/882/883/886/887). Steps 813-900 in progress.
-DIRECTION (2026-03-23, Jun): THIRD CLUSTER. Codebook=vertex 1 (recognition). Graph=vertex 2 (tracking). The true substrate is at vertex 3 (dynamics/prediction) or interior to the triangle. Post-ban, prediction error is the UNIQUE remaining signal for R3 encoding self-modification (Proposition 22). Steps 889-894 (already spec'd) + Steps 895-900 (new batch) systematically explore the breadth of the dynamics vertex: MLP, CTS, ESN, prediction-error attention, SDM, decision tree, LZ complexity, population predictors, attractor landscape. Step 895 (prediction-error-driven attention) is THE priority — first mechanism that could achieve game-adaptive encoding without human prescription.
+CURRENT STEP: ~940 complete. Steps 933-937 exhausted 800b-variant family.
+DIRECTION (2026-03-23, REVISED post-compression):
+  **ENCODING (solved):** Alpha-weighted prediction-error attention (Prop 22, confirmed Steps 895-895h). R3 encoding self-modification works universally. Carry forward to ALL future families.
+  **ACTION SELECTION (open — family exhausted):** 800b (per-action delta EMA + softmax) is the best post-ban selector (2-2.5x baselines). But: position-blind (Prop 23b), reset-inverted (delta inversion), and every modification degrades (Steps 912-937, 25+ experiments). The 916 architecture is a local minimum. Next family must use ACTUAL observation changes but NOT per-action delta EMA. See FAMILY_KILLS.md.
+  **FT09 (structural barrier — not family-specific):** ALL tested mechanisms score L1=0 at 68 actions. Graph+argmin=0 (Step 920b). ICM=0, RND=0, count=0, 800b=0. FT09's 7-step combinatorial barrier (Prop 23b: P≈10^{-11}/attempt) is benchmark-level, not mechanism-level. NO known global-statistics-only selector can solve it within 10K budget.
+  **VC33 (encoding barrier):** Observations near-static (var≈0.000, Step 937). The change signal barely exists. Needs fundamentally different encoding or observation preprocessing, not a different action selector.
+  **CIFAR (structural impossibility under current bans):** Classification without labels requires prototype-based clustering (codebook ban) or reward signal (R1 ban). All tested mechanisms = chance.
+  **CHAIN EXIT CONDITION:** PRISM-light "perfectly complete" may require: (a) new family that dissolves the monotonic/sequential distinction, (b) relaxing a constraint for FT09-class games, or (c) redefining "complete" to include partial chain success with structural impossibility documented.
 **Step 895 — PREDICTION-ERROR ATTENTION — R3 CONFIRMED.**
   FT09: alpha_conc=10.87× (max/min ratio). Consistent top dims: [60, 51, 209] across substrate seeds.
   LS20: alpha_conc=5.73×. FT09 >> LS20 — exactly as predicted (98.7% static forces concentration).
