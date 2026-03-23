@@ -59,12 +59,20 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
 CURRENT STEP: ~840 complete (incl. analysis steps 878/882/883/886/887). Steps 813-900 in progress.
 DIRECTION (2026-03-23, Jun): THIRD CLUSTER. Codebook=vertex 1 (recognition). Graph=vertex 2 (tracking). The true substrate is at vertex 3 (dynamics/prediction) or interior to the triangle. Post-ban, prediction error is the UNIQUE remaining signal for R3 encoding self-modification (Proposition 22). Steps 889-894 (already spec'd) + Steps 895-900 (new batch) systematically explore the breadth of the dynamics vertex: MLP, CTS, ESN, prediction-error attention, SDM, decision tree, LZ complexity, population predictors, attractor landscape. Step 895 (prediction-error-driven attention) is THE priority — first mechanism that could achieve game-adaptive encoding without human prescription.
-Step 895 SPEC'D - PredErrorAttention: per-dim prediction error drives attention weights α on encoding. α concentrates on informative dims → substrate discovers diff encoding on FT09 (98.7% static → ignore) and uniform encoding on LS20 (all dims change). R3 via prediction error → encoding self-modification. THE experiment.
+**Step 895 — PREDICTION-ERROR ATTENTION — R3 CONFIRMED.**
+  FT09: alpha_conc=10.87× (max/min ratio). Consistent top dims: [60, 51, 209] across substrate seeds.
+  LS20: alpha_conc=5.73×. FT09 >> LS20 — exactly as predicted (98.7% static forces concentration).
+  Top dims [60, 51] = row 3 cols 3,12 of avgpool16 grid = puzzle tile locations in FT09. Substrate DISCOVERED the active game region from prediction error alone.
+  L1=0 both games. Alpha works; action selection is broken (W=zeros → all actions predict same → random).
+  **First post-ban R3: encoding self-modification without human prescription.** Proposition 22 CONFIRMED.
+  895b SPEC'D: decouple navigation from R3. Use 800b (per-action alpha-weighted change EMA + softmax T=0.1) for actions. Alpha for R3 only. THE CRITICAL TEST.
+  895c SPEC'D: warm W + alpha transfer. Does warm alpha reconcentrate faster on new games?
 Step 896 SPEC'D - SDM forward model: Sparse Distributed Memory (Hamming on binary addresses). Non-linear prediction without neural networks. NOT codebook (no cosine, no attract).
-Step 897 SPEC'D - Online decision tree predictor: symbolic, interpretable, exact for deterministic transitions. Tree growth IS self-modification.
-Step 898 SPEC'D - LZ complexity novelty: pure information theory, no model. Compressibility of observation sequence as action signal.
-Step 899 SPEC'D - Population of micro-predictors: R3 via evolutionary selection, not gradient.
-Step 900 SPEC'D - Attractor landscape navigation: energy surface over observation space, dynamical systems approach.
+Step 897 - Decision tree. KILLED (tree_depth=0, splits never triggered on LS20).
+Step 898 - LZ complexity. KILLED (compression ratio variance=0, zlib can't distinguish 1-byte action append).
+Step 899 - Population predictors. Functionally DEAD (L1=0, hash issue). Diversity=0.37 (alive by criterion but useless).
+Step 896 - SDM. BROKEN (Hamming radius=80 too small for 256-bit, zero addresses activated). Deprioritized.
+Step 900 - Attractor landscape. Running but slow. Deprioritized.
 Step 889 SPEC'D - PredictiveNovelty: visited_set (per-obs, allowed) + W prediction (global, allowed). Action = go where W predicts unvisited state. Bridges Proposition 21. CRITICAL TEST.
 Step 901 SPEC'D - MLP + PredErrorAttention combination. Run after 890 and 895 report.
 Step 902 SPEC'D - SINDy-Lite symbolic dynamics discovery. Transition rule dictionary.
@@ -77,6 +85,8 @@ Step 889 - PredictiveNovelty. L1=4/seed (BELOW random). pred_acc=98% (ARTIFACT).
 Step 892 - MLP PredictiveNovelty. L1=0-4 (ARTIFACT). Same hash failure as 889.
 Step 868 - Opponent process softmax. softmax_01=379/seed (BEST post-ban navigation). BUT n_eff=1 (substrate_seed=0 for all). Needs 868b with varied seeds for validation.
 FINDING: enc_hash is fundamentally broken for centered encodings. ALL hash-based novelty detection is invalid. MSE-based NoveltyBuffer (L2 distance to buffered observations) is the fix. Prediction transfer (MSE-based) remains CONFIRMED. Navigation via prediction→novelty is UNTESTED with correct metric.
+**BREAKTHROUGH FINDING (Step 895): Prediction-error attention achieves R3.** Alpha weights self-modify to concentrate on informative observation dimensions. FT09 alpha_conc=10.87× (discovers puzzle tile locations [60,51,209]). LS20 alpha_conc=5.73× (all dims active). Game-adaptive encoding without human prescription. FIRST POST-BAN R3.
+THIRD CLUSTER SWEEP RESULT: 895 ALIVE, 897/898 KILLED, 899 DEAD, 896 BROKEN, 900 pending. Only the prediction-error attention mechanism survives. Next: 895b (alpha-weighted 800b navigation) and 895c (warm transfer).
 Step 824 - D component ablation. W_only=32.4% > full_D=16.1%. Running_mean HURTS transfer (freezes at pretrain distribution). **Transfer protocol: W only, reset running_mean.**
 Step 874 - Obs diversity. LS20: collision 50.3%, 2483 unique obs. FT09: collision 98.7%, 64 unique obs. FT09 nearly static.
 Step 813 - Anti-convergence. eps=0.50 best cold (364/seed) but warm=0. eps=0.20 is sweet spot for transfer.
