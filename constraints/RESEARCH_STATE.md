@@ -57,7 +57,16 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 719b complete — awaiting Leo's next spec.
+CURRENT STEP: 729 complete (batch 1/3). Steps 720-729 = R3 dynamics + baselines on new gym.
+GAME VERSION CRISIS (2026-03-23): FT09 (0d8bbf25) and VC33 (9851e02b) now have action_space=1 — DEGENERATE. Chain is LS20-only until resolved.
+KEY FINDINGS (Steps 720-729):
+  T9 CONFIRMED: aliased set Jaccard=0.881 within phases, 0.000 at transitions (C5).
+  R3 CONTINUOUS: not front-loaded. Refinement fires every 5K steps (C1).
+  PlainLSH FAILS LS20 L1 in 10K: 674 refinement IS load-bearing (A5/C4).
+  CIFAR NMI≈0: encoding random w.r.t. classes. D1 (channel selection) needed (A2).
+  POSITIVE BWT +0.096: anti-forgetting. Growth-only state helps later tasks (A2).
+  Atari Montezuma: patches=181, rooms=1. Stayed in room 0 (A3).
+  R3 measurement: metric biased toward fewer M elements. Need window>REFINE_EVERY (C4).
 REPO AUDIT (2026-03-22): 236 step scripts never existed as files (pre-convention gap, Steps 1-62 + 121-285 range). Historical, not recoverable. 483 unique step numbers have scripts.
 DIRECTION (2026-03-22): Stop optimizing per-level. The goal is ALL games, ALL levels, classification — the full chain. Whole-trajectory rule: never optimize for a single level/game/task. Breaking games into levels creates a frozen frame — the substrate should handle all levels with ONE mechanism.
 L1 BAN (2026-03-22): L1 banned as metric. 674+running-mean = frozen bootloader. Every experiment states R3 hypothesis. Ban lifts when R3 produces first M reclassification.
