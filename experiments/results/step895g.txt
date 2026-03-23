@@ -1,0 +1,43 @@
+======================================================================
+STEP 895g — DUAL STREAM (alpha→W only, raw enc→800b nav)
+======================================================================
+Stream 1: alpha-weighted W (R3 prediction). Stream 2: raw enc delta (nav).
+Hypothesis: LS20 warm ≈ plain 800b (uncompromised nav) + warm W pred_acc > cold.
+25K steps, 10 seeds. Compare vs 868b baseline: 72.1/seed.
+Game version: ls20/9607627b
+
+  Pretrain done (21.6s). alpha_conc=13.63 top=[250, 249, 251]
+  Pretrain W alpha-pred_acc=-1464.141
+
+  seed=1: cold L1= 284 warm L1= 284
+  seed=2: cold L1= 149 warm L1= 149
+  seed=3: cold L1= 277 warm L1= 277
+  seed=4: cold L1= 143 warm L1= 143
+  seed=5: cold L1= 284 warm L1= 284
+  seed=6: cold L1= 149 warm L1= 149
+  seed=7: cold L1= 277 warm L1= 277
+  seed=8: cold L1= 143 warm L1= 143
+  seed=9: cold L1= 284 warm L1= 284
+  seed=10: cold L1= 149 warm L1= 149
+
+cold: L1=213.9/seed  std=67.4  zero-seeds=0/10  alpha_conc=30.91  pred_acc=-2324.638
+      [284, 149, 277, 143, 284, 149, 277, 143, 284, 149]
+warm: L1=213.9/seed  std=67.4  zero-seeds=0/10  alpha_conc=13.57  pred_acc=-2812.174
+      [284, 149, 277, 143, 284, 149, 277, 143, 284, 149]
+L1 delta (warm-cold): +0.0/seed  std reduction: 1.0x (cold/warm)
+
+Variance comparison (key metric per Leo mail 2626):
+  868b plain 800b (25K): mean=72.1 std=112 zero=5/10
+  895c warm (alpha-delta, 10K): mean=77.8 std=35 zero=0/5
+  895g warm (dual-stream, 25K): mean=213.9 std=67.4 zero=0/10
+
+Total elapsed: 367.9s
+STEP 895g DONE
+
+ANALYSIS:
+- cold = warm exactly (per-seed identical): navigation fully independent of W+alpha (expected)
+- 0/10 zero seeds: ELIMINATES cold-start lottery (vs 5/10 in 868b)
+- mean 213.9 vs 72.1: 3x improvement — likely L2 norm vs squared-sum (868b used sum of squares)
+- pred_acc negative: W not converging in alpha-weighted space
+- CONFOUND: sub_seed=seed%4 → only 4 unique configs repeated [284,149,277,143] x2-3
+- Need 868d (plain 800b + L2 norm) to isolate the metric change from the architecture change
