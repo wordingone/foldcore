@@ -715,7 +715,7 @@ The feasible region for L1 navigation is occupied — graph + argmin + correct e
 
 This research was conducted using a team of LLM agents (Claude Opus and Claude Sonnet) coordinated by the author. Experiments were designed, theory was formalized, and the paper was written with LLM assistance. Experiment scripts were implemented and executed via LLM agents. Strategic direction, the constitutional framework (R1-R6), approval gates, and evaluation of findings for self-deception were provided by the author.
 
-The adversary process (review of each experiment) was conducted by the LLM agents, not by independent human reviewers. The simulated NeurIPS review in Section 7 was generated to stress-test the paper's claims. All experimental code is available in the repository for independent verification.
+The adversary process (review of each experiment) was conducted by the LLM agents, not by independent human reviewers. The simulated NeurIPS review in Section 7 was generated to stress-test the paper's claims. The constitutional framework (R1-R6) was stress-tested via structured adversarial debate between two LLM agents (Leo as attacker, Eli as defender, 12 rounds across two versions). The debate produced: R4's operational meaning as discriminative capacity (Ashby requisite variety), R2's role in preventing evaluation hacking (DGM case study), and Proposition 28 (R3-minimal anti-concentration via Ashby ultrastability). Full debate log: CONSTITUTIONAL_DEBATE.md. All experimental code is available in the repository for independent verification.
 
 The agents operated on a single machine (Windows 11, RTX 4090) with experiments run via WSL2. The memory system, mailbox, and coordination infrastructure are documented in the repository.
 
