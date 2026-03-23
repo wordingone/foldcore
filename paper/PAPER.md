@@ -878,6 +878,16 @@ A dynamics model learned on $\mathcal{T}$ transfers to $\mathcal{T}'$ when the u
 1. Construct a substrate with $D(s) \neq \emptyset$, $L(s) = \emptyset$. Measure R3_counterfactual. If $D$ generalizes, warm > cold.
 2. Ablation: on a substrate with both $L$ and $D$, independently reset $L(s_N) \to L(s_0)$ and $D(s_N) \to D(s_0)$ before testing. If Proposition 20 holds, resetting $L$ improves performance and resetting $D$ degrades it.
 
+**Corollary 20.1 (Generalized Negative Transfer).** Proposition 20(a) extends beyond $L(s)$ to ANY accumulated component that couples to action selection. Let $c(s)$ be a state component that (a) changes over time ($c(s_N) \neq c(s_0)$) and (b) influences action selection ($g(s) = g(c(s), \ldots)$). Then pretraining on $\mathcal{T}$ produces negative transfer on $\mathcal{T}' \neq \mathcal{T}$ via $c$.
+
+**Experimental evidence (Steps 776, 788, 803):**
+- Visit counts $N(n,a)$ → negative transfer (Step 776: OR=0.713, $p<0.0001$).
+- Per-observation cycling counters → negative transfer (Step 803: cold=226/seed, warm=0/seed). Cold cycling starts at action 0 (dominant in LS20); pretraining shifts counters away from action 0 → performance collapses on new seeds.
+- Global round-robin index → KILL (Step 788: 0 L1, worse than random).
+- Forward model $W$ with random action selection → NEUTRAL (Step 778v3: tied). $D(s)$ accumulates but does not couple to action selection during random-action training, avoiding the coupling that produces negative transfer.
+
+**Implication:** R3_counterfactual requires that accumulated state improves performance on new tasks. Corollary 20.1 shows this is impossible for any component that couples to action selection AND carries environment-specific information. The forward model is the unique candidate: it accumulates dynamics (environment-general) and can couple to action selection at TEST time without carrying environment-specific action biases from training (because training used random actions). Step 806-revised tests this directly.
+
 ## 5. Experimental Evidence
 
 ### 5.1 Navigation (720+ experiments)
