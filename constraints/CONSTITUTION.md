@@ -54,9 +54,7 @@ Not "some parameters adapt." ALL parameters, structural choices, functional form
 
 ### R4: Modification is tested against prior state (Principle III)
 
-After any self-modification, the system compares performance to before the modification. The comparison result biases subsequent modifications toward directions the comparison identifies as improvement. Improvement on trained tasks with degradation on novel tasks is overfitting, not improvement.
-
-*Amendment (2026-03-23, Constitutional Debate, Round 6): Added directional clause — "The comparison result biases subsequent modifications toward directions the comparison identifies as improvement." Establishes structural link between R4 (comparison) and R3 (modification). Drafted by Leo after forcing concession on the directional gap. Accepted by Eli. Structural constraint (specifies relationship), not frozen diagnostic (specifies metric). R3-compatible.*
+After any self-modification, the system compares performance to before the modification. Improvement on trained tasks with degradation on novel tasks is overfitting, not improvement.
 
 ### R5: Exactly one element is not self-modifiable: the ground truth test (Principle V)
 
