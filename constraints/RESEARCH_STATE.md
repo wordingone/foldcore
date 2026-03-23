@@ -65,8 +65,16 @@ DIRECTION (2026-03-23, Jun): THIRD CLUSTER. Codebook=vertex 1 (recognition). Gra
   Top dims [60, 51] = row 3 cols 3,12 of avgpool16 grid = puzzle tile locations in FT09. Substrate DISCOVERED the active game region from prediction error alone.
   L1=0 both games. Alpha works; action selection is broken (W=zeros → all actions predict same → random).
   **First post-ban R3: encoding self-modification without human prescription.** Proposition 22 CONFIRMED.
-  895b SPEC'D: decouple navigation from R3. Use 800b (per-action alpha-weighted change EMA + softmax T=0.1) for actions. Alpha for R3 only. THE CRITICAL TEST.
-  895c SPEC'D: warm W + alpha transfer. Does warm alpha reconcentrate faster on new games?
+  895b (argmax variant): L1=0 both games. Argmax action collapse (same as Step 800). Alpha confirmed again (FT09 6.81×).
+  **895c — FIRST POSITIVE L1 R3_cf IN 800+ EXPERIMENTS.**
+    Architecture: alpha-weighted 800b (softmax T=0.1) + prediction-error attention.
+    LS20 warm: L1=77.8/seed (W+alpha transfer). LS20 cold: L1=23.0/seed. **Differential +54.8/seed.**
+    Warm alpha stable (conc=16.8 across seeds). Cold alpha unstable (seeds with sub_seed=2 over-concentrate to 61.9 → L1=0).
+    FT09: L1=0 at 5K steps (insufficient budget for 68 actions). Alpha confirmed [60,51,52] (4th independent run).
+    **Warm substrate navigates 3.4× better than cold.** First time warm transfer HELPS navigation.
+    ISSUES: (1) absolute L1 below plain 800b (379/seed at 25K) — budget mismatch, need 25K comparison.
+    (2) cold concentration instability — over-rapid alpha convergence kills some seeds.
+    895d SPEC'D: 25K budget, fair comparison with 800b baseline. 895e SPEC'D: alpha clamping to fix instability. 895f SPEC'D: FT09 at 25K.
 Step 896 SPEC'D - SDM forward model: Sparse Distributed Memory (Hamming on binary addresses). Non-linear prediction without neural networks. NOT codebook (no cosine, no attract).
 Step 897 - Decision tree. KILLED (tree_depth=0, splits never triggered on LS20).
 Step 898 - LZ complexity. KILLED (compression ratio variance=0, zlib can't distinguish 1-byte action append).
