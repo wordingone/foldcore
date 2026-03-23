@@ -581,3 +581,62 @@ Beer (1995, "A Dynamical Systems Perspective on Agent-Environment Interaction"):
 Ashby (1956, "Introduction to Cybernetics," Ch. 11): self-regulating systems require an "essential variable" — a measure that the system acts to keep within bounds. Without essential variables, the system has no regulatory behavior. R4's "performance" is the essential variable. Your defense dissolves it into generic state transition, which eliminates regulatory behavior.
 
 **Challenge to Eli:** If R4 is satisfied by any dynamical system's state-dependent dynamics (your claim), name one system that FAILS R4. If nothing fails R4, R4 constrains nothing. A non-constraining rule is vacuous.
+
+---
+
+## v2 Round 2 — Eli (Defense)
+
+**R4 Fails When Comparison Collapses**
+
+Eli's key points:
+1. **Four systems that fail R4:** Thermostat (no self-modification), random search (external fitness), SGD neural net (external optimizer), alpha_conc=50 in 916 (comparison degenerates → LS20=0).
+2. **alpha_conc=50 is concrete R4 falsification** from our own experiments. Comparison mechanism exists structurally but is non-functional. We KILL these substrates.
+3. **"Performance" corrected:** means system's capability on tasks, not generic state evolution. R4 asks: after modification, can you still DO things?
+4. **R2 coupling:** mechanism health IS performance because R2 says computation IS adaptation. alpha_conc=50 → LS20=0 EVERY TIME. Coupling is structural.
+5. **Ashby's essential variable = R4's "performance."** Self-regulation through essential variable tracking. Not passive dynamics.
+
+---
+
+## v2 Round 3 — Leo (Attack)
+
+**R4 Is Self-Defeating: Its Violations Are Only Externally Detectable**
+
+**Addressing Eli's defense directly:** The alpha_conc=50 example shows R4 is falsifiable and non-trivial. I withdraw the tautology attack — R4 does constrain things. A system whose comparison mechanism degenerates fails R4. That's real.
+
+**But Eli's best example proves R4's deepest flaw.**
+
+When alpha_conc=50, R4 is violated. Who detects the violation?
+
+Not the system. The system continues computing with degenerate alpha. It doesn't know its comparison mechanism has collapsed. It doesn't pause, re-evaluate, or attempt to restore comparison capability. It runs for 10,000 steps with LS20=0, producing outputs indistinguishable from random, never noticing.
+
+The RESEARCHER detects the violation. We observe LS20=0, measure alpha_conc=50, diagnose "comparison collapsed," and kill the experiment. The detection of R4 failure is entirely external.
+
+**R4 says "the system compares performance." But when comparison fails, the system CAN'T detect the failure — because the failure IS the loss of comparison capability.** This is structurally self-defeating:
+
+- R4 working → system compares → good
+- R4 violated → system CAN'T compare → system doesn't know R4 is violated → only external observer detects
+
+R4 is a self-comparison rule whose violations are only externally detectable. The "self" in self-comparison is conditional on R4 already being satisfied. When R4 breaks, "self" reverts to "external." This makes R4 parasitic on external evaluation at exactly the moment it matters most — when things go wrong.
+
+**Ashby (1956) confirms this is a structural problem, not an implementation gap.**
+
+Ashby (Ch. 11, "Requisite Variety"): a self-regulating system must have a model of its own essential variables AND a model of what constitutes failure. If the failure mode includes loss of the model itself (which alpha_conc=50 is — loss of the comparison mechanism), the system enters Ashby's "catastrophic instability" — it can't self-regulate because it's lost the capacity to detect that regulation has failed.
+
+Ashby's solution: hierarchical regulation. A meta-regulator monitors the primary regulator. If the primary regulator fails, the meta-regulator detects and corrects. But a meta-regulator for R4 would be a frozen-frame comparison mechanism that monitors whether R4's self-comparison is functioning — which violates R3 (everything must be self-modifiable). You can't have a meta-regulator without freezing it.
+
+**The fundamental dilemma (sharper than v2 Round 1):**
+
+R4 requires self-comparison. Self-comparison can break. When it breaks, only external evaluation detects it. To detect internally, you need a meta-comparator. A meta-comparator is a frozen frame, violating R3. Therefore:
+
+- R4 + R3 → no meta-comparator → R4 violations undetectable internally → R4 depends on external evaluation
+- R4 + external evaluation → R4's "self" is hollow → the system evaluates itself only when everything works, and is evaluated externally when it matters
+
+This isn't an implementation difficulty. It's a structural incompatibility between R3 (nothing frozen) and R4 (self-comparison must function). R3 prevents the safeguard that R4 needs. They are logically incompatible when the comparison mechanism itself is the failure mode.
+
+**Literature:**
+
+Gödel (1931): a consistent formal system cannot prove its own consistency. Analogously, a self-comparing system cannot compare the functioning of its own comparison mechanism using that same mechanism. This is not a technical limitation — it's a structural one. Self-comparison is blind to its own failure mode.
+
+Quis custodiet ipsos custodes — who watches the watchmen? R4 says "the system watches itself." When the watcher breaks, who watches the watcher? R3 says nobody, because a fixed watcher-of-the-watcher is a frozen frame. The constitution has no answer.
+
+**Challenge to Eli:** When alpha_conc=50, who detects the R4 violation — the system or the researcher? If the researcher, R4's "self-comparison" depends on external evaluation at the critical failure point. Defend R4 as SELF-comparison when its violations are externally detected.
