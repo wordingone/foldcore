@@ -57,11 +57,12 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 1008 (awaiting spec from Leo). Attention-trajectory family, experiment 1/20 done.
-  **Steps 1001-1003 KILLED:** Oscillatory substrate (Stuart-Landau). Phase credit can't replace argmax. See kills/oscillatory_step1003.md.
-  **Steps 1004-1005 KILLED:** Multi-horizon prediction. Gradient ascent overflow. See kills/multi-horizon_step1005.md.
-  **Step 1006:** PRISM baseline established (chain_score 3/5: CIFAR=100%, LS20=100%, FT09=0%, VC33=0%, CIFAR-after=100%). Saved to chain_results/baseline_994.json.
-  **Step 1007 FAIL:** Attention-trajectory substrate. Buffer=(enc, action_idx, delta), action=softmax(q@K^T)@V argmax. LS20 regressed 100%→0%. FT09/VC33 unchanged (0%). Chain=2/5 < baseline. Root cause: running_mean alpha=0.01 too slow (noisy enc early), buffer cross-game action bleed, O(T) attention per step (857s total, 3x over cap).
+CURRENT STEP: 1010 RUNNING. Hybrid 800b + Attention (component composition test).
+  **Steps 1001-1003 KILLED:** Oscillatory. **Steps 1004-1005 KILLED:** Multi-horizon.
+  **Step 1006:** PRISM baseline (chain_score 3/5). **Step 1007 FAIL:** Attention-trajectory (bootstrap).
+  **Step 1008 KILL:** CC Zone Discovery + 800b. LS20=100%, FT09=0%, VC33=0%. CC survives graph ban (Theorem 5). Zone discovery works but 800b alone can't provide temporal credit.
+  **Step 1009 FAIL:** Attention v2. LS20=0/10 (attention collapses to NN lookup → no coverage). Structural mismatch: attention replaces 800b's coverage.
+  **Step 1010 RUNNING:** Hybrid: 800b (coverage) + attention (temporal credit) + CC discovery (action space). Tests whether components COMPOSE. One config.
   **PRISM infrastructure overhauled (2026-03-24):** run_experiment.py harness, randomized game order, substrate-only files, baseline_994.json.
   Step 1000 DEFINITIVE: 994@25K = LS20 286.2/9/10. FT09=0, VC33=0, CIFAR=chance.
   Theorem 4 formalized: global running mean SNR → 0 for state-dependent actions (Prop 31).
