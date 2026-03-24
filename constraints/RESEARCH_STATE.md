@@ -57,7 +57,7 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 948 (pending, Eli's next session). Hebbian RNN — new family.
+CURRENT STEP: 949 (building). Hebbian RNN h_dim=128 — robustness test.
 DIRECTION (2026-03-24, post-947):
   **916-AUGMENTATION FAMILY DEAD (Steps 944-947, 4 consecutive kills).**
   Step 944: alpha reset → KILL (concentration is load-bearing, not degeneration)
@@ -65,7 +65,8 @@ DIRECTION (2026-03-24, post-947):
   Step 946: additive action bias → KILL (global augmentation adds position-independent noise; 916 already has action in input)
   Step 947: persistence-weighted error → KILL (running mean drift weighting hurts LS20; FT09 dims 60/51/52 = game timer)
   **PATTERN:** 916 is a tightly coupled local minimum. Alpha values, alpha feedback loop, and error signal are ALL load-bearing. Any modification corrupts the coupled system. Prop 28 FALSIFIED.
-  **STEP 948 (pending):** Hebbian RNN — genuinely new family. No alpha, no 800b, no hash. Continuous recurrent state, Hebbian action mapping. Tests whether navigation is possible through entirely different mechanism. Kill: L1 > 0 on any seed.
+  **STEP 948 PASS:** Hebbian RNN — genuinely new family. LS20 seed 8 = 96 (9/10 zeros, mean=9.6). First navigation WITHOUT alpha, 800b, or hash. W_a @ h CAN drive navigation through continuous recurrent state + Hebbian action mapping. Brittle (seed-dependent init). FT09=0/10.
+  **STEP 949 (building):** h_dim=128 (was 64) for more representational capacity. Testing robustness.
   **CONSTITUTIONAL DEBATE RESOLVED (2026-03-23).** Eli wins. Constitution survives. R4 = discriminative capacity (Ashby). R2 prevents evaluation hacking (DGM).
   **ALL 916 DEGREES OF FREEDOM CLOSED (Steps 933-947).** 15 experiments confirm 916 is a fixed point.
   **CHAIN:** LS20=290.7 best (916 at 25K). FT09/VC33/CIFAR=0. PRISM-light incomplete.
