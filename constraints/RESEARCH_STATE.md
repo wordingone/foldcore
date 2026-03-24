@@ -57,7 +57,8 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 1018 running (LS20 7-level solver). **JUN REFRAME (2026-03-24): Gap = can the substrate autonomously discover the prescriptions? D2 = catalog ALL prescriptions. D1 = substrate discovers them. 800b/916/alpha lineage REFUSED. ARC-AGI-3 full release March 25 = expand D2 to all games.**
+CURRENT STEP: 1018b pending (LS20 BFS solver bug fix). **JUN REFRAME (2026-03-24): Gap = can substrate discover prescriptions? D2 = catalog+ablate. D1 = substrate discovers them. Lineage refused. Debate spec ready (experiments/debate_search_kill.md).**
+  **Step 1018 PARTIAL (Direction 2):** LS20 BFS solver. All 7 levels solved offline (L1=13, L2=45, L3=52, L4=41, L5=50, L6=84, L7=61 steps). In-game: 1/10 seeds (seed 0 = L1+L2 confirmed). Bug: on_level_transition double-fire when game order varies. L3+ model edge cases (sprites without tags, partial walls). Eli debugging → 1018b.
   **Steps 1001-1005 KILLED:** Oscillatory (3), multi-horizon (2). **Step 1006:** PRISM baseline (3/5).
   **Step 1007 FAIL:** Attention-trajectory (bootstrap). **Step 1008 KILL:** CC discovery + 800b. CC survives ban (Theorem 5) but 800b can't sequence. **Step 1009 FAIL:** Attention v2 (collapses to NN, no coverage).
   **Step 1010 PASS (no improvement):** Hybrid 800b + attention + CC. LS20=100%, FT09/VC33=0%. Adding attention to 800b = same as 800b alone. LS20-tuned foundation confound confirmed.
