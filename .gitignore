@@ -33,3 +33,6 @@ substrates/archive/
 
 # Build scripts (operational, not research)
 paper/compress_paper.py
+
+# Debate corpus (shared evidence, not for public repo)
+experiments/debate_corpus/

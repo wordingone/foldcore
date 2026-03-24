@@ -41,6 +41,12 @@ Stances switched from natural inclination.
 6. Final statements. One each.
 7. Verdict.
 
+## Shared Corpus
+
+Both sides have access to `experiments/debate_corpus/`. This directory contains the shared evidence base — facts both sides agree on before the debate starts. Neither side may dispute corpus entries during the debate. Additions require both sides to agree.
+
+Contents populated before debate launch. Gitignored — not for the public repo.
+
 ## Trigger
 
 Jun says go.
