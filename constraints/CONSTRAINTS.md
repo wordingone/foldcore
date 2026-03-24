@@ -226,7 +226,7 @@ The task is interactive (unknown environment, no separate training phase). Any s
 
 4. **Component extraction (2026-03-24):** 33 components cataloged. 6 families under-explored (<6 experiments). FT09/VC33 action-space discovery = zero post-ban experiments. See COMPONENT_CATALOG.md.
 
-5. **Unconstrained diagnostic:** Calibrate constraint costs via PRISM with all bans lifted. Expected 5/5 games L1 vs 3/5 constrained.
+5. **Unconstrained diagnostic COMPLETE (Step 1017):** ALL bans lifted + ALL rules suspended = FT09/VC33 still 0%. **Bans and constitution are orthogonal to the click game problem.** The constraint map describes LS20 navigation, not the full search space. The substrate lacks basic task competence (causal discovery of game mechanics) — a pre-constitutional capability that R1-R6 don't address.
 
 ### External Audit Status (2026-03-18, 13 findings)
 
