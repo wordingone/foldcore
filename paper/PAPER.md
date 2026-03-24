@@ -57,6 +57,7 @@ Multiple biological and physical systems exhibit fixed interpreter + self-modify
 - **Place cells** (Leutgeb et al., 2007): sparse coding (~5-10% active) → orthogonal representations. Dissolves positive lock (Prop 30). relu(h-0.5) gating = computational equivalent. Benna & Bhalla (2025): sparse place phenomena in untrained random nets, consistent with ESN finding.
 - **Forward models + graph ban:** No PAC-MDP without visit counts (Strehl 2009). BYOL-Explore (Guo 2022) achieves superhuman exploration without counts. Ban forces uncovered territory.
 - **Causal discovery from intervention** (Eberhardt 2008, Bareinboim 2020): active intervention requires fewer observations than passive coverage to infer causal structure. Step 1017: generic exploration fails — substrate may need targeted experimentation to discover game mechanics within tight budgets.
+- **Infant causal learning** (Goddu & Gopnik 2024): infants discover causal structure via targeted intervention (act, confirm, vary), not random exploration. By 4, children infer unobserved variables. The substrate needs to probe and model, not just explore.
 
 
 ## 3. Formal Framework
