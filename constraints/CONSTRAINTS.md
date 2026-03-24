@@ -271,6 +271,7 @@ Algorithm invariance (argmin banned), U3/U17 (graph growth banned — what accum
 | PB22 | Direction 1: 5 extraction experiments (1007-1014) = 0 FT09/VC33 signal | CONFIRMED |
 | PB23 | Game-agnostic base (no 800b/alpha/h) maintains LS20 via bootloader only | CONFIRMED (Step 1014) |
 | PB24 | LS20-tuned foundation (600 steps hill-climbing) may contaminate extraction experiments | PROVISIONAL (Jun observation, 2026-03-24, no controlled test) |
+| PB25 | Hardcoded game coordinates become stale across versions (572u = 0 on LS20/9607627b) | CONFIRMED (Step 1015) |
 
 ### Summary
 
