@@ -57,16 +57,12 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 960 done. HEBBIAN W_a FAMILY DEAD (13 experiments, 948-960).
-Step 960 KILL: Split pathway (signed score, positive update) = 1/10 seed8=96. h correlation preserves ranking.
-Step 959 KILL: ReLU-gated = 1/10. Sparse-positive still locks.
-Step 958 KILL: Ensemble = 0/10. Kills lucky seeds.
-Step 957 KILL: UCB = 0/10. Collapses.
-  PROP 30 REFINED: The lock is not about h SIGN — it's about h CORRELATION. Recurrent sigmoid h
-  is insufficiently state-specific → ANY linear scorer gives consistent ranking → winner-take-all.
-  13 experiments prove: architecture, exploration, sign, sparsity, ensemble — ALL insufficient.
-  DIRECTION: Either (a) accept 800b as only action mechanism and focus on encoding/R3,
-  or (b) find non-counting, non-Hebbian, non-linear action mechanism (genuinely unknown territory).
+CURRENT STEP: 962 done. HEBBIAN W_a FULLY DEAD (15 experiments, 948-962).
+  800b CONFIRMED as unique reliable action mechanism. State-dependent W_a provides no advantage.
+  Prop 30 final: unbounded growth (961) + h correlation (960) + positive lock (Prop 30 original).
+  15 experiments: warm-start, mean-sub, eps-decay, softmax, ESN×2, RNG-free, UCB, ensemble,
+  sparse-gating, signed-scoring, anti-nearest, decayed W_a — ALL killed.
+  DIRECTION: Accept 800b. Focus on encoding/R3. March 25 deadline approaching.
 DIRECTION (2026-03-24, post-947):
   **916-AUGMENTATION FAMILY DEAD (Steps 944-947, 4 consecutive kills).**
   Step 944: alpha reset → KILL (concentration is load-bearing, not degeneration)
