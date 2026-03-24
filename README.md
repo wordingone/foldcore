@@ -2,7 +2,7 @@
 
 Can a system improve itself by criteria it generates?
 
-1000+ experiments across 14 architecture families testing substrates for recursive self-improvement on published benchmarks (Split-CIFAR-100, Atari 100K) and interactive games (ARC-AGI-3). R3 encoding self-modification achieved (Step 895). Two bans — codebook (Step 416) and graph (Step 777, permanent) — remove both known-working mechanisms. Chain SOTA: 994 adaptive eta (LS20=286.2@25K, 9/10 seeds). FT09/VC33=0 under all mechanisms — formally characterized as the temporal credit wall (Theorem 4, Proposition 31, 43 experiments). The contributions: a formal framework (R1-R6), 4 theorems, 31 propositions, a constraint map from systematic falsification, and the temporal credit impossibility result.
+1009+ experiments across 16 architecture families testing substrates for recursive self-improvement on published benchmarks (Split-CIFAR-100, Atari 100K) and interactive games (ARC-AGI-3). R3 encoding self-modification achieved (Step 895). Two bans — codebook (Step 416) and graph (Step 777, permanent) — remove both known-working mechanisms. PRISM infrastructure overhaul (Step 1006): randomized game order, chain-based kills, all three games from step 1. Chain SOTA: 994 adaptive eta (LS20=286.2@25K, 9/10 seeds). FT09/VC33=0 under all mechanisms — formally characterized as the temporal credit wall (Theorem 4, Proposition 31). Extraction sprint (Steps 1008+): testing CC zone discovery and attention mechanisms to break the FT09/VC33 wall.
 
 ## Results (honest)
 
@@ -42,7 +42,7 @@ Can a system improve itself by criteria it generates?
 ```
 paper/           Research paper (PDF + source)
 constraints/     Constraint map (CONSTRAINTS.md), constitution (R1-R6), experiment log
-experiments/     943+ experiment scripts (chronological, Steps 1-943)
+experiments/     1009+ experiment scripts (chronological, Steps 1-1009+)
 substrates/      Active substrate code:
   base.py          BaseSubstrate interface (5 methods)
   step0674.py      Reference substrate (transition-triggered dual-hash)

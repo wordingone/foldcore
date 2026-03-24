@@ -1,0 +1,127 @@
+{
+  "substrate": "FastAdapt994",
+  "timestamp": "2026-03-24T08:45:57",
+  "step": 1006,
+  "prism_mode": null,
+  "chain": [
+    "Split-CIFAR-100-before",
+    "LS20",
+    "FT09",
+    "VC33",
+    "Split-CIFAR-100-after"
+  ],
+  "budget_per_phase": 500,
+  "n_seeds": 10,
+  "config": {
+    "ENC_DIM": 256,
+    "H_DIM": 64,
+    "ETA_W": 0.01,
+    "ALPHA_EMA": 0.1,
+    "EPSILON": 0.2,
+    "SOFTMAX_TEMP": 0.1,
+    "FAST_ADAPT_STEPS": 500,
+    "FAST_ETA_FACTOR": 1.5
+  },
+  "results": {
+    "Split-CIFAR-100-before": {
+      "l1_rate": 1.0,
+      "l2_rate": 0.0,
+      "avg_steps": 20.0,
+      "mean_elapsed": 1.7449999999999999,
+      "per_seed_l1": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "LS20": {
+      "l1_rate": 1.0,
+      "l2_rate": 0.0,
+      "avg_steps": 10000.0,
+      "mean_elapsed": 7.276000000000001,
+      "per_seed_l1": [
+        1427,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    "FT09": {
+      "l1_rate": 0.0,
+      "l2_rate": 0.0,
+      "avg_steps": 10000.0,
+      "mean_elapsed": 5.24,
+      "per_seed_l1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "VC33": {
+      "l1_rate": 0.0,
+      "l2_rate": 0.0,
+      "avg_steps": 10000.0,
+      "mean_elapsed": 3.911,
+      "per_seed_l1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "Split-CIFAR-100-after": {
+      "l1_rate": 1.0,
+      "l2_rate": 0.0,
+      "avg_steps": 20.0,
+      "mean_elapsed": 1.759,
+      "per_seed_l1": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    }
+  },
+  "chain_score": {
+    "phases_passed": 3,
+    "phases_total": 8,
+    "chain_complete": false
+  },
+  "chain_kill": {
+    "verdict": "NO_BASELINE",
+    "per_game_delta": {},
+    "details": "baseline not found"
+  }
+}

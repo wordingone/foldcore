@@ -28,6 +28,23 @@ DEFAULT_STEPS = 10_000
 SAFETY_MULTIPLIER = 10   # safety timeout = 10× expected step time
 
 
+# ─── Substrate compatibility shim ───
+# Old substrates (pre-2026-03-24) use set_game(n_actions) + _n_actions (private).
+# ChainRunner calls reset(seed) and substrate.n_actions (public).
+# These helpers bridge the gap without modifying existing substrates.
+
+def _substrate_reset(sub, seed: int):
+    """Call sub.reset(seed) if available. Old substrates use set_game() as reset."""
+    if hasattr(sub, 'reset'):
+        sub.reset(seed)
+    # else: set_game() was already called by the wrapper — functions as reset.
+
+
+def _substrate_n_actions(sub, fallback: int) -> int:
+    """Return sub.n_actions, or sub._n_actions (private), or fallback."""
+    return int(getattr(sub, 'n_actions', getattr(sub, '_n_actions', fallback)))
+
+
 def _make_arc_env(game_name: str):
     """Return factory for ARC game environment."""
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'experiments'))
@@ -72,7 +89,7 @@ class ArcGameWrapper:
         if hasattr(substrate, 'set_game'):
             substrate.set_game(n_actions)
 
-        substrate.reset(seed)
+        _substrate_reset(substrate, seed)
         obs = self._env.reset(seed=seed)
         level = 0
         l1_step = l2_step = None
@@ -90,7 +107,7 @@ class ArcGameWrapper:
                 continue
 
             action = substrate.process(np.array(obs, dtype=np.float32))
-            obs, reward, done, info = self._env.step(action % substrate.n_actions)
+            obs, reward, done, info = self._env.step(action % _substrate_n_actions(substrate, n_actions))
             steps += 1
 
             if fresh_episode:
@@ -153,9 +170,9 @@ class GymWrapper:
 
         env = gym.make(self.env_id, render_mode=None,
                        frameskip=self.frameskip if self.frameskip > 1 else None)
-        n_actions = env.action_space.n if hasattr(env.action_space, 'n') else substrate.n_actions
+        n_actions = env.action_space.n if hasattr(env.action_space, 'n') else _substrate_n_actions(substrate, 4)
 
-        substrate.reset(seed)
+        _substrate_reset(substrate, seed)
         obs, info = env.reset(seed=seed)
         steps = 0
         total_reward = 0.0
@@ -246,7 +263,7 @@ class CIFARWrapper:
         rng = np.random.RandomState(seed)
         idx = rng.permutation(len(images))[:self.n_steps]
 
-        substrate.reset(seed)
+        _substrate_reset(substrate, seed)
         correct = 0
         window = []
         l1_step = None
@@ -352,7 +369,7 @@ class SplitCIFAR100Wrapper:
         task0_acc_after = None
         t_start = time.time()
 
-        substrate.reset(seed)
+        _substrate_reset(substrate, seed)
 
         for task_id in range(self.N_TASKS):
             if (time.time() - t_start) > self.safety_timeout:
@@ -572,7 +589,8 @@ class ChainRunner:
             "step": step,
             "prism_mode": mode,
             "chain": [name for name, _ in self.chain],
-            "budget_per_phase": self.chain[0][1].n_steps if self.chain else 0,
+            "budget_per_phase": getattr(self.chain[0][1], 'n_steps',
+                                        getattr(self.chain[0][1], 'n_images_per_task', 0)) if self.chain else 0,
             "n_seeds": self.n_seeds,
             "config": config or {},
             "results": {},
@@ -712,3 +730,78 @@ def make_prism_mode(mode: str = "C", config_path: str = None,
         return make_prism_from_config(config_path, "light", n_steps, safety_timeout), True
     else:
         raise ValueError(f"Unknown PRISM mode: {mode}. Use A, B, or C.")
+
+
+def compute_chain_kill(aggregated: dict, baseline_path: str = None,
+                       baseline: dict = None) -> dict:
+    """Compare aggregated results against baseline. Returns chain kill verdict.
+
+    Chain kill rule (Jun 2026-03-24):
+      PASS  — all games neutral-or-improved vs baseline
+      KILL  — any game improved while another degraded (per-game tuning)
+      FAIL  — all games degraded (bad mechanism, not per-game tuning)
+      NO_BASELINE — no baseline available yet
+
+    Args:
+        aggregated: dict from ChainRunner.run()
+        baseline_path: path to baseline JSON file (chain_results/baseline_994.json)
+        baseline: pre-loaded baseline dict (alternative to baseline_path)
+
+    Returns dict with: verdict, per_game_delta, chain_score, details
+    """
+    import json
+
+    # Load baseline
+    if baseline is None and baseline_path is not None:
+        try:
+            with open(baseline_path) as f:
+                raw = json.load(f)
+            baseline = raw.get('results', raw)
+        except (FileNotFoundError, KeyError):
+            baseline = None
+
+    if baseline is None:
+        return {"verdict": "NO_BASELINE", "per_game_delta": {}, "details": "baseline not found"}
+
+    # Compute per-game L1 rate deltas
+    per_game_delta = {}
+    for name, data in aggregated.items():
+        if not isinstance(data, dict) or 'l1_rate' not in data:
+            continue
+        base_data = baseline.get(name, {})
+        base_l1 = base_data.get('l1_rate', None)
+        if base_l1 is None:
+            per_game_delta[name] = {"delta": None, "current": data['l1_rate'], "baseline": None}
+            continue
+        delta = data['l1_rate'] - base_l1
+        per_game_delta[name] = {
+            "delta": round(delta, 4),
+            "current": round(data['l1_rate'], 4),
+            "baseline": round(base_l1, 4),
+        }
+
+    # Verdict
+    valid_deltas = [v['delta'] for v in per_game_delta.values() if v['delta'] is not None]
+    if not valid_deltas:
+        verdict = "NO_BASELINE"
+    else:
+        improved = sum(1 for d in valid_deltas if d > 0.05)   # >5% improvement
+        degraded = sum(1 for d in valid_deltas if d < -0.05)  # >5% degradation
+        if improved > 0 and degraded > 0:
+            verdict = "KILL"   # per-game tuning: some games up, some down
+        elif improved == 0 and degraded > 0:
+            verdict = "FAIL"   # no improvement, at least one degraded
+        else:
+            verdict = "PASS"   # all improved or neutral
+
+    # Chain score summary
+    phases_passed = sum(1 for v in aggregated.values()
+                       if isinstance(v, dict) and v.get('l1_rate', 0) > 0)
+    phases_total = len([v for v in aggregated.values() if isinstance(v, dict) and 'l1_rate' in v])
+
+    return {
+        "verdict": verdict,
+        "per_game_delta": per_game_delta,
+        "chain_score": {"phases_passed": phases_passed, "phases_total": phases_total},
+        "details": f"improved={improved if valid_deltas else '?'} degraded={degraded if valid_deltas else '?'} of {len(valid_deltas)} games",
+    }
