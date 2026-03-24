@@ -551,6 +551,8 @@ All methods L1=0 on FT09 (68 actions). Even graph+argmin at 6 correct actions + 
 
 **Prescribed:** FT09 6/6 (Step 1012), VC33 7/7 (Step 1013). **Generic with ALL bans lifted (Step 1017):** 674 graph + CC zones → FT09=0%, VC33=0%. The 13-level gap is PRESCRIPTION, not constraints. Temporal credit for multi-step sequences within tight budgets — not state coverage — is the bottleneck. No mechanism in 1000+ experiments addresses this.
 
+**ARC-AGI-3 scoring (RHAE).** $\text{level\_score} = \min(1, (b_\ell / a_\ell)^2)$ where $b_\ell$ = human baseline actions, $a_\ell$ = agent actions. Game score = weighted average (later levels weighted more). Leaderboard = mean of game scores. Human baselines: LS20=[21,123,39,92,54,108,109], FT09=[17,19,15,21,65,26]. A substrate that solves L1 in 1000 actions vs baseline 17 scores $(17/1000)^2 = 0.03\%$. Efficient discovery, not just level completion, is required.
+
 ## 6. Degrees of Freedom
 
 The formalization identifies what the constraints REQUIRE but also what they leave UNDETERMINED. These degrees of freedom define the experiment space for the next phase.

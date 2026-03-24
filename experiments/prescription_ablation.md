@@ -94,3 +94,19 @@
 - Camera correction (auto-detectable)
 
 **The substrate must discover:** action-effect mappings + ordering + game mechanics. From interaction, not from source analysis.
+
+---
+
+## RHAE Scoring Constraint (ARC-AGI-3)
+
+Score = (human_baseline / agent_actions)^2 per level. The substrate must not just SOLVE levels but solve them EFFICIENTLY.
+
+| Game | Level | Human Baseline | Max Budget (score>25%) | Max Budget (score>1%) |
+|------|-------|---------------|----------------------|---------------------|
+| FT09 | L1 | 17 | 34 | 170 |
+| FT09 | L2 | 19 | 38 | 190 |
+| LS20 | L1 | 21 | 42 | 210 |
+| LS20 | L2 | 123 | 246 | 1230 |
+| VC33 | L1 | 6 | 12 | 60 |
+
+**Implication for ablation:** A mechanism that discovers the prescription in 10K steps but EXECUTES it in 20 actions scores well. A mechanism that needs 10K steps to stumble on the solution and has no way to replay it scores ~0%. The substrate needs LEARNING (discover once) + EXECUTION (replay efficiently), not just exploration.
