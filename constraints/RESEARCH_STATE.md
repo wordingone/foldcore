@@ -57,14 +57,13 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 943. ALL degrees of freedom under 916 base now closed.
-DIRECTION (2026-03-23, post-943 kill):
-  **EVERY MODIFICATION TO 916 KILLS IT.** Action selection (933-938e), encoding expansion (939-939b), observation preprocessing (942-943) — all closed. 916 is a fixed point under current constraints + bans.
-  **ACTION SELECTION (closed):** Steps 933-938e. 800b irreducible.
-  **ENCODING ARCHITECTURE (closed):** Steps 939-939b. Fixed-dim under 916. Dynamic growth kills alpha.
-  **OBSERVATION PREPROCESSING (closed):** Steps 942-943. Replacement preprocessing destroys positional signal. Additive would need growing dims (→ GFS → killed).
+CURRENT STEP: 944 (in progress). Ashby threshold reset — self-triggered alpha redistribution.
+DIRECTION (2026-03-23, post-debate):
+  **CONSTITUTIONAL DEBATE RESOLVED (2026-03-23).** Eli wins. Constitution survives. R4 = discriminative capacity (Ashby requisite variety). R2 prevents evaluation hacking (DGM case study). alpha_conc=50 = R3 predicting R4 failure → frozen comparator degenerates. R3 prescription: unfreeze comparator.
+  **STEP 944:** Ashby threshold reset. When alpha_conc > THETA_CONC (30), reset alpha to uniform. R3 hypothesis: self-triggered discontinuous modification maintains discriminative capacity that frozen continuous updates cannot. Proposition 28.
+  **ALL 916 DEGREES OF FREEDOM CLOSED (Steps 933-943).** Action selection (933-938e, 800b irreducible). Encoding architecture (939-939b, dynamic growth kills alpha). Observation preprocessing (942-943, destroys positional signal).
+  **NEW FAMILY:** Alpha-unfreezing. Different from 933-943 (those modified around the alpha update; 944 modifies the alpha update itself).
   **CHAIN:** LS20=290.7 best (916). FT09/VC33/CIFAR=0. PRISM-light incomplete.
-  **CONSTITUTIONAL QUESTION (Jun, 2026-03-23):** R1-R6 may have drifted from the original question. They constrain improvement operators but miss the evaluation layer. Awaiting Jun's directive.
 PREVIOUS DIRECTION (2026-03-23, post-compression):
   **ENCODING (solved):** Alpha-weighted prediction-error attention (Prop 22, confirmed Steps 895-895h). R3 encoding self-modification works universally. Carry forward to ALL future families.
   **ACTION SELECTION (open — family exhausted):** 800b (per-action delta EMA + softmax) is the best post-ban selector (2-2.5x baselines). But: position-blind (Prop 23b), reset-inverted (delta inversion), and every modification degrades (Steps 912-937, 25+ experiments). The 916 architecture is a local minimum. Next family must use ACTUAL observation changes but NOT per-action delta EMA. See FAMILY_KILLS.md.
