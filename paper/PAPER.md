@@ -536,7 +536,7 @@ Published baselines reproduced in our framework on LS20 (25K steps, $n_{\text{ef
 | 919 Count-based (Bellemare 2016) | 109.0 | 125.3 | 5/10 | obs frequency |
 | 917 ICM (Pathak 2017) | 0.0 | 0.0 | 10/10 | forward pred error |
 
-All methods L1=0 on FT09 (68 actions). Even graph+argmin at 6 correct actions = L1=0 (Step 920b). Bottleneck is sequential ordering, not mechanism.
+All methods L1=0 on FT09 (68 actions). Even graph+argmin at 6 correct actions + avgpool16 = L1=0 (Step 920b). Generic exploration insufficient — FT09 6/6 required per-game prescribed solution (Step 1012, all constraints lifted). Bottleneck is solution architecture (prescribed vs discovered), not encoding or action count.
 
 **Finding:** Our mechanism outperforms ALL baselines by $2\text{-}2.5\times$ on LS20 with 0/10 zero-seeds. Graph ban cost is NEGATIVE: 895h (268.0, no graph) $>$ 920 (129.9, with graph). ICM worst (signal dies as $W$ learns).
 
