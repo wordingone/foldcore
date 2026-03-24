@@ -57,14 +57,14 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 964 done. 916 CHAIN DIAGNOSTIC — 4 failure modes identified.
-  CIFAR: at chance (0.011). 916 doesn't classify.
-  LS20: degraded in chain (14.7/3/10 vs 74.7/8/10 standalone). Cross-game h corruption.
-  FT09: 0/10 (68 actions at 10K = budget-limited).
-  VC33: 0/10 (cause unknown).
-  PRISM-light NOT achievable with 916@10K. Four independent fixes needed.
-  HEBBIAN W_a FULLY DEAD (Steps 948-962, 15 experiments). 800b confirmed unique.
-  Props 29 (architecture irrelevance) + 30 (positive lock) written and formalized.
+CURRENT STEP: 966 (building). Action embeddings + prediction-as-classification.
+  Jun correction: 4 chain failures = ONE problem (substrate too narrow), not 4 separate fixes.
+  Step 965: h-reset fixes LS20 chain degradation (3/10→6/10). But LS20-only = per-game tuning.
+  Step 964: chain diagnostic — CIFAR/FT09/VC33 all broken. 916 is an LS20 solver, not a substrate.
+  DIRECTION: Prediction as universal mechanism. Navigation = argmin(pred error per action).
+  Classification = argmin(pred error per class). Same W_pred, different readout.
+  n_actions scaling: action embeddings cluster similar actions → O(k) not O(n).
+  HEBBIAN W_a DEAD (948-962, 15 exp). Props 29+30. 800b unique but scales poorly with n_actions.
 DIRECTION (2026-03-24, post-947):
   **916-AUGMENTATION FAMILY DEAD (Steps 944-947, 4 consecutive kills).**
   Step 944: alpha reset → KILL (concentration is load-bearing, not degeneration)
