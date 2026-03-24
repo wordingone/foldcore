@@ -65,12 +65,13 @@ CURRENT STEP: 988 done. 965 UNTOUCHABLE (22 kills: 966-987). FT09/VC33 MECHANISM
   800b action selection FROZEN (22 experiments confirm any override kills LS20).
   FT09/VC33: 68 actions, ordered sequences, mechanism-limited. Graph ban prevents per-state fix.
   CIFAR: chance (no classification mechanism).
-  Step 994 = NEW CHAIN BEST: LS20=83.8/8/10 (+25% over 965). h-novelty spike → fast adapt (500 steps).
-  First improvement in 28 kills. Adaptive eta family = new degree of freedom. W_pred learning rate is safe to modulate.
-  Step 995: re-triggering during game slightly hurts (77.6 vs 83.8). Game-transition-only = optimal.
-  FT09/VC33 still 0 — temporal credit wall unchanged (Prop 31).
-  DEBATE v3: Graph ban NOT the wall. Temporal credit assignment IS the wall.
-  DIRECTION: Iterate adaptive eta family. 994 = new floor. FT09/VC33 need new paradigm beyond eta modulation.
+  STEP 1000 DEFINITIVE: 994 @25K = LS20 286.2/9/10. FT09=0, VC33=0, CIFAR=chance.
+  994 = h-novelty transition detection + 500-step fast adapt. LS20 scales: 83.8@10K → 286.2@25K.
+  Mechanism fully characterized: 997 ablation (80% from transition, 20% from warm-start).
+  998 duration sweep: 500 steps optimal (non-monotonic). 999 dual-target: neutral.
+  FT09/VC33: temporal credit wall confirmed at 10K/25K/50K (Prop 31). Debate v3 resolved.
+  Props 29 (architecture irrelevance), 30 (positive lock), 31 (temporal credit wall).
+  Session: 53 experiments (948-1000). 916 paradigm FULLY CHARACTERIZED.
 DIRECTION (2026-03-24, post-947):
   **916-AUGMENTATION FAMILY DEAD (Steps 944-947, 4 consecutive kills).**
   Step 944: alpha reset → KILL (concentration is load-bearing, not degeneration)
