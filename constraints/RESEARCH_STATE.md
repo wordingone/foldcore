@@ -57,14 +57,12 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 953 (building). Hebbian RNN softmax action selection — reassessment experiment (6th, justified: untested mechanism).
-Step 952 KILL: Epsilon decay (1.0→0.20 over 2K) → 0/10 seeds. Early pure random destroys seed 8's bootstrap.
-Step 951 KILL: Mean-subtracted delta → W_a_norm 0.338 (vs 20.3). Positive accumulation load-bearing.
-Step 950 KILL: Warm-start → 0/10. Concurrent learning load-bearing.
-Step 949 NEUTRAL: h_dim=128 = same as 948. Capacity irrelevant.
-  FAMILY REASSESSMENT: 5/5 experiments, all used argmax+epsilon. Softmax (distribution-based) never tested.
-  Constraint map: concurrent learning + positive accumulation + early partial exploitation ALL load-bearing.
-  If 953 KILL → Hebbian RNN family DEAD → Echo State Network next.
+CURRENT STEP: 954/954b (building). Echo State Network — new family. Fixed reservoir (spectral radius 0.9) + Hebbian W_a (954) vs random W_a (954b diagnostic).
+  HEBBIAN RNN FAMILY DEAD (Steps 948-953, 6 experiments):
+  948 PASS 1/10 (seed 8=96). 949 NEUTRAL. 950-953 all KILL.
+  Proved: concurrent learning + positive accumulation + early partial exploitation ALL load-bearing.
+  Structural gap: W_a bootstrapping from zero + argmax = winner-take-all lock. Only luck navigates.
+  ESN hypothesis: strong fixed recurrence (ρ=0.9) → trajectory-dependent h from step 1 → W_a differentiation.
 DIRECTION (2026-03-24, post-947):
   **916-AUGMENTATION FAMILY DEAD (Steps 944-947, 4 consecutive kills).**
   Step 944: alpha reset → KILL (concentration is load-bearing, not degeneration)
