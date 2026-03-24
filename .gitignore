@@ -34,5 +34,6 @@ substrates/archive/
 # Build scripts (operational, not research)
 paper/compress_paper.py
 
-# Debate corpus (shared evidence, not for public repo)
+# Debate (internal process, not for public repo)
 experiments/debate_corpus/
+experiments/debate_search_kill.md
