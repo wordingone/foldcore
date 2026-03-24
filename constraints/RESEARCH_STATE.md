@@ -62,8 +62,11 @@ CURRENT STEP: 1014 queued. Direction 2 running (1011-1013). Direction 1 next (10
   **Step 1007 FAIL:** Attention-trajectory (bootstrap). **Step 1008 KILL:** CC discovery + 800b. CC survives ban (Theorem 5) but 800b can't sequence. **Step 1009 FAIL:** Attention v2 (collapses to NN, no coverage).
   **Step 1010 PASS (no improvement):** Hybrid 800b + attention + CC. LS20=100%, FT09/VC33=0%. Adding attention to 800b = same as 800b alone. LS20-tuned foundation confound confirmed.
   **DIRECTION SHIFT (Jun, 2026-03-24):** LS20-tuned base (600 steps of hill-climbing) contaminates all extraction experiments. Game-agnostic base needed. Universal missing piece: SEQUENCING (action order discovery). Discovery + recognition solved, sequencing unsolved.
-  **Steps 1011-1013 RUNNING (Direction 2):** Unconstrained diagnostic. ALL bans lifted. Every-level ceiling measurement.
+  **Step 1011/1011b FAIL (Direction 2):** Unconstrained PRISM. Implementation used global argmin (round-robin) instead of per-state argmin. Needs full 674 graph implementation. Deferred to 1011c.
+  **Step 1012 CONFIRMED (Direction 2):** FT09 per-game ceiling. 6/6 levels, 5/5 seeds, 75 clicks, deterministic. Game version 0d8bbf25 confirmed solvable. **Constrained gap: 0/10 L1 → 6/6 all levels.**
+  **Step 1013 RUNNING (Direction 2):** VC33 per-game ceiling.
   **Step 1014 QUEUED (Direction 1):** Sequence Novelty Learner on game-agnostic base. N-gram action scoring by observation novelty. NO 800b, NO alpha, NO recurrent h. First FT09-first design.
+  **THEORETICAL INSIGHT (2026-03-24):** The universal problem across all games is context-conditioned action selection. The graph ban prohibits per-state context. Attention tracks context via trajectory (time-indexed). Sequence learner tracks context via action history (action-indexed). Both are graph-ban safe. Neither has worked yet. The FRAMING is: how to track interaction context WITHOUT per-state storage.
   **PRISM infrastructure overhauled (2026-03-24):** run_experiment.py harness, randomized game order, substrate-only files, baseline_994.json.
   Step 1000 DEFINITIVE: 994@25K = LS20 286.2/9/10. FT09=0, VC33=0, CIFAR=chance.
   Theorem 4 formalized: global running mean SNR → 0 for state-dependent actions (Prop 31).
