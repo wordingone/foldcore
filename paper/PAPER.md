@@ -53,9 +53,9 @@ Multiple biological and physical systems exhibit fixed interpreter + self-modify
 
 ### 2.16 Additional related work
 
-- **Quorum sensing** (Waters & Bassler, 2005): population-level threshold triggers. Prop 28 FALSIFIED — alpha concentration on informative dims IS the mechanism.
-- **Place cells** (Leutgeb et al., 2007): sparse coding (~5-10% active) → orthogonal representations. Dissolves positive lock (Prop 30). relu(h-0.5) gating = computational equivalent. Benna & Bhalla (2025): sparse place phenomena in untrained random nets, consistent with ESN finding.
-- **Forward models + graph ban:** No PAC-MDP without visit counts (Strehl 2009). BYOL-Explore (Guo 2022) achieves superhuman exploration without counts. Ban forces uncovered territory.
+- **Quorum sensing** (Waters & Bassler, 2005): Prop 28 FALSIFIED — alpha concentration IS the mechanism.
+- **Place cells** (Leutgeb et al., 2007): sparse coding dissolves positive lock (Prop 30). relu(h-0.5) gating = computational equivalent.
+- **Forward models + graph ban:** No PAC-MDP without visit counts (Strehl 2009). BYOL-Explore (Guo 2022): superhuman exploration without counts.
 - **Causal discovery from intervention** (Eberhardt 2008, Bareinboim 2020): active intervention requires fewer observations than passive coverage to infer causal structure. Step 1017: generic exploration fails — substrate may need targeted experimentation to discover game mechanics within tight budgets.
 - **Infant causal learning** (Goddu & Gopnik 2024): infants discover causal structure via targeted intervention (act, confirm, vary), not random exploration. By 4, children infer unobserved variables. The substrate needs to probe and model, not just explore.
 
@@ -551,7 +551,7 @@ All methods L1=0 on FT09 (68 actions). Even graph+argmin at 6 correct actions + 
 
 **Prescribed:** FT09 6/6 (Step 1012), VC33 7/7 (Step 1013). **Generic with ALL bans lifted (Step 1017):** 674 graph + CC zones → FT09=0%, VC33=0%. The 13-level gap is PRESCRIPTION, not constraints. Temporal credit for multi-step sequences within tight budgets — not state coverage — is the bottleneck. No mechanism in 1000+ experiments addresses this.
 
-**ARC-AGI-3 scoring (RHAE).** $\text{level\_score} = \min(1, (b_\ell / a_\ell)^2)$ where $b_\ell$ = human baseline actions, $a_\ell$ = agent actions. Game score = weighted average (later levels weighted more). Leaderboard = mean of game scores. Human baselines: LS20=[21,123,39,92,54,108,109], FT09=[17,19,15,21,65,26]. A substrate that solves L1 in 1000 actions vs baseline 17 scores $(17/1000)^2 = 0.03\%$. Efficient discovery, not just level completion, is required.
+**ARC-AGI-3 scoring (RHAE).** $\text{level\_score} = \min(1, (b_\ell / a_\ell)^2)$. Human baselines: LS20=[21,123,39,92,54,108,109], FT09=[17,19,15,21,65,26]. Solving L1 in 1000 actions vs baseline 17 = 0.03%. Efficient discovery required, not just completion.
 
 ## 6. Degrees of Freedom
 
@@ -576,13 +576,13 @@ The formalization identifies what the constraints REQUIRE but also what they lea
 | 15 | Encoding temporal depth | Single frame or multi-frame | Frame stack depth from temporal autocorrelation at each cell | Sec 4.8 (D4) |
 | 16 | Encoding-statistics coupling rate | Must be non-zero (R3) and finite (stability) | How quickly encoding parameters respond to transition statistics | Sec 4.8 (T9, DoF 12) |
 
-**Central experimental question:** R3 = self-directed attention (Props 14b, 17, 18). Search space: encoding dimensions (D1-D5, §4.8) made state-dependent via transition statistics. Each independently testable on the chain benchmark.
+**Central question:** R3 = self-directed attention. Search space: encoding dimensions (D1-D5) made state-dependent via transition statistics.
 
 ## 7. Discussion
 
 ### 7.1 Pairwise Consistency Audit
 
-9 tensions checked. 6 resolved (T2: R3≡attention, T4: irredundant growth, T5: state-derived components, T6: one rule different inputs, T7: count-based self-observation, T8: per-domain centering). 1 constrained (T3: metric refines not rearranges). 2 open (T1: U7 reformulation, T9: encoding-statistics feedback). No contradictions found.
+9 tensions checked. 6 resolved, 1 constrained (T3), 2 open (T1, T9). No contradictions.
 
 ### 7.2 What is proven
 
@@ -642,7 +642,7 @@ The feasible region for L1 navigation is occupied — graph + argmin + correct e
 
 **Proposition 12 (Interpreter Bound).** Every self-referential system has an irreducible top-level interpreter. The frozen frame floor > 0. But $\ell_F$ achievable if state encodes operations the interpreter executes. → [propositions/12_interpreter_bound.md](propositions/12_interpreter_bound.md)
 
-**Post-ban addendum (Steps 778-938e):** 800b achieves 2x random on LS20. FT09 = 0 for all mechanisms. CIFAR = chance. R3 encoding self-modification CONFIRMED (alpha, Step 895). Action selection CLOSED after 938 series: per-observation (gate 5), reactive-global (constant action), trajectory-conditioned (unmappable h→action), trajectory-additive (noise corrupts delta). 800b is the unique working selector under current constraints. See kills/800b-variants_step937.md, Section 4.14.
+**Post-ban addendum (778-938e):** 800b=2x random LS20. FT09=0 all mechanisms. R3 encoding CONFIRMED (alpha, 895). Action selection CLOSED (938 series). 800b unique selector. See kills/800b-variants_step937.md.
 
 ### 7.7 Where the search points
 
