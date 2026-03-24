@@ -1144,6 +1144,108 @@ without per-state data, (b) lifting the graph ban (parametric models ---
 but Step 972 shows these compute the same function), or (c) a mechanism
 class outside prediction-error exploration entirely.
 
+\subsubsection{4.18 Component Extraction Validity (Theorem
+5)}\label{component-extraction-validity-theorem-5}
+
+\textbf{Prior work:} SURD (Martínez-Sánchez, Arranz, Lozano-Durán,
+Nature Communications 2024) decomposes causality into synergistic,
+unique, and redundant components. Ablation methodology (Meyes et al.,
+2019) establishes that removal ablation (component omitted during
+training and testing) is the valid paradigm; inaccurate ablation
+(corrupted at test only) introduces confounds. Our extraction protocol
+is a form of removal ablation applied to banned architecture families.
+
+\textbf{Our formalization:} Let family
+\(\mathcal{F} = \{c_1, \ldots, c_n\}\) be a system of components, and
+let \(P\) be the property identified by the killing finding \(K\):
+\(K(\mathcal{F}) = \text{FAIL}\) because
+\(P(\mathcal{F}) = \text{true}\).
+
+Define the causal contribution types of component \(c_i\) to property
+\(P\): - \textbf{Unique:} \(P(\{c_i\} \cup S') = \text{true}\) for any
+substrate \(S'\) not containing other \(\mathcal{F}\) components.
+\(c_i\) alone carries \(P\). - \textbf{Synergistic:}
+\(P(\{c_i\} \cup S') = \text{false}\) when
+\(\{c_j, c_k, \ldots\} \not\subseteq S'\). \(P\) requires the
+combination, not \(c_i\) alone. - \textbf{Redundant:}
+\(P(\mathcal{F} \setminus \{c_i\}) = \text{true}\). \(P\) persists even
+without \(c_i\) (other components also produce \(P\)).
+
+\textbf{Theorem 5 (Extraction Protocol Validity).} The extraction
+protocol --- testing \(S' \cup \{c_i\}\) against killing finding \(K\)
+--- correctly identifies whether \(c_i\) carries property \(P\) if and
+only if \(c_i\)'s causal contribution to \(P\) is unique or redundant.
+For synergistic contributions, the protocol produces false negatives:
+\(c_i\) appears safe when tested alone, but \(P\) re-emerges if
+synergistic partners are later added.
+
+\emph{Proof sketch:} If \(c_i\)'s contribution is unique,
+\(S' \cup \{c_i\}\) has \(P\) regardless of \(S'\)'s composition → test
+detects \(P\) → correctly rejects \(c_i\). If redundant, same logic
+applies. If synergistic with \(\{c_j, c_k\}\) and
+\(\{c_j, c_k\} \not\subseteq S'\), then
+\(P(S' \cup \{c_i\}) = \text{false}\) → test clears \(c_i\) → but
+\(P(S' \cup \{c_i, c_j, c_k\}) = \text{true}\). \(\square\)
+
+\textbf{Corollary 5.1 (Safe extraction criterion).} Component \(c_i\)
+can be safely extracted from banned family \(\mathcal{F}\) if: (a) the
+killing finding's property \(P\) is localized to a different component
+\(c_j \neq c_i\) (unique to \(c_j\)), or (b) \(c_i\) serves a function
+orthogonal to \(P\) (e.g., \(c_i\) is an encoding component and \(P\) is
+about action selection).
+
+\textbf{Application to our bans:}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0725}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.3043}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1594}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1884}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2754}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Ban
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Killing property \(P\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Component
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Causal type
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Extraction valid?
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Codebook & LVQ characterization & Attract dynamics & Synergistic (with
+cosine) & \textbf{Risky} --- LVQ needs all three \\
+Codebook & LVQ characterization & Novelty spawning & Unique to growth &
+\textbf{Valid} --- spawning ≠ LVQ \\
+Codebook & LVQ characterization & Centered encoding & Unique to
+preprocessing & \textbf{Valid} --- already U16 \\
+Graph & Negative transfer & Per-state-action storage & Unique to storage
+& \textbf{Valid} --- this IS \(P\) \\
+Graph & Negative transfer & Transition detection & Unique to detection &
+\textbf{Valid} --- detection ≠ storage \\
+Graph & Negative transfer & CC zone discovery & Unique to encoding &
+\textbf{Valid} --- discovery ≠ per-state data \\
+\end{longtable}
+}
+
+\textbf{Relationship to prior work:} SURD provides the
+information-theoretic framework for continuous time series; we apply to
+discrete component systems. Ablation methodology (Meyes et al., 2019)
+addresses removal in neural networks; we extend to cross-family
+transplantation. The extraction protocol formalization is novel.
+
+\textbf{Degrees of freedom:} The theorem doesn't tell us which
+extraction tests will SUCCEED (produce useful new substrates) --- only
+which are VALID (correctly test what they claim to test). 33 components
+cataloged (COMPONENT\_CATALOG.md); 5 extraction experiments designed
+with valid causal isolation (experiments/extraction\_specs.md).
+
 \subsection{5. Experimental Evidence}\label{experimental-evidence}
 
 \subsubsection{5.1 Navigation (943+
@@ -1265,60 +1367,18 @@ confound invalidates some results (Step 589).
 improves one game at the cost of another = per-game tuning = KILL. Only
 mechanisms neutral/positive on ALL games survive.
 
-\subsubsection{5.5 Post-Ban Experiments (Steps 778-812, Phase
-3)}\label{post-ban-experiments-steps-778-812-phase-3}
+\subsubsection{5.5 Post-Ban Results (Steps 778-1007, 230+
+experiments)}\label{post-ban-results-steps-778-1007-230-experiments}
 
-Post-ban (codebook Step 416, graph Step 777): both working mechanisms
-banned. 35 experiments testing D(s)-only substrates.
-
-\textbf{Key results:} - Hebbian W diverges; delta rule (LMS) stabilizes
-(Steps 778-787) - D(s) prediction transfer: 5/7 PASS --- first positive
-R3\_cf (Steps 778v5-855v3) - D(s) navigation: 0 mechanisms beat random
-consistently (Proposition 21) - 800b (per-action change EMA): 2x random
-on LS20, 0 on FT09 (Steps 800-812) - Compression progress: action
-collapse (Step 855) --- gradient too steep
-
-\subsubsection{5.6 Third-Cluster Sweep (Steps 889-903, Phase 3
-continued)}\label{third-cluster-sweep-steps-889-903-phase-3-continued}
-
-Per-action change tracking with alpha-weighted encoding. 15 experiments
-testing encoding and action mechanism modifications.
-
-{\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1429}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2619}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1429}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1429}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.3095}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Step
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Mechanism
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-LS20
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-FT09
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Key finding
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-889 & Per-action change + softmax & 268/10 & 0 & Baseline post-alpha \\
-895h & Cold clamped alpha {[}0.1,5.0{]} & 268.0 & 0 & Best cold LS20 \\
-895c & Warm alpha transfer & 77.8/seed & 0 & 3x lower variance,
-comparable mean \\
-903 & 4D encoding & 0 & 0 & Multi-res dilutes alpha \\
-\end{longtable}
-}
-
-\textbf{Summary:} Alpha-weighted encoding is solved (R3 confirmed).
-Action selection exhausted --- every modification degrades LS20. 800b is
-an irreducible local minimum for action selection. See
-kills/800b-variants\_step937.md.
+Both working mechanisms banned (codebook Step 416, graph Step 777). Key
+results: - D(s) prediction transfer: 5/7 PASS --- first positive R3\_cf
+(+73\%, Step 780v5) - 800b (per-action change EMA): best post-ban
+mechanism. LS20=268.0/seed cold (895h), 290.7/seed (916 with recurrent
+h). FT09/VC33=0 (Theorem 4). - Alpha prediction-error attention: R3
+encoding confirmed. FT09 dims {[}60,51,52{]} discovered autonomously. -
+800b action selection: FROZEN. 27 modifications all kill LS20
+(kills/800b-variants\_step937.md). - Extraction protocol: 33 components
+cataloged, 5 extraction experiments designed (Section 4.18).
 
 \subsubsection{5.7 Baseline Comparison (Steps
 916-920)}\label{baseline-comparison-steps-916-920}
@@ -1362,44 +1422,24 @@ frequency \\
 \end{longtable}
 }
 
-All methods achieve L1=0 on FT09 (68 actions, sequential ordering). Even
-graph+argmin at 6 correct actions (Step 920b) achieves L1=0 --- the FT09
-bottleneck is encoding resolution and sequential ordering, not the
+All methods L1=0 on FT09 (68 actions). Even graph+argmin at 6 correct
+actions = L1=0 (Step 920b). Bottleneck is sequential ordering, not
 mechanism.
 
-\textbf{Finding:} Our prediction-error attention mechanism
-(\(\alpha\)-weighted change-tracking) outperforms ALL baselines by
-\(2\text{-}2.5\times\) on LS20 with 0/10 zero-seeds (vs 4-5/10 for
-alternatives). The graph ban cost is NEGATIVE: 895h (268.0, no graph)
-\(>\) 920 (129.9, with graph). Alpha-weighted observation change is
-informationally richer than visit counts, distillation error, or
-pseudo-counts. ICM (forward prediction error as intrinsic reward) is the
-worst --- the signal dies as \(W\) learns the environment, collapsing to
-zero exploration.
+\textbf{Finding:} Our mechanism outperforms ALL baselines by
+\(2\text{-}2.5\times\) on LS20 with 0/10 zero-seeds. Graph ban cost is
+NEGATIVE: 895h (268.0, no graph) \(>\) 920 (129.9, with graph). ICM
+worst (signal dies as \(W\) learns).
 
-\subsubsection{5.8 Chain Integration and Diagnostics (Steps
-925-932)}\label{chain-integration-and-diagnostics-steps-925-932}
+\subsubsection{5.8 Chain and PRISM
+Results}\label{chain-and-prism-results}
 
-{\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lllllll@{}}
-\toprule\noalign{}
-Step & Chain config & LS20 & FT09 & VC33 & CIFAR & Verdict \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-925 & 916+chain & 257.6 & 0 & 0 & 20.21\% & CIFAR interference \\
-928 & No-CIFAR chain & 236.4 & 0 & 0 & --- & h hurts chain \\
-929 & Cold chain (no h) & 268.0 & 0 & 0 & 20.21\% & Best chain config \\
-932 & FT09 action-space fix (68) & --- & 0 & 0 & --- & Still 0 \\
-\end{longtable}
-}
-
-\textbf{Delta inversion (Remark 5.2):} 800b's ``maximize delta''
-anti-selects on reset-heavy games. Resets produce the largest
-observation changes, so the action causing the reset gets the highest
-delta. On FT09, wrong clicks reset → 800b actively selects wrong clicks.
-Structural, not fixable within the 800b family.
+\textbf{PRISM baseline (Step 1006):} CIFAR=100\%, LS20=100\%, FT09=0\%,
+VC33=0\%, chain\_score=3/5. CIFAR inflates alpha\_conc (PB16, −11\%
+chain LS20). Delta inversion (Remark 5.2): 800b anti-selects on
+reset-heavy games --- structural, not fixable. \textbf{Research skew:}
+230 post-ban experiments exclusively LS20. FT09/VC33 = 0 post-ban
+experiments. Extraction sprint (Steps 1008+) corrects this.
 
 \subsection{6. Degrees of Freedom}\label{degrees-of-freedom}
 
@@ -1476,77 +1516,21 @@ transition statistics & Sec 4.8 (T9, DoF 12) \\
 \end{longtable}
 }
 
-\textbf{The central experimental question (REVISED):} Propositions 14b,
-17, and 18 reduce the search: R3 = self-directed attention within the
-CSE interpreter. The search space is the space of encoding dimensions
-(DoF 13-16) that can be made state-dependent via transition statistics.
-Each dimension is independently testable. The cascading experiment: test
-all 5 encoding dimensions (D1-D5, Section 4.8) on the chain benchmark,
-measuring dynamic R3 at each phase transition.
+\textbf{Central experimental question:} R3 = self-directed attention
+(Props 14b, 17, 18). Search space: encoding dimensions (D1-D5, §4.8)
+made state-dependent via transition statistics. Each independently
+testable on the chain benchmark.
 
 \subsection{7. Discussion}\label{discussion}
 
 \subsubsection{7.1 Pairwise Consistency
 Audit}\label{pairwise-consistency-audit}
 
-All formalized constraints were checked for mutual consistency.
-Identified tensions and their resolutions:
-
-{\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3103}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4138}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2759}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Tension
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Constraints
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Status
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-T1: Stationarity vs self-modification & U7 + R3 & Open --- U7 needs
-reformulation as instantaneous, not asymptotic \\
-T2: Weak vs strong R3 & R3 interpretation & \textbf{Resolved} ---
-self-modification hierarchy (Sec 3.2) + Proposition 17: R3 ≡
-self-directed attention. Not ``modify the program'' but ``modify the
-lens.'' \(\ell_\pi\) is the correct target. \\
-T3: Continuity vs self-modification & U20 + R3 & Constrained --- metric
-can refine but not rearrange topology \\
-T4: Never delete vs no redundancy & U3 + R6 & \textbf{Resolved} ---
-irredundant growth (Sec 4.2). Every new component covers unique
-territory. \\
-T5: Infinite growth vs finite environment & U17 + finite \(X\) &
-\textbf{Resolved} --- Theorem 2. Growth shifts to state-derived
-components. \\
-T6: Navigation vs classification & U11 + U24 + U1 & \textbf{Dissolved}
-(Proposition 17, Sec 4.8) --- R3 for select: argmin rule is fixed, but
-WHAT gets counted is state-dependent. Visit counts → exploration. Death
-costs → avoidance. Value estimates → exploitation. One rule, different
-inputs. No mode switch needed. \\
-T7: Self-observation vs noisy TV & Theorem 2 + Sec 4.5 &
-\textbf{Resolved} --- Proposition 17: self-directed attention via
-transition statistics is robust to noisy TV (count-based, same reason as
-argmin). Self-observation targets \(\pi\) (Proposition 15). Forward
-prediction remains required for L2. \\
-T9: Encoding-statistics coupling & Proposition 17 + Theorem 1 & Open ---
-\(\pi_s\) depends on \(T(s)\); \(T(s)\) is computed under \(\pi_s\).
-Feedback loop. No global fixed point (Theorem 1). Local
-quasi-steady-states with bifurcations at domain transitions (Sec 4.8).
-Productive vs chaotic oscillation untested. \\
-T8: Centering vs domain separation & U16 + chain benchmark &
-\textbf{Resolved} --- per-domain centering (Step 546). R1-compliant via
-on\_reset. \\
-\end{longtable}
-}
-
-\textbf{No undiscovered contradictions.} All tensions are either
-resolved (T2, T4, T5, T6, T7, T8), constrained (T3), or identified as
-open questions (T1, T9). The constraint system is internally consistent.
+9 tensions checked. 6 resolved (T2: R3≡attention, T4: irredundant
+growth, T5: state-derived components, T6: one rule different inputs, T7:
+count-based self-observation, T8: per-domain centering). 1 constrained
+(T3: metric refines not rearranges). 2 open (T1: U7 reformulation, T9:
+encoding-statistics feedback). No contradictions found.
 
 \subsubsection{7.2 What is proven}\label{what-is-proven}
 
