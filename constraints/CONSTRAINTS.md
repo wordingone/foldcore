@@ -265,8 +265,12 @@ Algorithm invariance (argmin banned), U3/U17 (graph growth banned — what accum
 | PB16 | CIFAR inflates alpha_conc (-11% chain LS20) | CONFIRMED |
 | PB17 | Recurrent h = NEW LS20 SOTA (290.7/seed) | CONFIRMED |
 | PB18 | 916/895h beat ALL baselines 2-2.5× on LS20 | CONFIRMED |
-| PB19 | FT09 bottleneck = action space (68^7), not graph ban | CONFIRMED |
+| PB19 | FT09 bottleneck = encoding quality, not action count (69 actions + avgpool16 = 6/6; 68 actions + raw = 0/10) | REVISED (Steps 920 vs 1012) |
 | PB20 | Per-observation action memory = graph-banned | KILLED |
+| PB21 | Direction 2: FT09 6/6 + VC33 7/7 solvable with lifted bans (constraint cost = 13 levels) | CONFIRMED (Steps 1012-1013) |
+| PB22 | Direction 1: 5 extraction experiments (1007-1014) = 0 FT09/VC33 signal | CONFIRMED |
+| PB23 | Game-agnostic base (no 800b/alpha/h) maintains LS20 via bootloader only | CONFIRMED (Step 1014) |
+| PB24 | LS20-tuned foundation (600 steps hill-climbing) contaminates extraction experiments | CONFIRMED (Jun, 2026-03-24) |
 
 ### Summary
 
@@ -275,7 +279,8 @@ Prediction transfer region non-empty (PB5). Navigation transfer region empty. Ga
 800b = only post-ban LS20 mechanism. Theorem 4: global running mean SNR → 0 for FT09/VC33. Attention-trajectory (Step 1007) bypasses Theorem 4 — alive at 1/20. Graph ban tightened (Step 931): per-observation conditioning = banned. Full details: RESEARCH_STATE.md, COMPONENT_CATALOG.md.
 **Baselines:** 868d = 203.9/seed (true baseline). 916 = 290.7/seed (LS20 SOTA). See RESEARCH_STATE.md for full comparison table.
 - **916 = 290.7/seed LS20 SOTA (PB17).** Echo-state reservoir h_t=tanh(W_h@h+W_x@enc), ext_enc=[enc,h]=320D. 895h on extended space. Beats 895h cold (268.0) by +8.5%. Published baselines ALL below 895h: ICM=0 (signal collapses), Count=109, RND=112, Graph+argmin=129.9 (PB18, Steps 917-920). Our mechanism 2-2.5× better.
-- **FT09 action space bottleneck confirmed: even graph+argmin fails (PB19, Step 920).** 68 actions → 68^7≈10^12 sequences, untractable. Graph L1=0/10. Solution = narrow action space first, then search sequences (Step 921).
+- **FT09 bottleneck REVISED (PB19, Steps 920 vs 1012).** Step 920: graph+argmin on 68 raw-encoded actions → 0/10. Step 1012: graph+argmin on 69 avgpool16-encoded actions → 6/6 levels. Same action count, different encoding. The bottleneck is encoding quality (informative state representation), not action space size. Solution = better encoding enables graph search, not narrower action space.
+- **Constraint cost measured (PB21, Steps 1012-1013).** Constrained: FT09=0/10, VC33=0/10. Unconstrained: FT09=6/6 all levels, VC33=7/7 all levels. Gap = 13 levels. The graph ban + encoding prescription = dominant cost. LS20 cost = 0 (post-ban mechanism matches pre-ban). Direction 1 extraction (5 experiments, 0 signal) suggests components don't work in isolation — integration is required.
 - **Graph ban TIGHTENED (2026-03-23, Step 931 killed).** Per-observation-action memory (obs_encoding → best_action) IS per-state conditioning — banned. The observation encoding IS a state representation. ANY mechanism that conditions action selection on specific past observations is a graph in disguise. ONLY global statistics allowed: per-action delta (800b), alpha attention weights. No observation-specific recall of any kind.
 
 ---
