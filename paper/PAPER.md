@@ -710,7 +710,7 @@ The feasible region for L1 navigation is occupied — graph + argmin + correct e
 
 **Resolved:** (a) D-only substrate navigates at 2x random (800b). (b) D(s) produces positive R3_cf (5/7 PASS). (d) Prediction-error attention achieves R3 encoding (alpha, CONFIRMED). (e) W is sufficient for encoding but useless for action selection. (h) Epistemic action selection FAILS (Steps 934-938e). **(c) Action selection is CLOSED at 800b under current constraints (Section 4.14).**
 
-**Open:** (g) Interior point of architecture triangle: encoding achieved, action selection frozen at 800b. (i) FT09 solvable under current constraints? Gates 4+5 combined with Prop 23b block all position-dependent learned action selection. This may be a genuine impossibility result, not a failure to find the mechanism. **(j) NEW: Does the search need new substrate families (not action selector variants) to add constraint surfaces?** The 938 series exhausted selector-level modifications. The next direction may be a structurally different substrate architecture that changes the encoding-action-learning relationship entirely.
+**Open:** (g) Interior point of architecture triangle: encoding achieved, action selection frozen at 800b. (i) FT09 solvable under current constraints? Gates 4+5 combined with Prop 23b block all position-dependent learned action selection. This may be a genuine impossibility result, not a failure to find the mechanism. **(j) ANSWERED: Hebbian RNN (Step 948) = first non-916 navigation.** Continuous recurrent state $h_t = \sigma(W_h h_{t-1} + W_x \text{enc}_t)$, Hebbian action learning $W_a \leftarrow W_a + \eta \delta h^T$, prediction via $W_\text{pred} h$. Step 948: seed 8 = 96 L1 on LS20 (9/10 seeds = 0). Brittle but ALIVE — first proof that navigation exists outside the 916 family. Step 949: h_dim=128 identical results → capacity not the bottleneck. Diagnosis: W_pred/W_a learning deadlock (Hebbian updates noisy before prediction stabilizes). Literature: Najarro & Risi (2020) showed Hebbian networks from random init are inherently seed-sensitive; hebbRNN (Michaels & Scherberger 2016) uses perturbation-based exploration to break symmetry.
 
 **Architecture triangle (Proposition 22):** Recognition (banned), tracking (banned), dynamics (current frontier). Post-ban, the substrate lives at the dynamics vertex. The 938 series proves: the action selection degree of freedom at the dynamics vertex is exhausted. The remaining degrees of freedom are in the SUBSTRATE ARCHITECTURE itself — how encoding, action, and learning interact.
 
@@ -776,6 +776,9 @@ The agents operated on a single machine (Windows 11, RTX 4090) with experiments 
 - Popper, K. (1934). The Logic of Scientific Discovery. Routledge.
 - Raup, D. M. (1991). Extinction: Bad Genes or Bad Luck? W. W. Norton.
 - Rice, H. G. (1953). Classes of Recursively Enumerable Sets and Their Decision Problems. Transactions of the AMS, 74(2), 358-366.
+- Michaels, J. A. & Scherberger, H. (2016). hebbRNN: A Reward-Modulated Hebbian Learning Rule for Recurrent Neural Networks. JOSS, 1(8), 60.
+- Najarro, E. & Risi, S. (2020). Meta-Learning through Hebbian Plasticity in Random Networks. NeurIPS.
+- Patel, D. et al. (2022). Exploration in neo-Hebbian reinforcement learning: Computational approaches to the exploration-exploitation balance with bio-inspired neural networks. Neural Networks, 151, 204-218.
 - Sakana AI (2025). Darwin Gödel Machine: Open-Ended Evolution of Self-Improving Agents. arXiv:2505.22954.
 - Schlesinger, M. (2014). Learnability Frontier in Learning Agent Systems. Cognitive Systems Research, 29-30, 1-18.
 - Sutton, R. S. (1992). Adapting Bias by Gradient Descent: An Incremental Version of Delta-Bar-Delta. AAAI.
