@@ -1,0 +1,190 @@
+"""Step 956: RNG-free deterministic exploration.
+
+R3 hypothesis: Deterministic state-dependent action offsets provide diverse exploration
+without RNG dependence. h → sin(h_sum * action_index * 7919) offsets decay over time.
+Early: offsets dominate W_a → diverse state-dependent exploration.
+Late: W_a dominates → learned preferences.
+All seeds produce similar results (no RNG in action selection).
+
+Changes from 948 base: no epsilon/RNG, replace with decaying sin offsets from h.
+Kill: ≤1/10 seeds → deterministic hash insufficient.
+Success: 5+ seeds L1>0 → RNG was the bottleneck.
+Bonus: all 10 seeds identical → architecture is irrelevant, exploration is everything.
+"""
+import sys, math
+sys.path.insert(0, 'B:/M/the-search')
+sys.path.insert(0, 'B:/M/the-search/experiments')
+
+import numpy as np
+from substrates.step0674 import _enc_frame
+
+ENC_DIM = 256
+H_DIM = 64
+ETA_PRED = 0.01
+ETA_ACTION = 0.001
+EXPLORE_SCALE_INIT = 1.0
+EXPLORE_DECAY = 5000
+TEST_SEEDS = list(range(1, 11))
+TEST_STEPS = 10_000
+
+
+def sigmoid(x):
+    return 1.0 / (1.0 + np.exp(-np.clip(x, -20, 20)))
+
+
+class RNGFreeExplore956:
+    """Hebbian W_a + deterministic sin-offset exploration. No epsilon, no RNG."""
+
+    def __init__(self, n_actions, seed):
+        self._n_actions = n_actions
+        rs = np.random.RandomState(seed + 10000)
+
+        self.W_h = rs.randn(H_DIM, H_DIM).astype(np.float32) * 0.1
+        self.W_x = rs.randn(H_DIM, ENC_DIM).astype(np.float32) * 0.1
+
+        self.W_pred = np.zeros((ENC_DIM, H_DIM), dtype=np.float32)
+        self.W_a = np.zeros((n_actions, H_DIM), dtype=np.float32)
+
+        self.h = np.zeros(H_DIM, dtype=np.float32)
+        self._running_mean = np.zeros(ENC_DIM, dtype=np.float32)
+        self._n_obs = 0
+        self._step = 0
+        self._prev_h = None
+        self._prev_action = None
+
+    def _encode(self, obs):
+        enc_raw = _enc_frame(np.asarray(obs, dtype=np.float32))
+        self._n_obs += 1
+        a = 1.0 / self._n_obs
+        self._running_mean = (1 - a) * self._running_mean + a * enc_raw
+        enc = enc_raw - self._running_mean
+        self.h = sigmoid(self.W_h @ self.h + self.W_x @ enc)
+        return enc
+
+    def _get_action(self, h_new):
+        action_scores = (self.W_a @ h_new).copy()
+        explore_scale = max(0.1, EXPLORE_SCALE_INIT * (1.0 - self._step / EXPLORE_DECAY))
+        h_sum = float(h_new.sum())
+        for i in range(self._n_actions):
+            offset = math.sin(h_sum * (i + 1) * 7919.0) * explore_scale
+            action_scores[i] += offset
+        return int(np.argmax(action_scores))
+
+    def process(self, obs):
+        enc = self._encode(obs)
+        self._step += 1
+
+        if self._prev_h is not None and self._prev_action is not None:
+            pred = self.W_pred @ self._prev_h
+            error = enc - pred
+            delta = float(np.linalg.norm(error))
+
+            if delta > 10.0:
+                error = error * (10.0 / delta)
+                delta = 10.0
+
+            if not np.any(np.isnan(error)):
+                self.W_pred += ETA_PRED * np.outer(error, self._prev_h)
+                self.W_h += ETA_PRED * 0.1 * np.outer(error[:H_DIM], self._prev_h)
+                self.W_a[self._prev_action] += ETA_ACTION * delta * self.h
+
+        action = self._get_action(self.h)
+
+        self._prev_h = self.h.copy()
+        self._prev_action = action
+        return action
+
+    def on_level_transition(self):
+        self._prev_h = None
+        self._prev_action = None
+
+    def w_a_norm(self):
+        return float(np.linalg.norm(self.W_a))
+
+
+def make_game(name):
+    try:
+        import arcagi3; return arcagi3.make(name)
+    except Exception:
+        import util_arcagi3; return util_arcagi3.make(name)
+
+
+def run_game(game_name, n_actions, seeds, n_steps):
+    results = []
+    w_norms = []
+    for seed in seeds:
+        sub = RNGFreeExplore956(n_actions=n_actions, seed=seed)
+        env = make_game(game_name)
+        obs = env.reset(seed=seed * 1000)
+        step = 0; completions = 0; current_level = 0
+        while step < n_steps:
+            if obs is None:
+                obs = env.reset(seed=seed * 1000)
+                sub.on_level_transition()
+                continue
+            action = sub.process(np.asarray(obs, dtype=np.float32)) % n_actions
+            obs, _, done, info = env.step(action)
+            step += 1
+            cl = info.get('level', 0) if isinstance(info, dict) else 0
+            if cl > current_level:
+                completions += (cl - current_level)
+                current_level = cl
+                sub.on_level_transition()
+            if done:
+                obs = env.reset(seed=seed * 1000)
+                current_level = 0
+                sub.on_level_transition()
+        results.append(completions)
+        w_norms.append(sub.w_a_norm())
+        print(f"    seed={seed}: L1={completions:4d}  W_a_norm={sub.w_a_norm():.3f}")
+    return results, w_norms
+
+
+if __name__ == "__main__":
+    import os, time
+
+    print("=" * 70)
+    print("STEP 956 — RNG-FREE DETERMINISTIC EXPLORATION")
+    print("=" * 70)
+    t0 = time.time()
+
+    ls20_hash = next((d for d in os.listdir('B:/M/the-search/environment_files/ls20') if len(d) >= 8), 'unknown')
+    ft09_hash = next((d for d in os.listdir('B:/M/the-search/environment_files/ft09') if len(d) >= 8), 'unknown')
+    print(f"Game versions: LS20={ls20_hash}  FT09={ft09_hash}")
+    print(f"H_DIM={H_DIM}  EXPLORE_SCALE_INIT={EXPLORE_SCALE_INIT}  EXPLORE_DECAY={EXPLORE_DECAY}")
+    print()
+
+    print("--- LS20 (4 actions, 10K steps) ---")
+    ls20_r, ls20_norms = run_game("LS20", 4, TEST_SEEDS, TEST_STEPS)
+    ls20_mean = np.mean(ls20_r)
+    ls20_nonzero = sum(1 for x in ls20_r if x > 0)
+    print(f"  LS20: L1={ls20_mean:.1f}/seed  nonzero={ls20_nonzero}/10  W_a_norm={np.mean(ls20_norms):.3f}")
+    print(f"  {ls20_r}")
+
+    print()
+    print("--- FT09 (68 actions, 10K steps) ---")
+    ft09_r, ft09_norms = run_game("FT09", 68, TEST_SEEDS, TEST_STEPS)
+    ft09_mean = np.mean(ft09_r)
+    ft09_nonzero = sum(1 for x in ft09_r if x > 0)
+    print(f"  FT09: L1={ft09_mean:.1f}/seed  nonzero={ft09_nonzero}/10  W_a_norm={np.mean(ft09_norms):.3f}")
+    print(f"  {ft09_r}")
+
+    print()
+    print("=" * 70)
+    print("STEP 956 RESULTS (target: 5+/10 seeds, bonus: all seeds identical):")
+
+    if ls20_nonzero >= 5:
+        verdict = f"SUCCESS — {ls20_nonzero}/10 seeds, RNG was the bottleneck"
+    elif ls20_nonzero >= 2:
+        verdict = f"SIGNAL — {ls20_nonzero}/10 seeds, deterministic helps but not sufficient"
+    else:
+        verdict = f"KILL — {ls20_nonzero}/10 seeds, deterministic hash insufficient"
+
+    print(f"  LS20: L1={ls20_mean:.1f}/seed  {ls20_r}")
+    print(f"  FT09: L1={ft09_mean:.1f}/seed  {ft09_r}")
+    print(f"  VERDICT: {verdict}")
+    unique_vals = len(set(ls20_r))
+    print(f"  BONUS CHECK: {unique_vals} unique LS20 values ({'all identical' if unique_vals == 1 else 'vary by seed'})")
+
+    print(f"\nTotal elapsed: {time.time()-t0:.1f}s")
+    print("STEP 956 DONE")
