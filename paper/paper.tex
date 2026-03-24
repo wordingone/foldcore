@@ -217,36 +217,26 @@ deformable mirror (encoding) adapts; optical bench (interpreter) fixed.
 - \textbf{Physarum} (Tero et al., 2010): tube network = self-modifying
 encoding. Solves shortest-path without reward.
 
-\subsubsection{2.16 Quorum sensing and threshold-triggered
-self-regulation}\label{quorum-sensing-and-threshold-triggered-self-regulation}
+\subsubsection{2.16 Additional related
+work}\label{additional-related-work}
 
-Quorum sensing (Waters \& Bassler, 2005): population-level threshold
-triggers from individual stochastic variation. Connection to alpha
-concentration: individual dimension attention varies; aggregate metric
-triggers collective response (Ashby ultrastability). \textbf{Proposition
-28 FALSIFIED} --- concentration on informative dimensions IS the
-mechanism, not degeneration.
-
-\subsubsection{2.17 Hippocampal place cells and the positive
-lock}\label{hippocampal-place-cells-and-the-positive-lock}
-
-Place cells use sparse coding (\textasciitilde5-10\% active per
-location; Leutgeb et al., 2007) → orthogonal representations →
-cross-location dot products ≈ 0. This solves the positive lock
-(Proposition 30): our sigmoid h ∈ {[}0,1{]} makes ALL dot products
-positive → winner-take-all. relu(h-0.5) gating (Step 959) =
-computational equivalent of place cell thresholding, dissolving the
-lock. Benna \& Bhalla (2025, bioRxiv): sparse place cell phenomena
-emerge in untrained random networks, consistent with ESN finding (Step
-955).
-
-\subsubsection{2.15 Forward models, the noisy TV problem, and the graph
-ban}\label{forward-models-the-noisy-tv-problem-and-the-graph-ban}
-
-Forward models + graph ban: graph ban eliminates per-(state,action)
-tracking. No PAC-MDP algorithm exists without visit counts (Strehl
-2009). But BYOL-Explore (Guo 2022) achieves superhuman exploration
-without counts. The ban forces theoretically uncovered territory.
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Quorum sensing} (Waters \& Bassler, 2005): population-level
+  threshold triggers. Prop 28 FALSIFIED --- alpha concentration on
+  informative dims IS the mechanism.
+\item
+  \textbf{Place cells} (Leutgeb et al., 2007): sparse coding
+  (\textasciitilde5-10\% active) → orthogonal representations. Dissolves
+  positive lock (Prop 30). relu(h-0.5) gating = computational
+  equivalent. Benna \& Bhalla (2025): sparse place phenomena in
+  untrained random nets, consistent with ESN finding.
+\item
+  \textbf{Forward models + graph ban:} No PAC-MDP without visit counts
+  (Strehl 2009). BYOL-Explore (Guo 2022) achieves superhuman exploration
+  without counts. Ban forces uncovered territory.
+\end{itemize}
 
 \subsection{3. Formal Framework}\label{formal-framework}
 
@@ -1642,7 +1632,8 @@ open questions (T1, T9). The constraint system is internally consistent.
   R6-compliant.
 \item
   \textbf{R1-compliant classification.} 0 substrates above chance
-  without external labels.
+  without external labels (best: LSH k=16, 36.2\% self-labels, Step
+  573).
 \item
   \textbf{Post-ban action selection.} 800b is the unique working
   selector. FT09 = 0 formally characterized by Theorem 4 (temporal
@@ -1651,12 +1642,18 @@ open questions (T1, T9). The constraint system is internally consistent.
   \textbf{Post-ban constraint map.} Many U-constraints derived within
   graph framework. Survival post-ban is open.
 \item
-  \textbf{Observability determines mechanism viability.}
-  Prediction-contrast works where progress is visible in observations.
-  POMDPs require additional mechanisms.
+  \textbf{Component extraction.} Ban extraction protocol (2026-03-24)
+  permits isolated mechanism testing. 33 components cataloged across 14
+  families (COMPONENT\_CATALOG.md). Priority: FT09/VC33 action-space
+  discovery components (CC zone discovery, transition detection, sparse
+  gating).
 \item
-  \textbf{Compression progress action collapse.} Fix candidates
-  untested: epsilon-compression, action cycling, entropy regularization.
+  \textbf{LS20 research skew.} 230 post-ban experiments focused
+  exclusively on LS20 (solvable). FT09/VC33 abandoned since graph ban
+  (Step 777). The search has TWO distinct problems: (a) exploration
+  (LS20, well-characterized by 500+ experiments), (b) action-space
+  discovery (FT09/VC33, 0 post-ban experiments). The extraction protocol
+  enables Problem (b) experiments for the first time.
 \end{enumerate}
 
 \subsubsection{7.5 The Level 2 Problem}\label{the-level-2-problem}
