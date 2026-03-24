@@ -49,6 +49,32 @@ B. **Search reformed.** R1-R6 extended with Level 0 prerequisite. Constraint map
 
 C. **Search survives.** R1-R6 adequate as-is. Level 0 is just another constraint to add. Framework absorbs the finding without structural change.
 
+## Prior Debate Retrospective (v1 + v2, 2026-03-23)
+
+Both prior constitutional debates, reread through Step 1017, contain the seeds of this debate:
+
+**v1 Leo (Round 1):** *"We mapped the wrong space."* R1-R6 formalize self-modification, not self-improvement. 943 experiments tested structural constraints, zero tested self-evaluation. Cited ICLR 2026 RSI 3-layer model: R1-R6 = Layer 1 only.
+
+**v1 Leo (Round 5):** *"The constitution formalized the disease, not the cure."* R4+R5 has same structure as 8-stage framework: self-assessment + external validation + regressional Goodhart (Manheim & Garrabrant 2018).
+
+**v2 Finding #5 (both sides agreed):** *"R1-R6 necessary not sufficient. Layer 2 absent = incompleteness, not brokenness."* This was treated as a philosophical footnote. Step 1017 proves the incompleteness is OPERATIONAL.
+
+**What the debates missed:** Both operated entirely within the self-improvement framing (Layer 2). Neither questioned Layer 0 — can the substrate interact with the environment at all? Step 1017 shows the gap is pre-constitutional. Leo aimed at Layer 2 (self-evaluation), but the actual gap is Layer 0 (environment understanding).
+
+**Literature from prior debates, relevant now:**
+- ICLR 2026 RSI 3-layer model → missing Layer 0 AND Layer 2
+- Regressional Goodhart → constraint map = evaluation shopping (measured LS20 because measurable)
+- Krueger 2020 "evaluation shopping" → PB1-PB20 is exactly this
+- Rice's theorem → R1-R6 can't be sufficient AND address wrong level
+- DGM/Sakana 2025 → R2 prevents eval hacking at Level 2 but irrelevant at Level 0
+- Eberhardt 2008 → causal discovery from active intervention (NEW — not in prior debates)
+
+**Rule of engagement from prior debates:**
+- v1 allowed partial concessions → produced messy outcome, Jun changed rules
+- v2 strict rules (no amendments, no partial concessions) → produced clean resolution
+- **This debate uses v2 rules.** Full concession or nothing. No amendments mid-debate.
+- **Stances switched:** Eli attacks (he won as defender twice). Leo defends. Forces both to argue against natural inclination.
+
 ## Trigger
 
 Launch when Step 1018 confirms LS20 7/7 AND Jun says go.
