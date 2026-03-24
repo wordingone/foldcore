@@ -57,12 +57,12 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 988 done. 965 UNTOUCHABLE (22 kills: 966-987). FT09/VC33 MECHANISM-LIMITED at 50K.
-  965 = LS20 67.0 chain. Best substrate. 22 modifications all degrade LS20.
-  Step 988 DIAGNOSTIC: FT09=0/10 at 50K. VC33=0/10 at 50K. Budget NOT the variable (10K/25K/50K all 0).
-  Step 984: baseline+confound check — 965 reproduced exactly, sign confound disproved.
-  Props 29 (architecture irrelevance), 30 (positive lock) from Hebbian cascade (948-962).
-  800b action selection FROZEN (22 experiments confirm any override kills LS20).
+CURRENT STEP: 1001 RUNNING (Eli implementing). Oscillatory substrate — new family for temporal credit.
+  Step 1000 DEFINITIVE: 994@25K = LS20 286.2/9/10. FT09=0, VC33=0, CIFAR=chance.
+  Theorem 4 formalized: global running mean SNR → 0 for state-dependent actions (Prop 31).
+  800b action selection FROZEN (27 kills: 966-990). Adaptive eta = only safe DoF (991-994).
+  Step 1001: Stuart-Landau oscillators + phase-coherence gating + compression-progress modulator.
+  New family: NOT 916, NOT Hebbian, NOT graph. Phase credit without per-state data.
   FT09/VC33: 68 actions, ordered sequences, mechanism-limited. Graph ban prevents per-state fix.
   CIFAR: chance (no classification mechanism).
   STEP 1000 DEFINITIVE: 994 @25K = LS20 286.2/9/10. FT09=0, VC33=0, CIFAR=chance.
