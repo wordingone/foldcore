@@ -57,21 +57,17 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 1001 RUNNING (Eli implementing). Oscillatory substrate — new family for temporal credit.
+CURRENT STEP: 1007 (Eli implementing). Attention-trajectory substrate — new family for state-conditioned credit.
+  **Steps 1001-1003 KILLED:** Oscillatory substrate (Stuart-Landau). Phase credit can't replace argmax. See kills/oscillatory_step1003.md.
+  **Steps 1004-1005 KILLED:** Multi-horizon prediction. Gradient ascent overflow. See kills/multi-horizon_step1005.md.
+  **Step 1006:** PRISM baseline established (chain_score 3/5 = 0.6: CIFAR=100%, LS20=100%, FT09=0%, VC33=0%, CIFAR-after=100%).
+  **Step 1007 RUNNING:** Attention-trajectory substrate. Append-only buffer of (enc, action_idx, delta). Action = softmax(q @ K^T) @ V. State-conditioned retrieval bypasses Theorem 4. First family designed for ALL games from start.
   Step 1000 DEFINITIVE: 994@25K = LS20 286.2/9/10. FT09=0, VC33=0, CIFAR=chance.
   Theorem 4 formalized: global running mean SNR → 0 for state-dependent actions (Prop 31).
-  800b action selection FROZEN (27 kills: 966-990). Adaptive eta = only safe DoF (991-994).
-  Step 1001: Stuart-Landau oscillators + phase-coherence gating + compression-progress modulator.
-  New family: NOT 916, NOT Hebbian, NOT graph. Phase credit without per-state data.
-  FT09/VC33: 68 actions, ordered sequences, mechanism-limited. Graph ban prevents per-state fix.
-  CIFAR: chance (no classification mechanism).
-  STEP 1000 DEFINITIVE: 994 @25K = LS20 286.2/9/10. FT09=0, VC33=0, CIFAR=chance.
-  994 = h-novelty transition detection + 500-step fast adapt. LS20 scales: 83.8@10K → 286.2@25K.
-  Mechanism fully characterized: 997 ablation (80% from transition, 20% from warm-start).
-  998 duration sweep: 500 steps optimal (non-monotonic). 999 dual-target: neutral.
-  FT09/VC33: temporal credit wall confirmed at 10K/25K/50K (Prop 31). Debate v3 resolved.
+  800b action selection FROZEN (200+ experiments). See kills/800b-variants_step937.md.
   Props 29 (architecture irrelevance), 30 (positive lock), 31 (temporal credit wall).
-  Session: 53 experiments (948-1000). 916 paradigm FULLY CHARACTERIZED.
+  **PRISM infrastructure overhauled (Jun, 2026-03-24):** Randomized game order enforced. Hidden game names. run_experiment.py as universal harness. Substrate-only files can't produce results.
+  **Ban Policy updated (Jun, 2026-03-24):** Extraction Protocol — mechanisms from banned families testable individually against killing findings. See bans/POLICY.md.
 DIRECTION (2026-03-24, post-947):
   **916-AUGMENTATION FAMILY DEAD (Steps 944-947, 4 consecutive kills).**
   Step 944: alpha reset → KILL (concentration is load-bearing, not degeneration)

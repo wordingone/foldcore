@@ -1,5 +1,7 @@
 # Kill: 800b-variants
-Steps: 800-937 (160+ experiments) | Trigger: ALL modifications degrade LS20; position-blind (Prop 23b)
+Steps: 800-990 (200+ experiments) | Trigger: ALL modifications degrade LS20; position-blind (Prop 23b); frozen (27 kills, Steps 966-990)
+
+**Theoretical explanation:** Theorem 4 (PAPER.md §4.17). Global running mean SNR ≤ 1/|N_a| for state-dependent actions. 800b's delta_per_action averages over ALL states → signal for the correct action at state s* is diluted by 1/|N_a|. LS20 (4 actions, state-independent movement): SNR ≈ 1. FT09 (68 actions, state-dependent sequences): SNR → 0.007 at 10K. This is why 800b works on LS20 and provably cannot work on FT09/VC33.
 
 ## What worked
 - ACTUAL observation change magnitude is the only working action signal
