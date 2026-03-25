@@ -41,7 +41,7 @@
 
 ### Post-Ban Findings (LS20-focused, 230+ experiments)
 
-**Research skew:** 230 post-ban experiments (Steps 778-1036) exclusively LS20. Debate v3 sprint (Steps 1040-1067, 25+ experiments) broke this exclusivity — PRISM randomizes across 25-game API pool. L1>0 achieved on ~8/25 games. The three mapping properties predict LS20 L1 only. Click games and opaque games demand capabilities not captured by any existing constraint.
+**Research skew:** 230 post-ban experiments (Steps 778-1036) exclusively LS20. Debate v3 sprint (Steps 1040-1069, 27+ experiments) broke this exclusivity — PRISM randomizes across 25-game API pool. L1>0 achieved on multiple games (exact count unenumerated — aggregate from sprint results on random draws, no per-game tracking). The three mapping properties predict LS20 L1 only. Click games and opaque games demand capabilities not captured by any existing constraint.
 
 **Findings:**
 - Exploration is non-convergent (sublinear reachable set growth)
