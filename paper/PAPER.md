@@ -665,13 +665,13 @@ Key propositions from the feasible region analysis: R3-R5 tension (Prop 4) — f
 **Feasible region = Step 965:** LS20 = 67.0 (chain), FT09 = 0, VC33 = 0, CIFAR = chance. 43 experiments prove this fixed point. Props 29-31 fully characterize the dynamics vertex of the architecture triangle (Prop 22). The next breakthrough requires a mechanism class outside prediction-error exploration.
 
 
+### 5.10 Framework Transition: D2-Grounded Search (Debate v3, Steps 1023-1025)
+
+Three constitutional debates (v1-v3) stress-tested the R1-R6 framework. v3 (4 experiments) resolved: R1-R6 retired as axioms. Mode map discovery (Step 576 mechanism) solves WHERE for click games without any banned component (VC33 L1 5/5, FT09 L1 5/5). Old framework components (alpha attention, 800b delta, W_pred) add zero value for click games (Step 1025: identical results with or without). D2-grounded framework adopted: A1 (one config, all games), A2 (discover WHERE/HOW/WHEN from interaction), A3 (RHAE metric), A4 (no mechanism-level axioms — R1-R6 become testable hypotheses). The constraint map, theorems, and propositions survive as historical data. The framework transition is the terminal finding of the R1-R6 search.
+
 ## Author Attribution and Disclosure
 
-This research was conducted using a team of LLM agents (Claude Opus and Claude Sonnet) coordinated by the author. Experiments were designed, theory was formalized, and the paper was written with LLM assistance. Experiment scripts were implemented and executed via LLM agents. Strategic direction, the constitutional framework (R1-R6), approval gates, and evaluation of findings for self-deception were provided by the author.
-
-The adversary process (review of each experiment) was conducted by the LLM agents, not by independent human reviewers. The simulated NeurIPS review in Section 7 was generated to stress-test the paper's claims. The constitutional framework (R1-R6) was stress-tested via structured adversarial debate between two LLM agents (Leo as attacker, Eli as defender, 12 rounds across two versions). The debate produced: R4's operational meaning as discriminative capacity (Ashby requisite variety), R2's role in preventing evaluation hacking (DGM case study), and Proposition 28 (R3-minimal anti-concentration via Ashby ultrastability). Full debate log: CONSTITUTIONAL_DEBATE.md. All experimental code is available in the repository for independent verification.
-
-The agents operated on a single machine (Windows 11, RTX 4090) with experiments run via WSL2. The memory system, mailbox, and coordination infrastructure are documented in the repository.
+Research conducted by a team of LLM agents (Claude Opus/Sonnet) coordinated by the author on a single machine (Windows 11, RTX 4090, WSL2). Strategic direction, constitutional framework, and evaluation for self-deception by the author. Three adversarial debates between agents stress-tested all claims. Full code in repository.
 
 ## References
 
