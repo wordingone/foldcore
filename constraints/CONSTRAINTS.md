@@ -1,8 +1,8 @@
 # Constraints — Comprehensive Extraction from Experiments
 
-*Revised 2026-03-24. Compressed per doc-system limits. Full narratives in RESEARCH_STATE.md. Component extraction catalog in COMPONENT_CATALOG.md.*
+*Revised 2026-03-25. Compressed per doc-system limits. Full narratives in RESEARCH_STATE.md. Component extraction catalog in COMPONENT_CATALOG.md.*
 
-*1018+ experiments across 16 families. Codebook banned Step 416. Graph banned Step 777. See bans/POLICY.md for extraction protocol.*
+*1060+ experiments across 16 families. Codebook banned Step 416. Graph banned Step 777. See bans/POLICY.md for extraction protocol.*
 
 **Classification:**
 - **Task Requirement**: What the TASK demands of any substrate (derived from successes AND failures across families)
@@ -188,21 +188,23 @@ The task is interactive (unknown environment, no separate training phase). Any s
 
 ---
 
-## Game-Specificity Caveat (2026-03-23)
+## Game-Specificity Caveat (2026-03-25)
 
-*ARC-AGI-3 full launch: March 25. 150+ games. Constraints derived from 3 preview games.*
+*ARC-AGI-3 full set LIVE (2026-03-25). 150+ games, 1000+ levels. Constraints derived from 3 preview games + 20+ PRISM experiments on random draws from 25-game API pool. Full 150+ pool now available.*
 
 **Game-independent:** U1, U3, U7, U11, U16, U17, U20, U22, U24. Three mapping properties. Algorithm invariance. Mathematical arguments survive new games.
 
-**Game-specific (may break):** VC33 magic pixels, FT09 69-action decomposition, LS20 POMDP hidden state, death penalty effects, argmin purity, LS20 action persistence (not action-0 — RNG artifact, Steps 778-784v2). K_NAV=12 tested on LS20 only.
+**Game-specific (may break):** VC33 magic pixels, FT09 69-action decomposition, LS20 POMDP hidden state, death penalty effects, argmin purity, LS20 action persistence (not action-0 — RNG artifact, Steps 778-784v2). K_NAV=12 tested on LS20 only. All 3 preview games are now a tiny fraction of the full 150+ set.
 
-**Untested risks:** Non-navigation games (strategy, timing, memory). Non-pixel-grid encodings. R3 measurement beyond hash substrates.
+**Untested risks:** Non-navigation games (strategy, timing, memory). Non-pixel-grid encodings. R3 measurement beyond hash substrates. New game modalities in the 150+ set may invalidate assumptions from 3-game experiments.
+
+**PRISM sampling update:** `--random-games 3` must draw from full 150+ pool. Infrastructure audit pending (Step 1065).
 
 ---
 
-## The State of the Search (1000+ experiments, 14+ families, 2 bans)
+## The State of the Search (1060+ experiments, 16+ families, 2 bans)
 
-*Revised 2026-03-24. See RESEARCH_STATE.md for full log, COMPONENT_CATALOG.md for extraction inventory.*
+*Revised 2026-03-25. See RESEARCH_STATE.md for full log, COMPONENT_CATALOG.md for extraction inventory.*
 
 ### What's Solved
 
@@ -222,6 +224,12 @@ The task is interactive (unknown environment, no separate training phase). Any s
 4. **Component extraction (2026-03-24):** 33 components cataloged. 6 families under-explored (<6 experiments). FT09/VC33 action-space discovery = zero post-ban experiments. See COMPONENT_CATALOG.md.
 
 5. **Unconstrained diagnostic COMPLETE (Step 1017):** ALL bans lifted + ALL rules suspended = FT09/VC33 still 0%. **Bans and constitution are orthogonal to the click game problem.** The constraint map describes LS20 navigation, not the full search space. The substrate lacks basic task competence (causal discovery of game mechanics) — a pre-constitutional capability that R1-R6 don't address.
+
+6. **ℓ_π > ℓ₁ on responsive games (PB26, Steps 1042-1064).** Building sprint proved encoding modification dominates parameter modification — 10:1 advantage on same architecture. But L2+ = 0 across ALL substrates. The debate's win condition (100% ALL LEVELS, verified 25 times) = the original search problem.
+
+7. **Opaque games (PB27).** ~1/3-2/3 of random game pool produces zero detectable change. Jun (2026-03-25): not a wall — data about what the substrate can't yet perceive. Related to ExoMDP (Efroni et al., 2022) but more extreme.
+
+8. **ARC-AGI-3 full set LIVE (2026-03-25).** 150+ games, 1000+ levels. Pool 6x'd from 25 to 150+. $700K grand prize. PRISM infrastructure audit pending.
 
 ### External Audit Status (2026-03-18, 13 findings)
 
@@ -267,16 +275,21 @@ Algorithm invariance (argmin banned), U3/U17 (graph growth banned — what accum
 | PB23 | Game-agnostic base (no 800b/alpha/h) maintains LS20 via bootloader only | CONFIRMED (Step 1014) |
 | PB24 | LS20-tuned foundation (600 steps hill-climbing) may contaminate extraction experiments | PROVISIONAL (Jun observation, 2026-03-24, no controlled test) |
 | PB25 | Hardcoded game coordinates become stale across versions (572u = 0 on LS20/9607627b) | CONFIRMED (Step 1015) |
+| PB26 | ℓ_π (encoding modification) > ℓ₁ (parameter modification) on responsive games. 10:1 advantage on same architecture. Prosecution v12 (attention fitness) 100%/60% L1 vs defense v13 (SPSA fitness) 10%/0%. Known in literature as ANIL result (Raghu et al., ICLR 2020) — feature reuse dominates rapid learning. Novel aspect: demonstrated on truly unknown games (no meta-training distribution). | CONFIRMED (Steps 1042-1064, 20+ experiments, 6 defense concessions) |
+| PB27 | Opaque games: ~1/3-2/3 of random pool produces zero detectable change from ANY action at any timescale. Related to ExoMDP framework (Efroni et al., ICML 2022) but more extreme — entire observation appears static, not just distractors. Jun reframe (2026-03-25): "not a wall — will help us in the long run." Opaque games = data about substrate limitations, not impossibility. | CONFIRMED (Steps 1042-1064). Jun: treat as signal, not barrier. |
+| PB28 | Adaptive cascade = best architecture for unknown games. Short probes (500 steps) → early exit → full budget to detected game type. Multi-timescale change detection (per-step, 5-step, 50-step windows + distribution drift). Related to EPI (Zhou et al., ICLR 2019) and PEARL (Rakelly et al., ICML 2019). Novel: tiered adaptive-depth probing without meta-training. | CONFIRMED (prosecution v10-v12, Steps 1055-1064) |
+| PB29 | Jun's seed-protocol insight: substrate IS its own seed protocol. Internal restarts, internal diversity, internal failure evaluation. 10-seed protocol = researcher doing what the substrate should do internally. R1+R2+R3+R4 rolled into one. | DIRECTIVE (Jun, 2026-03-25) |
 
 ### Summary
 
-Prediction transfer region non-empty (PB5). Navigation transfer region empty. Gap is structural (Prop 21).
+Prediction transfer region non-empty (PB5). Navigation transfer region empty. Gap is structural (Prop 21). Building sprint (Steps 1042-1064) proved ℓ_π > ℓ₁ on responsive games but L2+ = 0 across ALL experiments. The debate's win condition (100% ALL LEVELS on 3 random games, verified 25 times) IS the original search problem.
 
-800b = only post-ban LS20 mechanism. Theorem 4: global running mean SNR → 0 for FT09/VC33. Attention-trajectory (Step 1007) bypasses Theorem 4 — alive at 1/20. Graph ban tightened (Step 931): per-observation conditioning = banned. Full details: RESEARCH_STATE.md, COMPONENT_CATALOG.md.
+800b = only post-ban LS20 mechanism. Theorem 4: global running mean SNR → 0 for FT09/VC33. Adaptive cascade (PB28) + multi-timescale detection + attention-weighted fitness = prosecution's best architecture. Opaque games (PB27) are data about substrate limitations, not a wall (Jun, 2026-03-25). Full 150+ games now available — random sampling pool 6x'd.
 **Baselines:** 868d = 203.9/seed (true baseline). 916 = 290.7/seed (LS20 SOTA). See RESEARCH_STATE.md for full comparison table.
 - **916 = 290.7/seed LS20 SOTA (PB17).** Echo-state reservoir h_t=tanh(W_h@h+W_x@enc), ext_enc=[enc,h]=320D. 895h on extended space. Beats 895h cold (268.0) by +8.5%. Published baselines ALL below 895h: ICM=0 (signal collapses), Count=109, RND=112, Graph+argmin=129.9 (PB18, Steps 917-920). Our mechanism 2-2.5× better.
-- **FT09 bottleneck REVISED (PB19, Steps 920/920b vs 1012).** Both 920 and 1012 used avgpool16+centered encoding. Step 920: generic graph+argmin → 0/10. Step 920b: 6 correct actions + graph+argmin → still 0/10. Step 1012: per-game prescribed deterministic solution → 6/6 levels. The variable is solution architecture (prescribed vs discovered), not encoding. Generic graph exploration is insufficient even with correct encoding and narrowed actions.
-- **Constraint cost measured (PB21, Step 1017).** Constrained: FT09=0/10, VC33=0/10. Unconstrained (8 constraints lifted simultaneously): still 0%. Gap is in the discovery mechanism, not in any single ban. LS20 cost ≈ 0 (post-ban mechanism matches).
+- **ℓ_π > ℓ₁ CONFIRMED (PB26, Steps 1042-1064).** Same adaptive cascade architecture, different fitness function. Attention-weighted fitness (prosecution) 100%/60% vs SPSA goal-mismatch (defense) 10%/0%. The encoding IS the bottleneck — modifying it (ℓ_π) dominates tuning within it (ℓ₁). Consistent with ANIL (Raghu 2020): feature reuse > rapid learning. Novel: no meta-training distribution.
+- **FT09 bottleneck REVISED (PB19, Steps 920/920b/1017 vs 1012).** Generic exploration = 0 even unconstrained. Prescribed solution = 6/6. Variable is discovery mechanism, not encoding or constraints.
+- **Constraint cost measured (PB21, Step 1017).** ALL bans lifted = still 0% on click games. Gap is discovery, not constraints. LS20 cost ≈ 0.
 - **Graph ban TIGHTENED (2026-03-23, Step 931 killed).** Per-observation-action memory (obs_encoding → best_action) IS per-state conditioning — banned. The observation encoding IS a state representation. ANY mechanism that conditions action selection on specific past observations is a graph in disguise. ONLY global statistics allowed: per-action delta (800b), alpha attention weights. No observation-specific recall of any kind.
 
 ---
