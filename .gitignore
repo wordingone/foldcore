@@ -9,6 +9,11 @@ scripts/
 *.log
 models/
 
+# Secrets (NEVER commit API keys or credentials)
+.secrets/
+*.env
+.env.*
+
 # Local config files (machine-specific, not for public repo)
 .mcp.json
 settings.local.json
