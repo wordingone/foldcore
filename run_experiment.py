@@ -98,8 +98,8 @@ def main():
                         help='Baseline JSON path for chain kill verdict')
     parser.add_argument('--save-as-baseline', action='store_true',
                         help='Copy result to chain_results/baseline_994.json (use for step 1006)')
-    parser.add_argument('--random-games', type=int, default=0,
-                        help='Randomly select N games from API pool (0=use config, default)')
+    parser.add_argument('--random-games', type=int, default=3,
+                        help='Randomly select N games from API pool (default=3, Jun 2026-03-25)')
     parser.add_argument('--game-seed', type=int, default=None,
                         help='Seed for random game selection (deterministic if set)')
     args = parser.parse_args()
