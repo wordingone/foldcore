@@ -39,40 +39,19 @@
 | VC33 | 5/5 (CC discovery, Step 576) | **0/10 all mechanisms** | Complete loss |
 | CIFAR | 94.48% w/ labels (Step 425) | ~chance without labels | R1-limited |
 
-### D2 Ablation Results (Steps 1019-1021, 2026-03-24)
-
-**What all games ACTUALLY demand (proven by systematic ablation):**
-
-| Capability | FT09 | VC33 | LS20 |
-|-----------|------|------|------|
-| Exact position discovery | 2px precision (zones KILL) | 2px precision (CC KILL) | Discrete (N/A) |
-| Ordering | ORDER-FREE (set) | L4-L7 STRICT (sequence) | ALL STRICT (311/311 critical) |
-| Mechanics inference | Lights-Out GF(2) for L5/L6 | Canal lock interleaving | Shape matching + budget |
-| Redundancy | None (all clicks necessary) | None | None (0 robust moves) |
-
-**Three layers the substrate must discover autonomously:**
-1. **WHERE** — exact interaction targets (not approximate zones)
-2. **HOW** — per-game mechanics (toggle vs cycle vs interleave vs navigate)
-3. **WHEN** — game-specific ordering (sometimes irrelevant, sometimes critical)
-
-**Key: the constraint map (U1-U19) describes substrate architecture requirements. The task demands above are a separate layer.** Step 1017 demonstrated that one unconstrained implementation also fails — but Step 576 (VC33 5/5 with mode map + CC) proves autonomous click-game solving IS possible with the right discovery mechanism. The ablation identifies what that mechanism must achieve (exact precision, game-specific ordering, mechanics inference).
-
-### Pre-D2 Findings (LS20-focused, 1000+ experiments)
+### Post-Ban Findings (LS20-focused, 230+ experiments)
 
 **Research skew:** 230 post-ban experiments exclusively LS20. The three mapping properties (deterministic, continuous, persistent) predict LS20 L1 only. Click games demand capabilities not captured by any existing constraint.
 
-**Findings still valid:**
+**Findings:**
 - Exploration is non-convergent (sublinear reachable set growth)
 - Targeted exploration kills LS20 navigation (noisy TV)
 - L1 is perception-limited, not action-limited
 - R3 = self-directed attention on encoding (alpha, 895)
 - CSE interpreter conjecture (5 families confirm)
 - Game versions change (Steps 690+ on current versions)
-
-**Findings recontextualized by D2:**
-- **"Action space IS a variable"** → STILL VALID. Step 576 (VC33 5/5, mode map + CC) = the only autonomous multi-game solve. D2 shows the substrate must discover exact targets, not just approximate zones.
-- **"Action discovery cascade — all levels insufficient"** → COMPLEMENTARY to ablation. Cascade addresses which actions to take (discovery). Ablation addresses precision and ordering (execution). Both are real bottlenecks at different pipeline stages.
-- **"L2 wall = purposeful navigation"** → STILL VALID, EXTENDED. L2+ requires mechanics inference IN ADDITION TO purposeful navigation. Shape matching (LS20), Lights-Out (FT09), canal locks (VC33) are mechanics that enable purposeful navigation, not alternatives to it.
+- Step 1017: full graph + all bans lifted = FT09/VC33 still 0%. Generic exploration can't discover multi-step sequences.
+- Step 576 (VC33 5/5, mode map + CC) = the only autonomous multi-game solve.
 
 ### Classification (P-MNIST)
 
@@ -128,9 +107,9 @@ The task is interactive (unknown environment, no separate training phase). Any s
 | U21 | Diversity fitness collapses | ExprSubstrate-only | One experiment on ExprSubstrate. Too thin to generalize. |
 | U25 | Convergent action selection kills exploration | **UPGRADE → Validated U** | Now confirmed across 4 representations (Steps 521-525): edge dict, weight matrix, transition tensor, n-gram all produce argmin which converges locally. Steps 528-529 confirm empirically: growth rate decays to ~2 cells/100K at 740K. Coupled to U17: edge growth postpones convergence, self-refinement (Recode) expands the cell set, but convergence is projected to be eventual (not empirically confirmed for self-refining substrates). Known in literature as count-based exploration decay (Bellemare et al. 2016). |
 | U26 | Self-generated labels compound errors | **CHALLENGED** | Codebook: 9.8% self-labels (Step 432). Graph: 10.1% (Step 444b). Both NN-voting = near chance. BUT Step 573: LSH k=16 achieves **36.2% test accuracy** with self-labels on P-MNIST — 4x above codebook. The self-label failure was codebook-specific (NN-voting on cosine centroids), not universal. LSH cells generalize better because random hyperplanes create more diverse partitions than cosine attractors. Note: splits=0, so this is pure LSH, not Recode. Coverage=70% (30% of test images map to unseen cells). |
-| — | ~~U27 attractor hypothesis~~ | **DOWNGRADED to hypothesis** | Hart debate Round 2 (2026-03-21): the 477-482 evidence was corrected to "mechanism-specific, not categorical" — which undermines using the same evidence for a categorical attractor pattern. Moved to What's Open item 3 as interpretive lens, not constraint. |
-| U28 | No auxiliary signal improves argmin; dense signals damage it | **PROVISIONAL** | LSH only (Steps 581d, 630-639, 12 experiments). No signal at any density significantly improves argmin navigation (581d at n=20: p=0.63, Step 584). Dense signals (>~60% firing rate) actively damage navigation: delta PREFER at 66% → 3/5 seeds 10-18x slower (633); frontier at 94-98% → 3/5 seeds 5-20x slower (635). Sparse/moderate signals (<~55%) are inert: stale at 12% → 0.94x (637); delta at 33-42% → identical to argmin (634); stale at 54% → inert (636). Environmental events (1-5%) seed-dependent (639). Transition from inert to damage between 54% and 66%. Hart debate (2026-03-21): original ~10% threshold was post-hoc fitting to 581d benefit claim, which was debunked at n=20. Single-family evidence (LSH). |
-| — | PENALTY=100 and op-code definitions are frozen value judgments | **R3/R4 AUDIT QUEUE** | Step 581d: PENALTY=100 is designer-prescribed. Fails R3 (not adaptive) and R6 (removable — 4/5→3/5, not all capability lost). Should be made adaptive: the graph already encodes death information (death edges lead to start node), so the substrate COULD discover appropriate avoidance without a prescribed magnitude. Step 582: op-code assignment is self-derived (R3 partial), but op definitions (what op2 and op3 DO) remain designer-prescribed. Hart debate (2026-03-21) identified these as R4 violations, not R1 violations. |
+| — | ~~U27 attractor hypothesis~~ | **DOWNGRADED to hypothesis** | Hart review Round 2 (2026-03-21): the 477-482 evidence was corrected to "mechanism-specific, not categorical" — which undermines using the same evidence for a categorical attractor pattern. Moved to What's Open item 3 as interpretive lens, not constraint. |
+| U28 | No auxiliary signal improves argmin; dense signals damage it | **PROVISIONAL** | LSH only (Steps 581d, 630-639, 12 experiments). No signal at any density significantly improves argmin navigation (581d at n=20: p=0.63, Step 584). Dense signals (>~60% firing rate) actively damage navigation: delta PREFER at 66% → 3/5 seeds 10-18x slower (633); frontier at 94-98% → 3/5 seeds 5-20x slower (635). Sparse/moderate signals (<~55%) are inert: stale at 12% → 0.94x (637); delta at 33-42% → identical to argmin (634); stale at 54% → inert (636). Environmental events (1-5%) seed-dependent (639). Transition from inert to damage between 54% and 66%. Hart review (2026-03-21): original ~10% threshold was post-hoc fitting to 581d benefit claim, which was debunked at n=20. Single-family evidence (LSH). |
+| — | PENALTY=100 and op-code definitions are frozen value judgments | **R3/R4 AUDIT QUEUE** | Step 581d: PENALTY=100 is designer-prescribed. Fails R3 (not adaptive) and R6 (removable — 4/5→3/5, not all capability lost). Should be made adaptive: the graph already encodes death information (death edges lead to start node), so the substrate COULD discover appropriate avoidance without a prescribed magnitude. Step 582: op-code assignment is self-derived (R3 partial), but op definitions (what op2 and op3 DO) remain designer-prescribed. Hart review (2026-03-21) identified these as R4 violations, not R1 violations. |
 
 ---
 
@@ -283,7 +262,7 @@ Algorithm invariance (argmin banned), U3/U17 (graph growth banned — what accum
 | PB18 | 916/895h beat ALL baselines 2-2.5× on LS20 | CONFIRMED |
 | PB19 | FT09 bottleneck = temporal credit for sequential actions. Generic exploration (graph+argmin, sequence novelty, attention) ALL = 0/10 even with bans lifted (Step 1017). Only prescribed deterministic solution = 6/6 (Step 1012). No discovery mechanism works. | REVISED (Steps 920/920b/1017 vs 1012) |
 | PB20 | Per-observation action memory = graph-banned | KILLED |
-| PB21 | Direction 2: FT09 6/6 + VC33 7/7 solvable ONLY with prescribed solutions. Generic exploration = 0 even with ALL bans lifted (Step 1017). Gap = prescription, not constraints. | CONFIRMED (Steps 1012-1013 vs 1017) |
+| PB21 | Generic exploration = 0 on click games even with ALL bans lifted (Step 1017). Gap is discovery mechanism, not constraints. | CONFIRMED (Step 1017) |
 | PB22 | Direction 1: 5 extraction experiments (1007-1014) = 0 FT09/VC33 signal | CONFIRMED |
 | PB23 | Game-agnostic base (no 800b/alpha/h) maintains LS20 via bootloader only | CONFIRMED (Step 1014) |
 | PB24 | LS20-tuned foundation (600 steps hill-climbing) may contaminate extraction experiments | PROVISIONAL (Jun observation, 2026-03-24, no controlled test) |
@@ -297,7 +276,7 @@ Prediction transfer region non-empty (PB5). Navigation transfer region empty. Ga
 **Baselines:** 868d = 203.9/seed (true baseline). 916 = 290.7/seed (LS20 SOTA). See RESEARCH_STATE.md for full comparison table.
 - **916 = 290.7/seed LS20 SOTA (PB17).** Echo-state reservoir h_t=tanh(W_h@h+W_x@enc), ext_enc=[enc,h]=320D. 895h on extended space. Beats 895h cold (268.0) by +8.5%. Published baselines ALL below 895h: ICM=0 (signal collapses), Count=109, RND=112, Graph+argmin=129.9 (PB18, Steps 917-920). Our mechanism 2-2.5× better.
 - **FT09 bottleneck REVISED (PB19, Steps 920/920b vs 1012).** Both 920 and 1012 used avgpool16+centered encoding. Step 920: generic graph+argmin → 0/10. Step 920b: 6 correct actions + graph+argmin → still 0/10. Step 1012: per-game prescribed deterministic solution → 6/6 levels. The variable is solution architecture (prescribed vs discovered), not encoding. Generic graph exploration is insufficient even with correct encoding and narrowed actions.
-- **Constraint cost measured (PB21, Steps 1012-1013).** Constrained: FT09=0/10, VC33=0/10. Unconstrained (8 constraints lifted simultaneously): FT09=6/6 all levels, VC33=7/7 all levels. Gap = 13 levels. **Not isolable to single ban** — codebook, graph, per-game tuning, R1, R3, one-config, budget cap, and PRISM all lifted. LS20 cost ≈ 0 (post-ban mechanism matches). Direction 1 extraction (5 experiments, 0 signal) suggests components don't work in isolation.
+- **Constraint cost measured (PB21, Step 1017).** Constrained: FT09=0/10, VC33=0/10. Unconstrained (8 constraints lifted simultaneously): still 0%. Gap is in the discovery mechanism, not in any single ban. LS20 cost ≈ 0 (post-ban mechanism matches).
 - **Graph ban TIGHTENED (2026-03-23, Step 931 killed).** Per-observation-action memory (obs_encoding → best_action) IS per-state conditioning — banned. The observation encoding IS a state representation. ANY mechanism that conditions action selection on specific past observations is a graph in disguise. ONLY global statistics allowed: per-action delta (800b), alpha attention weights. No observation-specific recall of any kind.
 
 ---

@@ -81,7 +81,7 @@ PRISM-era baseline: Step 1006 (994) = LS20=100% L1, chain=3/5.
 | 989 | Dual-horizon prediction | 61.8 | 0 | KILL |
 | 990 | Temporal model inconsistency signal | 25.3 | 0 | KILL |
 
-**Debate closed post-989:** Graph ban NOT the wall. Temporal credit IS the wall.
+**Resolved post-989:** Graph ban NOT the wall. Temporal credit IS the wall.
 **New rule (Step 987):** 800b action selection FROZEN — any modification auto-reject.
 
 ---

@@ -1,0 +1,162 @@
+======================================================================
+STEP 982 — VC33 STANDALONE DIAGNOSTIC (unmodified 916)
+======================================================================
+Game versions: VC33=9851e02b  FT09=0d8bbf25 (reference)
+Mirror of Step 969 FT09 standalone. 10 seeds. 10K + 25K.
+Hypothesis: VC33=0 at 25K → mechanism-limited. VC33>0 → budget-limited.
+
+--- VC33 @ 10K (10 seeds) ---
+2026-03-24 00:44:29 | INFO | Got anonymous API key: d3180898-8272-4543-ae9e-c90d43b70de9
+2026-03-24 00:44:29 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 00:44:29 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 00:44:29 | INFO | Created new scorecard: b9dd4f66-75e8-462a-bf4e-8bf711c062f8
+2026-03-24 00:44:30 | INFO | Successfully fetched metadata for game vc33
+2026-03-24 00:44:30 | INFO | Successfully loaded game class Vc33 from environment_files\vc33\9851e02b\vc33.py
+  seed=1: completions=   0  alpha_conc=28.63  n_actions=68
+2026-03-24 00:44:34 | INFO | Got anonymous API key: 9fa65931-ae4b-49a3-a9c8-f6745f9e3b1f
+2026-03-24 00:44:34 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 00:44:34 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 00:44:34 | INFO | Created new scorecard: 6a7408cc-494f-4e68-a436-7fdffc6f9fb5
+2026-03-24 00:44:34 | INFO | Successfully fetched metadata for game vc33
+2026-03-24 00:44:34 | INFO | Successfully loaded game class Vc33 from environment_files\vc33\9851e02b\vc33.py
+  seed=2: completions=   0  alpha_conc=27.07  n_actions=68
+2026-03-24 00:44:39 | INFO | Got anonymous API key: 02261ffc-935f-433e-989a-5b00320c104f
+2026-03-24 00:44:39 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 00:44:39 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 00:44:39 | INFO | Created new scorecard: ec853dbe-5a35-4a0f-8939-4a35c9cfbe29
+2026-03-24 00:44:40 | INFO | Successfully fetched metadata for game vc33
+2026-03-24 00:44:40 | INFO | Successfully loaded game class Vc33 from environment_files\vc33\9851e02b\vc33.py
+  seed=3: completions=   0  alpha_conc=50.00  n_actions=68
+2026-03-24 00:44:45 | INFO | Got anonymous API key: 1eedea22-7071-4100-822b-46b6fe129597
+2026-03-24 00:44:45 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 00:44:45 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 00:44:45 | INFO | Created new scorecard: 1584efe8-2806-4493-bcf9-12c8f09b7d66
+2026-03-24 00:44:45 | INFO | Successfully fetched metadata for game vc33
+2026-03-24 00:44:45 | INFO | Successfully loaded game class Vc33 from environment_files\vc33\9851e02b\vc33.py
+  seed=4: completions=   0  alpha_conc=34.13  n_actions=68
+2026-03-24 00:44:50 | INFO | Got anonymous API key: c94ed723-aa63-4cac-a63e-a30f909094b4
+2026-03-24 00:44:50 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 00:44:50 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 00:44:50 | INFO | Created new scorecard: 5b29d31d-cde2-4a0a-bb49-684de6cba739
+2026-03-24 00:44:50 | INFO | Successfully fetched metadata for game vc33
+2026-03-24 00:44:50 | INFO | Successfully loaded game class Vc33 from environment_files\vc33\9851e02b\vc33.py
+  seed=5: completions=   0  alpha_conc=29.04  n_actions=68
+2026-03-24 00:44:55 | INFO | Got anonymous API key: c43f04b1-b4ce-4a5d-a7cc-250ccccb64ff
+2026-03-24 00:44:55 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 00:44:56 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 00:44:56 | INFO | Created new scorecard: a9301e79-c446-4c04-8f2e-396f056b07f5
+2026-03-24 00:44:56 | INFO | Successfully fetched metadata for game vc33
+2026-03-24 00:44:56 | INFO | Successfully loaded game class Vc33 from environment_files\vc33\9851e02b\vc33.py
+  seed=6: completions=   0  alpha_conc=23.81  n_actions=68
+2026-03-24 00:45:01 | INFO | Got anonymous API key: 57e81a35-65ff-489e-aeb4-f09525008b69
+2026-03-24 00:45:01 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 00:45:01 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 00:45:01 | INFO | Created new scorecard: a3842eed-fbf4-4ff8-a952-4eaf01a34408
+2026-03-24 00:45:01 | INFO | Successfully fetched metadata for game vc33
+2026-03-24 00:45:01 | INFO | Successfully loaded game class Vc33 from environment_files\vc33\9851e02b\vc33.py
+  seed=7: completions=   0  alpha_conc=15.78  n_actions=68
+2026-03-24 00:45:06 | INFO | Got anonymous API key: 3d003a76-1f79-4fe3-bc32-9b20bde2ab9a
+2026-03-24 00:45:06 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 00:45:06 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 00:45:06 | INFO | Created new scorecard: ecabe6c1-4f26-4f82-90c6-8005158eb06d
+2026-03-24 00:45:07 | INFO | Successfully fetched metadata for game vc33
+2026-03-24 00:45:07 | INFO | Successfully loaded game class Vc33 from environment_files\vc33\9851e02b\vc33.py
+  seed=8: completions=   0  alpha_conc=50.00  n_actions=68
+2026-03-24 00:45:12 | INFO | Got anonymous API key: eb4403b5-8d71-4e90-9faf-eaa9208a4aab
+2026-03-24 00:45:12 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 00:45:12 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 00:45:12 | INFO | Created new scorecard: c592682f-e4f8-4c74-9790-c4768d0eb565
+2026-03-24 00:45:12 | INFO | Successfully fetched metadata for game vc33
+2026-03-24 00:45:12 | INFO | Successfully loaded game class Vc33 from environment_files\vc33\9851e02b\vc33.py
+  seed=9: completions=   0  alpha_conc=23.76  n_actions=68
+2026-03-24 00:45:17 | INFO | Got anonymous API key: 80053c59-1c93-4b47-a5d1-11386f37cd51
+2026-03-24 00:45:17 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 00:45:17 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 00:45:17 | INFO | Created new scorecard: 71224d33-8078-497b-8aa9-3de3b63712e4
+2026-03-24 00:45:17 | INFO | Successfully fetched metadata for game vc33
+2026-03-24 00:45:18 | INFO | Successfully loaded game class Vc33 from environment_files\vc33\9851e02b\vc33.py
+  seed=10: completions=   0  alpha_conc=26.32  n_actions=68
+  10K summary: mean=0.0  nonzero=0/10  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+--- VC33 @ 25K (10 seeds) ---
+2026-03-24 00:45:23 | INFO | Got anonymous API key: d8e33bae-5c29-41a9-a3f3-b7d0e214e0e9
+2026-03-24 00:45:23 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 00:45:23 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 00:45:23 | INFO | Created new scorecard: 01969fb9-e11a-47ac-a6bd-4294eca8a8d8
+2026-03-24 00:45:23 | INFO | Successfully fetched metadata for game vc33
+2026-03-24 00:45:23 | INFO | Successfully loaded game class Vc33 from environment_files\vc33\9851e02b\vc33.py
+  seed=1: completions=   0  alpha_conc=28.42  n_actions=68
+2026-03-24 00:45:37 | INFO | Got anonymous API key: 2e1a7cd0-d6cf-40e8-aaaf-325162b3cc94
+2026-03-24 00:45:37 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 00:45:37 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 00:45:37 | INFO | Created new scorecard: 1a1287e5-91f1-4966-abb2-9d73451d0ba5
+2026-03-24 00:45:37 | INFO | Successfully fetched metadata for game vc33
+2026-03-24 00:45:37 | INFO | Successfully loaded game class Vc33 from environment_files\vc33\9851e02b\vc33.py
+  seed=2: completions=   0  alpha_conc=27.36  n_actions=68
+2026-03-24 00:45:51 | INFO | Got anonymous API key: 4df6db53-1fbb-48ca-829d-e0a951591f37
+2026-03-24 00:45:51 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 00:45:51 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 00:45:51 | INFO | Created new scorecard: 53cb44f6-c6f9-470c-900f-ea55662bdf83
+2026-03-24 00:45:51 | INFO | Successfully fetched metadata for game vc33
+2026-03-24 00:45:51 | INFO | Successfully loaded game class Vc33 from environment_files\vc33\9851e02b\vc33.py
+  seed=3: completions=   0  alpha_conc=50.00  n_actions=68
+2026-03-24 00:46:04 | INFO | Got anonymous API key: c19045a3-167c-4150-b4ab-b3743a40a612
+2026-03-24 00:46:04 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 00:46:05 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 00:46:05 | INFO | Created new scorecard: 4ced97ca-a744-47fb-b0a2-5426668a6df1
+2026-03-24 00:46:05 | INFO | Successfully fetched metadata for game vc33
+2026-03-24 00:46:05 | INFO | Successfully loaded game class Vc33 from environment_files\vc33\9851e02b\vc33.py
+  seed=4: completions=   0  alpha_conc=33.65  n_actions=68
+2026-03-24 00:46:18 | INFO | Got anonymous API key: c8316171-bc0c-4973-b14a-c01c2fe0ccea
+2026-03-24 00:46:18 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 00:46:19 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 00:46:19 | INFO | Created new scorecard: 03c7a87c-18a9-4fc4-9e07-67cd90e4f635
+2026-03-24 00:46:19 | INFO | Successfully fetched metadata for game vc33
+2026-03-24 00:46:19 | INFO | Successfully loaded game class Vc33 from environment_files\vc33\9851e02b\vc33.py
+  seed=5: completions=   0  alpha_conc=29.52  n_actions=68
+2026-03-24 00:46:32 | INFO | Got anonymous API key: 63c21ced-7999-48ab-abed-207a6bb153bf
+2026-03-24 00:46:32 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 00:46:33 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 00:46:33 | INFO | Created new scorecard: aed64475-95cf-4e63-af5a-7bf5faedaf33
+2026-03-24 00:46:33 | INFO | Successfully fetched metadata for game vc33
+2026-03-24 00:46:33 | INFO | Successfully loaded game class Vc33 from environment_files\vc33\9851e02b\vc33.py
+  seed=6: completions=   0  alpha_conc=20.18  n_actions=68
+2026-03-24 00:46:46 | INFO | Got anonymous API key: 5aeba141-0f22-4b44-bc62-ac70c12358bf
+2026-03-24 00:46:46 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 00:46:46 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 00:46:46 | INFO | Created new scorecard: 8ec725c9-6716-4a36-a57e-5d4e4ed54bd4
+2026-03-24 00:46:47 | INFO | Successfully fetched metadata for game vc33
+2026-03-24 00:46:47 | INFO | Successfully loaded game class Vc33 from environment_files\vc33\9851e02b\vc33.py
+  seed=7: completions=   0  alpha_conc=15.77  n_actions=68
+2026-03-24 00:47:00 | INFO | Got anonymous API key: ad8870b4-762c-487e-a19a-92f879842a50
+2026-03-24 00:47:00 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 00:47:00 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 00:47:00 | INFO | Created new scorecard: f86c42d9-7ce9-467a-93e7-63dbf477ebe4
+2026-03-24 00:47:00 | INFO | Successfully fetched metadata for game vc33
+2026-03-24 00:47:00 | INFO | Successfully loaded game class Vc33 from environment_files\vc33\9851e02b\vc33.py
+  seed=8: completions=   0  alpha_conc=50.00  n_actions=68
+2026-03-24 00:47:14 | INFO | Got anonymous API key: 08066a0f-dd68-4426-8585-a1ce68dcb83b
+2026-03-24 00:47:14 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 00:47:14 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 00:47:14 | INFO | Created new scorecard: a2e928b7-7a9f-4380-898d-ea85b73c68d3
+2026-03-24 00:47:14 | INFO | Successfully fetched metadata for game vc33
+2026-03-24 00:47:14 | INFO | Successfully loaded game class Vc33 from environment_files\vc33\9851e02b\vc33.py
+  seed=9: completions=   0  alpha_conc=23.80  n_actions=68
+2026-03-24 00:47:28 | INFO | Got anonymous API key: 0b77b9e7-1dea-4db6-bc3d-bcc7a6d228fa
+2026-03-24 00:47:28 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 00:47:28 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 00:47:28 | INFO | Created new scorecard: 93c2cb8a-f374-4a06-b474-9524b10d07d3
+2026-03-24 00:47:28 | INFO | Successfully fetched metadata for game vc33
+2026-03-24 00:47:28 | INFO | Successfully loaded game class Vc33 from environment_files\vc33\9851e02b\vc33.py
+  seed=10: completions=   0  alpha_conc=26.00  n_actions=68
+  25K summary: mean=0.0  nonzero=0/10  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+======================================================================
+STEP 982 RESULTS:
+  VC33 @ 10K: mean=0.0/seed  nonzero=0/10  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  VC33 @ 25K: mean=0.0/seed  nonzero=0/10  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+  VERDICT: MECHANISM-LIMITED — VC33=0 at 25K, same structural gap as FT09.
+  FT09 reference (Step 969): 0/10 at 25K — mechanism-limited confirmed.
+Total elapsed: 192.9s
+STEP 982 DONE

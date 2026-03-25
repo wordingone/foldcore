@@ -2,7 +2,7 @@
 
 Can a system improve itself by criteria it generates?
 
-1039+ experiments across 16 architecture families testing substrates for recursive self-improvement on published benchmarks (Split-CIFAR-100, Atari 100K) and interactive games (ARC-AGI-3, 25 games live). **Debate v3 finding (Step 1039b): both ℓ₁ and ℓ_π R3 mechanisms hit the same wall.** The bottleneck is the goal function (freq_mode predicts the unsolved state), not the self-modification level. FT09 1/5 L1 from 5 debate experiments, 0 L2+. The question is: can the substrate infer the solved state from interaction alone?
+1039+ experiments across 16 architecture families testing substrates for recursive self-improvement on published benchmarks (Split-CIFAR-100, Atari 100K) and interactive games (ARC-AGI-3, 25 games live). Current bottleneck: goal inference. The substrate must infer the solved state from interaction alone — frequency-based prediction defaults to the unsolved background. ARC-AGI-3 full set (25 games) now live as the test bed.
 
 ## Results (honest)
 
@@ -26,13 +26,13 @@ Can a system improve itself by criteria it generates?
 | FT09 nav | ALL post-ban | 0/seed | Sequential ordering unsolved (Prop 23) |
 | VC33 nav | 895h cold (chain) | 0/seed | First post-ban VC33 result |
 | Full chain (914) | 895h cold | CIFAR=chance, LS20=237.6, FT09=0, VC33=0 | Chain: 1/4 |
-| R3 encoding (Step 895) | Prediction-error attention | alpha=[60,51,52] on FT09, UNIVERSAL | First post-ban ℓ_π |
+| R3 encoding (Step 895) | Prediction-error attention | alpha=[60,51,52] on FT09, UNIVERSAL | First post-ban R3 encoding |
 | D(s) pred transfer | Forward model W (delta rule) | 5/7 PASS | First positive R3_cf |
 
 **Key findings:**
 - **R3 encoding self-modification achieved** (Prop 22). Alpha discovers game-informative dims from prediction error alone. Universal on FT09 (dims [60,51,52] = puzzle tiles, all seeds).
 - **Navigation: +32% with clamped alpha.** Change-tracking (800b) + prediction-error attention = best post-ban mechanism. 0/10 zero-seeds.
-- **FT09/VC33 unsolved — bans are NOT the cause (Step 1017).** Full graph + all bans lifted = still 0%. Generic exploration can't discover multi-step click sequences. Per-game prescribed solutions work (FT09 6/6, VC33 7/7). The gap is autonomous discovery of game mechanics, not any constraint.
+- **FT09/VC33 unsolved — bans are NOT the cause (Step 1017).** Full graph + all bans lifted = still 0%. Generic exploration can't discover multi-step click sequences. The gap is autonomous discovery of game mechanics, not any constraint.
 - **Warm alpha transfer FAILED** (n_eff=10). Alpha is per-episode adaptation, not cross-seed transfer. Cold > warm.
 - **800b "10× random" retracted.** True mean = 203.9/seed (L2 norm, n_eff=10). Prior claim was seed artifact.
 - Compression progress dead across 5 variants. Novelty-based action selection dead on LS20. Only change-tracking navigates.

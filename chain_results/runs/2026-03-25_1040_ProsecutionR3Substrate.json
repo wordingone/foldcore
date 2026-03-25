@@ -1,0 +1,154 @@
+{
+  "substrate": "ProsecutionR3Substrate",
+  "timestamp": "2026-03-25T10:18:54",
+  "step": 1040,
+  "prism_mode": null,
+  "chain": [
+    "Split-CIFAR-100-before",
+    "LS20",
+    "FT09",
+    "VC33",
+    "Split-CIFAR-100-after"
+  ],
+  "budget_per_phase": 500,
+  "n_seeds": 10,
+  "config": {
+    "warmup": 3000,
+    "att_init": 0.5,
+    "att_lr": 0.02,
+    "att_min": 0.01,
+    "att_max": 1.0
+  },
+  "results": {
+    "Split-CIFAR-100-before": {
+      "l1_rate": 1.0,
+      "l2_rate": 0.0,
+      "avg_steps": 20.0,
+      "mean_elapsed": 0.05700000000000001,
+      "per_seed_l1": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "LS20": {
+      "l1_rate": 0.3,
+      "l2_rate": 0.0,
+      "avg_steps": 10000.0,
+      "mean_elapsed": 10.395999999999999,
+      "per_seed_l1": [
+        0,
+        0,
+        5694,
+        9623,
+        0,
+        0,
+        0,
+        3577,
+        0,
+        0
+      ]
+    },
+    "FT09": {
+      "l1_rate": 0.9,
+      "l2_rate": 0.0,
+      "avg_steps": 10000.0,
+      "mean_elapsed": 5.613,
+      "per_seed_l1": [
+        2380,
+        1479,
+        1479,
+        0,
+        1692,
+        1479,
+        2894,
+        500,
+        2894,
+        6244
+      ]
+    },
+    "VC33": {
+      "l1_rate": 0.0,
+      "l2_rate": 0.0,
+      "avg_steps": 10000.0,
+      "mean_elapsed": 5.439,
+      "per_seed_l1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "Split-CIFAR-100-after": {
+      "l1_rate": 1.0,
+      "l2_rate": 0.0,
+      "avg_steps": 20.0,
+      "mean_elapsed": 0.055999999999999994,
+      "per_seed_l1": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    }
+  },
+  "chain_score": {
+    "phases_passed": 4,
+    "phases_total": 8,
+    "chain_complete": false
+  },
+  "chain_kill": {
+    "verdict": "KILL",
+    "per_game_delta": {
+      "Split-CIFAR-100-before": {
+        "delta": 0.0,
+        "current": 1.0,
+        "baseline": 1.0
+      },
+      "LS20": {
+        "delta": -0.7,
+        "current": 0.3,
+        "baseline": 1.0
+      },
+      "FT09": {
+        "delta": 0.9,
+        "current": 0.9,
+        "baseline": 0.0
+      },
+      "VC33": {
+        "delta": 0.0,
+        "current": 0.0,
+        "baseline": 0.0
+      },
+      "Split-CIFAR-100-after": {
+        "delta": 0.0,
+        "current": 1.0,
+        "baseline": 1.0
+      }
+    },
+    "chain_score": {
+      "phases_passed": 4,
+      "phases_total": 5
+    },
+    "details": "improved=1 degraded=1 of 5 games"
+  }
+}

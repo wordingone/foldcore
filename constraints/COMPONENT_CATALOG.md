@@ -184,27 +184,3 @@
 
 **Key gap:** Steps 778-963 (~186 experiments) were supposed to go through PRISM but didn't. Results are valid per-game but chain interactions weren't tested. The infrastructure overhaul (2026-03-24) fixed this going forward.
 
----
-
-## Unconstrained Diagnostic Spec (Direction 2)
-
-**Purpose:** Calibration ceiling. What's the best we can do with EVERYTHING, through PRISM?
-
-**Substrate:** Combine all best-known techniques:
-- **Encoding:** avgpool16 + centered + running-mean (U16). Multi-resolution cascade if needed.
-- **State:** Graph (per-cell per-action edge counts). Visit-frequency argmin.
-- **LS20:** 4 directional actions + graph + 674+running-mean. Expected: 20/20.
-- **FT09:** 69-action expansion (64 grid + 5 simple) + graph + argmin. Expected: 20/20.
-- **VC33:** Mode map + CC zone discovery (Step 576) + 3-zone graph + argmin. Expected: 5/5.
-- **CIFAR:** LSH k=16 self-labels (Step 573). Expected: ~36%.
-- **Classification:** Top-K voting with external labels (Step 425). Expected: ~94% (R1-violating).
-- **Domain separation:** Per-domain centering (Step 546).
-- **Cross-game:** Dynamic codebook growth handles new domains (Step 507).
-
-**Through PRISM:** Randomized game order. Hidden game names. Chain score as metric.
-
-**Expected ceiling:** 5/5 games L1 (all through PRISM), CIFAR 36% self-labels.
-**Current constrained:** 3/5 (CIFAR + LS20 + CIFAR-after). FT09=0, VC33=0.
-**Cost of constraints:** FT09 L1 + VC33 L1 = 2 full game capabilities.
-
-**Implementation note:** This requires per-game action space expansion. The substrate MUST detect when it's in a click-game (FT09/VC33) vs direction-game (LS20) and expand actions accordingly. Step 576's mode map + CC could provide this detection autonomously. Without that: prescribe action spaces per game type (violates one-config rule but that's the point of the diagnostic).

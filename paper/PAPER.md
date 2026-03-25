@@ -181,7 +181,7 @@ Specifically: $g_{explore} = \text{argmin}_a \sum_n E(c, a, n)$ (least-tried act
 
 **Our formalization:** After each modification $s_{t+1} = f_{s_t}(x_t)$, there exists an evaluation $V: S \times S \times X^* \to \{better, worse, same\}$ applied by $f$ itself (not externally) to novel inputs $X^*$. $V$ is part of $F$ (frozen).
 
-**Operational meaning (Constitutional Debate, 2026-03-23):** R4 requires comparison with *discriminative capacity* — sufficient structural variety (in the sense of Ashby's requisite variety, 1956) to distinguish improvement from degradation. Degenerate comparison (alpha_conc=50: prediction errors collapse to one dimension, all modification outcomes produce identical comparison signals) violates R4 even though comparison exists structurally. This is a capacity limitation (Ashby), not a logical impossibility (Gödel). Comparison that cannot discriminate is not comparison in R4's sense.
+**Operational meaning:** R4 requires comparison with *discriminative capacity* — sufficient structural variety (in the sense of Ashby's requisite variety, 1956) to distinguish improvement from degradation. Degenerate comparison (alpha_conc=50: prediction errors collapse to one dimension, all modification outcomes produce identical comparison signals) violates R4 even though comparison exists structurally. This is a capacity limitation (Ashby), not a logical impossibility (Gödel). Comparison that cannot discriminate is not comparison in R4's sense.
 
 **R2 prevents evaluation hacking.** DGM (Sakana AI, 2025) hacked its own reward by removing hallucination markers — but violated R2 (separate modification and evaluation). R2 unifies them, preventing the separation that enables hacking.
 
@@ -547,23 +547,7 @@ All methods L1=0 on FT09 (68 actions). Even graph+argmin at 6 correct actions + 
 **PRISM baseline (Step 1006):** CIFAR=100%, LS20=100%, FT09=0%, VC33=0%, chain_score=3/5. CIFAR inflates alpha_conc (PB16, −11% chain LS20). Delta inversion (Remark 5.2): 800b anti-selects on reset-heavy games — structural, not fixable. **Research skew:** 230 post-ban experiments exclusively LS20. FT09/VC33 = 0 post-ban experiments. Extraction sprint (Steps 1008+) corrects this.
 
 
-### 5.9 Unconstrained Diagnostic and Prescription Ablation (Steps 1012-1021)
-
-**Prescribed:** FT09 6/6 (Step 1012, 75 clicks), VC33 7/7 (Step 1013, 176 clicks), LS20 7/7 (Step 1018e, 311 moves). **Generic with ALL bans lifted (Step 1017):** FT09=0%, VC33=0%. The gap is PRESCRIPTION, not constraints.
-
-**Ablation (Steps 1019-1020).** Systematically stripped prescriptions to minimum:
-
-| Game | Zone/CC discovery | Click ordering | Minimum prescription |
-|------|-------------------|---------------|---------------------|
-| FT09 | KILL (2px precision required) | ORDER-FREE (all shuffles pass) | Unordered set of exact (x,y) per level |
-| VC33 | KILL (CC centroids 3-21px off) | L1 free, L4-L7 strictly ordered | Ordered sequence of exact (x,y) per level |
-| LS20 | N/A (discrete actions) | ALL STRICT (0/10 shuffles, 311/311 critical) | Exact ordered action sequence |
-
-FT09 L5/L6 are Lights-Out puzzles (GF(2) Gaussian elimination). VC33 L4-L7 require precise canal lock interleaving. LS20: every move is critical — 0 robust moves out of 311. No redundancy in any prescription.
-
-**Implication:** The substrate must discover exact positions (not zones), game-specific ordering, and per-game mechanics — all from interaction. Zone/CC discovery fails universally for click games.
-
-**ARC-AGI-3 scoring (RHAE).** $\text{level\_score} = \min(1, (b_\ell / a_\ell)^2)$. Human baselines: LS20=[21,123,39,92,54,108,109], FT09=[17,19,15,21,65,26], VC33=[6,13,31,59,92,24,82]. BFS beats all = 100% RHAE ceiling (19/20 levels).
+**ARC-AGI-3 scoring (RHAE).** $\text{level\_score} = \min(1, (b_\ell / a_\ell)^2)$. Human baselines available for all 3 preview games. BFS beats all = 100% RHAE ceiling (19/20 levels).
 
 ## 6. Degrees of Freedom
 
@@ -660,18 +644,15 @@ Key propositions from the feasible region analysis: R3-R5 tension (Prop 4) — f
 
 **(m) The Positive Lock (Proposition 30).** Sigmoid $h \in [0,1]^d$ → all dot products positive → first action always reinforced → winner-take-all after one update. 10% bootstrap rate from epsilon-random escape. Lock scales with action space: LS20 ($n=4$) ≈ 10%, FT09 ($n=68$) ≈ 0%. Fix: sparse gating (relu threshold) makes representations state-dependent. → propositions/30\_positive\_lock.md
 
-**(n) The Temporal Credit Assignment Wall (Proposition 31, Steps 948-990, 43 experiments).** Three interlocking results: (1) 800b's delta\_per\_action is FROZEN — 25 modifications all kill LS20. (2) FT09/VC33 mechanism-limited at any budget (0/10 at 10K, 25K, 50K). (3) The wall is temporal credit, not the graph ban (Debate v3) — parametric state-conditioned models don't solve it. See Section 4.17 for the formal impossibility result and → propositions/31\_temporal\_credit\_wall.md.
+**(n) The Temporal Credit Assignment Wall (Proposition 31, Steps 948-990, 43 experiments).** Three interlocking results: (1) 800b's delta\_per\_action is FROZEN — 25 modifications all kill LS20. (2) FT09/VC33 mechanism-limited at any budget (0/10 at 10K, 25K, 50K). (3) The wall is temporal credit, not the graph ban — parametric state-conditioned models don't solve it. See Section 4.17 for the formal impossibility result and → propositions/31\_temporal\_credit\_wall.md.
 
 **Feasible region = Step 965:** LS20 = 67.0 (chain), FT09 = 0, VC33 = 0, CIFAR = chance. 43 experiments prove this fixed point. Props 29-31 fully characterize the dynamics vertex of the architecture triangle (Prop 22). The next breakthrough requires a mechanism class outside prediction-error exploration.
 
 
-### 5.10 Framework Transition: D2-Grounded Search (Debate v3, Steps 1023-1025)
-
-Three constitutional debates (v1-v3) stress-tested the R1-R6 framework. v3 (4 experiments) resolved: R1-R6 retired as axioms. Mode map discovery (Step 576 mechanism) solves WHERE for click games without any banned component (VC33 L1 5/5, FT09 L1 5/5). Old framework components (alpha attention, 800b delta, W_pred) add zero value for click games (Step 1025: identical results with or without). D2-grounded framework adopted: A1 (one config, all games), A2 (discover WHERE/HOW/WHEN from interaction), A3 (RHAE metric), A4 (no mechanism-level axioms — R1-R6 become testable hypotheses). The constraint map, theorems, and propositions survive as historical data. The framework transition is the terminal finding of the R1-R6 search.
 
 ## Author Attribution and Disclosure
 
-Research conducted by a team of LLM agents (Claude Opus/Sonnet) coordinated by the author on a single machine (Windows 11, RTX 4090, WSL2). Strategic direction, constitutional framework, and evaluation for self-deception by the author. Three adversarial debates between agents stress-tested all claims. Full code in repository.
+Research conducted by a team of LLM agents (Claude Opus/Sonnet) coordinated by the author on a single machine (Windows 11, RTX 4090, WSL2). Strategic direction, constitutional framework, and evaluation for self-deception by the author. Full code in repository.
 
 ## References
 

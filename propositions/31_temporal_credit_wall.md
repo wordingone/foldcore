@@ -3,7 +3,7 @@ Status: CONFIRMED
 Steps: 948-990 (43 experiments across 5+ families)
 
 ## Statement
-Under the graph ban and codebook ban, no mechanism provides temporal credit assignment for ordered multi-step action sequences using prediction error as the sole intrinsic signal. The structural wall is not the ban (Debate v3) — it is the absence of a mechanism that connects "action A at time t contributed to outcome at time t+K" without per-(state,action) data.
+Under the graph ban and codebook ban, no mechanism provides temporal credit assignment for ordered multi-step action sequences using prediction error as the sole intrinsic signal. The structural wall is not the ban (Step 1017) — it is the absence of a mechanism that connects "action A at time t contributed to outcome at time t+K" without per-(state,action) data.
 
 ## Evidence
 1. **800b (running_mean)**: Global per-action average of state-change delta. Works for small action spaces without ordering (LS20, 4 actions). Fails for large action spaces with ordering (FT09/VC33, 68 actions). 0/10 at 10K, 25K, AND 50K (Steps 969, 982, 988).
@@ -12,7 +12,7 @@ Under the graph ban and codebook ban, no mechanism provides temporal credit assi
 
 3. **Hebbian W_a**: Alternative action learning from prediction error. 1/10 structural bootstrap rate (Proposition 30, positive lock). 15 experiments confirm no variant achieves reliability.
 
-4. **Debate v3**: Graph ban is NOT the wall. Parametric state-conditioned models (Step 972) produce identical FT09 failure. The function (per-state action conditioning) fails regardless of implementation (lookup vs parametric).
+4. **Step 1017**: Graph ban is NOT the wall. Parametric state-conditioned models (Step 972) produce identical FT09 failure. The function (per-state action conditioning) fails regardless of implementation (lookup vs parametric).
 
 5. **Sequential mechanisms**: Eligibility traces (970-971), momentum/suppression (977-978), dual-horizon prediction (989), temporal inconsistency (990) — all killed. Traces corrupt running_mean. Bonuses disrupt warmup. No mechanism provides sequential credit without destroying single-step exploration.
 
@@ -26,4 +26,4 @@ Let $\Delta_t(a) = \|f_\theta(s_t) - s_{t+1}\|$ be the one-step prediction error
 4. R3 (self-modification) and the temporal credit wall are connected: the substrate can't learn to modify its OWN action sequences because it can't assign credit to sequence elements
 
 ## Supersedes / Superseded by
-Extends Propositions 29 (architecture irrelevance) and 30 (positive lock). Connected to Debate v3 (graph ban is not the wall). Supersedes the assumption that FT09/VC33 failure is a "ban problem" — it is a "credit problem."
+Extends Propositions 29 (architecture irrelevance) and 30 (positive lock). Connected to Step 1017 (graph ban is not the wall). Supersedes the assumption that FT09/VC33 failure is a "ban problem" — it is a "credit problem."

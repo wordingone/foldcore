@@ -150,7 +150,7 @@
 
 ---
 
-## Unconstrained Diagnostic (Direction 2)
+## Unconstrained Diagnostic
 
 **Purpose:** Calibration ceiling. All bans lifted, all constraints suspended. Best known techniques.
 

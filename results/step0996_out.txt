@@ -1,0 +1,197 @@
+======================================================================
+STEP 996 — FAST ADAPT DURATION SWEEP (200 / 500 / 1000 steps)
+======================================================================
+Game version: LS20=9607627b. Standalone LS20@10K. 10 seeds each.
+994 reference: FAST_ADAPT_STEPS=500 → LS20=83.8
+
+--- FAST_ADAPT_STEPS=200 ---
+2026-03-24 04:06:11 | INFO | Got anonymous API key: 533e2bc5-2082-4086-9d35-b56971077a39
+2026-03-24 04:06:11 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:06:11 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:06:11 | INFO | Created new scorecard: fbf68c64-ce1a-4979-8214-12a5ddba2253
+2026-03-24 04:06:11 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:06:11 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-24 04:06:19 | INFO | Got anonymous API key: 991c14f6-71cd-4319-8597-5738f74ab774
+2026-03-24 04:06:19 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:06:19 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:06:19 | INFO | Created new scorecard: 245db31f-0952-4d1f-87a0-d92c9f98ac94
+2026-03-24 04:06:19 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:06:19 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-24 04:06:30 | INFO | Got anonymous API key: 25b3d841-010f-48dd-bc8a-213b35bf2eae
+2026-03-24 04:06:30 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:06:30 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:06:30 | INFO | Created new scorecard: 5985df95-f1d8-4750-a0eb-67d8cbc21458
+2026-03-24 04:06:30 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:06:30 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-24 04:06:41 | INFO | Got anonymous API key: 7bf0f070-f47c-4ece-bc4f-e60bb021e742
+2026-03-24 04:06:41 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:06:41 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:06:41 | INFO | Created new scorecard: 0775132b-89b1-47b4-b177-236585c1685e
+2026-03-24 04:06:41 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:06:41 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-24 04:06:52 | INFO | Got anonymous API key: c6071ffb-51c3-4004-9221-5a03d0823161
+2026-03-24 04:06:52 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:06:53 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:06:53 | INFO | Created new scorecard: 4444f2a7-7006-4244-b204-fb30c4c1159c
+2026-03-24 04:06:53 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:06:53 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-24 04:07:04 | INFO | Got anonymous API key: ee86b3ea-41bc-4067-9e92-c90aa0073ad1
+2026-03-24 04:07:04 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:07:04 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:07:04 | INFO | Created new scorecard: 08129a76-1a3b-40b8-b1aa-ef8013aa4595
+2026-03-24 04:07:04 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:07:04 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-24 04:07:14 | INFO | Got anonymous API key: 5dbcce63-caf2-41ae-aac4-cf4b54cc5386
+2026-03-24 04:07:14 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:07:14 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:07:14 | INFO | Created new scorecard: dae17fff-757b-4daa-98a9-973423cd6dff
+2026-03-24 04:07:15 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:07:15 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-24 04:07:25 | INFO | Got anonymous API key: 2e2ce444-3462-4567-9ac7-581a9079a75f
+2026-03-24 04:07:25 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:07:26 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:07:26 | INFO | Created new scorecard: d4a6a2c7-25b1-4495-a37e-8f44ed77f30d
+2026-03-24 04:07:26 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:07:26 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-24 04:07:34 | INFO | Got anonymous API key: 34f5b168-5382-4f5a-a9ca-5f9e19b6da73
+2026-03-24 04:07:34 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:07:34 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:07:34 | INFO | Created new scorecard: 7d7d180e-bb89-4759-9c57-f972724ffc7e
+2026-03-24 04:07:34 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:07:34 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-24 04:07:44 | INFO | Got anonymous API key: 87f8cd6f-4bf2-4f6c-8152-d6f35890ebbb
+2026-03-24 04:07:44 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:07:44 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:07:44 | INFO | Created new scorecard: 4bdf2a9c-71c6-4e1e-9aa0-cf9cf2efe6e1
+2026-03-24 04:07:44 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:07:44 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+  LS20: mean=29.7  nonzero=3/10  [145, 0, 0, 0, 0, 0, 0, 134, 0, 18]
+
+--- FAST_ADAPT_STEPS=500 ---
+2026-03-24 04:07:55 | INFO | Got anonymous API key: ee1961b6-a67a-47e8-b8fc-c21f477e276b
+2026-03-24 04:07:55 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:07:55 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:07:55 | INFO | Created new scorecard: 22ae094a-0d22-4a7e-8c81-51093ac1778c
+2026-03-24 04:07:55 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:07:55 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-24 04:08:04 | INFO | Got anonymous API key: 6cd68c42-40d3-4e7e-bb1c-fa2fa579f85e
+2026-03-24 04:08:04 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:08:04 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:08:04 | INFO | Created new scorecard: d4356262-dc38-4099-8a61-f7bc18dcf267
+2026-03-24 04:08:04 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:08:04 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-24 04:08:15 | INFO | Got anonymous API key: 375201a4-54c6-431e-9481-6fa07158625f
+2026-03-24 04:08:15 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:08:15 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:08:15 | INFO | Created new scorecard: dafd5e24-2c1f-46a9-91bf-887ac2ad3245
+2026-03-24 04:08:15 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:08:15 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-24 04:08:25 | INFO | Got anonymous API key: fa0f7a2a-5c4e-45dc-b868-e75eac8bcc2d
+2026-03-24 04:08:25 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:08:26 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:08:26 | INFO | Created new scorecard: 3544522b-31d1-490f-9caa-7321073c27f3
+2026-03-24 04:08:26 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:08:26 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-24 04:08:36 | INFO | Got anonymous API key: 5aef46c6-8bc3-4adf-9f10-ca09878fd6f4
+2026-03-24 04:08:36 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:08:37 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:08:37 | INFO | Created new scorecard: 0b38bb12-dc53-411c-ab4a-b56a11c48f2f
+2026-03-24 04:08:37 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:08:37 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-24 04:08:48 | INFO | Got anonymous API key: 9b069f6c-6543-4cb8-bb48-6c515ae6e7a3
+2026-03-24 04:08:48 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:08:48 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:08:48 | INFO | Created new scorecard: b2d39aa4-2854-4a28-9220-6e9975237034
+2026-03-24 04:08:48 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:08:48 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-24 04:08:59 | INFO | Got anonymous API key: d15eec3f-b74e-4787-b97b-6d76297e6893
+2026-03-24 04:08:59 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:08:59 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:08:59 | INFO | Created new scorecard: 6638e0d6-544f-48d3-bd7b-fd1ab2d4cde6
+2026-03-24 04:08:59 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:08:59 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-24 04:09:10 | INFO | Got anonymous API key: 98b97b8f-14ee-48ec-8ae9-054b9586a796
+2026-03-24 04:09:10 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:09:10 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:09:10 | INFO | Created new scorecard: 7ac2de44-77bf-4807-b024-911a3ce953bb
+2026-03-24 04:09:11 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:09:11 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-24 04:09:19 | INFO | Got anonymous API key: 05b6ab55-307a-435f-904c-d98ea9cad82b
+2026-03-24 04:09:19 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:09:19 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:09:19 | INFO | Created new scorecard: 4cb10b7e-3a69-44e5-9b31-16f69cb04d1e
+2026-03-24 04:09:20 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:09:20 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-24 04:09:29 | INFO | Got anonymous API key: d3a40c44-0a3e-4f8f-a3e5-aa58a30cb407
+2026-03-24 04:09:29 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:09:30 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:09:30 | INFO | Created new scorecard: 1a55e8b9-7a67-4b2a-a744-cab20d4cbdda
+2026-03-24 04:09:30 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:09:30 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+  LS20: mean=29.7  nonzero=3/10  [145, 0, 0, 0, 0, 0, 0, 134, 0, 18]
+
+--- FAST_ADAPT_STEPS=1000 ---
+2026-03-24 04:09:40 | INFO | Got anonymous API key: f72fb772-59c6-432c-b83d-29fa6dea9e81
+2026-03-24 04:09:40 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:09:41 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:09:41 | INFO | Created new scorecard: d62642da-2726-4659-9417-03a81d26c450
+2026-03-24 04:09:41 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:09:41 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-24 04:09:48 | INFO | Got anonymous API key: 9299e213-8965-48ed-a230-0d44040fc307
+2026-03-24 04:09:48 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:09:49 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:09:49 | INFO | Created new scorecard: 98e830af-cd8c-4d7b-a6fa-c87d1502d949
+2026-03-24 04:09:49 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:09:49 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-24 04:09:59 | INFO | Got anonymous API key: 5e533b0c-4ee5-4b39-aa14-a948f192268e
+2026-03-24 04:09:59 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:09:59 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:09:59 | INFO | Created new scorecard: 6e6b4528-d000-4fe4-8fca-ded2f75370ff
+2026-03-24 04:10:00 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:10:00 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-24 04:10:10 | INFO | Got anonymous API key: edf1264d-5ee5-425c-815f-1ed03a7380f1
+2026-03-24 04:10:10 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:10:10 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:10:10 | INFO | Created new scorecard: 7b63ea7e-0f5b-4f5a-a658-6658758f020c
+2026-03-24 04:10:10 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:10:11 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-24 04:10:21 | INFO | Got anonymous API key: b9bc577d-ac0a-403f-98db-c437ee220229
+2026-03-24 04:10:21 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:10:21 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:10:21 | INFO | Created new scorecard: 1c350be4-e232-4382-b06a-7909a97f70de
+2026-03-24 04:10:22 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:10:22 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-24 04:10:32 | INFO | Got anonymous API key: 044b7990-383b-4aed-a419-8eb4a12ae6b4
+2026-03-24 04:10:32 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:10:32 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:10:32 | INFO | Created new scorecard: 0d0071f1-0c79-466a-af41-a357b37f78bc
+2026-03-24 04:10:33 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:10:33 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-24 04:10:44 | INFO | Got anonymous API key: c24bfb57-24f8-4a14-b246-1d0fd9dac7cb
+2026-03-24 04:10:44 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:10:44 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:10:44 | INFO | Created new scorecard: c9e697a4-f676-47ec-a392-64853ef7bf5b
+2026-03-24 04:10:44 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:10:44 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-24 04:10:55 | INFO | Got anonymous API key: ff46377d-93c9-4fcc-b3e4-24c932791f0e
+2026-03-24 04:10:55 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:10:55 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:10:55 | INFO | Created new scorecard: 35903faf-a664-428f-a398-c82b3cb8d767
+2026-03-24 04:10:55 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:10:55 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-24 04:11:04 | INFO | Got anonymous API key: fd29bc57-6e16-434a-a4fc-f8a5417c360c
+2026-03-24 04:11:04 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:11:04 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:11:04 | INFO | Created new scorecard: bec5a6f9-b29d-4f1e-9e48-b6653f05f565
+2026-03-24 04:11:04 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:11:04 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-24 04:11:14 | INFO | Got anonymous API key: 44fed9ad-2028-4053-864a-fbefb60e1090
+2026-03-24 04:11:14 | INFO | You can register for an API key at https://three.arcprize.org
+2026-03-24 04:11:14 | INFO | Successfully fetched 3 environment(s) from API
+2026-03-24 04:11:14 | INFO | Created new scorecard: a52504ac-eca4-4886-909d-f054d2099fce
+2026-03-24 04:11:14 | INFO | Successfully fetched metadata for game ls20
+2026-03-24 04:11:14 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+  LS20: mean=29.7  nonzero=3/10  [145, 0, 0, 0, 0, 0, 0, 134, 0, 18]
+
+Total elapsed: 315.3s
+STEP 996 DONE
