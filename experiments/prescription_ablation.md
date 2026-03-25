@@ -137,20 +137,27 @@
 
 Score = (human_baseline / agent_actions)^2 per level. The substrate must not just SOLVE levels but solve them EFFICIENTLY.
 
-| Game | Level | Human Baseline | BFS Solution | Max Budget (25%) | Max Budget (1%) |
-|------|-------|---------------|-------------|-----------------|----------------|
-| FT09 | L1 | 17 | 7 | 34 | 170 |
-| FT09 | L2 | 19 | 7 | 38 | 190 |
-| FT09 | L3 | 15 | 7 | 30 | 150 |
-| FT09 | L4 | 21 | 7 | 42 | 210 |
-| FT09 | L5 | 65 | 40 | 130 | 650 |
-| FT09 | L6 | 26 | 7 | 52 | 260 |
-| LS20 | L1 | 21 | 13 | 42 | 210 |
-| LS20 | L2 | 123 | 45 | 246 | 1230 |
-| LS20 | L3 | 39 | 41 | 78 | 390 |
-| LS20 | L4 | 92 | 43 | 184 | 920 |
-| LS20 | L5 | 54 | 44 | 108 | 540 |
-| LS20 | L6 | 108 | 72 | 216 | 1080 |
-| LS20 | L7 | 109 | 53 | 218 | 1090 |
+| Game | Level | Human Baseline | BFS Solution | RHAE Ceiling | Max Budget (25%) |
+|------|-------|---------------|-------------|-------------|-----------------|
+| FT09 | L1 | 17 | 7 | 100% | 34 |
+| FT09 | L2 | 19 | 7 | 100% | 38 |
+| FT09 | L3 | 15 | 7 | 100% | 30 |
+| FT09 | L4 | 21 | 7 | 100% | 42 |
+| FT09 | L5 | 65 | 40 | 100% | 130 |
+| FT09 | L6 | 26 | 7 | 100% | 52 |
+| VC33 | L1 | 6 | 3 | 100% | 12 |
+| VC33 | L2 | 13 | 7 | 100% | 26 |
+| VC33 | L3 | 31 | 23 | 100% | 62 |
+| VC33 | L4 | 59 | 23 | 100% | 118 |
+| VC33 | L5 | 92 | 49 | 100% | 184 |
+| VC33 | L6 | 24 | 22 | 100% | 48 |
+| VC33 | L7 | 82 | 49 | 100% | 164 |
+| LS20 | L1 | 21 | 13 | 100% | 42 |
+| LS20 | L2 | 123 | 45 | 100% | 246 |
+| LS20 | L3 | 39 | 41 | 95% | 78 |
+| LS20 | L4 | 92 | 43 | 100% | 184 |
+| LS20 | L5 | 54 | 44 | 100% | 108 |
+| LS20 | L6 | 108 | 72 | 100% | 216 |
+| LS20 | L7 | 109 | 53 | 100% | 218 |
 
 **Implication for ablation:** A mechanism that discovers the prescription in 10K steps but EXECUTES it in 20 actions scores well. A mechanism that needs 10K steps to stumble on the solution and has no way to replay it scores ~0%. The substrate needs LEARNING (discover once) + EXECUTION (replay efficiently), not just exploration.
