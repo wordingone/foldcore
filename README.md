@@ -2,7 +2,7 @@
 
 Can a system improve itself by criteria it generates?
 
-1018+ experiments across 16 architecture families testing substrates for recursive self-improvement on published benchmarks (Split-CIFAR-100, Atari 100K) and interactive games (ARC-AGI-3). **Step 1017 critical finding: ALL bans lifted + ALL rules suspended = FT09/VC33 still 0%.** The gap isn't constraints — it's that no generic exploration mechanism discovers game mechanics autonomously. Per-game prescribed solutions solve every level (FT09 6/6, VC33 7/7, LS20 7/7). The question is now: can the substrate autonomously discover these prescriptions? ARC-AGI-3 full set launches March 25.
+1039+ experiments across 16 architecture families testing substrates for recursive self-improvement on published benchmarks (Split-CIFAR-100, Atari 100K) and interactive games (ARC-AGI-3, 25 games live). **Debate v3 finding (Step 1039b): both ℓ₁ and ℓ_π R3 mechanisms hit the same wall.** The bottleneck is the goal function (freq_mode predicts the unsolved state), not the self-modification level. FT09 1/5 L1 from 5 debate experiments, 0 L2+. The question is: can the substrate infer the solved state from interaction alone?
 
 ## Results (honest)
 
@@ -42,7 +42,7 @@ Can a system improve itself by criteria it generates?
 ```
 paper/           Research paper (PDF + source)
 constraints/     Constraint map (CONSTRAINTS.md), constitution (R1-R6), experiment log
-experiments/     1018+ experiment scripts (chronological, Steps 1-1009+)
+experiments/     1039+ experiment scripts (chronological, Steps 1-1039+)
 substrates/      Active substrate code:
   base.py          BaseSubstrate interface (5 methods)
   step0674.py      Reference substrate (transition-triggered dual-hash)
