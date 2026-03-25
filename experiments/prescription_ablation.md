@@ -84,16 +84,23 @@
 - C6: Shape cycling mechanics (color/rotation/shape cycling via tagged sprites)
 - C7: Step budget management (42 steps, 3 lives)
 
-**Ablation experiments (after Step 1018):**
-| Step | Remove | Replace with | Expected | Tests |
-|------|--------|-------------|----------|-------|
-| C1 | Walls (C1) | Collision detection by trying to move | Works (discovery by interaction) | Wall knowledge purgable |
-| C2 | Goal position (C2) | Explore until frame matches goal indicator | Likely works if goal visible | Goal detection purgable? |
-| C3 | Shape matching (C3) | Trial-and-error cycling at goal | Works if budget allows ~12 tries (4 shapes × 4 rotations × 4 colors... too many?) | Shape matching essential? |
-| C4 | Collectibles (C4) | Ignore collectibles | Fails on tight-budget levels | Budget-dependent |
-| C5 | Path planning (C5) | Random walk within budget | Fails (21 moves too few for random, proved by Step 1015) | Planning essential |
+**Ablation results (Step 1021):**
+| Test | Result | Finding |
+|------|--------|---------|
+| BFS minimum verification | All 7 levels confirmed minimum | No shorter paths exist |
+| Order (shuffle) | 0/10 ALL levels | Strictly order-dependent |
+| Move criticality | 311/311 critical (0 robust) | Every single move is load-bearing |
 
-**Predicted minimum prescription:** Goal detection (simplified C2) + shape matching (C3, possibly trial-and-error) + some path planning (C5, even simple). Wall knowledge purgable. Collectible knowledge depends on budget tightness.
+**Level sequences (BFS-optimal):**
+- L1: 13 moves (LLLUUUURRRUUU)
+- L2: 45 moves (shape matching + navigation)
+- L3: 41 moves (shape matching + navigation)
+- L4: 43 moves (shape matching + navigation)
+- L5: 44 moves (moving triggers, cycle_lcm=8)
+- L6: 72 moves (moving triggers, cycle_lcm=8)
+- L7: 53 moves (fog + navigation)
+
+**CONFIRMED minimum prescription:** {Exact ordered sequence of discrete actions per level}. 311 moves, all critical, no redundancy, no purgable components. LS20 is the most constrained: every move matters, and the exact ordering is the only viable path.
 
 ---
 

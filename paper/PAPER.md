@@ -557,9 +557,9 @@ All methods L1=0 on FT09 (68 actions). Even graph+argmin at 6 correct actions + 
 |------|-------------------|---------------|---------------------|
 | FT09 | KILL (2px precision required) | ORDER-FREE (all shuffles pass) | Unordered set of exact (x,y) per level |
 | VC33 | KILL (CC centroids 3-21px off) | L1 free, L4-L7 strictly ordered | Ordered sequence of exact (x,y) per level |
-| LS20 | N/A (discrete actions) | Sequential (navigation) | Ordered action sequence |
+| LS20 | N/A (discrete actions) | ALL STRICT (0/10 shuffles, 311/311 critical) | Exact ordered action sequence |
 
-FT09 L5/L6 are Lights-Out puzzles (GF(2) Gaussian elimination). VC33 L4-L7 require precise canal lock interleaving. No redundancy in any prescription — every action is necessary.
+FT09 L5/L6 are Lights-Out puzzles (GF(2) Gaussian elimination). VC33 L4-L7 require precise canal lock interleaving. LS20: every move is critical — 0 robust moves out of 311. No redundancy in any prescription.
 
 **Implication:** The substrate must discover exact positions (not zones), game-specific ordering, and per-game mechanics — all from interaction. Zone/CC discovery fails universally for click games.
 
