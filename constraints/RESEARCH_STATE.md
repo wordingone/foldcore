@@ -57,8 +57,8 @@ Step 379: Centering at 64x64 — no effect. Same sim stats.
   I1 = learned projection. The substrate discovers which pixels matter from its own state (R3).
   Chollet: "brute-force dense sampling is benchmark hacking, not intelligence."
   The substrate explores but doesn't reason. The gap = encoding self-discovery = intelligence.
-CURRENT STEP: 1018b pending (LS20 BFS solver bug fix). **JUN REFRAME (2026-03-24): Gap = can substrate discover prescriptions? D2 = catalog+ablate. D1 = substrate discovers them. Lineage refused. Debate spec ready (experiments/debate_search_kill.md).**
-  **Step 1018 PARTIAL (Direction 2):** LS20 BFS solver. All 7 levels solved offline (L1=13, L2=45, L3=52, L4=41, L5=50, L6=84, L7=61 steps). In-game: 1/10 seeds (seed 0 = L1+L2 confirmed). Bug: on_level_transition double-fire when game order varies. L3+ model edge cases (sprites without tags, partial walls). Eli debugging → 1018b.
+CURRENT STEP: 1018e CONFIRMED. **PRESCRIPTION CATALOG COMPLETE: FT09 6/6 (75 actions), VC33 7/7 (176 actions), LS20 7/7 (311 actions). Total: 20 levels, 562 actions.** Next: ablation (1019-1021) → RHAE API scoring → debate. Jun reframe: gap = can substrate discover prescriptions? Lineage refused.
+  **Step 1018e CONFIRMED (Direction 2):** LS20 BFS solver. All 7 levels verified in-game across 3 seeds. [13,45,41,43,44,72,53]=311 steps. Mechanics: grid nav, shape matching, death-respawn cycling, ramps, moving triggers. 5 iterations (1018→1018e) to model full game physics. L1=100% on chain (1018c). BFS is prescription catalog (not scoreable — source analysis).
   **Steps 1001-1005 KILLED:** Oscillatory (3), multi-horizon (2). **Step 1006:** PRISM baseline (3/5).
   **Step 1007 FAIL:** Attention-trajectory (bootstrap). **Step 1008 KILL:** CC discovery + 800b. CC survives ban (Theorem 5) but 800b can't sequence. **Step 1009 FAIL:** Attention v2 (collapses to NN, no coverage).
   **Step 1010 PASS (no improvement):** Hybrid 800b + attention + CC. LS20=100%, FT09/VC33=0%. Adding attention to 800b = same as 800b alone. LS20-tuned foundation confound confirmed.
