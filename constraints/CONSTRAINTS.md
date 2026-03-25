@@ -41,7 +41,7 @@
 
 ### Post-Ban Findings (LS20-focused, 230+ experiments)
 
-**Research skew:** 230 post-ban experiments exclusively LS20. The three mapping properties (deterministic, continuous, persistent) predict LS20 L1 only. Click games demand capabilities not captured by any existing constraint.
+**Research skew:** 230 post-ban experiments (Steps 778-1036) exclusively LS20. Debate v3 sprint (Steps 1040-1067, 25+ experiments) broke this exclusivity — PRISM randomizes across 25-game API pool. L1>0 achieved on ~8/25 games. The three mapping properties predict LS20 L1 only. Click games and opaque games demand capabilities not captured by any existing constraint.
 
 **Findings:**
 - Exploration is non-convergent (sublinear reachable set growth)
@@ -202,7 +202,7 @@ The task is interactive (unknown environment, no separate training phase). Any s
 
 ---
 
-## The State of the Search (1060+ experiments, 16+ families, 2 bans)
+## The State of the Search (1067+ experiments, 16+ families, ALL BANS LIFTED)
 
 *Revised 2026-03-25. See RESEARCH_STATE.md for full log, COMPONENT_CATALOG.md for extraction inventory.*
 
@@ -225,7 +225,7 @@ The task is interactive (unknown environment, no separate training phase). Any s
 
 5. **Unconstrained diagnostic COMPLETE (Step 1017):** ALL bans lifted + ALL rules suspended = FT09/VC33 still 0%. **Bans and constitution are orthogonal to the click game problem.** The constraint map describes LS20 navigation, not the full search space. The substrate lacks basic task competence (causal discovery of game mechanics) — a pre-constitutional capability that R1-R6 don't address.
 
-6. **Building sprint (PB26-28, Steps 1042-1065).** 20+ experiments testing ℓ_π vs ℓ₁ within adaptive cascade. Approximate parity on L1 (head-to-head 2-2-1). L2+ = 0 across everything. Opaque games discovered — substantial fraction of pool produces zero detectable change from any action (Jun: data, not wall). All bans lifted permanently (Jun, 2026-03-25).
+6. **Debate v3 sprint (PB26-28, Steps 1040-1067).** 25+ experiments testing ℓ_π (encoding modification) vs ℓ₁ (parameter modification) within adaptive cascade + z-score detection. Early sprint: approximate parity (2-2-1 head-to-head). **Step 1067 controlled comparison:** same z-score + cascade, only fitness differs. ℓ_π attention = 80%/70%/0%. ℓ₁ SPSA = 0%/0%/0%. Different game draws (caveat) but pattern stark — PB26 upgrading toward CONFIRMED. Defense concession #7. L1 > 0 achieved on ~8/25 games by each side. L2+ = 0 across everything. Opaque games discovered — substantial fraction of pool produces zero detectable change from any action (Jun: data, not wall). All bans lifted permanently (Jun, 2026-03-25). Consistent with ANIL (Raghu et al., ICLR 2020): representation modification > parameter modification extends to non-gradient settings.
 
 7. **ARC-AGI-3 full set LIVE (2026-03-25).** 150+ games, 1000+ levels. API still at 25. PRISM auto-enumerates available games.
 
