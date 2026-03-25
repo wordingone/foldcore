@@ -187,7 +187,9 @@ def main():
     print(f"Budget: {args.steps} steps/game, {args.seeds} seeds, randomized order")
     print()
 
-    runner = ChainRunner(chain=chain, n_seeds=args.seeds, randomize_order=randomize, verbose=True)
+    # --blind: suppress verbose game-by-game output to prevent name leaks
+    runner = ChainRunner(chain=chain, n_seeds=args.seeds, randomize_order=randomize,
+                         verbose=(not args.blind))
     aggregated = runner.run(substrate_cls, substrate_kwargs={})
 
     # Validate completeness before saving
@@ -232,7 +234,7 @@ def main():
                 label = _game_labels.get(game, game)
                 sign = '+' if delta['delta'] >= 0 else ''
                 print(f"    {label}: {sign}{delta['delta']:+.0%} ({delta['baseline']:.0%} → {delta['current']:.0%})")
-    print(f"  Results: {out_path}")
+    print(f"  Results: {'[blind]' if args.blind else out_path}")
     print(f"  Elapsed: {time.time() - t0:.1f}s")
     print(f"STEP {args.step} DONE")
 
