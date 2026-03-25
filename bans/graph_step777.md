@@ -1,5 +1,5 @@
 # Ban: Graph (per-state-action data)
-Step: 777 | Status: ACTIVE
+Step: 777 | Status: LIFTED (Jun directive, 2026-03-25)
 
 ## What is banned
 Any data structure keyed by (state, action). The mechanism, not the name:

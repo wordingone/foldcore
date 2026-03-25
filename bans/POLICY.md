@@ -17,9 +17,13 @@ Each extraction is an experiment with a kill criterion, not a policy relaxation.
 
 ## Active Bans
 
-- [Codebook (Step 416)](codebook_step416.md) — LVQ spatial engine. Killing finding: fully characterized as LVQ (1988), no remaining degrees of freedom.
-- [Graph (Step 777)](graph_step777.md) — per-(state, action) data structures. Killing finding: negative transfer, cold > warm, p<0.0001 (Step 776).
+None. All bans lifted permanently (Jun directive, 2026-03-25).
 
-## Lifting Condition
+## Lifted Bans
 
-When the search is genuinely paralyzed under accumulated constraints and no existing literature or known methods provides a viable path forward, bans may be selectively lifted in controlled combinations to map the feasible region through recombination.
+- [Codebook (Step 416)](codebook_step416.md) — LVQ spatial engine. **LIFTED** (Jun, 2026-03-25). Original killing finding: fully characterized as LVQ (1988). 600+ post-ban experiments mapped the feasible region without it.
+- [Graph (Step 777)](graph_step777.md) — per-(state, action) data structures. **LIFTED** (Jun, 2026-03-25). Original killing finding: negative transfer (Step 776, p<0.0001). Post-ban evidence: 230+ experiments confirmed R3 wall exists WITH and WITHOUT graph.
+
+## Lifting History
+
+**2026-03-25 (Jun directive): ALL BANS LIFTED PERMANENTLY.** Context: 1060+ experiments, 150+ ARC-AGI-3 games now live, debate v3 active. The ban-era findings (PB1-PB25) remain valid as DATA — the mechanisms that failed still failed. But the bans as CONSTRAINTS on the search are removed. Any mechanism, any architecture, any combination is now allowed. The debate win condition (100% ALL LEVELS, verified 25 times) is the only gate.

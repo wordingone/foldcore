@@ -1,5 +1,5 @@
 # Ban: Codebook
-Step: 416 | Status: ACTIVE
+Step: 416 | Status: LIFTED (Jun directive, 2026-03-25)
 
 ## What is banned
 The codebook/LVQ mechanism and anything sharing its spatial engine:

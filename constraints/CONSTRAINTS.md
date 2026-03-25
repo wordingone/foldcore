@@ -2,7 +2,7 @@
 
 *Revised 2026-03-25. Compressed per doc-system limits. Full narratives in RESEARCH_STATE.md. Component extraction catalog in COMPONENT_CATALOG.md.*
 
-*1060+ experiments across 16 families. Codebook banned Step 416. Graph banned Step 777. See bans/POLICY.md for extraction protocol.*
+*1060+ experiments across 16 families. ALL BANS LIFTED permanently (Jun, 2026-03-25). See bans/POLICY.md for history. Codebook and graph findings remain valid as data.*
 
 **Classification:**
 - **Task Requirement**: What the TASK demands of any substrate (derived from successes AND failures across families)
