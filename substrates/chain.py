@@ -742,6 +742,57 @@ def make_prism_mode(mode: str = "C", config_path: str = None,
         raise ValueError(f"Unknown PRISM mode: {mode}. Use A, B, or C.")
 
 
+def make_prism_random(n_games: int = 3, game_seed: int = None,
+                      n_steps: int = DEFAULT_STEPS,
+                      safety_timeout: float = 300.0,
+                      include_cifar: bool = True) -> list:
+    """PRISM with randomly selected ARC-AGI-3 games from the API pool.
+
+    Randomly samples n_games from all available ARC-AGI-3 games.
+    Both sides of a debate get the same games when using the same game_seed.
+    Game names are hidden — substrate only sees set_game(n_actions).
+
+    Args:
+        n_games: number of ARC games to include (default 3)
+        game_seed: random seed for game selection (deterministic if set)
+        n_steps: step budget per game
+        safety_timeout: watchdog timeout per game
+        include_cifar: whether to include Split-CIFAR-100 before/after
+    """
+    import arc_agi
+    arc = arc_agi.Arcade()
+    all_envs = arc.get_environments()
+
+    # Deduplicate by game name (API may return multiple versions)
+    seen = set()
+    unique_games = []
+    for g in all_envs:
+        gname = g.game_id.split('-')[0]
+        if gname not in seen:
+            seen.add(gname)
+            unique_games.append(gname)
+
+    # Random selection
+    rng = np.random.RandomState(game_seed)
+    n_select = min(n_games, len(unique_games))
+    selected_idx = rng.choice(len(unique_games), n_select, replace=False)
+    selected = [unique_games[i] for i in selected_idx]
+
+    # Build chain — game names are opaque identifiers, not leaked to substrate
+    chain = []
+    if include_cifar:
+        chain.append(("Split-CIFAR-100-before", SplitCIFAR100Wrapper(500, safety_timeout)))
+    for i, gname in enumerate(selected):
+        chain.append((gname.upper(), ArcGameWrapper(gname.upper(), n_steps, safety_timeout)))
+    if include_cifar:
+        chain.append(("Split-CIFAR-100-after", SplitCIFAR100Wrapper(500, safety_timeout)))
+
+    print(f"[PRISM] Selected {n_select} games from {len(unique_games)} available "
+          f"(seed={game_seed}): {[g.upper() for g in selected]}")
+
+    return chain
+
+
 def compute_chain_kill(aggregated: dict, baseline_path: str = None,
                        baseline: dict = None) -> dict:
     """Compare aggregated results against baseline. Returns chain kill verdict.

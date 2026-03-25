@@ -26,7 +26,8 @@ import shutil
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'experiments'))
 
-from substrates.chain import ChainRunner, make_prism_mode, compute_chain_kill
+from substrates.chain import (ChainRunner, ArcGameWrapper, make_prism_mode,
+                              make_prism_random, compute_chain_kill)
 
 
 def _load_substrate_class(path: str):
@@ -97,6 +98,10 @@ def main():
                         help='Baseline JSON path for chain kill verdict')
     parser.add_argument('--save-as-baseline', action='store_true',
                         help='Copy result to chain_results/baseline_994.json (use for step 1006)')
+    parser.add_argument('--random-games', type=int, default=0,
+                        help='Randomly select N games from API pool (0=use config, default)')
+    parser.add_argument('--game-seed', type=int, default=None,
+                        help='Seed for random game selection (deterministic if set)')
     args = parser.parse_args()
 
     # Load substrate
@@ -112,20 +117,33 @@ def main():
     print(f"Substrate: {substrate_path}")
     print("=" * 70)
 
-    # Game version hashes
-    for game, env_dir in [("LS20", "ls20"), ("FT09", "ft09"), ("VC33", "vc33")]:
-        try:
-            h = next(d for d in os.listdir(f'B:/M/the-search/environment_files/{env_dir}') if len(d) >= 8)
-        except StopIteration:
-            h = '?'
-        print(f"  {game}={h}", end="")
-    print()
-    print(f"Budget: {args.steps} steps/game, {args.seeds} seeds, randomized order (PRISM-C)")
-    print()
-
     t0 = time.time()
 
-    chain, randomize = make_prism_mode("C", n_steps=args.steps)
+    if args.random_games > 0:
+        # Random game selection from full API pool
+        chain = make_prism_random(
+            n_games=args.random_games,
+            game_seed=args.game_seed,
+            n_steps=args.steps,
+        )
+        randomize = True
+    else:
+        chain, randomize = make_prism_mode("C", n_steps=args.steps)
+
+    # Print game version hashes for whatever games are in the chain
+    for name, wrapper in chain:
+        if isinstance(wrapper, ArcGameWrapper):
+            env_dir = name.lower()
+            try:
+                h = next(d for d in os.listdir(
+                    f'B:/M/the-search/environment_files/{env_dir}') if len(d) >= 8)
+            except (StopIteration, FileNotFoundError):
+                h = '?'
+            print(f"  {name}={h}", end="")
+    print()
+    print(f"Budget: {args.steps} steps/game, {args.seeds} seeds, randomized order")
+    print()
+
     runner = ChainRunner(chain=chain, n_seeds=args.seeds, randomize_order=randomize, verbose=True)
     aggregated = runner.run(substrate_cls, substrate_kwargs={})
 
