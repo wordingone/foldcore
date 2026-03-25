@@ -103,6 +103,8 @@ def main():
                              'Jun 2026-03-25: preview games dead, all runs use random pool.')
     parser.add_argument('--game-seed', type=int, default=None,
                         help='Seed for random game selection (deterministic if set)')
+    parser.add_argument('--blind', action='store_true',
+                        help='Hide game names in output (Jun 2026-03-25: black box approach)')
     args = parser.parse_args()
 
     # Load substrate
@@ -133,7 +135,11 @@ def main():
     randomize = True
 
     # Print game version hashes for whatever games are in the chain
-    for name, wrapper in chain:
+    # --blind: mask game names so neither side can design for specific games
+    _game_labels = {}
+    for i, (name, wrapper) in enumerate(chain):
+        label = f"GAME_{i+1}" if args.blind else name
+        _game_labels[name] = label
         if isinstance(wrapper, ArcGameWrapper):
             env_dir = name.lower()
             try:
@@ -141,7 +147,7 @@ def main():
                     f'B:/M/the-search/environment_files/{env_dir}') if len(d) >= 8)
             except (StopIteration, FileNotFoundError):
                 h = '?'
-            print(f"  {name}={h}", end="")
+            print(f"  {label}={'***' if args.blind else h}", end="")
     print()
     print(f"Budget: {args.steps} steps/game, {args.seeds} seeds, randomized order")
     print()
@@ -173,17 +179,24 @@ def main():
     print()
     print("=" * 70)
     print(f"STEP {args.step} RESULTS:")
+    any_zero = False
     for name, data in aggregated.items():
         if isinstance(data, dict) and 'l1_rate' in data:
-            print(f"  {name}: L1={data['l1_rate']:.0%}  avg_t={data['mean_elapsed']:.1f}s")
+            label = _game_labels.get(name, name)
+            print(f"  {label}: L1={data['l1_rate']:.0%}  avg_t={data['mean_elapsed']:.1f}s")
+            if data['l1_rate'] == 0:
+                any_zero = True
     cs = chain_kill.get('chain_score', {})
     print(f"  Chain score: {cs.get('phases_passed', '?')}/{cs.get('phases_total', '?')}")
+    if any_zero:
+        print(f"  ** DEBATE FAIL: one or more games at 0% L1 (Jun directive 2026-03-25) **")
     print(f"  Chain kill verdict: {chain_kill.get('verdict', 'NO_BASELINE')}")
     if 'per_game_delta' in chain_kill:
         for game, delta in chain_kill['per_game_delta'].items():
             if delta.get('delta') is not None:
+                label = _game_labels.get(game, game)
                 sign = '+' if delta['delta'] >= 0 else ''
-                print(f"    {game}: {sign}{delta['delta']:+.0%} ({delta['baseline']:.0%} → {delta['current']:.0%})")
+                print(f"    {label}: {sign}{delta['delta']:+.0%} ({delta['baseline']:.0%} → {delta['current']:.0%})")
     print(f"  Results: {out_path}")
     print(f"  Elapsed: {time.time() - t0:.1f}s")
     print(f"STEP {args.step} DONE")
