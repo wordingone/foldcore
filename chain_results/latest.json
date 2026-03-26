@@ -1,25 +1,24 @@
 {
-  "substrate": "RawPixelSubstrate",
-  "timestamp": "2026-03-26T01:47:40",
-  "step": 1144,
+  "substrate": "UltraPatientSubstrate",
+  "timestamp": "2026-03-26T02:00:22",
+  "step": 1145,
   "prism_mode": null,
   "chain": [
     "Split-CIFAR-100-before",
     "LF52",
-    "WA30",
-    "SB26",
+    "AR25",
+    "G50T",
     "Split-CIFAR-100-after"
   ],
   "budget_per_phase": 500,
   "n_seeds": 10,
   "config": {
-    "raw_dim": 4096,
+    "n_dims": 256,
     "block_size": 4,
+    "hold_duration": 200,
     "n_click_regions": 16,
-    "explore_steps": 50,
-    "max_patience": 20,
-    "family": "raw pixel encoding",
-    "tag": "defense v54 (\u2113\u2081 raw 4096D pixels: no averaging, full resolution change detection)"
+    "family": "ultra-patient persistence",
+    "tag": "defense v55 (\u2113\u2081 ultra-patient: hold each action 200 steps, detect delayed responses)"
   },
   "results": {
     "Split-CIFAR-100-before": {
@@ -28,7 +27,7 @@
       "fully_solved_rate": 0.0,
       "max_level": 0,
       "avg_steps": 20.0,
-      "mean_elapsed": 0.053000000000000005,
+      "mean_elapsed": 0.052000000000000005,
       "per_seed_l1": [
         1,
         1,
@@ -60,7 +59,7 @@
       "fully_solved_rate": 0.0,
       "max_level": 0,
       "avg_steps": 10000.0,
-      "mean_elapsed": 11.854000000000003,
+      "mean_elapsed": 8.087999999999997,
       "per_seed_l1": [
         0,
         0,
@@ -86,13 +85,13 @@
         {}
       ]
     },
-    "WA30": {
+    "AR25": {
       "l1_rate": 0.0,
       "l2_rate": 0.0,
       "fully_solved_rate": 0.0,
       "max_level": 0,
       "avg_steps": 10000.0,
-      "mean_elapsed": 0.8210000000000001,
+      "mean_elapsed": 2.6979999999999995,
       "per_seed_l1": [
         0,
         0,
@@ -118,13 +117,13 @@
         {}
       ]
     },
-    "SB26": {
+    "G50T": {
       "l1_rate": 0.0,
       "l2_rate": 0.0,
       "fully_solved_rate": 0.0,
       "max_level": 0,
       "avg_steps": 10000.0,
-      "mean_elapsed": 3.586,
+      "mean_elapsed": 1.855,
       "per_seed_l1": [
         0,
         0,
@@ -156,7 +155,7 @@
       "fully_solved_rate": 0.0,
       "max_level": 0,
       "avg_steps": 20.0,
-      "mean_elapsed": 0.05,
+      "mean_elapsed": 0.052000000000000005,
       "per_seed_l1": [
         1,
         1,
@@ -201,12 +200,12 @@
         "current": 0.0,
         "baseline": null
       },
-      "WA30": {
+      "AR25": {
         "delta": null,
         "current": 0.0,
         "baseline": null
       },
-      "SB26": {
+      "G50T": {
         "delta": null,
         "current": 0.0,
         "baseline": null
