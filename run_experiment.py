@@ -108,8 +108,8 @@ def main():
     parser.add_argument('--no-blind', action='store_true',
                         help='Jun-only override to disable blind mode')
     parser.add_argument('--human-baseline', type=int, default=50,
-                        help='ARC Prize: assumed human actions per level (default=50). '
-                             'Score = min(baseline/agent_actions, 1.0)^2 per level.')
+                        help='DEPRECATED fallback. Per-game per-level baselines loaded '
+                             'from human_baselines.json (Jun 2026-03-26 fix).')
     args = parser.parse_args()
 
     # === ENFORCED RULES (Jun 2026-03-25) — NOT CIRCUMVENTABLE ===
@@ -231,16 +231,28 @@ def main():
         shutil.copy(out_path, args.baseline)
         print(f"Saved as canonical baseline: {args.baseline}")
 
-    # ARC Prize Score (Jun directive 2026-03-25)
-    # For each seed of each game: compute per-level action efficiency.
-    # Score per level = min(human_baseline / actions_for_level, 1.0) ** 2
-    # Score per game per seed = mean of per-level scores (0 if no levels solved)
+    # ARC Prize Score (Jun directive 2026-03-25, FIXED 2026-03-26)
+    # Uses ACTUAL per-game per-level human baselines from API, NOT flat default.
+    # Score per level = min(human_baseline[game][level] / actions, 1.0) ** 2
+    # Score per game per seed = level-index-weighted average (later levels count more)
     # ARC Prize total = mean across all game-seed combinations
     import numpy as np
+
+    # Load per-game per-level human baselines
+    _baselines_path = os.path.join(os.path.dirname(__file__),
+                                    'experiments', 'results', 'human_baselines.json')
+    _human_baselines = {}
+    if os.path.exists(_baselines_path):
+        with open(_baselines_path) as f:
+            _human_baselines = json.load(f)
+
     arc_game_scores = {}
     for name, data in aggregated.items():
         if not isinstance(data, dict) or 'seeds' not in data:
             continue
+        # Look up per-level baselines for this game
+        game_key = name.lower().split('-')[0]
+        game_bl = _human_baselines.get(game_key, {}).get('baseline_actions', None)
         seed_scores = []
         seed_action_counts = []
         for sr in data['seeds']:
@@ -252,14 +264,22 @@ def main():
             sorted_levels = sorted(ls.items(), key=lambda x: x[0])
             level_scores = []
             level_actions = []
+            level_weights = []
             prev_step = 0
-            for lvl, step in sorted_levels:
+            for level_idx, (lvl, step) in enumerate(sorted_levels):
                 actions = step - prev_step
                 level_actions.append(actions)
-                eff = min(args.human_baseline / max(actions, 1), 1.0)
+                # Use per-level baseline if available, else fallback
+                if game_bl and level_idx < len(game_bl):
+                    bl = game_bl[level_idx]
+                else:
+                    bl = args.human_baseline
+                eff = min(bl / max(actions, 1), 1.0)
                 level_scores.append(eff ** 2)
+                level_weights.append(level_idx + 1)  # 1-indexed weight
                 prev_step = step
-            seed_scores.append(float(np.mean(level_scores)))
+            # Weighted average by level index (later levels count more)
+            seed_scores.append(float(np.average(level_scores, weights=level_weights)))
             seed_action_counts.append(level_actions)
         arc_game_scores[name] = {
             'mean_score': float(np.mean(seed_scores)),
@@ -287,7 +307,8 @@ def main():
                 any_not_fully_solved = True
     cs = chain_kill.get('chain_score', {})
     print(f"  Chain score: {cs.get('phases_passed', '?')}/{cs.get('phases_total', '?')}")
-    print(f"  ARC Prize score: {arc_total:.4f} (human_baseline={args.human_baseline} actions/level)")
+    _bl_source = "per-game per-level" if _human_baselines else f"flat={args.human_baseline}"
+    print(f"  ARC Prize score: {arc_total:.4f} (baselines={_bl_source})")
     if any_zero:
         print(f"  ** DEBATE FAIL: one or more games at 0% L1 (Jun directive 2026-03-25) **")
     if any_not_fully_solved:
