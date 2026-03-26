@@ -1,0 +1,38 @@
+{
+  "game": "lf52",
+  "total_levels": 10,
+  "levels": {
+    "L1": {
+      "status": "SOLVED",
+      "actions": [
+        1241,
+        1253,
+        1253,
+        1265,
+        1265,
+        2033,
+        2033,
+        2801
+      ],
+      "length": 8,
+      "method": "known"
+    },
+    "L2": {
+      "status": "UNSOLVED",
+      "time": 77.79
+    }
+  },
+  "full_sequence": [
+    1241,
+    1253,
+    1253,
+    1265,
+    1265,
+    2033,
+    2033,
+    2801
+  ],
+  "method": "bfs_set_level",
+  "max_level_solved": 1,
+  "total_actions": 8
+}
