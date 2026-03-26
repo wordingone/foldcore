@@ -1,0 +1,27 @@
+{
+  "game": "tu93",
+  "source": "bfs_maze_solver",
+  "type": "analytical",
+  "total_actions": 18,
+  "max_level": 1,
+  "all_actions": [
+    3,
+    1,
+    1,
+    3,
+    0,
+    3,
+    1,
+    1,
+    2,
+    2,
+    1,
+    3,
+    3,
+    1,
+    3,
+    0,
+    3,
+    1
+  ]
+}
