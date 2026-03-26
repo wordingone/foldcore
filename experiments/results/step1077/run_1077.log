@@ -1,0 +1,73 @@
+======================================================================
+STEP 1077 — ProsecutionV17Substrate
+Substrate: B:\M\the-search\experiments\sub1077_prosecution_v17.py
+======================================================================
+2026-03-25 17:27:29 | INFO | Successfully fetched 25 environment(s) from API
+[PRISM] Selected 3 games from 25 available (seed=22222)
+  GAME_2=***  GAME_3=***  GAME_4=***
+Budget: 10000 steps/game, 10 seeds, randomized order
+
+2026-03-25 17:27:30 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-25 17:27:30 | INFO | Created new scorecard: 33fda46a-b96a-4cf4-9a77-b92835706b01
+2026-03-25 17:27:30 | INFO | Successfully fetched metadata for game su15
+2026-03-25 17:27:30 | INFO | Successfully loaded game class Su15 from environment_files\su15\4c352900\su15.py
+2026-03-25 17:27:34 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-25 17:27:34 | INFO | Created new scorecard: b5df55ea-56dd-431f-a1ac-e2b4d24e3400
+2026-03-25 17:27:34 | INFO | Successfully fetched metadata for game ft09
+2026-03-25 17:27:34 | INFO | Successfully loaded game class Ft09 from environment_files\ft09\0d8bbf25\ft09.py
+2026-03-25 17:27:35 | INFO | Successfully fetched metadata for game ft09
+2026-03-25 17:27:35 | INFO | Successfully loaded game class Ft09 from environment_files\ft09\0d8bbf25\ft09.py
+2026-03-25 17:27:37 | INFO | Successfully fetched metadata for game ft09
+2026-03-25 17:27:37 | INFO | Successfully loaded game class Ft09 from environment_files\ft09\0d8bbf25\ft09.py
+2026-03-25 17:27:38 | INFO | Successfully fetched metadata for game ft09
+2026-03-25 17:27:38 | INFO | Successfully loaded game class Ft09 from environment_files\ft09\0d8bbf25\ft09.py
+2026-03-25 17:27:44 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-25 17:27:44 | INFO | Created new scorecard: dc7a7cf9-c2ab-466d-bb5c-0884b2d0a655
+2026-03-25 17:27:44 | INFO | Successfully fetched metadata for game sk48
+2026-03-25 17:27:44 | INFO | Successfully loaded game class Sk48 from environment_files\sk48\41055498\sk48.py
+2026-03-25 17:28:14 | INFO | Successfully fetched metadata for game ft09
+2026-03-25 17:28:14 | INFO | Successfully loaded game class Ft09 from environment_files\ft09\0d8bbf25\ft09.py
+2026-03-25 17:28:14 | INFO | Successfully fetched metadata for game ft09
+2026-03-25 17:28:14 | INFO | Successfully loaded game class Ft09 from environment_files\ft09\0d8bbf25\ft09.py
+2026-03-25 17:28:22 | INFO | Successfully fetched metadata for game ft09
+2026-03-25 17:28:22 | INFO | Successfully loaded game class Ft09 from environment_files\ft09\0d8bbf25\ft09.py
+2026-03-25 17:28:40 | INFO | Successfully fetched metadata for game ft09
+2026-03-25 17:28:40 | INFO | Successfully loaded game class Ft09 from environment_files\ft09\0d8bbf25\ft09.py
+2026-03-25 17:28:41 | INFO | Successfully fetched metadata for game ft09
+2026-03-25 17:28:41 | INFO | Successfully loaded game class Ft09 from environment_files\ft09\0d8bbf25\ft09.py
+2026-03-25 17:28:42 | INFO | Successfully fetched metadata for game ft09
+2026-03-25 17:28:42 | INFO | Successfully loaded game class Ft09 from environment_files\ft09\0d8bbf25\ft09.py
+2026-03-25 17:29:08 | INFO | Successfully fetched metadata for game ft09
+2026-03-25 17:29:08 | INFO | Successfully loaded game class Ft09 from environment_files\ft09\0d8bbf25\ft09.py
+2026-03-25 17:29:27 | INFO | Successfully fetched metadata for game ft09
+2026-03-25 17:29:27 | INFO | Successfully loaded game class Ft09 from environment_files\ft09\0d8bbf25\ft09.py
+2026-03-25 17:29:30 | INFO | Successfully fetched metadata for game ft09
+2026-03-25 17:29:30 | INFO | Successfully loaded game class Ft09 from environment_files\ft09\0d8bbf25\ft09.py
+2026-03-25 17:29:32 | INFO | Successfully fetched metadata for game ft09
+2026-03-25 17:29:32 | INFO | Successfully loaded game class Ft09 from environment_files\ft09\0d8bbf25\ft09.py
+2026-03-25 17:29:40 | INFO | Successfully fetched metadata for game ft09
+2026-03-25 17:29:40 | INFO | Successfully loaded game class Ft09 from environment_files\ft09\0d8bbf25\ft09.py
+2026-03-25 17:30:03 | INFO | Successfully fetched metadata for game ft09
+2026-03-25 17:30:03 | INFO | Successfully loaded game class Ft09 from environment_files\ft09\0d8bbf25\ft09.py
+2026-03-25 17:30:03 | INFO | Successfully fetched metadata for game ft09
+2026-03-25 17:30:03 | INFO | Successfully loaded game class Ft09 from environment_files\ft09\0d8bbf25\ft09.py
+2026-03-25 17:30:07 | INFO | Successfully fetched metadata for game ft09
+2026-03-25 17:30:07 | INFO | Successfully loaded game class Ft09 from environment_files\ft09\0d8bbf25\ft09.py
+
+======================================================================
+STEP 1077 RESULTS:
+  GAME_1: L1=100%  SOLVED=0%  max_lvl=0  avg_t=0.1s
+  GAME_2: L1=0%  SOLVED=0%  max_lvl=0  avg_t=5.6s
+  GAME_3: L1=0%  SOLVED=0%  max_lvl=0  avg_t=4.2s
+  GAME_4: L1=80%  SOLVED=80%  max_lvl=1  avg_t=5.1s
+  GAME_5: L1=100%  SOLVED=0%  max_lvl=0  avg_t=0.1s
+  Chain score: 3/5
+  ** DEBATE FAIL: one or more games at 0% L1 (Jun directive 2026-03-25) **
+  ** WIN CONDITION NOT MET: 100% ALL LEVELS required on ALL games **
+  Chain kill verdict: PASS
+    GAME_1: ++0% (100% → 100%)
+    GAME_4: ++80% (0% → 80%)
+    GAME_5: ++0% (100% → 100%)
+  Results: [blind]
+  Elapsed: 160.1s
+STEP 1077 DONE
