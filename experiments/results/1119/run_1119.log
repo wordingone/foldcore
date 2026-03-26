@@ -1,0 +1,52 @@
+======================================================================
+STEP 1119 — BidirectionalProgressSubstrate
+Substrate: B:\M\the-search\experiments\sub1116_prosecution_v31.py
+======================================================================
+2026-03-25 22:42:44 | INFO | Successfully fetched 25 environment(s) from API
+[PRISM] Selected 3 games from 25 available (seed=43821)
+  GAME_2=***  GAME_3=***  GAME_4=***
+Budget: 10000 steps/game, 10 seeds, randomized order
+
+2026-03-25 22:42:44 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-25 22:42:44 | INFO | Created new scorecard: 8c07ec7e-9bc0-4412-9f2e-403cd7ca1735
+2026-03-25 22:42:44 | INFO | Successfully fetched metadata for game re86
+2026-03-25 22:42:44 | INFO | Successfully loaded game class Re86 from environment_files\re86\4e57566e\re86.py
+2026-03-25 22:42:55 | WARNING | Failed to load metadata.json from environment_files\sp80\0ee2d095\metadata.json: 1 validation error for EnvironmentInfo
+  Invalid JSON: EOF while parsing a value at line 1 column 0 [type=json_invalid, input_value='', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+Traceback (most recent call last):
+  File "C:\Users\Admin\AppData\Roaming\Python\Python310\site-packages\arc_agi\base.py", line 221, in _scan_for_environments
+    env_info = EnvironmentInfo.model_validate_json(json_data)
+  File "C:\Users\Admin\AppData\Roaming\Python\Python310\site-packages\arc_agi\models.py", line 78, in model_validate_json
+    return super().model_validate_json(
+  File "C:\Users\Admin\AppData\Roaming\Python\Python310\site-packages\pydantic\main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+pydantic_core._pydantic_core.ValidationError: 1 validation error for EnvironmentInfo
+  Invalid JSON: EOF while parsing a value at line 1 column 0 [type=json_invalid, input_value='', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2026-03-25 22:42:55 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-25 22:42:55 | INFO | Created new scorecard: 71f1433e-e171-4606-8143-2e1f3f5d5efc
+2026-03-25 22:42:55 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 22:42:55 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 22:43:08 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-25 22:43:08 | INFO | Created new scorecard: 39d02461-5561-4d87-81f2-f35ef4a7d6d6
+2026-03-25 22:43:08 | INFO | Successfully fetched metadata for game s5i5
+2026-03-25 22:43:09 | INFO | Successfully loaded game class S5i5 from environment_files\s5i5\a48e4b1d\s5i5.py
+
+======================================================================
+STEP 1119 RESULTS:
+  GAME_1: L1=100%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=0.0s
+  GAME_2: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=10.0s
+  GAME_3: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=11.0s
+  GAME_4: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=8.8s
+  GAME_5: L1=100%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=0.0s
+  Chain score: 2/5
+  ARC Prize score: 0.0000 (human_baseline=50 actions/level)
+  ** DEBATE FAIL: one or more games at 0% L1 (Jun directive 2026-03-25) **
+  ** WIN CONDITION NOT MET: 100% ALL LEVELS required on ALL games **
+  Chain kill verdict: PASS
+    GAME_1: ++0% (100% → 100%)
+    GAME_5: ++0% (100% → 100%)
+  Results: [blind]
+  Elapsed: 306.5s
+STEP 1119 DONE
