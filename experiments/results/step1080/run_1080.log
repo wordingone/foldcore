@@ -1,0 +1,38 @@
+======================================================================
+STEP 1080 — DefenseV20Substrate
+Substrate: B:\M\the-search\experiments\sub1080_defense_v20.py
+======================================================================
+2026-03-25 17:46:56 | INFO | Successfully fetched 25 environment(s) from API
+[PRISM] Selected 3 games from 25 available (seed=55555)
+  GAME_2=***  GAME_3=***  GAME_4=***
+Budget: 10000 steps/game, 10 seeds, randomized order
+
+2026-03-25 17:46:56 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-25 17:46:56 | INFO | Created new scorecard: aa9661b6-3519-4a72-9036-704b2d8facdf
+2026-03-25 17:46:56 | INFO | Successfully fetched metadata for game su15
+2026-03-25 17:46:56 | INFO | Successfully loaded game class Su15 from environment_files\su15\4c352900\su15.py
+2026-03-25 17:47:00 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-25 17:47:00 | INFO | Created new scorecard: bbb5d91f-130c-4d6c-9386-e92fbcaf1175
+2026-03-25 17:47:00 | INFO | Successfully fetched metadata for game tr87
+2026-03-25 17:47:00 | INFO | Successfully loaded game class Tr87 from environment_files\tr87\cd924810\tr87.py
+2026-03-25 17:47:14 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-25 17:47:14 | INFO | Created new scorecard: 9cb6487f-868c-48bb-aef3-90b33d03e068
+2026-03-25 17:47:14 | INFO | Successfully fetched metadata for game g50t
+2026-03-25 17:47:14 | INFO | Successfully loaded game class G50t from environment_files\g50t\5849a774\g50t.py
+
+======================================================================
+STEP 1080 RESULTS:
+  GAME_1: L1=100%  SOLVED=0%  max_lvl=0  avg_t=0.1s
+  GAME_2: L1=0%  SOLVED=0%  max_lvl=0  avg_t=7.7s
+  GAME_3: L1=0%  SOLVED=0%  max_lvl=0  avg_t=4.5s
+  GAME_4: L1=0%  SOLVED=0%  max_lvl=0  avg_t=10.6s
+  GAME_5: L1=100%  SOLVED=0%  max_lvl=0  avg_t=0.1s
+  Chain score: 2/5
+  ** DEBATE FAIL: one or more games at 0% L1 (Jun directive 2026-03-25) **
+  ** WIN CONDITION NOT MET: 100% ALL LEVELS required on ALL games **
+  Chain kill verdict: PASS
+    GAME_1: ++0% (100% → 100%)
+    GAME_5: ++0% (100% → 100%)
+  Results: [blind]
+  Elapsed: 236.9s
+STEP 1080 DONE
