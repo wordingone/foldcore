@@ -53,11 +53,11 @@
         3519
       ],
       "length": 26,
-      "time": 172.57
+      "time": 155.87
     },
     "L3": {
       "status": "UNSOLVED",
-      "time": 300.07
+      "time": 300.0
     }
   },
   "full_sequence": [
@@ -101,7 +101,7 @@
     3519,
     3519
   ],
-  "method": "bfs_unique_actions",
+  "method": "bfs_set_level",
   "max_level_solved": 2,
   "total_actions": 39
 }
