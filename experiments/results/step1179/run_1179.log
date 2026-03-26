@@ -1,0 +1,39 @@
+======================================================================
+STEP 1179 — PatientHoldSubstrate
+Substrate: B:\M\the-search\experiments\sub1177_defense_v77.py
+======================================================================
+2026-03-26 05:04:37 | INFO | Successfully fetched 25 environment(s) from API
+[PRISM] Selected 3 games from 25 available (seed=None)
+  GAME_2=***  GAME_3=***  GAME_4=***
+Budget: 10000 steps/game, 10 seeds, randomized order
+
+2026-03-26 05:04:37 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-26 05:04:37 | INFO | Created new scorecard: fcb13666-ccdf-46c5-b69d-1dd053cc312a
+2026-03-26 05:04:37 | INFO | Successfully fetched metadata for game sb26
+2026-03-26 05:04:37 | INFO | Successfully loaded game class Sb26 from environment_files\sb26\7fbdac44\sb26.py
+2026-03-26 05:04:39 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-26 05:04:39 | INFO | Created new scorecard: ef29934e-888d-4a1d-b098-b565eaa0315a
+2026-03-26 05:04:39 | INFO | Successfully fetched metadata for game m0r0
+2026-03-26 05:04:39 | INFO | Successfully loaded game class M0r0 from environment_files\m0r0\dadda488\m0r0.py
+2026-03-26 05:04:44 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-26 05:04:44 | INFO | Created new scorecard: 55516142-5844-4f60-9404-54e74df2bcce
+2026-03-26 05:04:44 | INFO | Successfully fetched metadata for game g50t
+2026-03-26 05:04:45 | INFO | Successfully loaded game class G50t from environment_files\g50t\5849a774\g50t.py
+
+======================================================================
+STEP 1179 RESULTS:
+  GAME_1: L1=100%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=0.0s
+  GAME_2: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=1.2s
+  GAME_3: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=1.5s
+  GAME_4: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=1.5s
+  GAME_5: L1=100%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=0.0s
+  Chain score: 2/5
+  ARC Prize score: 0.0000 (human_baseline=50 actions/level)
+  ** DEBATE FAIL: one or more games at 0% L1 (Jun directive 2026-03-25) **
+  ** WIN CONDITION NOT MET: 100% ALL LEVELS required on ALL games **
+  Chain kill verdict: PASS
+    GAME_1: ++0% (100% → 100%)
+    GAME_5: ++0% (100% → 100%)
+  Results: [blind]
+  Elapsed: 50.0s
+STEP 1179 DONE
