@@ -2,7 +2,7 @@
 
 Can a system improve itself by criteria it generates?
 
-1097+ experiments across 16 architecture families testing substrates for recursive self-improvement on published benchmarks (Split-CIFAR-100, Atari 100K) and interactive games (ARC-AGI-3, 150+ games launched 2026-03-25, scoring = action efficiency squared). All architectural bans lifted (Jun, 2026-03-25).
+1101+ experiments across 16 architecture families testing substrates for recursive self-improvement on published benchmarks (Split-CIFAR-100, Atari 100K) and interactive games (ARC-AGI-3, 150+ games launched 2026-03-25, scoring = action efficiency squared). All architectural bans lifted. Encoding resolution breakthrough (Step 1101): avgpool4 reveals game changes avgpool8 missed, ARC=0.47 (draw-robustness pending).
 
 ## Results (honest)
 
