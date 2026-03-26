@@ -1,0 +1,228 @@
+{
+  "substrate": "LaggedProbeSubstrate",
+  "timestamp": "2026-03-26T00:20:30",
+  "step": 1134,
+  "prism_mode": null,
+  "chain": [
+    "Split-CIFAR-100-before",
+    "SC25",
+    "SK48",
+    "FT09",
+    "Split-CIFAR-100-after"
+  ],
+  "budget_per_phase": 500,
+  "n_seeds": 10,
+  "config": {
+    "n_dims": 256,
+    "block_size": 4,
+    "n_kb": 7,
+    "kb_explore": 50,
+    "lag": 10,
+    "max_patience": 20,
+    "change_thresh": 0.3,
+    "family": "full-coverage lagged click detection",
+    "tag": "defense v48 (\u2113\u2081 full 256-block scan + lagged change detection, lag=10 steps)"
+  },
+  "results": {
+    "Split-CIFAR-100-before": {
+      "l1_rate": 1.0,
+      "l2_rate": 0.0,
+      "fully_solved_rate": 0.0,
+      "max_level": 0,
+      "avg_steps": 20.0,
+      "mean_elapsed": 0.05100000000000001,
+      "per_seed_l1": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "per_seed_level_steps": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    "SC25": {
+      "l1_rate": 0.0,
+      "l2_rate": 0.0,
+      "fully_solved_rate": 0.0,
+      "max_level": 0,
+      "avg_steps": 10000.0,
+      "mean_elapsed": 14.886000000000001,
+      "per_seed_l1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "per_seed_level_steps": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    "SK48": {
+      "l1_rate": 0.0,
+      "l2_rate": 0.0,
+      "fully_solved_rate": 0.0,
+      "max_level": 0,
+      "avg_steps": 10000.0,
+      "mean_elapsed": 7.731999999999999,
+      "per_seed_l1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "per_seed_level_steps": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    "FT09": {
+      "l1_rate": 0.0,
+      "l2_rate": 0.0,
+      "fully_solved_rate": 0.0,
+      "max_level": 0,
+      "avg_steps": 10000.0,
+      "mean_elapsed": 8.742,
+      "per_seed_l1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "per_seed_level_steps": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    "Split-CIFAR-100-after": {
+      "l1_rate": 1.0,
+      "l2_rate": 0.0,
+      "fully_solved_rate": 0.0,
+      "max_level": 0,
+      "avg_steps": 20.0,
+      "mean_elapsed": 0.054000000000000006,
+      "per_seed_l1": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "per_seed_level_steps": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    }
+  },
+  "chain_score": {
+    "phases_passed": 2,
+    "phases_total": 8,
+    "chain_complete": false
+  },
+  "chain_kill": {
+    "verdict": "PASS",
+    "per_game_delta": {
+      "Split-CIFAR-100-before": {
+        "delta": 0.0,
+        "current": 1.0,
+        "baseline": 1.0
+      },
+      "SC25": {
+        "delta": null,
+        "current": 0.0,
+        "baseline": null
+      },
+      "SK48": {
+        "delta": null,
+        "current": 0.0,
+        "baseline": null
+      },
+      "FT09": {
+        "delta": 0.0,
+        "current": 0.0,
+        "baseline": 0.0
+      },
+      "Split-CIFAR-100-after": {
+        "delta": 0.0,
+        "current": 1.0,
+        "baseline": 1.0
+      }
+    },
+    "chain_score": {
+      "phases_passed": 2,
+      "phases_total": 5
+    },
+    "details": "improved=0 degraded=0 of 3 games"
+  }
+}
