@@ -1,0 +1,18 @@
+{
+  "game": "tr87",
+  "source": "analytical_solver (solve_6games_fullchain)",
+  "type": "analytical",
+  "total_actions": 0,
+  "max_level": 0,
+  "per_level": {},
+  "baseline": [
+    37,
+    30,
+    39,
+    29,
+    63,
+    119
+  ],
+  "all_actions": [],
+  "elapsed": 120.0
+}

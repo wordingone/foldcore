@@ -1,6 +1,11 @@
 {
   "game": "bp35",
-  "levels": {},
-  "max_level_reached": 0,
-  "elapsed": 45.48
+  "levels": {
+    "L1": {
+      "sequence": [3, 3, 3, 3, 2097, 2463, 2, 2, 2, 2079, 2079, 3, 2085, 2, 2],
+      "length": 15
+    }
+  },
+  "max_level_reached": 1,
+  "verified": 3
 }

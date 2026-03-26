@@ -1,0 +1,14 @@
+{
+  "game": "tu93",
+  "source": "bfs_maze_solver",
+  "type": "analytical",
+  "total_actions": 28,
+  "max_level": 2,
+  "l1_actions": [3, 1, 1, 3, 0, 3, 1, 1, 2, 2, 1, 3, 3, 1, 3, 0, 3, 1],
+  "l2_actions": [0, 3, 3, 1, 3, 3, 0, 3, 3, 0],
+  "all_actions": [
+    3, 1, 1, 3, 0, 3, 1, 1, 2, 2, 1, 3, 3, 1, 3, 0, 3, 1,
+    0, 3, 3, 1, 3, 3, 0, 3, 3, 0
+  ],
+  "l2_description": "Maze with enemy. Board at (3,12). Player starts (3,24), exit (39,12). Enemy (27,18) rot=270 faces left. Path avoids enemy activation by going down to bottom row, crossing right, then up through enemy position (kills it), then right to exit column and up to exit. BFS: UP RIGHT RIGHT DOWN RIGHT RIGHT UP RIGHT RIGHT UP."
+}

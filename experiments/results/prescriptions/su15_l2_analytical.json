@@ -1,0 +1,14 @@
+{
+  "game": "su15",
+  "source": "vacuum_merge_path",
+  "type": "analytical",
+  "total_actions": 25,
+  "max_level": 2,
+  "l1_actions": [3471, 3156, 2778, 2400, 2085, 1707, 1329, 1014],
+  "l2_actions": [2478, 2520, 3606, 3575, 2471, 2464, 2462, 3568, 3562, 3548, 3554, 3106, 2784, 2591, 2275, 2087, 1832],
+  "all_actions": [
+    3471, 3156, 2778, 2400, 2085, 1707, 1329, 1014,
+    2478, 2520, 3606, 3575, 2471, 2464, 2462, 3568, 3562, 3548, 3554, 3106, 2784, 2591, 2275, 2087, 1832
+  ],
+  "l2_description": "Vacuum fruit merging. Goal: 1 fruit of size 3 on goal area. 8 size-0 fruits. Phase 1 (4 clicks): merge 4 pairs into 4 size-1. Phase 2 (7 clicks): merge upper pair of size-1 into size-2, merge lower pair into size-2. Phase 3 (3 clicks): merge two size-2s into size-3. Phase 4 (3 clicks): move size-3 onto goal at (33,27)."
+}
