@@ -1,0 +1,39 @@
+======================================================================
+STEP 1143 — TemporalDiffSubstrate
+Substrate: B:\M\the-search\experiments\sub1143_defense_v53.py
+======================================================================
+2026-03-26 01:35:24 | INFO | Successfully fetched 25 environment(s) from API
+[PRISM] Selected 3 games from 25 available (seed=None)
+  GAME_2=***  GAME_3=***  GAME_4=***
+Budget: 10000 steps/game, 10 seeds, randomized order
+
+2026-03-26 01:35:24 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-26 01:35:24 | INFO | Created new scorecard: fb71eced-8075-40fd-8d18-ee3ecddd3d68
+2026-03-26 01:35:24 | INFO | Successfully fetched metadata for game s5i5
+2026-03-26 01:35:24 | INFO | Successfully loaded game class S5i5 from environment_files\s5i5\a48e4b1d\s5i5.py
+2026-03-26 01:35:25 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-26 01:35:25 | INFO | Created new scorecard: 7024e4c5-dc2f-443c-931e-ec63862c5039
+2026-03-26 01:35:25 | INFO | Successfully fetched metadata for game cd82
+2026-03-26 01:35:25 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-26 01:35:32 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-26 01:35:32 | INFO | Created new scorecard: 84a750a9-98ad-4d39-a6c3-2b6449a33e63
+2026-03-26 01:35:32 | INFO | Successfully fetched metadata for game re86
+2026-03-26 01:35:32 | INFO | Successfully loaded game class Re86 from environment_files\re86\4e57566e\re86.py
+
+======================================================================
+STEP 1143 RESULTS:
+  GAME_1: L1=100%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=0.1s
+  GAME_2: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=3.0s
+  GAME_3: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=1.5s
+  GAME_4: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=2.4s
+  GAME_5: L1=100%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=0.1s
+  Chain score: 2/5
+  ARC Prize score: 0.0000 (human_baseline=50 actions/level)
+  ** DEBATE FAIL: one or more games at 0% L1 (Jun directive 2026-03-25) **
+  ** WIN CONDITION NOT MET: 100% ALL LEVELS required on ALL games **
+  Chain kill verdict: PASS
+    GAME_1: ++0% (100% → 100%)
+    GAME_5: ++0% (100% → 100%)
+  Results: [blind]
+  Elapsed: 79.4s
+STEP 1143 DONE
