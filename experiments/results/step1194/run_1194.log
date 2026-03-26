@@ -1,0 +1,107 @@
+======================================================================
+STEP 1194 — DirectionalConsistencySubstrate
+Substrate: B:\M\the-search\experiments\sub1192_defense_v82.py
+======================================================================
+2026-03-26 05:53:31 | INFO | Successfully fetched 25 environment(s) from API
+[PRISM] Selected 3 games from 25 available (seed=None)
+  GAME_2=***  GAME_3=***  GAME_4=***
+Budget: 10000 steps/game, 10 seeds, randomized order
+
+2026-03-26 05:53:31 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-26 05:53:31 | INFO | Created new scorecard: 8de3a5ef-17de-4156-aa19-805b2055c69a
+2026-03-26 05:53:31 | INFO | Successfully fetched metadata for game tr87
+2026-03-26 05:53:31 | INFO | Successfully loaded game class Tr87 from environment_files\tr87\cd924810\tr87.py
+2026-03-26 05:53:35 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-26 05:53:35 | INFO | Created new scorecard: 780320b1-ff5d-4898-8393-b56ea15a2048
+2026-03-26 05:53:35 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:53:35 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:53:38 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:53:38 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:53:43 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-26 05:53:43 | INFO | Created new scorecard: 538fc43c-cb14-4b8d-8cdf-4a6f6b396c4e
+2026-03-26 05:53:43 | INFO | Successfully fetched metadata for game su15
+2026-03-26 05:53:43 | INFO | Successfully loaded game class Su15 from environment_files\su15\4c352900\su15.py
+2026-03-26 05:53:53 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:53:53 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:53:54 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:53:54 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:53:54 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:53:54 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:54:04 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:54:04 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:54:05 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:54:05 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:54:05 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:54:05 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:54:07 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:54:07 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:54:07 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:54:07 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:54:12 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:54:12 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:54:12 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:54:12 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:54:13 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:54:13 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:54:14 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:54:14 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:54:25 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:54:25 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:54:26 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:54:26 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:54:27 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:54:27 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:54:38 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:54:38 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:54:39 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:54:39 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:54:40 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:54:40 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:54:44 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:54:44 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:54:45 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:54:45 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:54:46 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:54:46 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:54:47 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:54:47 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:54:48 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:54:48 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:54:58 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:54:58 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:55:00 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:55:00 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:55:01 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:55:01 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:55:06 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:55:06 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:55:07 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:55:07 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:55:09 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:55:09 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:55:09 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:55:09 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:55:10 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:55:10 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:55:25 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:55:25 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-26 05:55:25 | INFO | Successfully fetched metadata for game lp85
+2026-03-26 05:55:26 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+
+======================================================================
+STEP 1194 RESULTS:
+  GAME_1: L1=100%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=0.1s
+  GAME_2: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=2.9s
+  GAME_3: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=4.5s
+  GAME_4: L1=100%  SOLVED=100%  max_lvl=1  ARC=0.1853  avg_t=3.3s
+  GAME_5: L1=100%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=0.1s
+  Chain score: 3/5
+  ARC Prize score: 0.0371 (human_baseline=50 actions/level)
+  ** DEBATE FAIL: one or more games at 0% L1 (Jun directive 2026-03-25) **
+  ** WIN CONDITION NOT MET: 100% ALL LEVELS required on ALL games **
+  Chain kill verdict: PASS
+    GAME_1: ++0% (100% → 100%)
+    GAME_5: ++0% (100% → 100%)
+  Results: [blind]
+  Elapsed: 118.5s
+STEP 1194 DONE
