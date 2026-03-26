@@ -1,27 +1,23 @@
 {
-  "substrate": "ForwardModelSubstrate",
-  "timestamp": "2026-03-25T20:21:58",
-  "step": 1096,
+  "substrate": "ReactiveActionSwitchSubstrate",
+  "timestamp": "2026-03-25T20:17:15",
+  "step": 1095,
   "prism_mode": null,
   "chain": [
     "Split-CIFAR-100-before",
-    "SU15",
-    "S5I5",
-    "FT09",
+    "KA59",
+    "G50T",
+    "RE86",
     "Split-CIFAR-100-after"
   ],
   "budget_per_phase": 500,
   "n_seeds": 10,
   "config": {
-    "n_dims": 256,
-    "input_dims": 263,
-    "epsilon": 0.2,
-    "pred_lr": 0.001,
-    "fwd_lr": 0.001,
-    "alpha_lr": 0.01,
-    "alpha_conc": 50.0,
-    "family": "forward-model action selection",
-    "tag": "prosecution v24 (\u2113_\u03c0 forward model + 100-step warmup)"
+    "n_dims": 64,
+    "explore_steps": 50,
+    "max_patience": 20,
+    "family": "reactive action switching",
+    "tag": "defense v21 (\u2113\u2081 reactive switching, zero learned params)"
   },
   "results": {
     "Split-CIFAR-100-before": {
@@ -30,7 +26,7 @@
       "fully_solved_rate": 0.0,
       "max_level": 0,
       "avg_steps": 20.0,
-      "mean_elapsed": 0.051000000000000004,
+      "mean_elapsed": 0.054000000000000006,
       "per_seed_l1": [
         1,
         1,
@@ -56,13 +52,13 @@
         {}
       ]
     },
-    "SU15": {
+    "KA59": {
       "l1_rate": 0.0,
       "l2_rate": 0.0,
       "fully_solved_rate": 0.0,
       "max_level": 0,
       "avg_steps": 10000.0,
-      "mean_elapsed": 12.608,
+      "mean_elapsed": 4.771,
       "per_seed_l1": [
         0,
         0,
@@ -88,13 +84,13 @@
         {}
       ]
     },
-    "S5I5": {
+    "G50T": {
       "l1_rate": 0.0,
       "l2_rate": 0.0,
       "fully_solved_rate": 0.0,
       "max_level": 0,
       "avg_steps": 10000.0,
-      "mean_elapsed": 12.591999999999999,
+      "mean_elapsed": 5.63,
       "per_seed_l1": [
         0,
         0,
@@ -120,13 +116,13 @@
         {}
       ]
     },
-    "FT09": {
+    "RE86": {
       "l1_rate": 0.0,
       "l2_rate": 0.0,
       "fully_solved_rate": 0.0,
       "max_level": 0,
       "avg_steps": 10000.0,
-      "mean_elapsed": 11.797999999999998,
+      "mean_elapsed": 4.8549999999999995,
       "per_seed_l1": [
         0,
         0,
@@ -198,20 +194,20 @@
         "current": 1.0,
         "baseline": 1.0
       },
-      "SU15": {
+      "KA59": {
         "delta": null,
         "current": 0.0,
         "baseline": null
       },
-      "S5I5": {
+      "G50T": {
         "delta": null,
         "current": 0.0,
         "baseline": null
       },
-      "FT09": {
-        "delta": 0.0,
+      "RE86": {
+        "delta": null,
         "current": 0.0,
-        "baseline": 0.0
+        "baseline": null
       },
       "Split-CIFAR-100-after": {
         "delta": 0.0,
@@ -223,6 +219,6 @@
       "phases_passed": 2,
       "phases_total": 5
     },
-    "details": "improved=0 degraded=0 of 3 games"
+    "details": "improved=0 degraded=0 of 2 games"
   }
 }
