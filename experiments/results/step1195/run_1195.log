@@ -1,0 +1,40 @@
+======================================================================
+STEP 1195 — AntiCorrelatedPairSubstrate
+Substrate: B:\M\the-search\experiments\sub1195_defense_v83.py
+======================================================================
+2026-03-26 05:58:33 | INFO | Successfully fetched 25 environment(s) from API
+[PRISM] Selected 3 games from 25 available (seed=None)
+  GAME_2=***  GAME_3=***  GAME_4=***
+Budget: 10000 steps/game, 10 seeds, randomized order
+
+2026-03-26 05:58:33 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-26 05:58:33 | INFO | Created new scorecard: 63249fc5-646d-40c2-9b68-5fc5300620d4
+2026-03-26 05:58:33 | INFO | Successfully fetched metadata for game ls20
+2026-03-26 05:58:33 | INFO | Successfully loaded game class Ls20 from environment_files\ls20\9607627b\ls20.py
+2026-03-26 05:58:41 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-26 05:58:41 | INFO | Created new scorecard: 8ed0f0ba-635e-4c60-9c9d-844c3082f6fa
+2026-03-26 05:58:41 | INFO | Successfully fetched metadata for game cd82
+2026-03-26 05:58:41 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-26 05:58:48 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-26 05:58:48 | INFO | Created new scorecard: 668f315a-b45d-4f16-9c06-ab82268654a2
+2026-03-26 05:58:48 | INFO | Successfully fetched metadata for game m0r0
+2026-03-26 05:58:48 | INFO | Successfully loaded game class M0r0 from environment_files\m0r0\dadda488\m0r0.py
+
+======================================================================
+STEP 1195 RESULTS:
+  GAME_1: L1=100%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=0.1s
+  GAME_2: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=1.6s
+  GAME_3: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=7.4s
+  GAME_4: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=1.6s
+  GAME_5: L1=100%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=0.1s
+  Chain score: 2/5
+  ARC Prize score: 0.0000 (human_baseline=50 actions/level)
+  ** DEBATE FAIL: one or more games at 0% L1 (Jun directive 2026-03-25) **
+  ** WIN CONDITION NOT MET: 100% ALL LEVELS required on ALL games **
+  Chain kill verdict: FAIL
+    GAME_1: ++0% (100% → 100%)
+    GAME_3: -100% (100% → 0%)
+    GAME_5: ++0% (100% → 100%)
+  Results: [blind]
+  Elapsed: 114.9s
+STEP 1195 DONE
