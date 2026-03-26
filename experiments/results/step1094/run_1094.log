@@ -1,0 +1,110 @@
+======================================================================
+STEP 1094 — ForwardModelSubstrate
+Substrate: B:\M\the-search\experiments\sub1094_prosecution_v24.py
+======================================================================
+2026-03-25 19:54:19 | INFO | Successfully fetched 25 environment(s) from API
+[PRISM] Selected 3 games from 25 available (seed=71538)
+  GAME_2=***  GAME_3=***  GAME_4=***
+Budget: 10000 steps/game, 10 seeds, randomized order
+
+2026-03-25 19:54:19 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-25 19:54:19 | INFO | Created new scorecard: 0a855c27-5c8d-4880-8722-b99e8b2c48d5
+2026-03-25 19:54:20 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:54:20 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 19:54:26 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:54:26 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 19:54:32 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-25 19:54:32 | INFO | Created new scorecard: 1532dfb0-c113-4643-9137-9a57911cda92
+2026-03-25 19:54:32 | INFO | Successfully fetched metadata for game s5i5
+2026-03-25 19:54:32 | INFO | Successfully loaded game class S5i5 from environment_files\s5i5\a48e4b1d\s5i5.py
+2026-03-25 19:54:48 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-25 19:54:48 | INFO | Created new scorecard: a5b2cf5f-898f-43f8-99f5-ce2aa7d89f7d
+2026-03-25 19:54:48 | INFO | Successfully fetched metadata for game vc33
+2026-03-25 19:54:48 | INFO | Successfully loaded game class Vc33 from environment_files\vc33\9851e02b\vc33.py
+2026-03-25 19:55:06 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:55:06 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 19:55:08 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:55:08 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 19:55:12 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:55:12 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 19:55:43 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:55:43 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 19:55:46 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:55:46 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 19:55:49 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:55:49 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 19:56:32 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:56:32 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 19:56:32 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:56:32 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 19:56:32 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:56:32 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 19:57:20 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:57:20 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 19:57:29 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:57:29 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 19:57:34 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:57:34 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 19:57:37 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:57:37 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 19:57:40 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:57:40 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 19:58:39 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:58:39 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 19:58:43 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:58:43 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 19:59:10 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:59:10 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 19:59:11 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:59:11 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 19:59:13 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:59:13 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 19:59:17 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:59:17 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 19:59:17 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:59:17 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 19:59:20 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:59:20 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 19:59:20 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:59:20 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 19:59:22 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:59:22 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 19:59:53 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:59:53 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 19:59:57 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 19:59:57 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 20:00:12 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 20:00:12 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 20:00:13 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 20:00:13 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 20:00:15 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 20:00:15 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 20:00:17 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 20:00:17 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 20:00:18 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 20:00:18 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 20:00:18 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 20:00:18 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 20:00:20 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 20:00:20 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 20:00:23 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 20:00:23 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+
+======================================================================
+STEP 1094 RESULTS:
+  GAME_1: L1=100%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=0.0s
+  GAME_2: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=12.9s
+  GAME_3: L1=100%  SOLVED=100%  max_lvl=1  ARC=0.0045  avg_t=12.3s
+  GAME_4: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=11.7s
+  GAME_5: L1=100%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=0.0s
+  Chain score: 3/5
+  ARC Prize score: 0.0009 (human_baseline=50 actions/level)
+  ** DEBATE FAIL: one or more games at 0% L1 (Jun directive 2026-03-25) **
+  ** WIN CONDITION NOT MET: 100% ALL LEVELS required on ALL games **
+  Chain kill verdict: PASS
+    GAME_1: ++0% (100% → 100%)
+    GAME_2: ++0% (0% → 0%)
+    GAME_5: ++0% (100% → 100%)
+  Results: [blind]
+  Elapsed: 377.4s
+STEP 1094 DONE
