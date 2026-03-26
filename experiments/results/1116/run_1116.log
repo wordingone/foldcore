@@ -1,0 +1,41 @@
+======================================================================
+STEP 1116 — BidirectionalProgressSubstrate
+Substrate: B:\M\the-search\experiments\sub1116_prosecution_v31.py
+======================================================================
+2026-03-25 22:26:04 | INFO | Successfully fetched 25 environment(s) from API
+[PRISM] Selected 3 games from 25 available (seed=83146)
+  GAME_2=***  GAME_3=***  GAME_4=***
+Budget: 10000 steps/game, 10 seeds, randomized order
+
+2026-03-25 22:26:04 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-25 22:26:04 | INFO | Created new scorecard: cb8847ec-08a8-4460-80e7-af4f39efcada
+2026-03-25 22:26:04 | INFO | Successfully fetched metadata for game cd82
+2026-03-25 22:26:04 | INFO | Successfully loaded game class Cd82 from environment_files\cd82\fb555c5d\cd82.py
+2026-03-25 22:26:13 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-25 22:26:13 | INFO | Created new scorecard: d598d39d-47d2-4c70-9fb1-844fa7f8b809
+2026-03-25 22:26:14 | INFO | Successfully fetched metadata for game sp80
+2026-03-25 22:26:14 | INFO | Successfully loaded game class Sp80 from environment_files\sp80\0ee2d095\sp80.py
+2026-03-25 22:26:17 | INFO | Successfully fetched metadata for game sp80
+2026-03-25 22:26:17 | INFO | Successfully loaded game class Sp80 from environment_files\sp80\0ee2d095\sp80.py
+2026-03-25 22:26:28 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-25 22:26:28 | INFO | Created new scorecard: a86562c6-748f-4729-bfc2-76a87d3b6e66
+2026-03-25 22:26:28 | INFO | Successfully fetched metadata for game tr87
+2026-03-25 22:26:28 | INFO | Successfully loaded game class Tr87 from environment_files\tr87\cd924810\tr87.py
+
+======================================================================
+STEP 1116 RESULTS:
+  GAME_1: L1=100%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=0.0s
+  GAME_2: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=12.3s
+  GAME_3: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=8.7s
+  GAME_4: L1=10%  SOLVED=10%  max_lvl=1  ARC=0.0000  avg_t=10.3s
+  GAME_5: L1=100%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=0.0s
+  Chain score: 3/5
+  ARC Prize score: 0.0000 (human_baseline=50 actions/level)
+  ** DEBATE FAIL: one or more games at 0% L1 (Jun directive 2026-03-25) **
+  ** WIN CONDITION NOT MET: 100% ALL LEVELS required on ALL games **
+  Chain kill verdict: PASS
+    GAME_1: ++0% (100% → 100%)
+    GAME_5: ++0% (100% → 100%)
+  Results: [blind]
+  Elapsed: 321.0s
+STEP 1116 DONE
