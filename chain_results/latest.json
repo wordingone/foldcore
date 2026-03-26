@@ -1,23 +1,23 @@
 {
-  "substrate": "BidirectionalReactiveSubstrate",
-  "timestamp": "2026-03-25T20:46:16",
-  "step": 1099,
+  "substrate": "ArgminFrequencySubstrate",
+  "timestamp": "2026-03-25T20:51:10",
+  "step": 1100,
   "prism_mode": null,
   "chain": [
     "Split-CIFAR-100-before",
-    "TR87",
-    "S5I5",
-    "SK48",
+    "SU15",
+    "TU93",
+    "CN04",
     "Split-CIFAR-100-after"
   ],
   "budget_per_phase": 500,
   "n_seeds": 10,
   "config": {
     "n_dims": 64,
-    "explore_steps": 50,
-    "max_patience": 20,
-    "family": "reactive action switching",
-    "tag": "defense v28 (\u2113\u2081 bidirectional progress, toward-initial OR new-territory)"
+    "n_quant": 4,
+    "n_buckets": 256,
+    "family": "frequency-counting exploration",
+    "tag": "defense v29 (\u2113\u2081 argmin-over-frequency, coarse hash, 256 buckets)"
   },
   "results": {
     "Split-CIFAR-100-before": {
@@ -26,7 +26,7 @@
       "fully_solved_rate": 0.0,
       "max_level": 0,
       "avg_steps": 20.0,
-      "mean_elapsed": 0.039999999999999994,
+      "mean_elapsed": 0.043,
       "per_seed_l1": [
         1,
         1,
@@ -52,13 +52,13 @@
         {}
       ]
     },
-    "TR87": {
+    "SU15": {
       "l1_rate": 0.0,
       "l2_rate": 0.0,
       "fully_solved_rate": 0.0,
       "max_level": 0,
       "avg_steps": 10000.0,
-      "mean_elapsed": 5.422000000000001,
+      "mean_elapsed": 3.4269999999999996,
       "per_seed_l1": [
         0,
         0,
@@ -84,13 +84,13 @@
         {}
       ]
     },
-    "S5I5": {
+    "TU93": {
       "l1_rate": 0.0,
       "l2_rate": 0.0,
       "fully_solved_rate": 0.0,
       "max_level": 0,
       "avg_steps": 10000.0,
-      "mean_elapsed": 3.0520000000000005,
+      "mean_elapsed": 3.113,
       "per_seed_l1": [
         0,
         0,
@@ -116,13 +116,13 @@
         {}
       ]
     },
-    "SK48": {
+    "CN04": {
       "l1_rate": 0.0,
       "l2_rate": 0.0,
       "fully_solved_rate": 0.0,
       "max_level": 0,
       "avg_steps": 10000.0,
-      "mean_elapsed": 3.528,
+      "mean_elapsed": 3.973,
       "per_seed_l1": [
         0,
         0,
@@ -154,7 +154,7 @@
       "fully_solved_rate": 0.0,
       "max_level": 0,
       "avg_steps": 20.0,
-      "mean_elapsed": 0.046,
+      "mean_elapsed": 0.044,
       "per_seed_l1": [
         1,
         1,
@@ -194,17 +194,17 @@
         "current": 1.0,
         "baseline": 1.0
       },
-      "TR87": {
+      "SU15": {
         "delta": null,
         "current": 0.0,
         "baseline": null
       },
-      "S5I5": {
+      "TU93": {
         "delta": null,
         "current": 0.0,
         "baseline": null
       },
-      "SK48": {
+      "CN04": {
         "delta": null,
         "current": 0.0,
         "baseline": null
