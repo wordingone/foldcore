@@ -1,0 +1,47 @@
+======================================================================
+STEP 1190 — DualSignalReactiveSubstrate
+Substrate: B:\M\the-search\experiments\sub1189_defense_v81.py
+======================================================================
+2026-03-26 05:44:27 | INFO | Successfully fetched 25 environment(s) from API
+[PRISM] Selected 3 games from 25 available (seed=None)
+  GAME_2=***  GAME_3=***  GAME_4=***
+Budget: 10000 steps/game, 10 seeds, randomized order
+
+2026-03-26 05:44:27 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-26 05:44:27 | INFO | Created new scorecard: 7626cebe-8c6c-4c9e-9c05-6bb6bfde2f43
+2026-03-26 05:44:27 | INFO | Successfully fetched metadata for game sc25
+2026-03-26 05:44:27 | INFO | Successfully loaded game class Sc25 from environment_files\sc25\f9b21a2f\sc25.py
+2026-03-26 05:44:33 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-26 05:44:33 | INFO | Created new scorecard: 1320ccb9-8763-4ae2-abeb-00b829764f8d
+2026-03-26 05:44:33 | INFO | Successfully fetched metadata for game sb26
+2026-03-26 05:44:33 | INFO | Successfully loaded game class Sb26 from environment_files\sb26\7fbdac44\sb26.py
+2026-03-26 05:44:40 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-26 05:44:40 | INFO | Created new scorecard: 3fa0d001-f2a9-4b5c-b429-49e37d3f9757
+2026-03-26 05:44:41 | INFO | Successfully fetched metadata for game cn04
+2026-03-26 05:44:41 | INFO | Successfully loaded game class Cn04 from environment_files\cn04\65d47d14\cn04.py
+2026-03-26 05:45:03 | ERROR | Error performing step with action ACTION6: 'x'
+Traceback (most recent call last):
+  File "C:\Users\Admin\AppData\Roaming\Python\Python310\site-packages\arc_agi\local_wrapper.py", line 209, in step
+    FrameDataRaw, self._game.perform_action(action_input, raw=True)
+  File "C:\Users\Admin\AppData\Roaming\Python\Python310\site-packages\arcengine\base_game.py", line 231, in perform_action
+    self.step()
+  File "<string>", line 643, in step
+KeyError: 'x'
+
+======================================================================
+STEP 1190 RESULTS:
+  GAME_1: L1=100%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=0.1s
+  GAME_2: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=0.9s
+  GAME_3: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=5.9s
+  GAME_4: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=3.1s
+  GAME_5: L1=100%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=0.0s
+  Chain score: 2/5
+  ARC Prize score: 0.0000 (human_baseline=50 actions/level)
+  ** DEBATE FAIL: one or more games at 0% L1 (Jun directive 2026-03-25) **
+  ** WIN CONDITION NOT MET: 100% ALL LEVELS required on ALL games **
+  Chain kill verdict: PASS
+    GAME_1: ++0% (100% → 100%)
+    GAME_5: ++0% (100% → 100%)
+  Results: [blind]
+  Elapsed: 107.5s
+STEP 1190 DONE

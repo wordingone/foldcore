@@ -1,0 +1,228 @@
+{
+  "substrate": "DualSignalReactiveSubstrate",
+  "timestamp": "2026-03-26T05:47:27",
+  "step": 1191,
+  "prism_mode": null,
+  "chain": [
+    "Split-CIFAR-100-before",
+    "TU93",
+    "S5I5",
+    "RE86",
+    "Split-CIFAR-100-after"
+  ],
+  "budget_per_phase": 500,
+  "n_seeds": 10,
+  "config": {
+    "n_dims": 256,
+    "block_size": 4,
+    "explore_steps": 100,
+    "epsilon": 0.2,
+    "change_thresh": 0.1,
+    "family": "dual-signal reactive",
+    "tag": "defense v81 (\u2113\u2081 dual-signal: v80 change-rate ranking + v30 distance switching. Actions ranked by how much change they cause, switched when distance progress stalls. Fuses both strategies.)"
+  },
+  "results": {
+    "Split-CIFAR-100-before": {
+      "l1_rate": 1.0,
+      "l2_rate": 0.0,
+      "fully_solved_rate": 0.0,
+      "max_level": 0,
+      "avg_steps": 20.0,
+      "mean_elapsed": 0.053000000000000005,
+      "per_seed_l1": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "per_seed_level_steps": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    "TU93": {
+      "l1_rate": 0.1,
+      "l2_rate": 0.0,
+      "fully_solved_rate": 0.1,
+      "max_level": 1,
+      "avg_steps": 10000.0,
+      "mean_elapsed": 1.659,
+      "per_seed_l1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        5275,
+        0,
+        0
+      ],
+      "per_seed_level_steps": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {
+          "1": 5275
+        },
+        {},
+        {}
+      ]
+    },
+    "S5I5": {
+      "l1_rate": 0.0,
+      "l2_rate": 0.0,
+      "fully_solved_rate": 0.0,
+      "max_level": 0,
+      "avg_steps": 10000.0,
+      "mean_elapsed": 1.225,
+      "per_seed_l1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "per_seed_level_steps": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    "RE86": {
+      "l1_rate": 0.0,
+      "l2_rate": 0.0,
+      "fully_solved_rate": 0.0,
+      "max_level": 0,
+      "avg_steps": 10000.0,
+      "mean_elapsed": 1.815,
+      "per_seed_l1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "per_seed_level_steps": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    "Split-CIFAR-100-after": {
+      "l1_rate": 1.0,
+      "l2_rate": 0.0,
+      "fully_solved_rate": 0.0,
+      "max_level": 0,
+      "avg_steps": 20.0,
+      "mean_elapsed": 0.051000000000000004,
+      "per_seed_l1": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "per_seed_level_steps": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    }
+  },
+  "chain_score": {
+    "phases_passed": 3,
+    "phases_total": 8,
+    "chain_complete": false
+  },
+  "chain_kill": {
+    "verdict": "PASS",
+    "per_game_delta": {
+      "Split-CIFAR-100-before": {
+        "delta": 0.0,
+        "current": 1.0,
+        "baseline": 1.0
+      },
+      "TU93": {
+        "delta": null,
+        "current": 0.1,
+        "baseline": null
+      },
+      "S5I5": {
+        "delta": null,
+        "current": 0.0,
+        "baseline": null
+      },
+      "RE86": {
+        "delta": null,
+        "current": 0.0,
+        "baseline": null
+      },
+      "Split-CIFAR-100-after": {
+        "delta": 0.0,
+        "current": 1.0,
+        "baseline": 1.0
+      }
+    },
+    "chain_score": {
+      "phases_passed": 3,
+      "phases_total": 5
+    },
+    "details": "improved=0 degraded=0 of 2 games"
+  }
+}

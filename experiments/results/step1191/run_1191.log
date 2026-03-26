@@ -1,0 +1,41 @@
+======================================================================
+STEP 1191 — DualSignalReactiveSubstrate
+Substrate: B:\M\the-search\experiments\sub1189_defense_v81.py
+======================================================================
+2026-03-26 05:46:32 | INFO | Successfully fetched 25 environment(s) from API
+[PRISM] Selected 3 games from 25 available (seed=None)
+  GAME_2=***  GAME_3=***  GAME_4=***
+Budget: 10000 steps/game, 10 seeds, randomized order
+
+2026-03-26 05:46:32 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-26 05:46:32 | INFO | Created new scorecard: 188afd76-ec55-4e11-a7cd-bddbfca06187
+2026-03-26 05:46:33 | INFO | Successfully fetched metadata for game s5i5
+2026-03-26 05:46:33 | INFO | Successfully loaded game class S5i5 from environment_files\s5i5\a48e4b1d\s5i5.py
+2026-03-26 05:46:34 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-26 05:46:34 | INFO | Created new scorecard: 32df347b-dc31-406c-84e6-3d9699a02056
+2026-03-26 05:46:34 | INFO | Successfully fetched metadata for game re86
+2026-03-26 05:46:34 | INFO | Successfully loaded game class Re86 from environment_files\re86\4e57566e\re86.py
+2026-03-26 05:46:40 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-26 05:46:40 | INFO | Created new scorecard: ef807425-5c20-432c-9e49-17b4508b2038
+2026-03-26 05:46:40 | INFO | Successfully fetched metadata for game tu93
+2026-03-26 05:46:40 | INFO | Successfully loaded game class Tu93 from environment_files\tu93\2b534c15\tu93.py
+2026-03-26 05:47:13 | INFO | Successfully fetched metadata for game tu93
+2026-03-26 05:47:13 | INFO | Successfully loaded game class Tu93 from environment_files\tu93\2b534c15\tu93.py
+
+======================================================================
+STEP 1191 RESULTS:
+  GAME_1: L1=100%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=0.1s
+  GAME_2: L1=10%  SOLVED=10%  max_lvl=1  ARC=0.0000  avg_t=1.7s
+  GAME_3: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=1.2s
+  GAME_4: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=1.8s
+  GAME_5: L1=100%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=0.1s
+  Chain score: 3/5
+  ARC Prize score: 0.0000 (human_baseline=50 actions/level)
+  ** DEBATE FAIL: one or more games at 0% L1 (Jun directive 2026-03-25) **
+  ** WIN CONDITION NOT MET: 100% ALL LEVELS required on ALL games **
+  Chain kill verdict: PASS
+    GAME_1: ++0% (100% → 100%)
+    GAME_5: ++0% (100% → 100%)
+  Results: [blind]
+  Elapsed: 55.5s
+STEP 1191 DONE
