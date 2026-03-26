@@ -13,8 +13,13 @@ Action encoding (PRISM-compatible):
   n_actions:     7 (keyboard-only games) or 7 + 4096 = 4103 (click games)
 
 Click support detected from env.action_space: if ACTION6 is listed, the game
-accepts click with coordinates. All games accept all GameAction values (games
-ignore unsupported actions), so keyboard actions always work.
+accepts click with coordinates.
+
+BUG FIX (2026-03-26): ACTION6 is overloaded — it's both keyboard action index 5
+AND the click action. Click games crash with KeyError: 'x' when ACTION6 is sent
+without data. Fix: for click games, keyboard action 5 sends ACTION6 with
+data={"x": 0, "y": 0}. Additionally, game errors (obs=None) no longer cause
+game resets — the last valid frame is returned instead.
 """
 import arc_agi
 from arcengine import GameAction, GameState
@@ -42,8 +47,10 @@ class _Env:
         self.n_actions = N_KB_ACTIONS + (N_CLICK_TARGETS if self._supports_click else 0)
 
         self._last_obs = None
+        self._last_frame = None  # cache last valid frame for error recovery
         self._game_id = info.game_id
         self._levels_offset = 0
+        self._error_count = 0  # track consecutive errors
 
     def reset(self, seed=None):
         # arc_agi doesn't support seeding — seed param is ignored.
@@ -53,13 +60,21 @@ class _Env:
             self._env = self._arc.make(self._game_id)
             self._last_obs = self._env.reset()
         self._levels_offset = self._last_obs.levels_completed if self._last_obs is not None else 0
-        return self._frame()
+        self._error_count = 0
+        frame = self._frame()
+        self._last_frame = frame
+        return frame
 
     def step(self, action_int):
         if action_int < N_KB_ACTIONS:
             # Keyboard action: 0-6 → ACTION1-ACTION7
             ga = _GA_KB[action_int % len(_GA_KB)]
-            obs = self._env.step(ga)
+            if ga == GameAction.ACTION6 and self._supports_click:
+                # ACTION6 is the click action for this game — sending without
+                # data causes KeyError: 'x'. Provide default click at (0,0).
+                obs = self._env.step(GameAction.ACTION6, data={"x": 0, "y": 0})
+            else:
+                obs = self._env.step(ga)
         else:
             # Click action: 7+ → ACTION6 with pixel coordinates
             click_idx = action_int - N_KB_ACTIONS
@@ -67,13 +82,26 @@ class _Env:
             y = click_idx // 64
             obs = self._env.step(GameAction.ACTION6, data={"x": x, "y": y})
 
-        self._last_obs = obs
         if obs is None:
-            return None, 0.0, True, {'level': 0}
+            # Game error (e.g. internal KeyError). Don't reset — return last
+            # valid frame so the substrate can continue playing.
+            self._error_count += 1
+            if self._error_count > 100:
+                # Too many consecutive errors — game is truly broken, signal done
+                return self._last_frame, 0.0, True, {'level': 0}
+            level = 0
+            if self._last_obs is not None:
+                level = self._last_obs.levels_completed - self._levels_offset
+            return self._last_frame, 0.0, False, {'level': level}
+
+        self._last_obs = obs
+        self._error_count = 0  # reset on success
         done = obs.state in (GameState.GAME_OVER, GameState.WIN)
         info = {'level': obs.levels_completed - self._levels_offset}
         frame = obs.frame if obs.frame else None
-        return frame, 0.0, done, info
+        if frame is not None:
+            self._last_frame = frame
+        return frame if frame is not None else self._last_frame, 0.0, done, info
 
     def _frame(self):
         if self._last_obs is None or not self._last_obs.frame:
