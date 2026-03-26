@@ -34,8 +34,7 @@
         0,
         4
       ],
-      "count": 26,
-      "time": 15.13
+      "count": 26
     }
   },
   "all_actions": [
@@ -66,12 +65,13 @@
     0,
     4
   ],
-  "total_time": 40.05,
   "action_map": {
     "0": "UP",
     "1": "DOWN",
     "2": "LEFT",
     "3": "RIGHT",
     "4": "INTERACT"
-  }
+  },
+  "verified": true,
+  "description": "L1 solved via abstract BFS (26 actions, optimal). L2-L9 require AI mover modeling."
 }

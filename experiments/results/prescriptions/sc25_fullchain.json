@@ -10,10 +10,10 @@
   },
   "all_actions": [
     2,
-    3552,
-    3237,
-    3877,
-    3562,
+    3230,
+    3545,
+    3555,
+    3870,
     2,
     2,
     2,
@@ -31,10 +31,10 @@
     "L1": {
       "actions": [
         2,
-        3552,
-        3237,
-        3877,
-        3562,
+        3230,
+        3545,
+        3555,
+        3870,
         2,
         2,
         2,
@@ -48,8 +48,7 @@
         2,
         2
       ],
-      "n_actions": 17,
-      "description": "LEFT (face left), cast fireball (cross pattern), LEFT 12 to exit"
+      "n_actions": 17
     }
   }
 }

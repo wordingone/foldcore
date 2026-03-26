@@ -3,11 +3,10 @@
   "source": "analytical_solver",
   "type": "fullchain",
   "version_hash": "5849a774",
-  "total_actions": 32,
-  "max_level": 2,
+  "total_actions": 17,
+  "max_level": 1,
   "per_level": {
-    "L1": 17,
-    "L2": 15
+    "L1": 17
   },
   "all_actions": [
     3,
@@ -25,21 +24,6 @@
     3,
     3,
     3,
-    3,
-    3,
-    2,
-    2,
-    4,
-    2,
-    2,
-    2,
-    2,
-    1,
-    1,
-    4,
-    0,
-    0,
-    0,
     3,
     3
   ],
@@ -64,29 +48,7 @@
         3,
         3
       ],
-      "n_actions": 17,
-      "description": "RIGHT 4 to trigger, RECORD, DOWN 7 (clone holds trigger, claw retracts), RIGHT 5 to goal"
-    },
-    "L2": {
-      "actions": [
-        2,
-        2,
-        4,
-        2,
-        2,
-        2,
-        2,
-        1,
-        1,
-        4,
-        0,
-        0,
-        0,
-        3,
-        3
-      ],
-      "n_actions": 15,
-      "description": "LEFT 2 to trigger, RECORD, LEFT 4 DOWN 2 to trigger 2, RECORD, UP 3 RIGHT 2 to goal"
+      "n_actions": 17
     }
   }
 }

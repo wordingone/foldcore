@@ -2,6 +2,7 @@
   "game": "dc22",
   "source": "analytical_solver",
   "type": "fullchain",
+  "version_hash": "4c9bff3e",
   "total_actions": 64,
   "max_level": 2,
   "per_level": {
