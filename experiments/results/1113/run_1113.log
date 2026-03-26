@@ -1,0 +1,39 @@
+======================================================================
+STEP 1113 — RandomExploreReactiveSubstrate
+Substrate: B:\M\the-search\experiments\sub1113_defense_v37.py
+======================================================================
+2026-03-25 22:13:15 | INFO | Successfully fetched 25 environment(s) from API
+[PRISM] Selected 3 games from 25 available (seed=48672)
+  GAME_2=***  GAME_3=***  GAME_4=***
+Budget: 10000 steps/game, 10 seeds, randomized order
+
+2026-03-25 22:13:16 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-25 22:13:16 | INFO | Created new scorecard: b155f060-539e-4e83-885c-188de8f511a2
+2026-03-25 22:13:16 | INFO | Successfully fetched metadata for game lp85
+2026-03-25 22:13:16 | INFO | Successfully loaded game class Lp85 from environment_files\lp85\305b61c3\lp85.py
+2026-03-25 22:13:31 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-25 22:13:31 | INFO | Created new scorecard: 5975e1e7-49e3-4351-b8c6-49bcdaee2096
+2026-03-25 22:13:31 | INFO | Successfully fetched metadata for game wa30
+2026-03-25 22:13:31 | INFO | Successfully loaded game class Wa30 from environment_files\wa30\ee6fef47\wa30.py
+2026-03-25 22:13:54 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-25 22:13:54 | INFO | Created new scorecard: a072f8ea-9131-48e3-8e1d-3c2221ed9b5a
+2026-03-25 22:13:54 | INFO | Successfully fetched metadata for game tu93
+2026-03-25 22:13:54 | INFO | Successfully loaded game class Tu93 from environment_files\tu93\2b534c15\tu93.py
+
+======================================================================
+STEP 1113 RESULTS:
+  GAME_1: L1=100%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=0.1s
+  GAME_2: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=9.8s
+  GAME_3: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=12.9s
+  GAME_4: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=12.6s
+  GAME_5: L1=100%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=0.1s
+  Chain score: 2/5
+  ARC Prize score: 0.0000 (human_baseline=50 actions/level)
+  ** DEBATE FAIL: one or more games at 0% L1 (Jun directive 2026-03-25) **
+  ** WIN CONDITION NOT MET: 100% ALL LEVELS required on ALL games **
+  Chain kill verdict: PASS
+    GAME_1: ++0% (100% → 100%)
+    GAME_5: ++0% (100% → 100%)
+  Results: [blind]
+  Elapsed: 366.5s
+STEP 1113 DONE
