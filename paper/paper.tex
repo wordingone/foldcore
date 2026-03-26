@@ -1787,6 +1787,46 @@ fully characterize the dynamics vertex of the architecture triangle
 (Prop 22). The next breakthrough requires a mechanism class outside
 prediction-error exploration.
 
+\textbf{(o) Debate v3 Sprint: Simplicity and ARC-AGI-3 (Proposition 32,
+Steps 1082-1094, 12 experiments).} Two architecturally distinct substrates
+tested on ARC-AGI-3 games with action efficiency scoring (efficiency vs
+human baseline, squared). Key findings:
+
+\begin{enumerate}
+\item \textbf{Both sides solve 1/3 ARC games at L1 (100\% seeds).} Defense
+(reactive switching, zero parameters): ARC=0.30. Prosecution (forward model
+action selection in alpha-weighted space): ARC=0.005. Defense 66$\times$
+more action-efficient.
+
+\item \textbf{Proposition 32 (Simplicity in R2-constrained learning):}
+In the R2-constrained setting (no optimizer), adding learnable parameters
+to a working architecture degrades performance. Observed across 2
+architecturally distinct families (n=5 experiments: defense v22-v25 killed,
+prosecution v21 killed). \emph{Mechanism:} Without SGD, parameter updates
+are driven by noisy prediction error via outer product rules. Each additional
+parameter accumulates noise at rate $O(\sqrt{T} \cdot \|\mathbf{n}\|)$ vs
+signal at rate $O(T \cdot \|\mathbf{s}\|)$, but with $\text{SNR} \ll 1$ in
+high-dimensional observation spaces, accumulated noise dominates action
+selection before signal reaches actionable levels. Zero-parameter reactive
+comparison avoids this entirely. \emph{Prior work:} Simplicity bias in
+neural networks is well-studied (Shah et al., NeurIPS 2020; Huh et al.,
+2024), but always with gradient-based optimizers that can partially
+compensate. No prior work addresses simplicity in the no-optimizer (R2)
+setting. \emph{Status:} PROVISIONAL (n=5, post-hoc explanation untested).
+
+\item \textbf{Forward model action selection (prosecution, Steps 1092-1094):}
+$W_{\text{fwd}}$ (256$\times$263) predicts next encoding per action in
+alpha-weighted space. Action = $\arg\max_a \|W_{\text{fwd}}
+[\text{enc}_\alpha, \mathbf{1}_a] - \text{enc}_\alpha\|$. Extended warmup
+(100 random steps) required for reliable W\_fwd training (3/10 $\to$ 10/10
+seeds). This is R1-compliant ICM (Pathak et al., 2017) without neural
+networks or SGD.
+
+\item \textbf{0\% wall persists on $\sim$2/3 games.} Mode 1 (near-inert) =
+noise. Mode 2 (responsive, oscillating) = the open problem. Both
+architectures fail identically on Mode 2 games.
+\end{enumerate}
+
 \subsection{Author Attribution and
 Disclosure}\label{author-attribution-and-disclosure}
 
