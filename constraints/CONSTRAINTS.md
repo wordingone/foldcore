@@ -117,14 +117,12 @@ The task is interactive (unknown environment, no separate training phase). Any s
 
 *These were labeled "Universal" but are contradicted by non-codebook evidence. They are codebook/cosine-specific properties, not task requirements.*
 
-| Former # | Constraint | Why reclassified | Contradicting evidence |
+| Former # | Constraint | Status | Note |
 |---|---|---|---|
-| — | ~~U1 reclassification REVERTED~~ | **U1 reworded and remains Validated Universal.** Adversarial review: the principle (no separate learn/infer modes) holds across all families. The original wording ("one operation") was too strong — read/write ARE decomposable sub-steps in LSH. But no family has separate training/inference modes. Reworded to capture the principle, not the mechanism. | Corrected 2026-03-18 session 2. |
-| ~~U6~~ → S23 | Similarity-based discovery finds only Lipschitz functions | This is a mathematical property of k-NN, which is codebook-specific. LSH doesn't use k-NN. Graph uses edge counts. Note: LSH's locality-preserving hash IS a form of local similarity (nearby observations hash together with probability proportional to angular similarity). The specific theorem doesn't apply, but the underlying concern (local methods miss global structure) may resurface for LSH. | Irrelevant to non-codebook families as theorem; underlying concern persists. |
-| — | ~~U16 reclassification REVERTED~~ | **U16 remains Validated Universal.** Adversarial review (Hart) confirmed via code review: Step 453 LSH uses centered_enc explicitly (x - x.mean() before hashing). Centering is load-bearing for TWO distinct families: codebook (prevents cosine saturation, Step 414) AND LSH (prevents hash concentration, Step 453). Different failure modes, same mechanism required. Original reclassification was factually wrong — introduced bias by not verifying code before claiming "no centering." | Corrected 2026-03-18 session 2. |
-| — | ~~U17 reclassification REVERTED~~ | **U17 reworded and remains Validated Universal.** Adversarial review: LSH's edge growth IS unbounded information accumulation. LSH doesn't violate U17 — it SATISFIES it via edge growth instead of entry growth. The principle holds: exploration requires unbounded accumulation of some kind. | Corrected 2026-03-18 session 2. |
-| ~~U23~~ → S26 | Distributed updates destabilize similarity structure | Specific to codebook Gram matrix structure. Updating all entries pushes them toward each observation. Neural networks use distributed updates (backprop) successfully. Edge-based systems don't have this problem. | Codebook-specific mechanism. Step 418 series. |
-| — | ~~U25 reclassification REVERTED to Provisional~~ | **U25 moved to Provisional (not S-class).** Adversarial review: edge-count RATIOS do converge (law of large numbers). Local convergence (per-cell) is qualitatively slower than global convergence (codebook scores), but with fixed cell count, local convergence eventually exhausts all cells. U25 and U17 are COUPLED: edge growth postpones convergence, but only cell growth prevents it indefinitely. | See Provisional U25 entry for full framing. |
+| U1, U16, U17 | (attempted reclassification) | **REVERTED** — all remain Validated Universal | Hart adversarial review (2026-03-18). U1 reworded. U16/U17 confirmed by code review. |
+| U25 | (attempted reclassification) | **REVERTED to Provisional** | Edge-count ratios converge (LLN). Coupled to U17. |
+| ~~U6~~ → S23 | Lipschitz discovery | S-class confirmed | k-NN property, codebook-specific. |
+| ~~U23~~ → S26 | Distributed updates destabilize | S-class confirmed | Codebook Gram matrix specific. Step 418 series. |
 
 ---
 
