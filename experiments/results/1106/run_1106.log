@@ -1,0 +1,40 @@
+======================================================================
+STEP 1106 — LevelTransitionForwardModelSubstrate
+Substrate: B:\M\the-search\experiments\sub1106_prosecution_v27.py
+======================================================================
+2026-03-25 21:32:37 | INFO | Successfully fetched 25 environment(s) from API
+[PRISM] Selected 3 games from 25 available (seed=92461)
+  GAME_2=***  GAME_3=***  GAME_4=***
+Budget: 10000 steps/game, 10 seeds, randomized order
+
+2026-03-25 21:32:37 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-25 21:32:37 | INFO | Created new scorecard: 0cbb23c1-2a16-4fec-88f9-d8552eb07faf
+2026-03-25 21:32:37 | INFO | Successfully fetched metadata for game wa30
+2026-03-25 21:32:37 | INFO | Successfully loaded game class Wa30 from environment_files\wa30\ee6fef47\wa30.py
+2026-03-25 21:32:50 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-25 21:32:50 | INFO | Created new scorecard: 18091087-1e9f-4860-8d9b-2dd184ee8cf5
+2026-03-25 21:32:50 | INFO | Successfully fetched metadata for game ft09
+2026-03-25 21:32:50 | INFO | Successfully loaded game class Ft09 from environment_files\ft09\0d8bbf25\ft09.py
+2026-03-25 21:33:04 | INFO | Successfully fetched 25 environment(s) from API
+2026-03-25 21:33:04 | INFO | Created new scorecard: 26e7f42c-d2e7-49c4-b0d0-0745a7005b23
+2026-03-25 21:33:04 | INFO | Successfully fetched metadata for game re86
+2026-03-25 21:33:04 | INFO | Successfully loaded game class Re86 from environment_files\re86\4e57566e\re86.py
+
+======================================================================
+STEP 1106 RESULTS:
+  GAME_1: L1=100%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=0.0s
+  GAME_2: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=12.9s
+  GAME_3: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=12.3s
+  GAME_4: L1=0%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=11.3s
+  GAME_5: L1=100%  SOLVED=0%  max_lvl=0  ARC=0.0000  avg_t=0.0s
+  Chain score: 2/5
+  ARC Prize score: 0.0000 (human_baseline=50 actions/level)
+  ** DEBATE FAIL: one or more games at 0% L1 (Jun directive 2026-03-25) **
+  ** WIN CONDITION NOT MET: 100% ALL LEVELS required on ALL games **
+  Chain kill verdict: PASS
+    GAME_1: ++0% (100% → 100%)
+    GAME_4: ++0% (0% → 0%)
+    GAME_5: ++0% (100% → 100%)
+  Results: [blind]
+  Elapsed: 373.2s
+STEP 1106 DONE
