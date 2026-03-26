@@ -1,0 +1,21 @@
+{
+  "game": "tn36",
+  "source": "analytical_solver (solve_6games_fullchain)",
+  "type": "analytical",
+  "total_actions": 0,
+  "max_level": 0,
+  "n_levels": 7,
+  "per_level": {},
+  "baseline": [
+    23,
+    22,
+    26,
+    37,
+    25,
+    56,
+    61
+  ],
+  "all_actions": [],
+  "raw_actions_repr": [],
+  "elapsed": 194.89
+}
