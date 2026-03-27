@@ -1,21 +1,52 @@
 {
   "game": "ar25",
-  "source": "solve_6games_fullchain (stub - needs deeper analysis)",
-  "type": "analytical",
-  "total_actions": 0,
-  "max_level": 0,
-  "n_levels": 8,
-  "per_level": {},
-  "baseline": [
-    17,
-    22,
-    103,
-    29,
-    29,
-    159,
-    152,
-    66
+  "total_levels": 8,
+  "method": "engine_bfs",
+  "levels": {
+    "L1": {
+      "status": "SOLVED",
+      "actions": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "length": 15,
+      "time": 62.78
+    },
+    "L2": {
+      "status": "UNSOLVED",
+      "time": 121.01
+    }
+  },
+  "full_sequence": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    2,
+    2,
+    2,
+    2,
+    2
   ],
-  "all_actions": [],
-  "notes": "Complex game mechanics require game-specific solver. BFS exhaustive search completed but level 1 not solved within budget."
+  "max_level_solved": 1,
+  "total_actions": 15
 }
