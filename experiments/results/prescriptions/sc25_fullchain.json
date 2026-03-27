@@ -1,54 +1,53 @@
 {
   "game": "sc25",
-  "source": "analytical_solver",
+  "source": "abstract_model_solver",
   "type": "fullchain",
   "version_hash": "f9b21a2f",
   "total_levels": 6,
-  "max_level_solved": 1,
-  "total_actions": 17,
-  "per_level": {
-    "L1": 17
-  },
-  "all_actions": [2, 3230, 3545, 3555, 3870, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
   "levels": {
     "L1": {
       "status": "SOLVED",
-      "actions": [2, 3230, 3545, 3555, 3870, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-      "n_actions": 17,
-      "method": "analytical",
-      "description": "LEFT, cast spell (fpokrvgln=teleport: click 4 slots in cross pattern), LEFT x12 to exit."
-    },
-    "L2": {
-      "status": "UNSOLVED",
-      "blocker": "BFS branching factor 13 (4 kb + 9 spell slots) too wide for replay-from-scratch (108/s). Needs abstract model with spell+position state.",
-      "abstract_model": {
-        "state": "(player_pos, player_scale, spell_slots_3x3, door_states, actions_taken)",
-        "spells": {
-          "jzukcpajs": {"pattern": "[[1,1,0],[0,1,0],[0,0,0]]", "effect": "teleport"},
-          "fpokrvgln": {"pattern": "[[0,1,0],[1,0,1],[0,1,0]]", "effect": "teleport"},
-          "aprnrzeyj": {"pattern": "[[0,1,0],[0,1,0],[0,1,0]]", "effect": "fireball"}
-        },
-        "step_size": "2 (scale=1) or 4 (scale=2)",
-        "spell_slot_clicks": "3x3 grid at display positions (25,50)-(35,60) with 5px spacing"
-      }
+      "actions": [
+        2,
+        3230,
+        3545,
+        3555,
+        3870,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "n_actions": 17
     }
   },
-  "action_map": {
-    "0": "UP",
-    "1": "DOWN",
-    "2": "LEFT",
-    "3": "RIGHT",
-    "clicks": "y*64+x (e.g., 3230 = click at display (30,50))"
-  },
-  "spell_slot_positions": {
-    "(0,0)": "click(25,50)=3225",
-    "(0,1)": "click(30,50)=3230",
-    "(0,2)": "click(35,50)=3235",
-    "(1,0)": "click(25,55)=3545",
-    "(1,1)": "click(30,55)=3550",
-    "(1,2)": "click(35,55)=3555",
-    "(2,0)": "click(25,60)=3865",
-    "(2,1)": "click(30,60)=3870",
-    "(2,2)": "click(35,60)=3875"
-  }
+  "all_actions": [
+    2,
+    3230,
+    3545,
+    3555,
+    3870,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+  ],
+  "max_level_solved": 1,
+  "total_actions": 17
 }

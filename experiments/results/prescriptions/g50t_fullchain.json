@@ -1,39 +1,53 @@
 {
   "game": "g50t",
-  "source": "analytical_solver",
+  "source": "abstract_model_solver",
   "type": "fullchain",
   "version_hash": "5849a774",
   "total_levels": 7,
-  "max_level_solved": 1,
-  "total_actions": 17,
-  "per_level": {
-    "L1": 17
-  },
-  "all_actions": [3, 3, 3, 3, 4, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3],
   "levels": {
     "L1": {
       "status": "SOLVED",
-      "actions": [3, 3, 3, 3, 4, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3],
-      "n_actions": 17,
-      "method": "analytical",
-      "description": "RIGHT x4, RECORD, DOWN x7, RIGHT x5. Clone replays path to activate trigger."
-    },
-    "L2": {
-      "status": "UNSOLVED",
-      "blocker": "BFS replay-from-scratch too slow (46/s). Needs abstract model with clone+trigger state. 5 actions, solution depth >46.",
-      "abstract_model": {
-        "state": "(player_pos, clone_paths, clone_positions, trigger_states, claw_states)",
-        "step_size": 6,
-        "grid": "10x10 approx",
-        "mechanics": "RECORD saves path and creates clone. Clone replays in lockstep. Triggers retract claws when occupied."
-      }
+      "actions": [
+        3,
+        3,
+        3,
+        3,
+        4,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "n_actions": 17
     }
   },
-  "action_map": {
-    "0": "UP",
-    "1": "DOWN",
-    "2": "LEFT",
-    "3": "RIGHT",
-    "4": "RECORD"
-  }
+  "all_actions": [
+    3,
+    3,
+    3,
+    3,
+    4,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    3,
+    3,
+    3,
+    3,
+    3
+  ],
+  "max_level_solved": 1,
+  "total_actions": 17
 }

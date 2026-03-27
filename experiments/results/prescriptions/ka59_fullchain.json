@@ -4,36 +4,13 @@
   "type": "fullchain",
   "version_hash": "9f096b4a",
   "total_levels": 7,
-  "max_level_solved": 0,
-  "total_actions": 0,
-  "per_level": {},
-  "all_actions": [],
   "levels": {
     "L1": {
       "status": "UNSOLVED",
-      "blocker": "Old L1 solution (54 actions) no longer valid on current game version. BFS reached depth 29 in 180s but solution is deeper. Random search (50K attempts) failed. Need abstract model with pixel-level wall collision.",
-      "abstract_model": {
-        "state": "(active_block_idx, block_positions[], goal_fill_states)",
-        "step_size": 3,
-        "mechanics": "Active block moves UP/DOWN/LEFT/RIGHT. Blocked by walls (divgcilurm) and gulches (vwjqkxkyxm). Colliding with other blocks pushes them. Pushed blocks only blocked by walls (NOT gulches). Click switches active block. Win = all goals (rktpmjcpkt) contain blocks.",
-        "key_mechanic": "Pushed blocks slide through gulches. Active block cannot cross gulches. Must use pushing to send blocks across gaps."
-      },
-      "level_data": {
-        "grid": "(45, 45)",
-        "step_counter": 100,
-        "blocks": [[9,21,3,3], [18,21,3,3]],
-        "goals": [[2,23,5,5], [35,17,5,5]],
-        "gulches": [[24,12,6,21]],
-        "wall_shape": "Two chambers (x=0-14 and x=27-44) connected by corridor at y=21-23. Gulch at x=24-29 blocks corridor for active block."
-      }
+      "time": 0.17
     }
   },
-  "action_map": {
-    "0": "UP",
-    "1": "DOWN",
-    "2": "LEFT",
-    "3": "RIGHT",
-    "clicks": "y*64+x for block switching"
-  },
-  "notes": "L1 requires ~54 actions with block switching. Abstract model confirmed 2 chambers separated by gulch. Pushed blocks cross gulch but active cannot. All 7 levels have similar push mechanics with increasing complexity (more blocks, goals, explosives)."
+  "all_actions": [],
+  "max_level_solved": 0,
+  "total_actions": 0
 }

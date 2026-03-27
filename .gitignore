@@ -42,3 +42,6 @@ paper/compress_paper.py
 # Debate (internal process, not for public repo)
 experiments/debate_corpus/
 experiments/debate_search_kill.md
+
+# Internal analysis (not for public repo)
+SEARCH_ANALYSIS.md
