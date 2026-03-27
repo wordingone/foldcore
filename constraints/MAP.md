@@ -1,6 +1,6 @@
 # Constraint Map
 
-*Revised 2026-03-23. 937+ experiments, 12 architecture families, 2 bans (codebook Step 416, graph post-777). Renamed from CONSTRAINTS.md.*
+*Revised 2026-03-27. 1252+ experiments, 16 architecture families, all bans lifted (Jun, 2026-03-25). R3 solved by composition (Step 1251). Renamed from CONSTRAINTS.md.*
 
 **Classification:** T = Task Requirement, U = Validated Universal (2+ families), P = Provisional (1 family), S = Substrate-specific (codebook/LVQ), I = Intent (capability gap), E = Engineering (not carried forward), PB = Post-Ban.
 
@@ -169,26 +169,27 @@ Interactive (unknown environment, no training phase). Must learn online.
 
 ---
 
-## State of the Search (937 experiments, 12 families, 2 bans)
+## State of the Search (1251 experiments, 16 families, bans lifted)
 
 ### Solved
 
-- **Navigation mechanism:** Graph + edge-count argmin. Architecture-independent. Three mapping properties predict success 100%. **POST-BAN: BANNED.**
-- **All 3 games multi-level:** LS20 L1-L3 5/5, FT09 6 levels 75 clicks, VC33 7 levels 176 clicks. All via source analysis (prescribed). These are R3's 16 test cases.
+- **Navigation mechanism:** Graph + edge-count argmin. Architecture-independent. Three mapping properties predict success 100%. Bans lifted (2026-03-25).
+- **All 3 preview games multi-level:** LS20 L1-L3 5/5, FT09 6 levels 75 clicks, VC33 7 levels 176 clicks. All via source analysis (prescribed). 10/25 games fully solved by analytical solvers.
 - **Recode achieves l_pi:** LSH k=16 + self-refinement = 5/5 (Step 542). K confound (Step 589).
 - **674+running-mean = 20/20** on LS20 and FT09. Centering ~75% of gain. L1 is infrastructure, not a result (banned as metric Step 713).
+- **R3 (self-modification) — SOLVED BY COMPOSITION (Step 1251).** 7 cross-family components (centered encoding, novelty growth, transition detection, argmin, prediction-error attention, recurrent state, self-observation) composed into one substrate produce genuine self-modification of the obs→representation mapping. Jacobian ∂(attended)/∂obs differs between fresh and experienced substrate (0.05-0.09 vs 0.026 baseline). 100/100 passes across 10 games, both sequential and parallel wirings. Component-level finding, not wiring-dependent. **R3 was always achievable — the 0/1250 failure was a composition failure, not an R3 failure.**
 
 ### Open
 
-1. **R3 (self-modification).** 0/4 calibration targets pass R3 (Table 1, Step 777). R3_cf: 674 warm HURTS (cold 4054 vs warm 2899, p<0.0001, Step 776). Graph = exploration bookkeeping, not knowledge. Post-ban: R3_static passes 13/24 substrates (thinner frozen frame). Self-directed attention (D1+D3) = R3_dynamic=1.0, L1=1105 but hurts CIFAR and R3_cf FAIL. Argmin purity confirmed (Step 759, n=20). **Graph ban + codebook ban = both known mechanisms banned. Phase 3.**
+1. **R3→action bridge.** R3 works (Step 1251) but argmin ignores the modified representation. I3 identical for composed substrate and argmin-alone (0.67 both). L1=0% on 8/10 games for both. The substrate modifies its world model; the action selector throws it away. **The one missing component: a state-conditioned action selector that reads from h/alpha/attended representation.** 200+ debate experiments enumerate which bridges DON'T work (alpha attention, forward models, directional attention, state-conditioned rankings, MI+attention, pixel scanning, EMA, empowerment, anti-correlated pairs, softmax concentration).
 
-2. **R1-compliant classification.** LSH 36.2% self-labels (Step 573). Far below supervised. Unsolved.
+2. **I1 (state-distinguishing encoding).** Encoding self-modifies (R3) but does NOT produce distinct representations for analytically-distinct game states. I1=0.00 across 100 runs, 10 games (Step 1251). The encoding changes HOW it processes but not in a way that distinguishes states. Next: contrastive/predictive encodings that are R1-R6 compatible.
 
-3. **Purposeful exploration (I6, I9).** 6 targeted strategies + 12 signal experiments = argmin unbeatable within framework. L2 requires fundamentally different mechanism. U28 confirmed LSH-only.
+3. **R1-compliant classification.** LSH 36.2% self-labels (Step 573). Far below supervised. Unsolved.
 
-4. **Population-level R3.** GRN killed (Step 607). Needs diverse encoding candidates.
+4. **Purposeful exploration (I6, I9).** Argmin unbeatable within current framework. L2 requires different mechanism. Coupled to R3→action bridge — a state-conditioned selector may provide purposeful exploration as a byproduct.
 
-5. **LS20 L4+.** Blocked at L3 transition (puq_wall_set, Steps 611-612).
+5. **L2+ across all games.** L2 reached twice (Steps 1074, 1211), never reproduced. 0/1251 substrates reliably reach L2. Blocked by open items 1+2.
 
 ### SOTA Baselines (Steps 760-766, 917-920)
 
