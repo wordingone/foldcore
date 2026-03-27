@@ -2,7 +2,7 @@
   "game": "r11l",
   "version": "aa269680",
   "total_levels": 6,
-  "method": "bfs_set_level + random_search",
+  "method": "analytical_greedy + bfs",
   "levels": {
     "L1": {
       "status": "SOLVED",
@@ -63,28 +63,40 @@
         2,
         1541
       ],
-      "length": 55,
-      "method": "existing"
+      "length": 55
     },
     "L2": {
-      "status": "UNSOLVED",
-      "time": 305.34
+      "status": "SOLVED",
+      "actions": [
+        3133,
+        1208,
+        2292,
+        1222,
+        1359,
+        2863,
+        632,
+        3496,
+        408,
+        3510
+      ],
+      "length": 10,
+      "time": 0.12
     },
     "L3": {
       "status": "UNSOLVED",
-      "unique_actions": 157
+      "time": 240.05
     },
     "L4": {
       "status": "UNSOLVED",
-      "unique_actions": 158
+      "time": 240.02
     },
     "L5": {
       "status": "UNSOLVED",
-      "unique_actions": 209
+      "time": 4.56
     },
     "L6": {
       "status": "UNSOLVED",
-      "unique_actions": 207
+      "time": 4.63
     }
   },
   "full_sequence": [
@@ -142,8 +154,18 @@
     4020,
     690,
     2,
-    1541
+    1541,
+    3133,
+    1208,
+    2292,
+    1222,
+    1359,
+    2863,
+    632,
+    3496,
+    408,
+    3510
   ],
-  "max_level_solved": 1,
-  "total_actions": 55
+  "max_level_solved": 2,
+  "total_actions": 65
 }

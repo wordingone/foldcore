@@ -20,8 +20,8 @@
       "status": "UNSOLVED",
       "info": {
         "timeout": true,
-        "depth": 6,
-        "explored": 26892
+        "depth": 57,
+        "explored": 13090
       }
     }
   },
@@ -35,7 +35,7 @@
     2033,
     2801
   ],
-  "method": "dfs_undo",
+  "method": "undo_dfs_v2",
   "max_level_solved": 1,
   "total_actions": 8
 }
