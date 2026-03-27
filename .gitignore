@@ -45,3 +45,8 @@ experiments/debate_search_kill.md
 
 # Internal analysis (not for public repo)
 SEARCH_ANALYSIS.md
+
+# Prescription studies (working artifacts + results — operational, not for public repo)
+experiments/solvers/
+experiments/results/prescriptions/
+experiments/solve_*.py
