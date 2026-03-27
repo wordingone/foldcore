@@ -1,33 +1,10 @@
 {
   "game": "ar25",
   "total_levels": 8,
-  "method": "engine_bfs",
+  "method": "fast_bfs_deepcopy",
   "levels": {
-    "L1": {
-      "status": "SOLVED",
-      "actions": [
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        2,
-        2,
-        2,
-        2,
-        2
-      ],
-      "length": 15,
-      "time": 62.78
-    },
     "L2": {
-      "status": "UNSOLVED",
-      "time": 121.01
+      "status": "NO_ACTIONS"
     }
   },
   "full_sequence": [

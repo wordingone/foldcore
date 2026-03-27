@@ -1,95 +1,11 @@
 {
   "game": "s5i5",
-  "version": "a48e4b1d",
   "total_levels": 8,
-  "method": "bfs_set_level + random_search",
+  "method": "engine_bfs",
   "levels": {
-    "L1": {
-      "status": "SOLVED",
-      "actions": [
-        2847,
-        2847,
-        2847,
-        2847,
-        2847,
-        2847,
-        1396,
-        1396,
-        1396,
-        1396,
-        1396,
-        1396,
-        1396
-      ],
-      "length": 13,
-      "method": "analytical"
-    },
-    "L2": {
-      "status": "SOLVED",
-      "actions": [
-        3473,
-        3473,
-        3473,
-        3473,
-        3473,
-        3473,
-        3473,
-        3473,
-        3489,
-        3489,
-        3489,
-        3489,
-        3489,
-        3489,
-        3489,
-        3489,
-        3473,
-        3503,
-        3503,
-        3503,
-        3519,
-        3519,
-        3519,
-        3519,
-        3519,
-        3519
-      ],
-      "length": 26,
-      "method": "bfs",
-      "unique_actions": 4,
-      "states_explored": 21096
-    },
     "L3": {
       "status": "UNSOLVED",
-      "unique_actions": 8,
-      "bfs_depth_reached": 11,
-      "states_explored": 85328
-    },
-    "L4": {
-      "status": "SOLVED_INDEPENDENT",
-      "actions": [
-        3367
-      ],
-      "length": 1,
-      "method": "random_search",
-      "unique_actions": 6,
-      "note": "not reachable in chain without L3"
-    },
-    "L5": {
-      "status": "UNSOLVED",
-      "unique_actions": 6
-    },
-    "L6": {
-      "status": "UNSOLVED",
-      "unique_actions": 9
-    },
-    "L7": {
-      "status": "UNSOLVED",
-      "unique_actions": 11
-    },
-    "L8": {
-      "status": "UNSOLVED",
-      "unique_actions": 9
+      "time": 305.01
     }
   },
   "full_sequence": [
@@ -133,12 +49,6 @@
     3519,
     3519
   ],
-  "max_level_solved": 2,
-  "max_level_solved_chain": 2,
-  "total_actions": 39,
-  "independent_solves": {
-    "L4": [
-      3367
-    ]
-  }
+  "max_level_solved": 0,
+  "total_actions": 39
 }

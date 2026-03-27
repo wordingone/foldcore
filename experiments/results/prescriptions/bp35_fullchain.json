@@ -3,76 +3,138 @@
   "version": "0a0ad940",
   "method": "abstract_bfs_gravity",
   "max_level": 0,
-  "total_actions": 14,
+  "total_actions": 42,
   "levels": {
     "L1": {
       "status": "UNSOLVED",
-      "time": 0.0
+      "time": 73.15
     },
     "L2": {
       "status": "UNSOLVED",
-      "time": 130.65
+      "time": 216.08
     },
     "L3": {
       "status": "UNSOLVED",
-      "time": 0.0
+      "time": 128.61
     },
     "L4": {
       "status": "SOLVED",
       "actions": [
         2,
-        6004,
-        8284,
+        4084,
+        3676,
+        4084,
+        4060,
         3,
         3,
-        5620,
-        5992,
+        3292,
         3,
         3,
-        5992,
+        3676,
         2,
         2,
         2,
-        5992
+        220
       ],
-      "length": 14,
-      "time": 0.31
+      "length": 15,
+      "time": 0.65
     },
     "L5": {
-      "status": "UNSOLVED",
-      "time": 0.0
+      "status": "SOLVED",
+      "actions": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        2176,
+        2548,
+        2554,
+        2,
+        2,
+        2,
+        2
+      ],
+      "length": 13,
+      "time": 2.27
     },
     "L6": {
-      "status": "UNSOLVED",
-      "time": 0.0
+      "status": "SOLVED",
+      "actions": [
+        3,
+        3,
+        3,
+        4084,
+        4078,
+        4066,
+        3,
+        3,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "length": 14,
+      "time": 1.79
     },
     "L7": {
       "status": "UNSOLVED",
-      "time": 179.89
+      "time": 268.36
     },
     "L8": {
       "status": "UNSOLVED",
-      "time": 1.82
+      "time": 2.97
     },
     "L9": {
       "status": "UNSOLVED",
-      "time": 20.73
+      "time": 32.49
     }
   },
   "all_actions": [
     2,
-    6004,
-    8284,
+    4084,
+    3676,
+    4084,
+    4060,
     3,
     3,
-    5620,
-    5992,
+    3292,
     3,
     3,
-    5992,
+    3676,
     2,
     2,
     2,
-    5992
+    220,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    2176,
+    2548,
+    2554,
+    2,
+    2,
+    2,
+    2,
+    3,
+    3,
+    3,
+    4084,
+    4078,
+    4066,
+    3,
+    3,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
   ]
 }

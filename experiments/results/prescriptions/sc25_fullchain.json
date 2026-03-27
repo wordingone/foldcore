@@ -1,54 +1,9 @@
 {
   "game": "sc25",
-  "source": "analytical_solver",
+  "source": "engine_bfs_solver",
   "type": "fullchain",
-  "version_hash": "f9b21a2f",
-  "total_actions": 17,
-  "max_level": 1,
-  "per_level": {
-    "L1": 17
-  },
-  "all_actions": [
-    2,
-    3230,
-    3545,
-    3555,
-    3870,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2,
-    2
-  ],
-  "levels": {
-    "L1": {
-      "actions": [
-        2,
-        3230,
-        3545,
-        3555,
-        3870,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2
-      ],
-      "n_actions": 17
-    }
-  }
+  "total_levels": 6,
+  "levels": {},
+  "all_actions": [],
+  "max_level_solved": 0
 }
