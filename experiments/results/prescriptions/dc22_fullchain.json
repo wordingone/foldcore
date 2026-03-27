@@ -1,6 +1,6 @@
 {
   "game": "dc22",
-  "source": "bfs_solver",
+  "source": "analytical_solver + bfs_solver",
   "type": "fullchain",
   "total_actions": 64,
   "max_level": 2,
@@ -82,5 +82,6 @@
     0,
     0,
     0
-  ]
+  ],
+  "notes": "L1-L2 solved analytically. L3-L6 need maze analysis with button toggling."
 }
