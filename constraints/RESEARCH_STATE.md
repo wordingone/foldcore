@@ -37,10 +37,19 @@ raw pixels → avgpool4 → centered encoding (U16)
 **Current bottleneck:** R3 and SAL both pass simultaneously (Step 1258, first time in 1258 experiments). C25 post-recurrent on ext_enc provides R3 (Jacobian diff 0.049-0.055). Viability attention on enc-dims provides SAL (rho 0.21-0.49). LS20: both pass. VC33/SP80: SAL below threshold (sparse visits on 4103-action space make viability alpha flat). I3=0 on GPR (coverage broken). I1=0 (states not distinguished). L1=0 on all games with GPR.
 
 **Remaining gaps:**
-1. SAL on click games (VC33/SP80): viability alpha can't build spread with 2.4 visits/action in 10K steps
-2. I3: GPR breaks systematic coverage (argmin works but ignores encoding)
-3. I1: encoding doesn't distinguish game states regardless of attention mechanism
-4. L1: no composition with GPR reaches L1. Argmin reaches L1 but ignores R3.
+1. Bootstrap: viability alpha needs diverse exploration to build spread, needs spread to guide exploration. Proven: encoding CAN distinguish states (ARI=1.000 on VC33 control, Step 1259). The composition can't reach those states.
+2. SAL on click games: sparse visits (2.4/action at 10K steps) prevent viability alpha from building spread
+3. I3: GPR breaks systematic coverage. Argmin works but ignores encoding.
+4. L1: no composition with GPR reaches L1.
+
+**Step 1261 composition (current best):** Argmin warm-up → GPR transition when conc > 0.1. Combined attention (C25 * viability) post-recurrent on ext_enc.
+- LS20: R3=0.053, SAL=0.36 (both pass), transition at step 38 (fast)
+- VC33: L1 recovered (5/5 at step 2118), transition at step 6220, SAL=-0.16 (insufficient GPR phase)
+- SP80: never transitions (conc=0.055 at 10K, uniform action effects)
+
+**Game-type split:** Small action spaces (LS20, 7 actions): viability works, transition fast, R3+SAL pass. Large click spaces (VC33, 4103): L1 recovered via argmin warm-up, but GPR phase too short for SAL. Uniform-response games (SP80): viability can't differentiate actions, stays in argmin permanently.
+
+**Next question:** Does GPR-phase on LS20 (after step 38) reach L1? If yes, first game where encoding-informed selection navigates.
 
 ---
 
