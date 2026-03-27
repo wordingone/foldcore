@@ -1,90 +1,14 @@
 {
   "game": "bp35",
   "version": "0a0ad940",
-  "total_levels": 9,
-  "method": "bfs_set_level",
+  "method": "abstract_bfs_gravity",
+  "max_level_solved": 0,
+  "total_actions": 0,
   "levels": {
     "L1": {
-      "status": "SOLVED",
-      "actions": [
-        3,
-        3,
-        3,
-        3,
-        2097,
-        2463,
-        2,
-        2,
-        2,
-        2079,
-        2079,
-        3,
-        2085,
-        2,
-        2
-      ],
-      "length": 15,
-      "method": "analytical"
-    },
-    "L2": {
       "status": "UNSOLVED",
-      "unique_actions": 16,
-      "bfs_depth_reached": 4,
-      "states_explored": 34432,
-      "note": "gravity platformer, deep solutions"
-    },
-    "L3": {
-      "status": "UNSOLVED",
-      "unique_actions": 11
-    },
-    "L4": {
-      "status": "UNSOLVED",
-      "unique_actions": 4,
-      "bfs_depth_reached": 50,
-      "states_explored": 6008,
-      "note": "linear chain, >50 depth needed"
-    },
-    "L5": {
-      "status": "UNSOLVED",
-      "unique_actions": 12
-    },
-    "L6": {
-      "status": "UNSOLVED",
-      "unique_actions": 9
-    },
-    "L7": {
-      "status": "UNSOLVED",
-      "unique_actions": 22
-    },
-    "L8": {
-      "status": "UNSOLVED",
-      "unique_actions": 3,
-      "bfs_depth_reached": 50,
-      "states_explored": 1704,
-      "note": "linear chain, >50 depth needed"
-    },
-    "L9": {
-      "status": "UNSOLVED",
-      "unique_actions": 6
+      "time": 36.35
     }
   },
-  "full_sequence": [
-    3,
-    3,
-    3,
-    3,
-    2097,
-    2463,
-    2,
-    2,
-    2,
-    2079,
-    2079,
-    3,
-    2085,
-    2,
-    2
-  ],
-  "max_level_solved": 1,
-  "total_actions": 15
+  "all_actions": []
 }

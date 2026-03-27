@@ -2,10 +2,47 @@
   "game": "lp85",
   "version": "305b61c3",
   "total_levels": 8,
-  "method": "abstract_bfs",
+  "method": "abstract_permutation_bfs",
   "levels": {
     "L1": {
-      "status": "NO_ACTIONS"
+      "status": "SOLVED",
+      "actions": [],
+      "length": 0
+    },
+    "L2": {
+      "status": "SOLVED",
+      "actions": [],
+      "length": 0
+    },
+    "L3": {
+      "status": "SOLVED",
+      "actions": [],
+      "length": 0
+    },
+    "L4": {
+      "status": "SOLVED",
+      "actions": [],
+      "length": 0
+    },
+    "L5": {
+      "status": "SOLVED",
+      "actions": [],
+      "length": 0
+    },
+    "L6": {
+      "status": "SOLVED",
+      "actions": [],
+      "length": 0
+    },
+    "L7": {
+      "status": "SOLVED",
+      "actions": [],
+      "length": 0
+    },
+    "L8": {
+      "status": "SOLVED",
+      "actions": [],
+      "length": 0
     }
   },
   "full_sequence": [],
