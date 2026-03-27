@@ -2,13 +2,77 @@
   "game": "bp35",
   "version": "0a0ad940",
   "method": "abstract_bfs_gravity",
-  "max_level_solved": 0,
-  "total_actions": 0,
+  "max_level": 0,
+  "total_actions": 14,
   "levels": {
     "L1": {
       "status": "UNSOLVED",
-      "time": 36.35
+      "time": 0.0
+    },
+    "L2": {
+      "status": "UNSOLVED",
+      "time": 130.65
+    },
+    "L3": {
+      "status": "UNSOLVED",
+      "time": 0.0
+    },
+    "L4": {
+      "status": "SOLVED",
+      "actions": [
+        2,
+        6004,
+        8284,
+        3,
+        3,
+        5620,
+        5992,
+        3,
+        3,
+        5992,
+        2,
+        2,
+        2,
+        5992
+      ],
+      "length": 14,
+      "time": 0.31
+    },
+    "L5": {
+      "status": "UNSOLVED",
+      "time": 0.0
+    },
+    "L6": {
+      "status": "UNSOLVED",
+      "time": 0.0
+    },
+    "L7": {
+      "status": "UNSOLVED",
+      "time": 179.89
+    },
+    "L8": {
+      "status": "UNSOLVED",
+      "time": 1.82
+    },
+    "L9": {
+      "status": "UNSOLVED",
+      "time": 20.73
     }
   },
-  "all_actions": []
+  "all_actions": [
+    2,
+    6004,
+    8284,
+    3,
+    3,
+    5620,
+    5992,
+    3,
+    3,
+    5992,
+    2,
+    2,
+    2,
+    5992
+  ]
 }
