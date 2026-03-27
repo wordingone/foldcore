@@ -2,6 +2,8 @@
 Analytical solver for RE86 — all 8 levels.
 Each level: position cross/diamond/X-shaped sprites so that
 specific target pixel positions get the right colors.
+
+L4+ add color zones: sprites change color when entering zones.
 """
 import sys, json, os, time
 import numpy as np
@@ -11,276 +13,498 @@ logging.disable(logging.INFO)
 sys.path.insert(0, 'B:/M/the-search')
 import arc_agi
 from arcengine import GameAction, GameState
+from itertools import permutations, combinations
 
-STEP = 3  # ilmaurgzng = 3
+STEP = 3
 RESULTS_DIR = 'B:/M/the-search/experiments/results/prescriptions'
 
 
-def solve_level(game):
-    """
-    Solve one RE86 level analytically.
-    Handles both single-color-per-sprite and multi-sprite same-color cases.
-    Returns list of GameAction values, or None.
-    """
-    movable = game.current_level.get_sprites_by_tag("vfaeucgcyr")
+def get_sprite_color(sprite):
+    vals = sprite.pixels[(sprite.pixels != -1) & (sprite.pixels != 0)]
+    return int(vals[0]) if len(vals) > 0 else 0
+
+
+def is_active(sprite):
+    h, w = sprite.height // 2, sprite.width // 2
+    return int(sprite.pixels[h, w]) == 0
+
+
+def get_target_colors_and_points(game):
     targets = game.current_level.get_sprites_by_tag("vzuwsebntu")
-
     if not targets:
-        return None
-
-    target = targets[0]
-    tp = target.pixels
-
-    # Find target positions grouped by color
-    color_targets = {}
+        return {}
+    t = targets[0]
+    tp = t.pixels
+    ct = {}
     for r in range(tp.shape[0]):
         for c in range(tp.shape[1]):
             v = int(tp[r, c])
             if v != -1 and v != 4:
-                if v not in color_targets:
-                    color_targets[v] = []
-                color_targets[v].append((c, r))
-
-    # Group sprites by color
-    color_to_sprites = {}
-    for s in movable:
-        unique = np.unique(s.pixels[s.pixels != -1])
-        sprite_color = int([c for c in unique if c != 0][0]) if len([c for c in unique if c != 0]) > 0 else None
-        if sprite_color is not None:
-            if sprite_color not in color_to_sprites:
-                color_to_sprites[sprite_color] = []
-            color_to_sprites[sprite_color].append(s)
-
-    # For each color, find sprite positions that collectively cover all targets
-    sprite_solutions = {}  # sprite -> (target_x, target_y)
-
-    for color, target_pts in color_targets.items():
-        sprites_for_color = color_to_sprites.get(color, [])
-        if not sprites_for_color:
-            print(f'    WARNING: no sprite for color {color}')
-            continue
-
-        if len(sprites_for_color) == 1:
-            # Single sprite covers all targets
-            s = sprites_for_color[0]
-            valid = find_valid_position(s, target_pts, color)
-            if not valid:
-                print(f'    No single valid position for color {color}!')
-                return None
-            best = min(valid, key=lambda p: abs(p[0] - s.x) + abs(p[1] - s.y))
-            sprite_solutions[s.name] = (s, best, color)
-        else:
-            # Multiple sprites need to collectively cover all targets
-            result = solve_multi_sprite_covering(sprites_for_color, target_pts, color)
-            if result is None:
-                print(f'    Multi-sprite covering failed for color {color}!')
-                return None
-            for s, pos in result:
-                sprite_solutions[s.name] = (s, pos, color)
-
-    # Build action sequence
-    active_sprite = None
-    for s in movable:
-        h = s.height // 2
-        w = s.width // 2
-        if s.pixels[h, w] == 0:
-            active_sprite = s
-            break
-
-    if active_sprite is None:
-        return None
-
-    # Process sprites: active first, then others in order
-    to_process = [s for s in movable if s.name in sprite_solutions]
-    active_first = [s for s in to_process if s == active_sprite]
-    others = [s for s in to_process if s != active_sprite]
-    to_process = active_first + others
-
-    actions = []
-    current_active = active_sprite
-
-    for s in to_process:
-        _, (target_x, target_y), color = sprite_solutions[s.name]
-
-        # Switch to this sprite if not active
-        if s != current_active:
-            current_idx = movable.index(current_active)
-            target_idx = movable.index(s)
-            n_switches = (target_idx - current_idx) % len(movable)
-            if n_switches == 0:
-                n_switches = len(movable)
-            for _ in range(n_switches):
-                actions.append(GameAction.ACTION5)
-            current_active = s
-
-        # Move to target position
-        dx = target_x - s.x
-        dy = target_y - s.y
-
-        n_right = dx // STEP if dx > 0 else 0
-        n_left = -dx // STEP if dx < 0 else 0
-        n_down = dy // STEP if dy > 0 else 0
-        n_up = -dy // STEP if dy < 0 else 0
-
-        actions.extend([GameAction.ACTION4] * n_right)
-        actions.extend([GameAction.ACTION3] * n_left)
-        actions.extend([GameAction.ACTION2] * n_down)
-        actions.extend([GameAction.ACTION1] * n_up)
-
-    return actions
+                ct.setdefault(v, []).append((c + t.x, r + t.y))
+    return ct
 
 
-def solve_multi_sprite_covering(sprites, target_pts, color):
-    """
-    Given multiple sprites of the same color and target points,
-    find positions for each sprite that collectively cover all targets.
-    Returns list of (sprite, (sx, sy)) or None.
-    """
-    target_set = set(target_pts)
-    n_targets = len(target_set)
-    n_sprites = len(sprites)
-
-    # For each sprite, find which targets each valid position covers
-    sprite_coverages = []
-    for s in sprites:
-        coverages = []  # list of (position, set_of_covered_targets)
-        sx_cur, sy_cur = s.x, s.y
-
-        for sy in range(-s.height + 1, 64):
-            if (sy - sy_cur) % STEP != 0:
-                continue
-            for sx in range(-s.width + 1, 64):
-                if (sx - sx_cur) % STEP != 0:
-                    continue
-
-                cx = sx + s.width // 2
-                cy = sy + s.height // 2
-                if cx < 0 or cy < 0 or cx >= 64 or cy >= 64:
-                    continue
-
-                covered = set()
-                for tx, ty in target_set:
-                    row = ty - sy
-                    col = tx - sx
-                    if 0 <= row < s.height and 0 <= col < s.width:
-                        pixel = int(s.pixels[row, col])
-                        if pixel != -1 and (pixel == color or pixel == 0):
-                            covered.add((tx, ty))
-
-                if covered:
-                    dist = abs(sx - sx_cur) + abs(sy - sy_cur)
-                    coverages.append(((sx, sy), covered, dist))
-
-        sprite_coverages.append(coverages)
-
-    print(f'    Multi-sprite covering: {n_sprites} sprites, {n_targets} targets')
-    for i, covs in enumerate(sprite_coverages):
-        max_cover = max(len(c[1]) for c in covs) if covs else 0
-        print(f'      Sprite {i} ({sprites[i].name}): {len(covs)} positions, max_cover={max_cover}')
-
-    # Greedy set cover with backtracking
-    # For small n_sprites (2-4), try all combinations
-    if n_sprites <= 4:
-        return brute_force_cover(sprites, sprite_coverages, target_set)
-
-    return None
-
-
-def brute_force_cover(sprites, sprite_coverages, target_set):
-    """
-    Try all combinations of sprite positions to find minimum-cost covering.
-    """
-    n = len(sprites)
-    best = None
-    best_cost = float('inf')
-
-    # For efficiency, limit each sprite's candidate positions
-    # Keep only positions that cover at least 1 uncovered target
-    MAX_POSITIONS = 200
-
-    limited = []
-    for covs in sprite_coverages:
-        # Sort by coverage (desc) then distance (asc)
-        sorted_covs = sorted(covs, key=lambda c: (-len(c[1]), c[2]))[:MAX_POSITIONS]
-        limited.append(sorted_covs)
-
-    def search(sprite_idx, remaining, assignments, total_cost):
-        nonlocal best, best_cost
-
-        if not remaining:
-            if total_cost < best_cost:
-                best_cost = total_cost
-                best = list(assignments)
-            return
-
-        if sprite_idx >= n:
-            return
-
-        # Try each position for this sprite
-        for pos, covered, dist in limited[sprite_idx]:
-            new_remaining = remaining - covered
-            new_cost = total_cost + dist
-            if new_cost >= best_cost:
-                continue
-            assignments.append((sprites[sprite_idx], pos))
-            search(sprite_idx + 1, new_remaining, assignments, new_cost)
-            assignments.pop()
-
-        # Also try skipping this sprite (it stays in place)
-        search(sprite_idx + 1, remaining, assignments, total_cost)
-
-    search(0, target_set, [], 0)
-
-    return best
-
-
-def find_valid_position(sprite, target_pts, color):
-    """
-    Find all sprite positions where all target points fall on non-transparent, non-zero pixels.
-    Positions must be reachable (aligned to step size 3 from current position).
-    """
-    sx_cur, sy_cur = sprite.x, sprite.y
+def find_valid_positions(sprite, target_pts, ref_x, ref_y):
     valid = []
-
-    # Search space: sprite must be positioned so all targets are inside
-    # Canvas is 64x64, sprite can go off-edge (center must be in bounds)
-
     for sy in range(-sprite.height + 1, 64):
-        # Check alignment with step grid
+        if (sy - ref_y) % STEP != 0:
+            continue
+        for sx in range(-sprite.width + 1, 64):
+            if (sx - ref_x) % STEP != 0:
+                continue
+            cx, cy = sx + sprite.width // 2, sy + sprite.height // 2
+            if cx < 0 or cy < 0 or cx >= 64 or cy >= 64:
+                continue
+            ok = True
+            for tx, ty in target_pts:
+                row, col = ty - sy, tx - sx
+                if row < 0 or row >= sprite.height or col < 0 or col >= sprite.width:
+                    ok = False; break
+                if int(sprite.pixels[row, col]) == -1:
+                    ok = False; break
+            if ok:
+                valid.append((sx, sy))
+    return valid
+
+
+def find_covering_positions(sprite, target_pts, ref_x, ref_y):
+    """Find positions and which targets each covers."""
+    results = []
+    target_set = set(target_pts)
+    for sy in range(-sprite.height + 1, 64):
+        if (sy - ref_y) % STEP != 0:
+            continue
+        for sx in range(-sprite.width + 1, 64):
+            if (sx - ref_x) % STEP != 0:
+                continue
+            cx, cy = sx + sprite.width // 2, sy + sprite.height // 2
+            if cx < 0 or cy < 0 or cx >= 64 or cy >= 64:
+                continue
+            covered = set()
+            for tx, ty in target_set:
+                row, col = ty - sy, tx - sx
+                if 0 <= row < sprite.height and 0 <= col < sprite.width:
+                    if int(sprite.pixels[row, col]) != -1:
+                        covered.add((tx, ty))
+            if covered:
+                dist = abs(sx - ref_x) + abs(sy - ref_y)
+                results.append(((sx, sy), covered, dist))
+    return results
+
+
+def sprite_overlaps_zone(sx, sy, sprite, zone):
+    for r in range(sprite.height):
+        for c in range(sprite.width):
+            if sprite.pixels[r, c] == -1:
+                continue
+            px, py = sx + c, sy + r
+            if zone.x <= px < zone.x + zone.width and zone.y <= py < zone.y + zone.height:
+                return True
+    return False
+
+
+def find_zone_entry(sprite, zone, all_zones):
+    sx_cur, sy_cur = sprite.x, sprite.y
+    best, best_dist = None, float('inf')
+    for sy in range(-sprite.height + 1, 64):
         if (sy - sy_cur) % STEP != 0:
             continue
-
         for sx in range(-sprite.width + 1, 64):
             if (sx - sx_cur) % STEP != 0:
                 continue
-
-            # Check center is in bounds
-            cx = sx + sprite.width // 2
-            cy = sy + sprite.height // 2
+            cx, cy = sx + sprite.width // 2, sy + sprite.height // 2
             if cx < 0 or cy < 0 or cx >= 64 or cy >= 64:
                 continue
+            if not sprite_overlaps_zone(sx, sy, sprite, zone):
+                continue
+            if any(sprite_overlaps_zone(sx, sy, sprite, z) for z in all_zones if z is not zone):
+                continue
+            dist = abs(sx - sx_cur) + abs(sy - sy_cur)
+            if dist < best_dist:
+                best_dist = dist
+                best = (sx, sy)
+    return best
 
-            # Check all target points
-            all_ok = True
-            for tx, ty in target_pts:
-                row = ty - sy
-                col = tx - sx
-                if row < 0 or row >= sprite.height or col < 0 or col >= sprite.width:
-                    all_ok = False
-                    break
-                pixel = int(sprite.pixels[row, col])
-                if pixel == -1:  # transparent
-                    all_ok = False
-                    break
-                # Pixel should be the right color or the active marker (0)
-                if pixel != color and pixel != 0:
-                    all_ok = False
+
+def gen_move(from_x, from_y, to_x, to_y):
+    dx, dy = to_x - from_x, to_y - from_y
+    acts = []
+    if dx > 0: acts.extend([GameAction.ACTION4] * (dx // STEP))
+    elif dx < 0: acts.extend([GameAction.ACTION3] * (-dx // STEP))
+    if dy > 0: acts.extend([GameAction.ACTION2] * (dy // STEP))
+    elif dy < 0: acts.extend([GameAction.ACTION1] * (-dy // STEP))
+    return acts
+
+
+def gen_move_safe(from_x, from_y, to_x, to_y, sprite, avoid_zones, vert_first=False):
+    """Generate moves avoiding zones. Try both orderings."""
+    dx, dy = to_x - from_x, to_y - from_y
+    h_acts = ([GameAction.ACTION4] * (dx // STEP) if dx > 0 else
+              [GameAction.ACTION3] * (-dx // STEP) if dx < 0 else [])
+    v_acts = ([GameAction.ACTION2] * (dy // STEP) if dy > 0 else
+              [GameAction.ACTION1] * (-dy // STEP) if dy < 0 else [])
+
+    orders = [(v_acts + h_acts, 'VH'), (h_acts + v_acts, 'HV')]
+    if not vert_first:
+        orders = orders[::-1]
+
+    for acts, name in orders:
+        cx, cy = from_x, from_y
+        safe = True
+        for a in acts:
+            if a == GameAction.ACTION1: cy -= STEP
+            elif a == GameAction.ACTION2: cy += STEP
+            elif a == GameAction.ACTION3: cx -= STEP
+            elif a == GameAction.ACTION4: cx += STEP
+            for z in avoid_zones:
+                if sprite_overlaps_zone(cx, cy, sprite, z):
+                    safe = False; break
+            if not safe: break
+        if safe:
+            return acts, True
+
+    # Neither safe — return vert-first as default
+    return (v_acts + h_acts if vert_first else h_acts + v_acts), False
+
+
+def solve_level_simple(game):
+    """Solve a level where sprites already match target colors."""
+    movable = game.current_level.get_sprites_by_tag("vfaeucgcyr")
+    color_targets = get_target_colors_and_points(game)
+
+    by_color = {}
+    for s in movable:
+        c = get_sprite_color(s)
+        by_color.setdefault(c, []).append(s)
+
+    solutions = {}
+    for color, pts in color_targets.items():
+        sprites_for = by_color.get(color, [])
+        if not sprites_for:
+            continue
+        if len(sprites_for) == 1:
+            s = sprites_for[0]
+            valid = find_valid_positions(s, pts, s.x, s.y)
+            if not valid:
+                return None
+            best = min(valid, key=lambda p: abs(p[0] - s.x) + abs(p[1] - s.y))
+            solutions[s.name] = (s, best, color)
+        else:
+            result = solve_multi_cover(sprites_for, pts, color)
+            if result is None:
+                return None
+            for s, pos in result:
+                solutions[s.name] = (s, pos, color)
+
+    active = next((s for s in movable if is_active(s)), None)
+    if not active:
+        return None
+
+    ordered = ([s for s in movable if s.name in solutions and s == active] +
+               [s for s in movable if s.name in solutions and s != active])
+
+    actions, cur = [], active
+    for s in ordered:
+        _, (tx, ty), _ = solutions[s.name]
+        if s != cur:
+            ci, ti = movable.index(cur), movable.index(s)
+            n_sw = (ti - ci) % len(movable) or len(movable)
+            actions.extend([GameAction.ACTION5] * n_sw)
+            cur = s
+        actions.extend(gen_move(s.x, s.y, tx, ty))
+    return actions
+
+
+def solve_multi_cover(sprites_list, target_pts, color):
+    """Find positions for multiple sprites to collectively cover all targets."""
+    target_set = set(target_pts)
+    n = len(sprites_list)
+    coverages = []
+    for s in sprites_list:
+        covs = find_covering_positions(s, target_pts, s.x, s.y)
+        # Filter to those matching color
+        filtered = []
+        for pos, covered, dist in covs:
+            # Check pixels at covered positions have correct color
+            filtered.append((pos, covered, dist))
+        coverages.append(sorted(filtered, key=lambda c: (-len(c[1]), c[2]))[:200])
+
+    best, best_cost = None, float('inf')
+
+    def search(si, rem, asgn, cost):
+        nonlocal best, best_cost
+        if not rem:
+            if cost < best_cost:
+                best_cost = cost
+                best = list(asgn)
+            return
+        if si >= n:
+            return
+        for pos, covered, dist in coverages[si]:
+            nc = cost + dist
+            if nc >= best_cost:
+                continue
+            asgn.append((sprites_list[si], pos))
+            search(si + 1, rem - covered, asgn, nc)
+            asgn.pop()
+        search(si + 1, rem, asgn, cost)
+
+    search(0, target_set, [], 0)
+    return best
+
+
+def solve_level_zones(env, game):
+    """Solve a level with color zones using simulation."""
+    movable = game.current_level.get_sprites_by_tag("vfaeucgcyr")
+    color_targets = get_target_colors_and_points(game)
+    zones = game.current_level.get_sprites_by_tag("ozhohpbjxz")
+    initial_level = game.level_index
+
+    zone_by_color = {}
+    for z in zones:
+        zc = int(z.pixels[1, 1]) if z.height > 1 else int(z.pixels[0, 0])
+        zone_by_color.setdefault(zc, []).append(z)
+
+    needed_colors = list(color_targets.keys())
+    n_sprites = len(movable)
+
+    # Find the best assignment: each sprite gets one target color
+    # Multiple sprites can be assigned to the same color (for multi-sprite covering)
+    # We need to cover ALL target points for EACH needed color
+
+    best_plan = None
+    best_cost = float('inf')
+
+    # Generate all possible color assignments for sprites
+    # Each sprite can be assigned to any needed color
+    def gen_assignments(idx, current):
+        if idx == n_sprites:
+            # Check all needed colors are assigned at least one sprite
+            assigned_colors = set(current.values())
+            if set(needed_colors).issubset(assigned_colors):
+                yield dict(current)
+            return
+        for nc in needed_colors:
+            current[idx] = nc
+            yield from gen_assignments(idx + 1, current)
+        # Also allow NOT assigning this sprite (it stays put)
+        # Only if we have enough sprites
+        yield from gen_assignments(idx + 1, current)
+
+    for assignment in gen_assignments(0, {}):
+        # Group sprites by assigned color
+        groups = {}
+        for si, tc in assignment.items():
+            groups.setdefault(tc, []).append(si)
+
+        # Check feasibility and compute cost
+        plan = []
+        total_cost = 0
+        feasible = True
+
+        for tc in needed_colors:
+            sprite_indices = groups.get(tc, [])
+            if not sprite_indices:
+                feasible = False
+                break
+
+            pts = color_targets[tc]
+
+            if len(sprite_indices) == 1:
+                si = sprite_indices[0]
+                sprite = movable[si]
+                if tc not in zone_by_color:
+                    feasible = False
                     break
 
-            if all_ok:
-                valid.append((sx, sy))
+                found = False
+                for zone in zone_by_color[tc]:
+                    entry = find_zone_entry(sprite, zone, zones)
+                    if entry is None:
+                        continue
+                    valid = find_valid_positions(sprite, pts, entry[0], entry[1])
+                    if not valid:
+                        continue
+                    bt = min(valid, key=lambda p: abs(p[0] - entry[0]) + abs(p[1] - entry[1]))
+                    cost = (abs(entry[0] - sprite.x) + abs(entry[1] - sprite.y) +
+                            abs(bt[0] - entry[0]) + abs(bt[1] - entry[1]))
+                    plan.append({'si': si, 'color': tc, 'zone': zone,
+                                 'entry': entry, 'target': bt, 'multi': False})
+                    total_cost += cost
+                    found = True
+                    break
 
-    return valid
+                if not found:
+                    feasible = False
+                    break
+            else:
+                # Multi-sprite covering for this color
+                sprites = [movable[si] for si in sprite_indices]
+
+                # For each sprite, find zone entry and possible positions
+                sprite_entries = []
+                for si in sprite_indices:
+                    sprite = movable[si]
+                    if tc not in zone_by_color:
+                        feasible = False
+                        break
+                    found_entry = False
+                    for zone in zone_by_color[tc]:
+                        entry = find_zone_entry(sprite, zone, zones)
+                        if entry is not None:
+                            sprite_entries.append((si, sprite, zone, entry))
+                            found_entry = True
+                            break
+                    if not found_entry:
+                        feasible = False
+                        break
+
+                if not feasible:
+                    break
+
+                # Find multi-sprite covering positions
+                target_set = set(pts)
+                coverages = []
+                for si, sprite, zone, entry in sprite_entries:
+                    covs = find_covering_positions(sprite, pts, entry[0], entry[1])
+                    sorted_covs = sorted(covs, key=lambda c: (-len(c[1]), c[2]))[:200]
+                    coverages.append(sorted_covs)
+
+                # Search for covering
+                n_s = len(sprite_entries)
+                found_cover = [None]
+                cover_cost = [float('inf')]
+
+                def search_cover(idx, remaining, asgn, cost):
+                    if not remaining:
+                        if cost < cover_cost[0]:
+                            cover_cost[0] = cost
+                            found_cover[0] = list(asgn)
+                        return
+                    if idx >= n_s:
+                        return
+                    for pos, covered, dist in coverages[idx]:
+                        nc = cost + dist
+                        if nc >= cover_cost[0]:
+                            continue
+                        asgn.append((idx, pos))
+                        search_cover(idx + 1, remaining - covered, asgn, nc)
+                        asgn.pop()
+                    search_cover(idx + 1, remaining, asgn, cost)
+
+                search_cover(0, target_set, [], 0)
+
+                if found_cover[0] is None:
+                    feasible = False
+                    break
+
+                for cover_idx, target_pos in found_cover[0]:
+                    si, sprite, zone, entry = sprite_entries[cover_idx]
+                    cost = (abs(entry[0] - sprite.x) + abs(entry[1] - sprite.y) +
+                            abs(target_pos[0] - entry[0]) + abs(target_pos[1] - entry[1]))
+                    plan.append({'si': si, 'color': tc, 'zone': zone,
+                                 'entry': entry, 'target': target_pos, 'multi': True})
+                    total_cost += cost
+
+        if feasible and total_cost < best_cost:
+            best_cost = total_cost
+            best_plan = list(plan)
+
+    if best_plan is None:
+        print(f'    No feasible zone assignment!')
+        return None, None
+
+    # Execute plan
+    active = next((s for s in movable if is_active(s)), None)
+    if not active:
+        return None, None
+
+    # Sort: process active sprite first, then others
+    active_idx = movable.index(active)
+    best_plan.sort(key=lambda p: (0 if p['si'] == active_idx else 1))
+
+    all_actions = []
+    cur_active = active
+    obs = None
+
+    for item in best_plan:
+        sprite = movable[item['si']]
+        target_color = item['color']
+        target_zone = item['zone']
+        entry_pos = item['entry']
+
+        # Switch if needed
+        if sprite != cur_active:
+            ci, ti = movable.index(cur_active), movable.index(sprite)
+            n_sw = (ti - ci) % len(movable) or len(movable)
+            for _ in range(n_sw):
+                obs = env.step(GameAction.ACTION5)
+                all_actions.append(GameAction.ACTION5)
+            cur_active = sprite
+
+        # Move to zone entry (avoid other zones)
+        avoid = [z for z in zones if z is not target_zone]
+        acts, _ = gen_move_safe(sprite.x, sprite.y, entry_pos[0], entry_pos[1],
+                                sprite, avoid, vert_first=True)
+        for a in acts:
+            obs = env.step(a)
+            all_actions.append(a)
+
+        # Handle color change animation
+        if game.zrermyobpw is not None:
+            for _ in range(200):
+                obs = env.step(GameAction.ACTION1)
+                all_actions.append(GameAction.ACTION1)
+                if game.zrermyobpw is None:
+                    break
+
+        # Check color
+        if get_sprite_color(sprite) != target_color:
+            print(f'    Color fail: {sprite.name} is {get_sprite_color(sprite)}, wanted {target_color}')
+            return None, None
+
+        # Find safe path to target position
+        # Recalculate valid positions from current position
+        valid = find_valid_positions(sprite, color_targets[target_color],
+                                     sprite.x, sprite.y)
+        if item['multi']:
+            # For multi-sprite covering, use pre-computed target
+            # but verify grid alignment
+            target_pos = item['target']
+            if (target_pos[0] - sprite.x) % STEP != 0 or (target_pos[1] - sprite.y) % STEP != 0:
+                # Grid misalignment — recalculate
+                covs = find_covering_positions(sprite, color_targets[target_color],
+                                                sprite.x, sprite.y)
+                if not covs:
+                    print(f'    No covering position after zone change!')
+                    return None, None
+                target_pos = min(covs, key=lambda c: c[2])[0]
+        else:
+            if not valid:
+                print(f'    No valid pos for {sprite.name}')
+                return None, None
+            target_pos = min(valid, key=lambda p: abs(p[0] - sprite.x) + abs(p[1] - sprite.y))
+
+        # Move to target, avoiding zones
+        acts, safe = gen_move_safe(sprite.x, sprite.y, target_pos[0], target_pos[1],
+                                    sprite, avoid, vert_first=True)
+        for a in acts:
+            obs = env.step(a)
+            all_actions.append(a)
+
+        # If we hit a zone during move, handle color change animation
+        if game.zrermyobpw is not None:
+            for _ in range(200):
+                obs = env.step(GameAction.ACTION1)
+                all_actions.append(GameAction.ACTION1)
+                if game.zrermyobpw is None:
+                    break
+
+        # Check if level advanced
+        if game.level_index != initial_level:
+            break
+
+    return all_actions, obs
 
 
 def main():
@@ -301,18 +525,30 @@ def main():
         print(f'\n--- Level {level_idx + 1}/{n_levels} ---')
 
         game = env._game
-        level_actions = solve_level(game)
+        if game.level_index != level_idx:
+            print(f'  ERROR: expected level {level_idx} but at {game.level_index}')
+            break
+
+        movable = game.current_level.get_sprites_by_tag("vfaeucgcyr")
+        color_targets = get_target_colors_and_points(game)
+        sprite_colors = set(get_sprite_color(s) for s in movable)
+        needs_zones = not set(color_targets.keys()).issubset(sprite_colors)
+
+        if needs_zones:
+            level_actions, obs_after = solve_level_zones(env, game)
+            if level_actions is not None:
+                obs = obs_after
+        else:
+            level_actions = solve_level_simple(game)
+            if level_actions is not None:
+                for a in level_actions:
+                    obs = env.step(a)
 
         if level_actions is None:
             print(f'  FAILED')
             break
 
         print(f'  Solution: {len(level_actions)} actions (baseline: {info.baseline_actions[level_idx]})')
-
-        # Execute
-        for a in level_actions:
-            obs = env.step(a)
-
         all_actions.extend(level_actions)
         per_level[f'L{level_idx + 1}'] = len(level_actions)
 
@@ -320,22 +556,21 @@ def main():
             print(f'  GAME COMPLETE!')
             break
 
-        print(f'  State: {obs.state.name}')
+        state = obs.state.name if obs else 'None'
+        print(f'  State: {state}, level_index: {game.level_index}')
 
-    # Verify chain
+    # Verify
     env2 = arc.make(info.game_id)
     obs2 = env2.reset()
     for a in all_actions:
         obs2 = env2.step(a)
-
     final_state = obs2.state.name if obs2 else 'None'
     print(f'\nVerification: state={final_state}')
 
-    # Save
     serialized = [a.value - 1 for a in all_actions]
     result = {
         'game': 're86',
-        'source': 'analytical_solver (solve_re86_analytical)',
+        'source': 'analytical_solver',
         'type': 'analytical',
         'total_actions': sum(per_level.values()),
         'max_level': len(per_level),
@@ -349,7 +584,6 @@ def main():
     with open(out_path, 'w') as f:
         json.dump(result, f, indent=2)
     print(f'Saved: {out_path}')
-
     return result
 
 
