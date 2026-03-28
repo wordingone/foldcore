@@ -1,0 +1,1 @@
+{"total_elapsed": 234.0, "n_runs": 39, "conditions": ["three_factor", "zero_diag", "neg_diag"], "games": ["ls20", "ft09", "sp80", "mbpp_0"], "frozen_baseline": {"ft09": 0.551, "ls20": 1.0, "sp80": 0.49}, "tf_baseline_1293": {"ft09": 0.748, "ls20": 1.0, "sp80": 0.49}}
