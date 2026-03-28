@@ -518,3 +518,18 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **ND MI explosion:** ND FT09 mi=0.861 vs 3F mi=0.476. Higher sequential MI suggests richer action sequence dynamics when self-suppression forces winner cycling.
   - **MBPP baseline confirmed:** All 3 conditions: L1=0/1, arc=0.000. Random action substrate generates no valid Python. Numerical overflow in 3F MBPP (W_drive instability at 10K steps of continuous ASCII input — different from ARC game episodic resets).
   - **Decision tree outcome:** ZD: "Prediction 1 wrong → off-diagonal W_recur entries also create lock chains → need full E/I separation." ND: "Prediction 1 confirmed AND dramatically better than ZD → active self-suppression is the key mechanism. Build into architecture permanently." Phase 2 (unfreeze W_readout) triggered by ND confirmation.
+
+- **Step 1295 (Phase 2 — learned W_readout on NEG-DIAG base): ALL PREDICTIONS WRONG — W_readout learning negligible.** 39 runs (36 ARC + 3 MBPP), ~304s.
+  - **L1=0 everywhere.** Prediction 3 (any L1) wrong.
+  - **R3=0 everywhere.** Prediction 1 (behavioral R3 > 0) wrong.
+  - **Root cause:** W_readout update `W_readout[action] += 0.001 * pe * activation` where activation winner ≈ 0.02 → update ≈ 2e-5 per element. With n_actions=4103, each action visited ~2.4 times in 10K steps → cumulative drift per row ≈ 6e-5 → total Frobenius ≈ 0.000 (below 3-decimal rounding). **Activation magnitudes too small for readout learning at large action spaces.**
+  - **Scale evidence:**
+    - FT09 (4103 actions): LRO ro_drift=0.000, URO ro_drift=0.013
+    - SP80 (smaller action space): LRO ro_drift=0.090, URO ro_drift=0.613
+    - MBPP (128 actions, ~78 visits/row): LRO ro_drift=1.201, URO ro_drift=1.691
+    - Drift scales inversely with action space size — confirms action visit frequency as bottleneck.
+  - **Kill criteria not triggered** (LRO lock=0.758 on FT09 < 0.8, I3cv stable). Architecture structurally sound; failure is learning signal scale, not instability.
+  - **URO FT09: lock=0.549, MI=0.861** — seeds 102/202/302/402 replicate 1294 NEG-DIAG exactly (same seeds). Cross-validates 1294's key result.
+  - **MBPP LRO drift=1.201:** Readout DID learn on 128-action space. Still L1=0 (random substrate can't generate Python), but learning mechanism itself works. Confirms problem is scale, not architecture.
+  - **Fix required:** Normalize activation before readout update (`act_norm = activation / max(||activation||, eps)`) OR increase W_drive init from 0.01 to 0.1 to get 10x larger drive magnitudes. Either ensures update magnitude is ~0.001 per step regardless of absolute activation scale.
+  - **Decision tree outcome:** Falls outside spec's 3 branches. New failure mode: "activation scale too small for readout learning at large action spaces." Not "readout learns but fails" — readout doesn't learn. Fix: normalized activation update, then retry Phase 2.
