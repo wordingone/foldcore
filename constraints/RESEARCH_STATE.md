@@ -295,3 +295,20 @@ Kill criterion: FT09 L1 regressed 4/5 → 3/5 vs 1276 (pe_ema). No improvement o
 Root cause: pe_delta bootstrap harder than pe_ema. On FT09 (4103 actions, ~0.05 visits/action at step 200), most actions have pe_ema_prev = pe_ema = 0 → pe_delta = 0. Signal only activates on actions visited ≥2x. For LS20 (7 actions), pe_delta more aggressive than pe_ema (I3_rho -0.586 vs -0.307) — deeper artifact, same CV.
 
 **1276 (pe_ema, alpha=0.1, unnormalized) confirmed as composition. FT09 L1=4/5 is the benchmark.**
+
+**Step 1282 (eta_h=0.05 vs 0.01):** CONDITIONAL PASS. 100 runs, 780s.
+
+| Game | E05 R3 | E01 R3 | E05 L1 | E01 L1 |
+|------|--------|--------|--------|--------|
+| ft09 | 0.947 (5/5) ✓ | 0.931 (5/5) ✓ | 4/5 | 5/5 |
+| ls20 | **0.086 (5/5) ✓ FIXED** | 0.046 (0/5) ✗ | 0/5 | 0/5 |
+| vc33 | 0.924 (5/5) ✓ | 0.923 (5/5) ✓ | 5/5 | 5/5 |
+| tr87 | 0.046 (0/5) ✗ UNCHANGED | 0.045 (0/5) ✗ | 0/5 | 0/5 |
+| tu93 | **0.054 (5/5) ✓ FIXED** | 0.046 (0/5) ✗ | 0/5 | 0/5 |
+| (others) | 0.91-0.94 (5/5) ✓ | same | — | — |
+
+I3_cv: E05 == E01 on all games. No regressions. FT09 kill criterion not triggered (4/5 ≥ 3/5).
+
+TR87 anomaly: 6 actions, R3 essentially unchanged (0.0455→0.0460). flow signal (||enc_t+1 - enc_t||) likely near-zero on TR87 — obs doesn't change visually → W_action doesn't accumulate regardless of eta_h.
+
+LS20/TU93 L1 still 0/5 despite R3 now passing — R3 is necessary but not sufficient. Pending Leo verdict on whether eta_h=0.05 becomes new composition.
