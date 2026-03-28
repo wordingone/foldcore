@@ -17,7 +17,7 @@ The search finds substrates by composing validated components, testing against d
 ## Current Composition
 
 ```
-raw pixels → avgpool4 → centered encoding (U16)
+raw pixels → avgpool4 → centered encoding (C4, 256 dims)
   → W (shared: encoding projection + action salience)
   → LPL update (Hebbian + predictive, modifies W)
   → adaptive softmax (T = 1/std(salience))
@@ -64,6 +64,8 @@ raw pixels → avgpool4 → centered encoding (U16)
 **DIRECTION CHANGE (2026-03-27):** Stop testing at L1. L1 selects for coverage, not understanding. Higher levels require game understanding. Test: substrate observes solver playing all levels on seed A, then acts on seed B. Did the observation transfer?
 
 **Step 1268 (per-level L_max instrumentation, SP80/FT09/TR87):** COMPLETE (30 runs). L_max=0 on ALL 30 draws — substrate never escapes L0 within 10K steps. Confirms direction change: solver handoff mandatory. FT09 physarum reached L1 (4/5 draws, ~7K steps), never L2. R3 passes on SP80/FT09 (0.083), dead on TR87 (0.003). SAL near-zero (rho<0.1 everywhere). I4=0 everywhere. lmax_i4 metric unmeasurable without solver transport. Awaiting Leo spec-gate resolution (missing control baseline + wiring spec) before building solver handoff infrastructure.
+
+**Step 1272 (IncSFA for I1, SP80/FT09/TR87):** COMPLETE (30 runs, 785.6s). I1=null EVERYWHERE — structural measurement issue: repr_log collects only steps 0-1000, but FT09 L1 reached at ~6000-9000 steps → all repr entries are L0, no between-level pairs for I1. IncSFA does NOT improve L1 vs nSFA: SFA FT09 3/5 vs nSFA 4/5 (nSFA slightly better, within noise). FT09 nSFA draw4 reached Lmax=2 (FIRST L2 for Physarum+argmin composition). R3 stable: SP80/FT09 ~0.083-0.085 both conditions (pass), TR87 0.0035 both (fail). I3: FT09 ρ=0.96 both (pass). SP80 ρ=-0.46 (fail). TR87 varies. Conclusion: I1 is unmeasurable with current repr_log design, not because encoding fails. Measurement fix required before I1 can gate future specs.
 
 **Step 1269 (solver handoff, SP80):** COMPLETE (10 runs). All 10 draws Lmax=FAIL(r=0.0). Solver transports substrate to L5 but substrate can't act within L5 — game timeout at step 120. Confirmed: solver handoff insufficient, substrate needs game-understanding not just placement.
 
@@ -127,4 +129,4 @@ ft09 (6L, 75 clicks), ls20 (7L, 311 moves), vc33 (7L, 176 clicks), tr87 (6L, 123
 
 ## Next Step
 
-**Step 1272 (IncSFA for I1):** Add IncSFA layer to Physarum+argmin composition. I1=0 is the wall; encoding doesn't distinguish states. IncSFA extracts slowly-varying features via Oja's rule on derivative covariance. Slow features concatenated with centered encoding → W input expands from 16 to 24 dims. Predictions: I1 improves (slow features cluster states by behavioral role), R3 maintained, FT09 L1 maintained. Kill: if I1 stays at 0 after 3 IncSFA variants.
+**Next spec needed:** I1 measurement fix. Extend repr_log to full run (not just steps 0-1000) so between-level pairs exist. I1 cannot gate future decisions until this is resolved.
