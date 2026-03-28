@@ -34,7 +34,7 @@ raw pixels → avgpool4 → centered encoding (C4, 256 dims)
 | I1 | **FAIL** (0/15) | Encoding doesn't distinguish analytically-distinct game states. Single-layer W lacks capacity. |
 | I5 | **NULL** | No reliable L1 → cross-level transfer unmeasurable. |
 
-**Current bottleneck (revised Step 1273):** I1 is NOT the wall. Encoding distinguishes states when L1 is reached (I1_enc=3/5 PASS on FT09). The wall is L1 reachability: SP80 (uniform action effects → viability flat), TR87 (R3 fails → no self-modification). FT09 composition works (L1=4/5, I1 passes, R3 passes). Full 10-game failure map needed.
+**Current bottleneck (revised Step 1274):** Composition works on FT09 only (4/5 L1, PHY advantage over CTL). Three distinct failure classes across 10 games: (1) R3 failure → Physarum dynamics don't engage (tr87, tu93, borderline ls20); (2) Physarum tube reinforcement kills I3 coverage on large click spaces (cd82, cn04); (3) uniform action effects block all exploration signals (sp80). Encoding and I1 are NOT the wall — when L1 is reached (ft09), I1_enc and I1_act both pass (3/5). Next: fix the Physarum-kills-I3 failure mode on click games.
 
 **Remaining gaps:**
 1. Bootstrap: viability alpha needs diverse exploration to build spread, needs spread to guide exploration. Proven: encoding CAN distinguish states (ARI=1.000 on VC33 control, Step 1259). The composition can't reach those states.
@@ -133,4 +133,27 @@ ft09 (6L, 75 clicks), ls20 (7L, 311 moves), vc33 (7L, 176 clicks), tr87 (6L, 123
 
 **Paradigm shift:** I1 was called "the wall" from Step 1253 to 1272 (20 steps). It was a broken measurement. The encoding DOES distinguish states (I1_enc passes 3/5 on FT09). The allosteric principle works (I1_enc and I1_act pass together). The real wall is L1 reachability on games where the composition can't build Physarum structure.
 
-**Step 1274 (full 10-game PRISM chain):** Run Physarum+argmin on all 10 solved games with fixed repr_log (dual I1). Full chain score. Classify which games reach L1+, which have R3/I1/I3 pass. Failure mode map across the full game set.
+**Step 1274 (full 10-game PRISM chain):** COMPLETE (100 runs, 26.3 min). Chain ARC=0.0000010. Full failure mode map:
+
+| Game | PHY L1 | CTL L1 | PHY R3 | PHY I3 | CTL I3 | PHY I1enc | Failure mode |
+|------|--------|--------|--------|--------|--------|-----------|--------------|
+| ft09 | 4/5 | 0/5 | 5/5 | 5/5 | 5/5 | 3/5 | WORKING — PHY provides real L1 advantage |
+| vc33 | 5/5 | 5/5 | 5/5 | 5/5 | 5/5 | 5/5 | Easy L1 — CTL argmin also solves |
+| lp85 | 5/5 | 5/5 | 5/5 | null | null | 5/5 | Easy L1 — both conditions, identical l1_step=1870 (game seed-independent) |
+| ls20 | 1/5 | 0/5 | 0/5 | 0/5 | 5/5 | null | R3 borderline fail (0.044 vs 0.05 threshold), PHY I3 negative — Physarum hurts LS20 coverage |
+| sb26 | 0/5 | 0/5 | 5/5 | 5/5 | 5/5 | null | R3+I3 pass but L1=0 — requires specific click sequence, neither argmin nor Physarum discovers it |
+| sp80 | 0/5 | 0/5 | 5/5 | 0/5 | 0/5 | null | Uniform response — I3 fails both conditions |
+| cd82 | 0/5 | 0/5 | 5/5 | 0/5 | 0/5 | null | PHY I3 fails — Physarum tube reinforcement kills coverage on large click space |
+| cn04 | 0/5 | 0/5 | 5/5 | 0/5 | 0/5 | null | PHY I3 fails — same as cd82 |
+| tr87 | 0/5 | 0/5 | 0/5 | 0/5 | 5/5 | null | R3 fails — no self-modification (Jacobian diff ≈0.04 < 0.05 threshold) |
+| tu93 | 0/5 | 0/5 | 0/5 | 0/5 | 5/5 | null | R3 fails — same as tr87 |
+
+**Failure mode clusters:**
+1. **R3 failure** (tr87, tu93, borderline ls20): W doesn't modify meaningfully. Physarum dynamics don't engage. Jacobian diff 0.04 vs threshold 0.05.
+2. **I3 failure — Physarum kills coverage** (cd82, cn04): PHY I3 NEGATIVE where CTL I3 passes. Tube dynamics create action loops that hurt exploration on large click spaces.
+3. **Uniform response** (sp80): Both conditions I3 fail. Action effects indistinguishable → no coverage signal.
+4. **Sequence-locked** (sb26): All stages pass (R3+I3) but game requires specific click sequence not discoverable by exploration.
+5. **Easy L1** (vc33, lp85): Physarum composition provides no unique advantage — argmin alone sufficient.
+6. **PHY advantage** (ft09 only): R3+I3+I1 all pass, PHY L1=4/5 vs CTL=0/5. Composition provides real benefit on exactly ONE game.
+
+**Key finding:** Composition works on FT09 only. The wall is not I1 (encoding works when L1 is reached), but stage prerequisites (R3 failing → no Physarum dynamics; I3 failing → Physarum reinforcement hurts coverage). LP85/VC33 L1 is free — CTL argmin also solves.
