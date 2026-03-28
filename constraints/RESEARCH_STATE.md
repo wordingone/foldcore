@@ -49,7 +49,17 @@ raw pixels → avgpool4 → centered encoding (U16)
 
 **Game-type split:** Small action spaces (LS20, 7 actions): viability works, transition fast, R3+SAL pass. Large click spaces (VC33, 4103): L1 recovered via argmin warm-up, but GPR phase too short for SAL. Uniform-response games (SP80): viability can't differentiate actions, stays in argmin permanently.
 
-**Next question:** Does GPR-phase on LS20 (after step 38) reach L1? If yes, first game where encoding-informed selection navigates.
+**Step 1263 (viability-weighted argmin):** SAL=1.00 (15/15, LS20 rho=0.85, VC33 0.49, SP80 0.54). First time SAL passes on ALL games. The encoding perfectly tracks per-action state-change differentiation. L1 unchanged (VC33 5/5 same as control, LS20/SP80 0/5). Gap: encoding knows what each action DOES individually but not what SEQUENCES do collectively. Navigation requires temporal composition.
+
+**Step 1263 FINAL (viability-weighted argmin):** SAL=1.00 all games (LS20 rho=0.85). R3=0.67. L1 unchanged. Encoding perfectly tracks action effects but can't compose sequences.
+
+**Step 1264 (no-selector LPL dynamics):** FAILED. Runaway positive feedback — Hebbian locks onto one action. VC33 regressed 5/5→0/5. SAL=-0.35. LPL creates instability without separate selector.
+
+**Step 1265 (Physarum no-selector):** I4=0.73 (temporal structure passes). But argmax kills coverage — VC33 regressed 5/5→0/5. Same failure as LPL no-selector.
+
+**Step 1266 (Physarum + argmin):** LS20 L1=1/5 (FIRST L1 from encoding-informed composition, outperforms pure argmin 0/5). VC33 L1=5/5 (coverage recovered). SAL=0.829 on LS20. I4=7% on LS20 (passes). Tube-weighted argmin: Physarum dynamics for encoding, argmin for coverage, tube thickness modulates visit priority.
+
+**Step 1267 (anomaly flow):** Pending. Barlow correction: flow = |delta - EMA(delta)| instead of |delta|. Suppresses predictable magnitude, rewards surprising effects.
 
 ---
 
