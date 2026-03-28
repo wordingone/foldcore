@@ -562,6 +562,25 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **Three problems now isolated:** (1) W_readout scale — FIXED in 1296. (2) W_drive Oja activity — FIXED in 1297. (3) Jacobian sensitivity — NEW. R3 metric may not capture W_drive learning in this architecture. Need R3 recalibration or direct comparison of W_drive action distributions.
   - **Next:** PRISM baseline sweep (20 draws × 3 conditions × 11 games = 660 runs). Jun directive. Establishes THE reference for all future comparisons. Step 1298.
 
+- **Step 1298 (PRISM baseline sweep — RANDOM / ARGMIN / PE-EMA, 20 draws × 3 conds × 11 games = 660 runs): COMPLETE. THE reference established.** 660 substrate pairs (1320 episodes), ~85 min.
+  - **L1 by game — 3 reachable games, 8 opaque:**
+    - FT09: RAND=14/20, ARGMIN=0/20(!), PE-EMA=18/20
+    - VC33: RAND=3/20, ARGMIN=20/20, PE-EMA=20/20
+    - LP85: RAND=18/20, ARGMIN=20/20, PE-EMA=20/20
+    - LS20, TR87, SP80, SB26, TU93, CN04, CD82: 0/20 all conditions
+  - **FT09 ARGMIN anomaly:** RAND=14/20 but ARGMIN=0/20. FT09 n_actions=4096 (64×64 grid), 10K steps covers only ~2.4 visits/action. Systematic coverage fails — argmin needs ~4096 steps before revisiting. Random with 10K steps finds the needed position by chance (75/4096 target density). This is the ARGMIN coverage trap for large action spaces.
+  - **RHAE (chain mean):** RAND=8.22e-06 (above 1e-6 threshold), ARGMIN=8.18e-07 (RHAE-DEAD), PE-EMA=8.86e-07 (RHAE-DEAD). Confirmed: only the floor exists above 1e-6. Our current architectures are RHAE-dead at the chain level.
+  - **Second-exposure speedup — FIRST TIME MEASURED across 1298 experiments:**
+    - RAND: 28 pairs, 2.77x (artifact — random has no cross-episode memory; sampling bias)
+    - ARGMIN: 40 pairs, **15.57x** (mechanistic — visit counts persist, episode B starts with prior coverage map)
+    - PE-EMA: 55 pairs, **1.16x** (near-null — substrate memory carries state but minimal exploitation)
+    - FINDING: speedup is real but mechanistic. ARGMIN's 15x is visit count transfer, not learning. PE-EMA barely above 1x despite carrying W state. No substrate has EVER shown genuine second-exposure speedup from understanding.
+  - **I3cv:** Small-space games (LS20/TR87/TU93): RAND≈0.17, ARGMIN≈0.017 (uniform). Large-space games: RAND≈4.53, ARGMIN≈4.42 (both concentrated — sparse coverage of 4096 actions).
+  - **R3 (PE-EMA only):** Consistent 0.009–0.013 across large-action-space games. 0.0004–0.0008 on small-space games. Jacobian diff present but below 0.05 pass threshold everywhere.
+  - **MBPP:** 0/20 L1 all conditions. KL from uniform decays (step100→step1000): RAND 0.71→0.06, ARGMIN 0.25→0.001, PE-EMA 0.25→0.001. Distribution convergence without functional output.
+  - **THE REFERENCE (future comparisons gate on):** RAND L1 rates {ft09:14, vc33:3, lp85:18}/20. ARGMIN L1 rates {vc33:20, lp85:20}/20. PE-EMA L1 rates {ft09:18, vc33:20, lp85:20}/20. RHAE floor: RAND=8.2e-6, ARGMIN/PEEMA < 1e-6. Speedup floor: RAND 2.8x (noise), ARGMIN 15.6x (visit persistence), PEEMA 1.2x (near-null).
+  - **Next:** Step 1299 — forward model spec from Leo (per-action W_forward[a], plasticity gating). Step 1300+ — childhood protocol.
+
 - **Step 1253b (catalog revisit — allosteric softmax vs CTL vs PE-EMA, full PRISM chain): KILL CRITERION TRIGGERED — I3cv inflation on 3 games.** 166 runs (150 ARC + 15 MBPP + 1 duplicate), ~35 min.
   - **Kill criterion #1** (ALLO L1 ≤ CTL L1 all games): NOT triggered. ALLO beats CTL on FT09 (2/5 vs 0/5), ties on LP85 (5/5).
   - **Kill criterion #2** (ALLO I3cv > 3× CTL on 3+ games): **TRIGGERED.** LS20=23x, TR87=22x, TU93=18x. Softmax concentrates on specific actions in small-space games → coverage collapse on 3 games.
