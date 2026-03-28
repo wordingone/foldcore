@@ -34,7 +34,7 @@ raw pixels → avgpool4 → centered encoding (C4, 256 dims)
 | I1 | **FAIL** (0/15) | Encoding doesn't distinguish analytically-distinct game states. Single-layer W lacks capacity. |
 | I5 | **NULL** | No reliable L1 → cross-level transfer unmeasurable. |
 
-**Current bottleneck:** R3 and SAL both pass simultaneously (Step 1258, first time in 1258 experiments). C25 post-recurrent on ext_enc provides R3 (Jacobian diff 0.049-0.055). Viability attention on enc-dims provides SAL (rho 0.21-0.49). LS20: both pass. VC33/SP80: SAL below threshold (sparse visits on 4103-action space make viability alpha flat). I3=0 on GPR (coverage broken). I1=0 (states not distinguished). L1=0 on all games with GPR.
+**Current bottleneck (revised Step 1273):** I1 is NOT the wall. Encoding distinguishes states when L1 is reached (I1_enc=3/5 PASS on FT09). The wall is L1 reachability: SP80 (uniform action effects → viability flat), TR87 (R3 fails → no self-modification). FT09 composition works (L1=4/5, I1 passes, R3 passes). Full 10-game failure map needed.
 
 **Remaining gaps:**
 1. Bootstrap: viability alpha needs diverse exploration to build spread, needs spread to guide exploration. Proven: encoding CAN distinguish states (ARI=1.000 on VC33 control, Step 1259). The composition can't reach those states.
@@ -131,4 +131,6 @@ ft09 (6L, 75 clicks), ls20 (7L, 311 moves), vc33 (7L, 176 clicks), tr87 (6L, 123
 
 **Step 1273 (repr_log fix + dual I1, SP80/FT09/TR87):** COMPLETE (30 runs, 439.4s). **I1 is NOT the wall.** FT09 PHY: I1_enc=3/5 pass (within=0.855, between=1.113) AND I1_act=3/5 pass — both encoding and policy distinguish states when L1 is reached. I1 passes on the same draws, same rate: no bridge problem. SP80/TR87: I1=null (Lmax=0, only 1 level). ControlC FT09: Lmax=0, I1=null. R3: PHY passes SP80/FT09 (5/5), fails TR87 (0.045 < 0.05). I3: FT09 ρ=0.96 both conditions. TR87 CTL ρ=0.75 (pass), PHY ρ=-0.46 to -0.57 (fail). **Wall = what prevents SP80/TR87 from reaching L1.** SP80: uniform response, viability flat. TR87: R3 fails, no self-modification.
 
-**Next step:** Leo spec needed. Address L1 reachability on SP80/TR87. I1 confirmed not the bottleneck.
+**Paradigm shift:** I1 was called "the wall" from Step 1253 to 1272 (20 steps). It was a broken measurement. The encoding DOES distinguish states (I1_enc passes 3/5 on FT09). The allosteric principle works (I1_enc and I1_act pass together). The real wall is L1 reachability on games where the composition can't build Physarum structure.
+
+**Step 1274 (full 10-game PRISM chain):** Run Physarum+argmin on all 10 solved games with fixed repr_log (dual I1). Full chain score. Classify which games reach L1+, which have R3/I1/I3 pass. Failure mode map across the full game set.
