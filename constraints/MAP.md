@@ -12,7 +12,7 @@
 
 **Three mapping properties** (observation→node): Deterministic (HYPOTHESIZED), Locally continuous (YES  - 5 families partition cleanly), Persistent (YES  - kd-tree splits destroy edges → fail). Evidence: Props 1-3, Steps 446-453.
 
-**Algorithm invariance.** Action selection = argmin over visit frequency across 4 representations (edge dict, W matrix, transition tensor, n-gram). Steps 521-525. **POST-BAN: INVALIDATED**  - argmin requires per-(state,action) counts = banned.
+**Algorithm invariance (REVISED).** Count-monotone representations produce identical action sequences under argmin (Prop 3 — tautology, not closure). Does NOT prove argmin is optimal or action selection is solved. Steps 521-525. **POST-BAN: INVALIDATED** — argmin requires per-(state,action) counts = banned. **POST-COMPOSITION: R2-VIOLATING** — all count-based selectors are separate evaluators (frozen frame). Reflexive map architecture requires action selection through W.
 
 **Non-convergent exploration.** Reachable set grows sublinearly (259→439 cells at 50K→740K, k=12). Growth decays ~2 cells/100K. Steps 528-529.
 
@@ -173,7 +173,7 @@ Interactive (unknown environment, no training phase). Must learn online.
 
 ### Solved
 
-- **Navigation mechanism:** Graph + edge-count argmin. Architecture-independent. Three mapping properties predict success 100%.
+- **Navigation mechanism (REVISED):** Graph + edge-count argmin navigates preview games but is the unexamined incumbent. Prop 3 (tautology) and broken I3_rho metric (24+ false kills) protected it from comparative evaluation. R2-violating (separate evaluator). Three mapping properties predict L1 success on preview games only.
 - **All 3 preview games multi-level:** LS20 L1-L3 5/5, FT09 6 levels 75 clicks, VC33 7 levels 176 clicks. All via source analysis (prescribed). 10/25 games fully solved by analytical solvers.
 - **Recode achieves l_pi:** LSH k=16 + self-refinement = 5/5 (Step 542). K confound (Step 589).
 - **674+running-mean = 20/20** on LS20 and FT09. Centering ~75% of gain. L1 is infrastructure, not a result (banned as metric Step 713).
@@ -250,6 +250,6 @@ Algorithm invariance, U3 (needs re-test), U17 (needs re-test), U24 (reframe need
 
 **Universal benchmarks:** LS20 L1 (0 levels at 50K/10 seeds = fail), FT09 L1 (same), P-MNIST >25% AA / 0pp forgetting, Cross-domain (navigate after classification).
 
-**Meta-rules:** Min 20 experiments before killing a family. 3 consecutive structural failures = one death mode, not family dead. Kill criteria in family's diagnostic language. Benchmark universal, explanation family-specific.
+**Meta-rules:** Min 20 experiments before killing a family. 3 consecutive structural failures = one death mode, not family dead. Kill criteria in family's diagnostic language. Benchmark universal, explanation family-specific. **Incumbent evaluation is symmetric** — the control baseline faces the same kill criteria as alternatives. A control that would fail its own stage criteria is not a valid control. Asymmetric evaluation (alternatives killed, incumbent untested) is itself a defect in the evaluation framework (learned 2026-03-28, 30+ experiments).
 
 **Family diagnostics:** See kills/ directory for per-family kill registers.
