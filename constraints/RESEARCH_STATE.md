@@ -129,4 +129,6 @@ ft09 (6L, 75 clicks), ls20 (7L, 311 moves), vc33 (7L, 176 clicks), tr87 (6L, 123
 
 ## Next Step
 
-**Step 1273 (repr_log fix + re-run base):** Fix repr_log to sample every 100 steps across full run (not just steps 0-1000). Re-run Physarum+argmin (no IncSFA) on FT09/SP80/TR87 with Control C. Critical test: is I1 actually passing on FT09 (where L1/L2 are reached)? One I1 measurement from 1272 (w=0.0001, b=1.0012) suggests strong signal. If confirmed, I1 is not the wall.
+**Step 1273 (repr_log fix + dual I1, SP80/FT09/TR87):** COMPLETE (30 runs, 439.4s). **I1 is NOT the wall.** FT09 PHY: I1_enc=3/5 pass (within=0.855, between=1.113) AND I1_act=3/5 pass — both encoding and policy distinguish states when L1 is reached. I1 passes on the same draws, same rate: no bridge problem. SP80/TR87: I1=null (Lmax=0, only 1 level). ControlC FT09: Lmax=0, I1=null. R3: PHY passes SP80/FT09 (5/5), fails TR87 (0.045 < 0.05). I3: FT09 ρ=0.96 both conditions. TR87 CTL ρ=0.75 (pass), PHY ρ=-0.46 to -0.57 (fail). **Wall = what prevents SP80/TR87 from reaching L1.** SP80: uniform response, viability flat. TR87: R3 fails, no self-modification.
+
+**Next step:** Leo spec needed. Address L1 reachability on SP80/TR87. I1 confirmed not the bottleneck.
