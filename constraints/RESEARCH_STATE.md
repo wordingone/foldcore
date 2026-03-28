@@ -344,3 +344,12 @@ Kill: FT09 L1 3/5 (TPE) vs 5/5 (LPE). W_pred on [enc;h] adds noise to PE signal 
 | TU93 | ? | ? | KB | SEQ | NO |
 
 **PE+argmin ceiling:** 3/10 games (FT09/VC33/LP85). PE works when L1 = 1-2 unique high-index click positions. Fails when L1 needs ordered sequences or ≥7 unique clicks. Remaining 7 games require temporal credit assignment (prospective, not retrospective PE).
+
+**Step 1284 (KB injection diagnostic):** CONFIRMED — KB coverage insufficient. 200 forced KB actions per seed (~29 visits per KB action). Zero new L1 games. SP80 0/5, SB26 0/5. Wall is sequential credit assignment: the substrate needs to discover which action SEQUENCES advance the game, not just visit individual actions. Individual KB visits don't compose into the ordered pairs/sequences that L1 requires.
+
+**Composition loop status (Steps 1271-1284, 14 experiments):**
+- Confirmed composition: LPL + pe_ema + argmin, alpha=0.1, eta_h=0.05 (Step 1276/1282)
+- Ceiling: 3/10 games at L1 (FT09 4-5/5, VC33 5/5, LP85 5/5)
+- Wall: 7/10 games need sequence discovery. No current component addresses this.
+- Two broken measurements fixed (I1 repr_log, I3 index artifact)
+- Next phase: NEW component class for temporal credit assignment / sequence discovery.
