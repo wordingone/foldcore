@@ -59,7 +59,7 @@ raw pixels → avgpool4 → centered encoding (U16)
 
 **Step 1266 (Physarum + argmin):** LS20 L1=1/5 (FIRST L1 from encoding-informed composition, outperforms pure argmin 0/5). VC33 L1=5/5 (coverage recovered). SAL=0.829 on LS20. I4=7% on LS20 (passes). Tube-weighted argmin: Physarum dynamics for encoding, argmin for coverage, tube thickness modulates visit priority.
 
-**Step 1267 (anomaly flow + frozen-mean control):** Running (45 runs, 3 conditions). Tests whether SAL/I4 signals are real action effects or running-mean drift.
+**Step 1267 (anomaly flow + frozen-mean control):** COMPLETE (45 runs, 3 conditions). Mean drift is negligible: live SAL=0.800 vs frozen SAL=0.764 (nearly identical). Frozen I4=9.5% vs live I4=4.8% — slight improvement. Anomaly flow signal is real, not an artifact. VC33 5/5 L1 both conditions. LS20 L1=0/5 both (regression from 1266 raw-flow 1/5, different seeds).
 
 **DIRECTION CHANGE (Jun, 2026-03-27):** Stop testing at L1. L1 selects for coverage (argmin), not understanding. Higher levels require game understanding — mechanics, sequences, complex configurations. Use analytical solvers to fast-forward to L3/L5/L7, test substrate there. The mechanism that handles L7 is a superset of L1. Design for the hardest level, not the easiest.
 
@@ -119,4 +119,4 @@ ft09 (6L, 75 clicks), ls20 (7L, 311 moves), vc33 (7L, 176 clicks), tr87 (6L, 123
 
 ## Next Step
 
-Compose IncSFA into the allosteric substrate. Test I1. If I1 passes → test whether L1 follows. If I1 fails → IncSFA lacks capacity, try multi-layer LPL or SR composition.
+**DIRECTION CHANGE under discussion (Leo/Jun, 2026-03-27):** Stop optimizing for L1. Test substrate at L5/L7 using analytical solvers to fast-forward. Awaiting Leo's response on solver-game-version validity and handoff structure before building infrastructure. Current best substrate: Step 1266 Physarum+argmin (VC33 5/5, LS20 1/5, SAL=0.829 on LS20).
