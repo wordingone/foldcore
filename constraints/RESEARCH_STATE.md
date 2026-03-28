@@ -400,8 +400,15 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
 - Ceiling: 3/10 games at L1 (FT09 5/5, VC33 5/5, LP85 5/5)
 - Wall: 7/10 games need sequence discovery. Argmin-of-counts structurally incompatible (count dominance). KB coverage insufficient (1284). N-step displacement insufficient (1285).
 - Two broken measurements fixed (I1 repr_log, I3 index artifact)
-- Running: Step 1286 (causal controls A/B/C: frozen_init, frozen_mid, eta_slow — paper-quality allosteric claim test)
+- **Step 1286 (causal controls: frozen_init/frozen_mid/eta_slow/lpl_pe_ctrl): COMPLETE.** 200 runs (10 games × 4 conditions × 5 draws), 1539s.
+  - **R3 is causally weight-driven.** frozen_init collapses R3 to ~0.001-0.05 (vs 0.66-0.94 for all other conditions). Weight updates are the mechanism.
+  - **L1 performance is weight-learning-independent.** Games that solve (ft09/lp85/vc33) solve at equal rates across all 4 conditions including frozen_init. Games that fail (7) fail in all 4 conditions regardless.
+  - frozen_mid R3 indistinguishable from CTL: 5K steps sufficient to establish full R3 signal.
+  - eta_slow (×0.1) preserves R3 and L1 equally. Mechanism not rate-sensitive in this range.
+  - I3_cv: identical across all conditions (3.098). Action selection mechanism unchanged.
+  - arc_score: 0.000 in all conditions (no L2 reached).
+  - Interpretation: R3 (self-modification) is real and weight-driven. But R3 without changed action selection (argmin unchanged) produces no behavioral change. Bottleneck confirmed as action selection, not representation learning.
 - **Step 1287 (pairwise transition count argmin): KILL.** Zero new L1 on failing games. R3 regression LS20/TU93 (0.047 vs 0.086). Root cause: pairwise degenerates to pe_ema-argmax on click games (all pairs count=0 when prev=click), KB-KB pairs never accumulate consecutively.
   - I3 CV explosion on click games: FT09 PAR=32.81 vs CTL=4.42. Concentrated selection pattern.
   - FT09/VC33/LP85 maintained (no regression). 7 failing games unchanged.
-- Step 1288 (eigenoption-directed exploration, W_action SVD): HELD — 1286b shows encoding NOT SEPARABLE (ratio=1.017). May not find KB-specific directions. Pending Leo's decision.
+- **Step 1288 (encoding-change momentum): RUNNING.** Repeat last action when enc_change > running_median(window=100). Targets I4=0. Game-agnostic signal. 100 runs (MOM vs CTL), launched after Step 1286 completion.
