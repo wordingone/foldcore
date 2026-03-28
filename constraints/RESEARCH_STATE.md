@@ -191,3 +191,24 @@ I3 FULLY RECOVERED: LS20=0.64(5/5), TR87=0.75(5/5), TU93=0.86(5/5) — all match
 - SELECTION_ALPHA=0.1 appropriate for FT09 but 100x too strong for LS20.
 
 **Gap: pe normalization.** score = action_counts - alpha * (pe_ema / (max(pe_ema) + eps)) would bound signal to [0,1] regardless of action space. Preserves relative ordering on all games.
+
+**Step 1278 (normalized pe):** KILL. 100 runs, 519.8s.
+
+| Game  | NPE I3        | CTL I3        | NPE L1 | CTL L1 |
+|-------|---------------|---------------|--------|--------|
+| ft09  | 0.964 (5/5)   | 0.964 (5/5)   | 3/5    | 0/5    |
+| ls20  | 0.307 (2/5)   | 0.643 (5/5)   | 0/5    | 0/5    |
+| tr87  | 0.421 (3/5)   | 0.750 (5/5)   | 0/5    | 0/5    |
+| tu93  | -0.000 (0/5)  | 0.857 (5/5)   | 0/5    | 0/5    |
+| vc33  | 0.964 (5/5)   | 0.964 (5/5)   | 5/5    | 5/5    |
+| lp85  | 0.000 (0/5)   | 0.000 (0/5)   | 5/5    | 5/5    |
+| sb26  | 0.893 (5/5)   | 0.893 (5/5)   | 0/5    | 0/5    |
+| cd82  | 0.393 (0/5)   | 0.393 (0/5)   | 0/5    | 0/5    |
+| cn04  | -0.679 (0/5)  | -0.679 (0/5)  | 0/5    | 0/5    |
+| sp80  | -0.464 (0/5)  | -0.464 (0/5)  | 0/5    | 0/5    |
+
+FT09 L1 restored (3/5 vs CTL 0/5). Kill criterion triggered by I3 regressions on LS20 (2/5 vs CTL 5/5), TR87 (3/5 vs CTL 5/5), TU93 (0/5 vs CTL 5/5).
+
+Root cause: normalization bounds pe to [0,1] but does NOT make pe invisible on KB games. EMA ramps up from first visit (~14 visits/action by step 100 on 7-action games). At step 100: LS20 pe_ema mean=0.276 (max/mean=1.06x), TR87 mean=0.042 (max/mean=1.38x), TU93 mean=0.124 (max/mean=1.36x). After normalization, top7 pe_norm values differ by ~0.15 → score difference ~0.015 against visit_count ~14. Early EMA bootstrap creates order-dependent bias before I3 measurement at step 200. FT09 pe@100 mean=0.000005 (4103 actions, only 7 visited) — normalization is essentially inactive on click games.
+
+**Consolidated finding — pe signal on KB games:** Any pe-based action selection has early-step bootstrap problems on small action spaces (7 actions). Pe EMA ramps up faster than I3 can measure coverage (I3 measured at step 200, pe active from step 1). Scale-based fix (normalization) does not help because the signal is already structured by step 100. Temporal-based fix needed (delayed activation past step 200) OR a different signal that is zero at uniform visitation.
