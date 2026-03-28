@@ -425,3 +425,12 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **Mechanism was never tested.** SAL = accidental uniform-random selection throughout entire run. Result: pe_argmin beats uniform-random (expected).
   - **R3 intact:** No collapse (0.664 vs 0.669). Weight learning unaffected.
   - Fix required: remove DECAY from W_action entirely (or normalize salience by ||W_action||) before retesting allosteric selection.
+- **Step 1290 (allosteric softmax, DECAY removed): KILL — mechanism activated but harmful.** 100 runs (10 games × 2 conditions × 5 draws), 688s.
+  - **SAL overall:** L1=8/50 (0.16) vs CTL=14/50 (0.28). Worse than 1289 (10/50) and worse than CTL.
+  - **Mechanism confirmed active:** Removing DECAY fixed activation. Actual T (excluding step-0 initial 100M): FT09=57 (min 4.4), VC33=55 (min 6.7), LS20=5.2 (min 0.1), SB26=20 (min 11.6), TU93=13 (min 1.6). LS20 reaches T=0.1 — near-deterministic selection.
+  - **Aggregation bug:** Summary script included step 0 (T=100M initial) in mean T — reported 85K-212K, actual 5-112. Mechanism was active throughout.
+  - **VC33 catastrophic regression persists:** SAL 0/5 vs CTL 5/5 (same as 1289, but mechanism was active here — VC33 regression is real, not artifact).
+  - **LS20 fully concentrated but still fails:** T_min=0.1 (deterministic), L1=0/5. W_action concentrates on high-pe actions that don't advance levels. R3 SAL=0.106 vs CTL=0.367 (CTL 3.5x higher).
+  - **I4 split diagnostic:** LS20/TR87/TU93 show near-zero I4 for both conditions (CTL too). Large action-space games show I4=-71% SAL vs -79.5% CTL.
+  - **Root cause:** pe_argmin uses counts term (exploration drive). SAL replaces this with Hebbian concentration on high-pe actions. Concentration on wrong actions = exploration eliminated = worse L1.
+  - **Finding:** pe_argmin (counts - 0.1*pe_ema) is superior to softmax(W_action@ext/T) as action selector. Allosteric softmax removes exploration and concentrates on visually-responsive but level-irrelevant actions.
