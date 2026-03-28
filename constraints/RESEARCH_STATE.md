@@ -311,4 +311,19 @@ I3_cv: E05 == E01 on all games. No regressions. FT09 kill criterion not triggere
 
 TR87 anomaly: 6 actions, R3 essentially unchanged (0.0455→0.0460). flow signal (||enc_t+1 - enc_t||) likely near-zero on TR87 — obs doesn't change visually → W_action doesn't accumulate regardless of eta_h.
 
-LS20/TU93 L1 still 0/5 despite R3 now passing — R3 is necessary but not sufficient. Pending Leo verdict on whether eta_h=0.05 becomes new composition.
+LS20/TU93 L1 still 0/5 despite R3 now passing — R3 is necessary but not sufficient. eta_h=0.05 adopted as new composition baseline (Leo mail 3579).
+
+**Step 1283 (temporal PE: W_pred 256×320 on [enc;h] vs W_pred 256×256 on enc):** KILL. 100 runs, 879s.
+
+| Game | TPE R3 | LPE R3 | TPE L1 | LPE L1 |
+|------|--------|--------|--------|--------|
+| ft09 | 0.947 (5/5) ✓ | 0.931 (5/5) ✓ | **3/5 ↓** | 5/5 |
+| ls20 | 0.065 (5/5) ✓ | 0.082 (5/5) ✓ | 0/5 | 0/5 |
+| vc33 | 0.924 (5/5) ✓ | 0.923 (5/5) ✓ | 5/5 | 5/5 |
+| tr87 | 0.046 (0/5) ✗ | 0.046 (0/5) ✗ | 0/5 | 0/5 |
+| tu93 | 0.053 (5/5) ✓ | 0.056 (5/5) ✓ | 0/5 | 0/5 |
+| (others) | 0.91-0.94 (5/5) ✓ | same | — | — |
+
+I4: Both conditions identical (-79.55% click, -0.03% KB). Temporal PE provides zero I4 benefit.
+
+Kill: FT09 L1 3/5 (TPE) vs 5/5 (LPE). W_pred on [enc;h] adds noise to PE signal on FT09 — click games are order-free (SET not sequence), so h_t context is irrelevant and degrades PE discrimination. No LS20 improvement. Kill criterion: FT09 L1 regression + no I4 gain.
