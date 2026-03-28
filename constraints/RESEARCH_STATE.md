@@ -599,9 +599,16 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **Conclusion:** 64-neuron competitive inhibition network is architecturally incompatible with R2. Frozen W_inhibit = frozen evaluator (same violation as argmin). Forward model concept valid — has no substrate to improve.
   - **Next:** Step 1301 — return to linear reflexive map (Step 1264 base) with anti-Hebbian decorrelation to fix collapse.
 
-- **Step 1301 (DHL anti-collapse linear reflexive map): RUNNING.** Leo mail 3665. 3 conditions × 11 games × 5 draws = 165 runs. ETA ~25 min.
-  - DHL: Oja + sparse anti-Hebbian (K=20) + soft bound. OJA-ONLY: Oja alone (expected to collapse). ARGMIN-PE: 1282 reference.
-  - Kill: DHL collapse >80% on 3+ games; DHL I3_cv >3× ARGMIN-PE on 3+ games.
+- **Step 1301 (DHL anti-collapse linear reflexive map): COMPLETE. KILL — anti-Hebbian had zero effect.** 165 runs, ~58 min.
+  - **Kill triggered:** DHL collapse >80% on 6/11 games. I3_cv >3× ARGMIN-PE on 11/11 games.
+  - **Critical finding:** DHL collapse fraction = OJA-ONLY collapse fraction on EVERY game. Anti-Hebbian (eta_anti=0.001, K=20) has zero measurable effect on collapse dynamics. Diagnosis: Oja (eta=0.01) is 10× stronger — Oja collapses small-action-space games in first ~100 steps before anti-Hebbian can stabilize.
+  - **Collapse by game type:**
+    - Small action spaces (LS20=7, TR87=6, TU93~6): both DHL+OJA collapse ~0.998 (instantaneous single-winner lock)
+    - Large click spaces (VC33=4103, SP80, CD82): both DHL+OJA cf~0.20-0.39 (NOT collapsing — K=20 is 0.5% coverage, insufficient)
+    - Medium/other (FT09, LP85, SB26, CN04): cf~0.78-0.99
+  - **R3:** DHL 0.0001-0.0162 on ARC games (improved vs 1299's 0.0001-0.0003). MBPP DHL R3=0.0879 (PASS — 128 actions, higher visit frequency). No ARC game passes 0.05.
+  - **ARGMIN-PE confirmed working:** FT09=5/5, VC33=5/5, LP85=5/5 L1. Linear architecture is necessary — step1299's LP85=0/10 was architecture failure, not task failure.
+  - **Decision tree outcome:** "DHL collapses → add homeostatic rate target (per-action scaling toward 1/n_actions)." → Step 1302.
 
 - **Step 1300 (StochasticGoose PRISM baseline — leaderboard leader): RUNNING.** Jun directive, Leo mail 3662/3663. 11 games × 20 draws = 220 pairs. ETA ~8 hours remaining.
   - Port of DriesSmit/ARC3-solution (exact CNN architecture, training loop, buffer)
