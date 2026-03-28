@@ -327,3 +327,20 @@ LS20/TU93 L1 still 0/5 despite R3 now passing — R3 is necessary but not suffic
 I4: Both conditions identical (-79.55% click, -0.03% KB). Temporal PE provides zero I4 benefit.
 
 Kill: FT09 L1 3/5 (TPE) vs 5/5 (LPE). W_pred on [enc;h] adds noise to PE signal on FT09 — click games are order-free (SET not sequence), so h_t context is irrelevant and degrades PE discrimination. No LS20 improvement. Kill criterion: FT09 L1 regression + no I4 gain.
+
+**Full L1 prescription analysis (Step 1283, post-mortem):**
+
+| Game | L1 actions | Unique | Type | Structure | PE reachable? |
+|------|-----------|--------|------|-----------|---------------|
+| FT09 | 2 | 2 | clicks | SET (2 pixels) | YES (1-2/5) |
+| VC33 | 1 | 1 | click | SET (1 pixel) | YES (5/5) |
+| LP85 | 3 | 1 | click | SET (1 pixel x3) | YES (5/5) |
+| SB26 | 7 | 7 | clicks | SET/SEQ? (7 pixels) | MAYBE |
+| SP80 | 2 | 1 | KB | SEQ (key x2) | NO |
+| CD82 | 24 | 19 | mixed | SEQ (KB+clicks) | NO |
+| CN04 | 9 | 2 | KB | SEQ (keys only) | NO |
+| LS20 | 13 | ? | KB | SEQ | NO |
+| TR87 | ? | ? | KB | SEQ | NO |
+| TU93 | ? | ? | KB | SEQ | NO |
+
+**PE+argmin ceiling:** 3/10 games (FT09/VC33/LP85). PE works when L1 = 1-2 unique high-index click positions. Fails when L1 needs ordered sequences or ≥7 unique clicks. Remaining 7 games require temporal credit assignment (prospective, not retrospective PE).
