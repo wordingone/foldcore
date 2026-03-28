@@ -470,3 +470,24 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **R3: 0.0000** on all games. Oja plasticity updates W_drive only; W_readout frozen → Jacobian of action selection vs obs unchanged → R3=0. Expected for diagnostic.
   - **Key finding:** Capacity exists (N=64 can form multiple attractors on FT09/SP80). The problem is not capacity — it's that W_readout must be learned to connect activation patterns to useful actions. Frozen readout = random action selection regardless of internal state richness.
   - **LINEAR baseline:** lock=0.49-0.90, cyc=5.4-17.2 (more cycling than MINIMAL due to LPL Hebbian update), R3=0.0001-0.0008. Both conditions fail L1 equally.
+- **Step 1293 (three-factor plasticity on recurrent weights): CONDITIONAL PASS — no kill triggered, two predictions failed.** 36 runs (3 games × 3 conditions × 4 draws, N_DRAWS=4 for budget compliance), ~288s.
+  - **Kill criteria: NOT triggered.** 3F k=2.0/3.5/4.8 (>1.5 on FT09/SP80), lock=1.00/0.75/0.49 (>0.8 on LS20 only, not all games). UNGATED ≠ THREE-FACTOR (pe gate demonstrably matters: FT09 lock 0.93→0.75, corr 0.835→0.083).
+  - **Per-game results:**
+
+| | LS20 | FT09 | SP80 |
+|---|---|---|---|
+| 3F sil(k) | 0.990(2.0) | 0.934(3.5) | 0.922(4.8) |
+| 3F lock | 1.000 | 0.748 | 0.490 |
+| 3F mi | 0.009 | 0.476 | 0.273 |
+| 3F corr | 0.932 | 0.083 | 0.186 |
+| 3F reorg | 11x | 42x | 0.9x |
+| UNG lock | 0.991 | 0.928 | 0.475 |
+| FRZ lock | 0.990 | 0.551 | 0.474 |
+
+  - **Prediction 3 (3F won't collapse): CONFIRMED on FT09/SP80, FAILED on LS20.** Small action space (7 actions) locks regardless of plasticity rule — same as 1292b. FT09/SP80 have stable multi-attractor dynamics with three-factor plasticity.
+  - **Prediction 4 (attractor-state corr > 0.3 on FT09): FAILED.** 3F corr=0.083 — attractors stable but NOT game-phase-aware. The internal states don't reorganize to track game progression.
+  - **Prediction 2 (UNGATED collapses): PARTIALLY CONFIRMED.** UNG lock=0.928 vs 3F lock=0.748 on FT09. Pe gate reduces lock. But FROZEN lock=0.551 — recurrence itself adds lock even with pe gating.
+  - **Critical unexpected finding:** FROZEN has LESS lock than THREE-FACTOR on FT09 (0.55 vs 0.75). Recurrent connections create winner-excites-itself feedback at inference time, independent of learning. The pe gate prevents chronic weight drift (3F corr=0.083 vs UNG corr=0.835) but doesn't prevent inference-time recurrent reinforcement.
+  - **Pe gate confirmed effective:** Three-factor rule prevents temporal drift (corr: 3F=0.083 vs UNG=0.835), reduces lock (0.928→0.748 on FT09), and triggers 42x more surprise-reorganization vs FROZEN (2.2). The gate works — it just doesn't solve the structural problem.
+  - **R3=0.0 everywhere** (W_readout frozen, expected).
+  - **Decision tree outcome (Leo spec):** "Prediction 3 confirmed, 4 wrong → attractors form but not game-phase-aware. Need different surprise signal or longer timescale." Recurrence-adds-lock finding is NEW — not in decision tree. Recurrent winner feedback is a structural problem separate from the learning rule.
