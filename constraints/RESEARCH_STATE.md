@@ -366,9 +366,32 @@ FT09 slight regression (4/5 KBI vs 5/5 LPE): I3rho drops 0.96→~0.26 mean from 
 
 **Conclusion:** KB coverage alone is insufficient. ~29 visits per KB index, zero new games unlocked. SP80 and SB26 unchanged (Leo's predicted improvements did not materialize). Wall = sequential credit assignment: substrate visited KB actions but cannot detect which SEQUENCES advance the game. Next component class: temporal abstractions / macro-actions / successor representations for sequence discovery without reward signal.
 
-**Composition loop status (Steps 1271-1284, 14 experiments):**
+**Step 1285 (N-step displacement, N=10, replaces pe_ema):** KILL. 100 runs, 687s.
+
+| Game | D10 L1 | LPE L1 | D10 R3 | D10 I4 | LPE I4 |
+|------|--------|--------|--------|--------|--------|
+| ft09 | **0/5 ↓↓** | 5/5 | 0.947 (5/5) ✓ | -79.5% | -79.5% |
+| ls20 | 0/5 | 0/5 | 0.074 (5/5) ✓ | -0.0% | -0.0% |
+| vc33 | 5/5 | 5/5 | 0.924 (5/5) ✓ | -79.5% | -79.5% |
+| tr87 | 0/5 | 0/5 | 0.046 (0/5) ✗ | -0.0% | -0.0% |
+| sp80 | 0/5 | 0/5 | 0.909 (5/5) ✓ | -79.5% | -79.5% |
+| sb26 | 0/5 | 0/5 | 0.915 (5/5) ✓ | -79.5% | -79.5% |
+| tu93 | 0/5 | 0/5 | 0.053 (5/5) ✓ | -0.0% | -0.0% |
+| cn04 | 0/5 | 0/5 | 0.925 (5/5) ✓ | -79.5% | -79.5% |
+| cd82 | 0/5 | 0/5 | 0.944 (5/5) ✓ | -79.5% | -79.5% |
+| lp85 | 5/5 | 5/5 | 0.944 (5/5) ✓ | -79.5% | -79.5% |
+
+Kill: FT09 L1 = 0/5 (regression from 5/5 LPE). No L1 improvement on any failing game.
+
+Root cause: FT09 needs systematic argmin coverage of 4103 actions to find 2 target clicks. LPE works because pe_ema≈0 on FT09 → pure argmin. Displacement introduces spurious biases — early high-displacement windows boost wrong actions, breaking systematic coverage. argmin revisits boosted actions instead of continuing exploration.
+
+I4 finding: displacement at N=10 produces no temporal structure. I4 = -79.5% on ALL click games in BOTH conditions (entropy increases over time as argmin covers more unique positions). I4 = -0.0% on KB games (flat distribution). Zero difference between D10 and LPE on I4.
+
+Open questions: Is the wall the window size (need N≫10 for full sequence capture)? Or the attribution method (all window actions get equal displacement credit → dilutes signal)?
+
+**Composition loop status (Steps 1271-1285, 15 experiments):**
 - Confirmed composition: LPL + pe_ema + argmin, alpha=0.1, eta_h=0.05 (Step 1276/1282)
-- Ceiling: 3/10 games at L1 (FT09 4-5/5, VC33 5/5, LP85 5/5)
-- Wall: 7/10 games need sequence discovery. No current component addresses this.
+- Ceiling: 3/10 games at L1 (FT09 5/5, VC33 5/5, LP85 5/5)
+- Wall: 7/10 games need sequence discovery. KB coverage confirmed insufficient (1284). N-step displacement insufficient (1285).
 - Two broken measurements fixed (I1 repr_log, I3 index artifact)
 - Next phase: NEW component class for temporal credit assignment / sequence discovery.

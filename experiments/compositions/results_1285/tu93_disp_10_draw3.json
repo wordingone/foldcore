@@ -1,0 +1,115 @@
+{
+  "game": "tu93",
+  "condition": "disp_10",
+  "draw": 3,
+  "seed": 301,
+  "steps_taken": 10000,
+  "elapsed_seconds": 1.9,
+  "max_level": 0,
+  "L1_solved": false,
+  "L2_solved": false,
+  "l1_step": null,
+  "l2_step": null,
+  "level_first_step": {},
+  "arc_score": 0.0,
+  "arc_per_level": {},
+  "solver_level_steps": {
+    "1": 18,
+    "2": 28,
+    "3": 47,
+    "4": 64,
+    "5": 93,
+    "6": 121,
+    "7": 135,
+    "8": 156,
+    "9": 185
+  },
+  "repr_log_enc_n": 100,
+  "repr_log_enc_levels": 1,
+  "I3_rho": null,
+  "I3_rho_pass": null,
+  "I3_cv": 0.017321,
+  "I3_counts_at_200": [
+    29.0,
+    29.0,
+    29.0,
+    29.0,
+    28.0,
+    28.0,
+    28.0
+  ],
+  "I1_enc_within": null,
+  "I1_enc_between": null,
+  "I1_enc_p_value": 1.0,
+  "I1_enc_pass": false,
+  "I1_act_within": null,
+  "I1_act_between": null,
+  "I1_act_p_value": 1.0,
+  "I1_act_pass": false,
+  "I4_entropy_100": 1.9454,
+  "I4_entropy_5000": 1.9459,
+  "I4_reduction_pct": -0.03,
+  "I4_pass": false,
+  "I5_level_actions": null,
+  "I5_pass": null,
+  "R3_jacobian_diff": 0.0537,
+  "R3_n_obs_used": 100,
+  "R3_pass": true,
+  "SAL_rho": -0.5357,
+  "SAL_pass": false,
+  "SAL_n_actions_visited": 7,
+  "disp_snapshots": {
+    "100": {
+      "mean": 0.093271,
+      "max": 0.093271,
+      "top7": [
+        0.093271,
+        0.093271,
+        0.093271,
+        0.093271,
+        0.093271,
+        0.093271,
+        0.093271
+      ]
+    },
+    "1000": {
+      "mean": 0.23924,
+      "max": 0.23924,
+      "top7": [
+        0.23924,
+        0.23924,
+        0.23924,
+        0.23924,
+        0.23924,
+        0.23924,
+        0.23924
+      ]
+    },
+    "5000": {
+      "mean": 0.260081,
+      "max": 0.260081,
+      "top7": [
+        0.260081,
+        0.260081,
+        0.260081,
+        0.260081,
+        0.260081,
+        0.260081,
+        0.260081
+      ]
+    }
+  },
+  "disp_score_final": {
+    "mean": 0.253566,
+    "max": 0.253566,
+    "top7": [
+      0.253566,
+      0.253566,
+      0.253566,
+      0.253566,
+      0.253566,
+      0.253566,
+      0.253566
+    ]
+  }
+}

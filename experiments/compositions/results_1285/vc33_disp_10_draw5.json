@@ -1,0 +1,119 @@
+{
+  "game": "vc33",
+  "condition": "disp_10",
+  "draw": 5,
+  "seed": 501,
+  "steps_taken": 10000,
+  "elapsed_seconds": 7.32,
+  "max_level": 1,
+  "L1_solved": true,
+  "L2_solved": false,
+  "l1_step": 2118,
+  "l2_step": null,
+  "level_first_step": {
+    "1": 2118
+  },
+  "arc_score": 2e-06,
+  "arc_per_level": {
+    "1": 2e-06
+  },
+  "solver_level_steps": {
+    "1": 3,
+    "2": 10,
+    "3": 33,
+    "4": 56,
+    "5": 105,
+    "6": 127,
+    "7": 176
+  },
+  "repr_log_enc_n": 100,
+  "repr_log_enc_levels": 2,
+  "I3_rho": null,
+  "I3_rho_pass": null,
+  "I3_cv": 4.417579,
+  "I3_counts_at_200": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "I1_enc_within": 0.4501,
+  "I1_enc_between": 1.7239,
+  "I1_enc_p_value": 0.0,
+  "I1_enc_pass": true,
+  "I1_act_within": 0.6195,
+  "I1_act_between": 1.3257,
+  "I1_act_p_value": 0.0,
+  "I1_act_pass": true,
+  "I4_entropy_100": 4.6052,
+  "I4_entropy_5000": 8.2685,
+  "I4_reduction_pct": -79.55,
+  "I4_pass": false,
+  "I5_level_actions": {
+    "1": 32
+  },
+  "I5_pass": null,
+  "R3_jacobian_diff": 0.917,
+  "R3_n_obs_used": 100,
+  "R3_pass": true,
+  "SAL_rho": 0.7857,
+  "SAL_pass": true,
+  "SAL_n_actions_visited": 7,
+  "disp_snapshots": {
+    "100": {
+      "mean": 9.3e-05,
+      "max": 0.008777,
+      "top7": [
+        0.001845,
+        0.001845,
+        0.001845,
+        0.001845,
+        0.001845,
+        0.001845,
+        0.001845
+      ]
+    },
+    "1000": {
+      "mean": 0.001215,
+      "max": 0.008777,
+      "top7": [
+        0.001845,
+        0.001845,
+        0.001845,
+        0.001845,
+        0.001845,
+        0.001845,
+        0.001845
+      ]
+    },
+    "5000": {
+      "mean": 0.010537,
+      "max": 0.252528,
+      "top7": [
+        0.001845,
+        0.001845,
+        0.001845,
+        0.001845,
+        0.001845,
+        0.001845,
+        0.001845
+      ]
+    }
+  },
+  "disp_score_final": {
+    "mean": 0.017711,
+    "max": 0.375216,
+    "top7": [
+      0.004393,
+      0.004393,
+      0.004393,
+      0.004393,
+      0.004393,
+      0.004393,
+      0.065366
+    ]
+  }
+}

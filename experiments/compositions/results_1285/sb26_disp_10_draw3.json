@@ -1,0 +1,114 @@
+{
+  "game": "sb26",
+  "condition": "disp_10",
+  "draw": 3,
+  "seed": 301,
+  "steps_taken": 10000,
+  "elapsed_seconds": 5.58,
+  "max_level": 0,
+  "L1_solved": false,
+  "L2_solved": false,
+  "l1_step": null,
+  "l2_step": null,
+  "level_first_step": {},
+  "arc_score": 0.0,
+  "arc_per_level": {},
+  "solver_level_steps": {
+    "1": 9,
+    "2": 24,
+    "3": 39,
+    "4": 54,
+    "5": 71,
+    "6": 90,
+    "7": 107,
+    "8": 124
+  },
+  "repr_log_enc_n": 100,
+  "repr_log_enc_levels": 1,
+  "I3_rho": null,
+  "I3_rho_pass": null,
+  "I3_cv": 4.417579,
+  "I3_counts_at_200": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "I1_enc_within": null,
+  "I1_enc_between": null,
+  "I1_enc_p_value": 1.0,
+  "I1_enc_pass": false,
+  "I1_act_within": null,
+  "I1_act_between": null,
+  "I1_act_p_value": 1.0,
+  "I1_act_pass": false,
+  "I4_entropy_100": 4.6052,
+  "I4_entropy_5000": 8.2685,
+  "I4_reduction_pct": -79.55,
+  "I4_pass": false,
+  "I5_level_actions": null,
+  "I5_pass": null,
+  "R3_jacobian_diff": 0.9042,
+  "R3_n_obs_used": 100,
+  "R3_pass": true,
+  "SAL_rho": 0.4286,
+  "SAL_pass": true,
+  "SAL_n_actions_visited": 7,
+  "disp_snapshots": {
+    "100": {
+      "mean": 0.0,
+      "max": 9.5e-05,
+      "top7": [
+        9.5e-05,
+        9.5e-05,
+        9.5e-05,
+        9.5e-05,
+        9.5e-05,
+        9.5e-05,
+        9.5e-05
+      ]
+    },
+    "1000": {
+      "mean": 0.0,
+      "max": 9.5e-05,
+      "top7": [
+        9.5e-05,
+        9.5e-05,
+        9.5e-05,
+        9.5e-05,
+        9.5e-05,
+        9.5e-05,
+        9.5e-05
+      ]
+    },
+    "5000": {
+      "mean": 0.000505,
+      "max": 0.012025,
+      "top7": [
+        0.000298,
+        0.000298,
+        0.000298,
+        0.000298,
+        0.000298,
+        0.000298,
+        0.000298
+      ]
+    }
+  },
+  "disp_score_final": {
+    "mean": 0.002281,
+    "max": 0.06124,
+    "top7": [
+      0.008717,
+      0.008717,
+      0.008717,
+      0.008717,
+      0.008717,
+      0.030837,
+      0.030837
+    ]
+  }
+}
