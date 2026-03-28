@@ -1,16 +1,22 @@
 {
+  "_comment": "PRISM chain config. CIFAR removed, MBPP added. Jun directive 2026-03-28.",
   "light": [
-    {"name": "Split-CIFAR-100-before", "type": "split_cifar", "n_images_per_task": 500},
     {"name": "LS20", "type": "arc_game", "game_name": "LS20"},
     {"name": "FT09", "type": "arc_game", "game_name": "FT09"},
     {"name": "VC33", "type": "arc_game", "game_name": "VC33"},
-    {"name": "Split-CIFAR-100-after", "type": "split_cifar", "n_images_per_task": 500}
+    {"name": "MBPP", "type": "mbpp"}
   ],
   "full": [
-    {"name": "Split-CIFAR-100-before", "type": "split_cifar", "n_images_per_task": 500},
     {"name": "LS20", "type": "arc_game", "game_name": "LS20"},
     {"name": "FT09", "type": "arc_game", "game_name": "FT09"},
     {"name": "VC33", "type": "arc_game", "game_name": "VC33"},
-    {"name": "Split-CIFAR-100-after", "type": "split_cifar", "n_images_per_task": 500}
+    {"name": "TR87", "type": "arc_game", "game_name": "TR87"},
+    {"name": "SP80", "type": "arc_game", "game_name": "SP80"},
+    {"name": "SB26", "type": "arc_game", "game_name": "SB26"},
+    {"name": "TU93", "type": "arc_game", "game_name": "TU93"},
+    {"name": "CN04", "type": "arc_game", "game_name": "CN04"},
+    {"name": "CD82", "type": "arc_game", "game_name": "CD82"},
+    {"name": "LP85", "type": "arc_game", "game_name": "LP85"},
+    {"name": "MBPP", "type": "mbpp"}
   ]
 }

@@ -3,10 +3,10 @@ chain.py — PRISM: Progressive Recursive Intelligence Sequence Metric.
 
 The benchmark for self-modifying substrates. One system, one config, no reward,
 sequential diverse tasks. The parts of the chain are one problem seen from
-different angles — classification, navigation, sequential puzzles, transfer.
+different angles — interactive adaptation (ARC games), compositional reasoning (MBPP).
 
 Sequences a substrate through multiple environments in order.
-Handles LS20/FT09/VC33 (ARC games), CIFAR-100, and any gymnasium env.
+Handles ARC-AGI-3 games + MBPP code generation. CIFAR removed (Jun, 2026-03-28).
 
 Budget: n_steps is PRIMARY. elapsed is an efficiency metric, not a cap.
 Safety timeout = 10× expected time (prevents runaway, not a budget).
@@ -154,6 +154,94 @@ class ArcGameWrapper:
             "level_reached": level,
             "level_steps": level_steps,  # ARC Prize: {level_num: step_reached}
             "fully_solved": fully_solved,
+        }
+
+
+class MBPPWrapper:
+    """MBPP code generation task as a chain environment.
+
+    Tests compositional reasoning: substrate must generate valid Python
+    by sequencing ASCII characters (action space = 128).
+
+    Level 1 = at least one test assertion passes (pass_rate >= 1/len(tests)).
+    No L2 defined (L2 = 100% pass rate, rarely achievable without language model).
+
+    Problem selection: seed % N_EVAL_PROBLEMS (50 problems from sanitized test set).
+    n_steps: outer loop steps. Each MBPP episode is up to 2000 steps.
+
+    Jun directive 2026-03-28: CIFAR replaced with MBPP in all PRISM chains.
+    """
+    N_ACTIONS = 128  # ASCII 0-127
+
+    def __init__(self, n_steps: int = DEFAULT_STEPS, safety_timeout: float = 300.0):
+        self.n_steps = n_steps
+        self.safety_timeout = safety_timeout
+        self._env = None
+
+    def _get_env(self):
+        if self._env is None:
+            sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'environments'))
+            from mbpp_game import MBPPGame
+            self._env = MBPPGame(problem_idx=0)  # problem reset per seed in run_seed
+        return self._env
+
+    def run_seed(self, substrate, seed: int) -> dict:
+        env = self._get_env()
+
+        if hasattr(substrate, 'set_game'):
+            substrate.set_game(self.N_ACTIONS)
+
+        _substrate_reset(substrate, seed)
+        obs = env.reset(seed=seed)
+
+        l1_step = None
+        level_steps = {}
+        level = 0
+        steps = 0
+        t_start = time.time()
+        fresh_episode = True
+
+        while steps < self.n_steps:
+            if (time.time() - t_start) > self.safety_timeout:
+                break
+            if obs is None:
+                obs = env.reset(seed=seed)
+                substrate.on_level_transition()
+                fresh_episode = True
+                continue
+
+            action = substrate.process(np.array(obs, dtype=np.float32))
+            obs, reward, done, info = env.step(int(action) % self.N_ACTIONS)
+            steps += 1
+
+            if fresh_episode:
+                fresh_episode = False
+                continue
+
+            cl = info.get('level', 0) if isinstance(info, dict) else 0
+            if cl > level:
+                if cl == 1 and l1_step is None:
+                    l1_step = steps
+                level_steps[cl] = steps
+                level = cl
+                substrate.on_level_transition()
+
+            if done:
+                obs = env.reset(seed=seed)
+                substrate.on_level_transition()
+                fresh_episode = True
+
+        elapsed = time.time() - t_start
+        return {
+            "game": "MBPP",
+            "seed": seed,
+            "steps": steps,
+            "elapsed": round(elapsed, 2),
+            "l1": l1_step,
+            "l2": None,  # no L2 defined for MBPP
+            "level_reached": level,
+            "level_steps": level_steps,
+            "fully_solved": bool(l1_step is not None),
         }
 
 
@@ -659,31 +747,25 @@ def make_prism(n_steps: int = DEFAULT_STEPS,
                safety_timeout: float = 300.0) -> list:
     """PRISM: Progressive Recursive Intelligence Sequence Metric.
 
-    Standard chain: Split-CIFAR-100 → LS20 → FT09 → VC33 → Split-CIFAR-100.
-    One problem, many angles. The substrate that solves one solves all.
+    Chain: ARC-AGI-3 games (LS20, FT09, VC33) + MBPP.
+    Tests interactive adaptation (ARC) + compositional reasoning (MBPP).
+    CIFAR removed per Jun directive, 2026-03-28.
 
     n_steps: primary step budget per env (not time).
     safety_timeout: watchdog (not primary budget).
     """
     return [
-        ("Split-CIFAR-100-before", SplitCIFAR100Wrapper(500, safety_timeout)),
         ("LS20", ArcGameWrapper("LS20", n_steps, safety_timeout)),
         ("FT09", ArcGameWrapper("FT09", n_steps, safety_timeout)),
         ("VC33", ArcGameWrapper("VC33", n_steps, safety_timeout)),
-        ("Split-CIFAR-100-after", SplitCIFAR100Wrapper(500, safety_timeout)),
+        ("MBPP", MBPPWrapper(n_steps, safety_timeout)),
     ]
 
 
 def make_default_chain(n_steps: int = DEFAULT_STEPS,
                        safety_timeout: float = 300.0) -> list:
-    """Legacy chain: CIFAR-100 → LS20 → FT09 → VC33 → CIFAR-100."""
-    return [
-        ("CIFAR-100-before", CIFARWrapper(n_steps, safety_timeout)),
-        ("LS20", ArcGameWrapper("LS20", n_steps, safety_timeout)),
-        ("FT09", ArcGameWrapper("FT09", n_steps, safety_timeout)),
-        ("VC33", ArcGameWrapper("VC33", n_steps, safety_timeout)),
-        ("CIFAR-100-after", CIFARWrapper(n_steps, safety_timeout)),
-    ]
+    """DEPRECATED: Legacy chain (CIFAR removed Jun 2026-03-28). Use make_prism()."""
+    return make_prism(n_steps, safety_timeout)
 
 
 def make_game_only_chain(n_steps: int = DEFAULT_STEPS,
@@ -717,10 +799,14 @@ def make_prism_from_config(config_path: str = None, mode: str = "light",
         name = phase["name"]
         if t == "arc_game":
             chain.append((name, ArcGameWrapper(phase["game_name"], n_steps, safety_timeout)))
+        elif t == "mbpp":
+            chain.append((name, MBPPWrapper(n_steps, safety_timeout)))
         elif t == "split_cifar":
+            # DEPRECATED: CIFAR removed per Jun directive 2026-03-28. Kept for config compat.
             chain.append((name, SplitCIFAR100Wrapper(phase.get("n_images_per_task", 500),
                                                       safety_timeout)))
         elif t == "cifar":
+            # DEPRECATED: CIFAR removed per Jun directive 2026-03-28. Kept for config compat.
             chain.append((name, CIFARWrapper(n_steps, safety_timeout)))
         elif t == "gym":
             chain.append((name, GymWrapper(phase["env_id"], n_steps, safety_timeout)))
@@ -793,12 +879,11 @@ def make_prism_random(n_games: int = 3, game_seed: int = None,
 
     # Build chain — game names are opaque identifiers, not leaked to substrate
     chain = []
-    if include_cifar:
-        chain.append(("Split-CIFAR-100-before", SplitCIFAR100Wrapper(500, safety_timeout)))
     for i, gname in enumerate(selected):
         chain.append((gname.upper(), ArcGameWrapper(gname.upper(), n_steps, safety_timeout)))
-    if include_cifar:
-        chain.append(("Split-CIFAR-100-after", SplitCIFAR100Wrapper(500, safety_timeout)))
+    # MBPP at end of chain (Jun directive 2026-03-28: CIFAR replaced with MBPP)
+    if include_cifar:  # parameter renamed conceptually but kept for compat
+        chain.append(("MBPP", MBPPWrapper(n_steps, safety_timeout)))
 
     print(f"[PRISM] Selected {n_select} games from {len(unique_games)} available "
           f"(seed={game_seed})")
