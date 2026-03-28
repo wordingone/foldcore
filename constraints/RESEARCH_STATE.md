@@ -176,3 +176,7 @@ ft09 (6L, 75 clicks), ls20 (7L, 311 moves), vc33 (7L, 176 clicks), tr87 (6L, 123
 | lp85 | 5/5 | 5/5 | null | null | 0.944 (5/5) |
 
 Root cause: W_pred (256×256 linear) cannot discriminate loop vs game-advancing actions. Loop actions at different game states produce different encoding deltas → W_pred can't learn stable predictions → pe stays high for loop actions. PE diagnostic confirms no differentiation: LS20 top7 pe@5000 all similar (0.30-0.43), TR87 top7 all similar (0.085-0.103). New regression on TU93 (I3 -0.00 vs CTL 0.86). I3 regressed further on LS20/TR87 (worse than Physarum). FT09 L1 maintained (pe≈0 on click games, mechanism neutral). KILL: per-action prediction error signal is too noisy to differentiate action types in high-dimensional encoding space.
+
+**Critical realization from 1276 PE diagnostic:** FT09 pe≈0 for all actions (mean 0.001). LPE ≈ pure argmin on FT09. Yet FT09 L1=4/5 vs CTL 0/5. The ONLY difference is LPL encoding modification (R3). The FT09 advantage was never from dynamics (Physarum or LPE). It's from R3. 12 steps investigating dynamics (1264-1276) when the encoding was doing all the work.
+
+**Step 1277 (strip dynamics, bare LPL+argmin):** Test the minimal composition: LPL encoding + pure argmin. No Physarum, no PE, no tube bias. If FT09 L1≈4/5: dynamics were always irrelevant, R3 encoding IS the composition. If I3 regressions disappear: dynamics were the problem, not missing the solution.
