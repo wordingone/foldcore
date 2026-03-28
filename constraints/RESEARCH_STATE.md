@@ -389,9 +389,13 @@ I4 finding: displacement at N=10 produces no temporal structure. I4 = -79.5% on 
 
 Open questions: Is the wall the window size (need N≫10 for full sequence capture)? Or the attribution method (all window actions get equal displacement credit → dilutes signal)?
 
+**SP80 count-dominance diagnostic (Eli mail 3604):** At step 5000, KB-3 pe_ema=0.29 (signal found, bonus=0.029) but argmin score=28.97 vs 0 for unvisited click. Discovery is permanent but unexploitable. Argmin-of-counts is structurally incompatible with KB sequence discovery — no selection signal fixes this within argmin.
+
+**Literature connection — eigenoptions (Eli mail 3605):** W_action (4103×256) is already a one-step empirical SR. SVD → top-k right singular vectors = encoding directions most coupled to actions. Eigenoption policy: argmin_a ||h + W_action[a] - h_target|| where h_target = projection onto eigenvector subspace. Produces emergent sequences (goal-conditioned single-action selection). The Sketched Jacobian measured for R3 IS the same Jacobian eigenoptions exploit. Papers: Machado et al. JMLR 2023 (arxiv:2110.05740), ICLR 2024.
+
 **Composition loop status (Steps 1271-1285, 15 experiments):**
 - Confirmed composition: LPL + pe_ema + argmin, alpha=0.1, eta_h=0.05 (Step 1276/1282)
 - Ceiling: 3/10 games at L1 (FT09 5/5, VC33 5/5, LP85 5/5)
-- Wall: 7/10 games need sequence discovery. KB coverage confirmed insufficient (1284). N-step displacement insufficient (1285).
+- Wall: 7/10 games need sequence discovery. Argmin-of-counts structurally incompatible (count dominance). KB coverage insufficient (1284). N-step displacement insufficient (1285).
 - Two broken measurements fixed (I1 repr_log, I3 index artifact)
-- Next phase: NEW component class for temporal credit assignment / sequence discovery.
+- Queued: Step 1286 (causal controls A/B/C for paper), Step 1287 (eigenoption-directed exploration — replaces pe_ema with W_action SVD goal-conditioned selection)
