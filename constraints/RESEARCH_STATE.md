@@ -59,7 +59,9 @@ raw pixels → avgpool4 → centered encoding (U16)
 
 **Step 1266 (Physarum + argmin):** LS20 L1=1/5 (FIRST L1 from encoding-informed composition, outperforms pure argmin 0/5). VC33 L1=5/5 (coverage recovered). SAL=0.829 on LS20. I4=7% on LS20 (passes). Tube-weighted argmin: Physarum dynamics for encoding, argmin for coverage, tube thickness modulates visit priority.
 
-**Step 1267 (anomaly flow):** Pending. Barlow correction: flow = |delta - EMA(delta)| instead of |delta|. Suppresses predictable magnitude, rewards surprising effects.
+**Step 1267 (anomaly flow + frozen-mean control):** Running (45 runs, 3 conditions). Tests whether SAL/I4 signals are real action effects or running-mean drift.
+
+**DIRECTION CHANGE (Jun, 2026-03-27):** Stop testing at L1. L1 selects for coverage (argmin), not understanding. Higher levels require game understanding — mechanics, sequences, complex configurations. Use analytical solvers to fast-forward to L3/L5/L7, test substrate there. The mechanism that handles L7 is a superset of L1. Design for the hardest level, not the easiest.
 
 ---
 
