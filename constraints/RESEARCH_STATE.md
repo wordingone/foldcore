@@ -400,5 +400,8 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
 - Ceiling: 3/10 games at L1 (FT09 5/5, VC33 5/5, LP85 5/5)
 - Wall: 7/10 games need sequence discovery. Argmin-of-counts structurally incompatible (count dominance). KB coverage insufficient (1284). N-step displacement insufficient (1285).
 - Two broken measurements fixed (I1 repr_log, I3 index artifact)
-- Running: Step 1286 (causal controls A/B/C: frozen_init, frozen_mid, eta_slow — paper-quality allosteric claim test), Step 1287 (pairwise transition count argmin: count[a_{t-1},a] replaces count[a] — tests sequence emergence from pair statistics)
-- Step 1288 (eigenoption-directed exploration, W_action SVD goal-conditioned selection) held pending 1287 results
+- Running: Step 1286 (causal controls A/B/C: frozen_init, frozen_mid, eta_slow — paper-quality allosteric claim test)
+- **Step 1287 (pairwise transition count argmin): KILL.** Zero new L1 on failing games. R3 regression LS20/TU93 (0.047 vs 0.086). Root cause: pairwise degenerates to pe_ema-argmax on click games (all pairs count=0 when prev=click), KB-KB pairs never accumulate consecutively.
+  - I3 CV explosion on click games: FT09 PAR=32.81 vs CTL=4.42. Concentrated selection pattern.
+  - FT09/VC33/LP85 maintained (no regression). 7 failing games unchanged.
+- Step 1288 (eigenoption-directed exploration, W_action SVD): HELD — 1286b shows encoding NOT SEPARABLE (ratio=1.017). May not find KB-specific directions. Pending Leo's decision.
