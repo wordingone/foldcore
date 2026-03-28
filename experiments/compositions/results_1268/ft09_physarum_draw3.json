@@ -1,0 +1,52 @@
+{
+  "game": "ft09",
+  "condition": "physarum",
+  "draw": 3,
+  "seed": 301,
+  "steps_taken": 10000,
+  "elapsed_seconds": 32.93,
+  "max_level": 0,
+  "lmax_level": 0,
+  "L1_solved": true,
+  "L2_solved": false,
+  "l1_step": 9055,
+  "l2_step": null,
+  "I3_spearman_rho": 0.9643,
+  "I3_pass": true,
+  "I1_within_dist": null,
+  "I1_between_dist": null,
+  "I1_p_value": 1.0,
+  "I1_pass": false,
+  "I4_entropy_100": 3.912,
+  "I4_entropy_5000": 3.912,
+  "I4_reduction_pct": 0.0,
+  "I4_pass": false,
+  "per_level_i4": {
+    "0": {
+      "reduction_pct": 0.0,
+      "pass": false,
+      "n_actions": 9722
+    },
+    "1": {
+      "reduction_pct": null,
+      "pass": false,
+      "n_actions": 278
+    }
+  },
+  "lmax_i4_reduction_pct": 0.0,
+  "lmax_i4_pass": false,
+  "lmax_i4_n_actions": 9722,
+  "I5_level_actions": {
+    "1": 119
+  },
+  "I5_pass": null,
+  "R3_jacobian_diff": 0.084199,
+  "R3_n_obs_used": 100,
+  "R3_pass": true,
+  "SAL_rho": 0.0451,
+  "SAL_pass": false,
+  "SAL_n_actions_visited": 4103,
+  "act_mean": 4e-06,
+  "act_std": 5.3e-05,
+  "act_max": 0.000718
+}
