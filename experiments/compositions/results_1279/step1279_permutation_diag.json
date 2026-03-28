@@ -1,0 +1,213 @@
+{
+  "results": [
+    {
+      "game": "ls20",
+      "condition": "control_c",
+      "draw": 1,
+      "seed": 100,
+      "max_level": 0,
+      "L1_solved": false,
+      "I3_spearman_rho": 0.6429,
+      "I3_pass": true,
+      "action_counts_at_200": [
+        29.0,
+        29.0,
+        29.0,
+        29.0,
+        28.0,
+        28.0,
+        28.0
+      ],
+      "elapsed_seconds": 4.71
+    },
+    {
+      "game": "ls20",
+      "condition": "control_c",
+      "draw": 2,
+      "seed": 200,
+      "max_level": 0,
+      "L1_solved": false,
+      "I3_spearman_rho": 0.6429,
+      "I3_pass": true,
+      "action_counts_at_200": [
+        29.0,
+        29.0,
+        29.0,
+        29.0,
+        28.0,
+        28.0,
+        28.0
+      ],
+      "elapsed_seconds": 4.75
+    },
+    {
+      "game": "ls20",
+      "condition": "control_c",
+      "draw": 3,
+      "seed": 300,
+      "max_level": 0,
+      "L1_solved": false,
+      "I3_spearman_rho": 0.6429,
+      "I3_pass": true,
+      "action_counts_at_200": [
+        29.0,
+        29.0,
+        29.0,
+        29.0,
+        28.0,
+        28.0,
+        28.0
+      ],
+      "elapsed_seconds": 4.89
+    },
+    {
+      "game": "ls20",
+      "condition": "control_c",
+      "draw": 4,
+      "seed": 400,
+      "max_level": 0,
+      "L1_solved": false,
+      "I3_spearman_rho": 0.6429,
+      "I3_pass": true,
+      "action_counts_at_200": [
+        29.0,
+        29.0,
+        29.0,
+        29.0,
+        28.0,
+        28.0,
+        28.0
+      ],
+      "elapsed_seconds": 5.0
+    },
+    {
+      "game": "ls20",
+      "condition": "control_c",
+      "draw": 5,
+      "seed": 500,
+      "max_level": 0,
+      "L1_solved": false,
+      "I3_spearman_rho": 0.6429,
+      "I3_pass": true,
+      "action_counts_at_200": [
+        29.0,
+        29.0,
+        29.0,
+        29.0,
+        28.0,
+        28.0,
+        28.0
+      ],
+      "elapsed_seconds": 4.75
+    },
+    {
+      "game": "ls20",
+      "condition": "control_c_permuted",
+      "draw": 1,
+      "seed": 150,
+      "max_level": 0,
+      "L1_solved": false,
+      "I3_spearman_rho": 0.6429,
+      "I3_pass": true,
+      "action_counts_at_200": [
+        29.0,
+        29.0,
+        29.0,
+        29.0,
+        28.0,
+        28.0,
+        28.0
+      ],
+      "elapsed_seconds": 4.93
+    },
+    {
+      "game": "ls20",
+      "condition": "control_c_permuted",
+      "draw": 2,
+      "seed": 250,
+      "max_level": 0,
+      "L1_solved": false,
+      "I3_spearman_rho": -0.7143,
+      "I3_pass": false,
+      "action_counts_at_200": [
+        28.0,
+        29.0,
+        28.0,
+        29.0,
+        28.0,
+        29.0,
+        29.0
+      ],
+      "elapsed_seconds": 4.89
+    },
+    {
+      "game": "ls20",
+      "condition": "control_c_permuted",
+      "draw": 3,
+      "seed": 350,
+      "max_level": 0,
+      "L1_solved": false,
+      "I3_spearman_rho": -0.1786,
+      "I3_pass": false,
+      "action_counts_at_200": [
+        29.0,
+        28.0,
+        28.0,
+        29.0,
+        29.0,
+        28.0,
+        29.0
+      ],
+      "elapsed_seconds": 4.87
+    },
+    {
+      "game": "ls20",
+      "condition": "control_c_permuted",
+      "draw": 4,
+      "seed": 450,
+      "max_level": 0,
+      "L1_solved": false,
+      "I3_spearman_rho": -0.8571,
+      "I3_pass": false,
+      "action_counts_at_200": [
+        28.0,
+        28.0,
+        29.0,
+        28.0,
+        29.0,
+        29.0,
+        29.0
+      ],
+      "elapsed_seconds": 4.92
+    },
+    {
+      "game": "ls20",
+      "condition": "control_c_permuted",
+      "draw": 5,
+      "seed": 550,
+      "max_level": 0,
+      "L1_solved": false,
+      "I3_spearman_rho": -0.2857,
+      "I3_pass": false,
+      "action_counts_at_200": [
+        29.0,
+        28.0,
+        29.0,
+        28.0,
+        29.0,
+        28.0,
+        29.0
+      ],
+      "elapsed_seconds": 4.82
+    }
+  ],
+  "kb_delta": [
+    376.0,
+    16.0,
+    232.0,
+    232.0,
+    0.0,
+    0.0,
+    0.0
+  ]
+}
