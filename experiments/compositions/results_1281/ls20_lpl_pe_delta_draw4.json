@@ -1,0 +1,106 @@
+{
+  "game": "ls20",
+  "condition": "lpl_pe_delta",
+  "draw": 4,
+  "seed": 401,
+  "steps_taken": 10000,
+  "elapsed_seconds": 5.73,
+  "max_level": 0,
+  "L1_solved": false,
+  "L2_solved": false,
+  "l1_step": null,
+  "l2_step": null,
+  "level_first_step": {},
+  "arc_score": 0.0,
+  "arc_per_level": {},
+  "solver_level_steps": {
+    "1": 13,
+    "2": 58,
+    "3": 99,
+    "4": 142,
+    "5": 186,
+    "6": 258,
+    "7": 311
+  },
+  "repr_log_enc_n": 100,
+  "repr_log_enc_levels": 1,
+  "I3_rho": -0.8214,
+  "I3_rho_pass": false,
+  "I3_cv": 0.017321,
+  "I3_counts_at_200": [
+    28.0,
+    28.0,
+    28.0,
+    29.0,
+    29.0,
+    29.0,
+    29.0
+  ],
+  "I1_enc_within": null,
+  "I1_enc_between": null,
+  "I1_enc_p_value": 1.0,
+  "I1_enc_pass": false,
+  "I1_act_within": null,
+  "I1_act_between": null,
+  "I1_act_p_value": 1.0,
+  "I1_act_pass": false,
+  "I4_entropy_100": 1.9454,
+  "I4_entropy_5000": 1.9459,
+  "I4_reduction_pct": -0.03,
+  "I4_pass": false,
+  "I5_level_actions": null,
+  "I5_pass": null,
+  "R3_jacobian_diff": 0.0454,
+  "R3_n_obs_used": 100,
+  "R3_pass": false,
+  "SAL_rho": 0.4643,
+  "SAL_pass": true,
+  "SAL_n_actions_visited": 7,
+  "pe_snapshots": {
+    "100": {
+      "pe_ema_mean": 0.267149,
+      "pe_ema_max": 0.286687,
+      "pe_delta_mean": -0.010837,
+      "pe_delta_max": -0.010066,
+      "pe_delta_top7": [
+        -0.011319,
+        -0.010066,
+        -0.010458,
+        -0.011676,
+        -0.011883,
+        -0.01021,
+        -0.010249
+      ]
+    },
+    "1000": {
+      "pe_ema_mean": 0.477275,
+      "pe_ema_max": 0.515283,
+      "pe_delta_mean": 0.002224,
+      "pe_delta_max": 0.004157,
+      "pe_delta_top7": [
+        0.000171,
+        0.001896,
+        0.00091,
+        0.004157,
+        0.00223,
+        0.00396,
+        0.002247
+      ]
+    },
+    "5000": {
+      "pe_ema_mean": 0.385141,
+      "pe_ema_max": 0.442628,
+      "pe_delta_mean": 0.003981,
+      "pe_delta_max": 0.005587,
+      "pe_delta_top7": [
+        0.005259,
+        0.00511,
+        0.001176,
+        0.005587,
+        0.004036,
+        0.003369,
+        0.003334
+      ]
+    }
+  }
+}

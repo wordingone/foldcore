@@ -278,3 +278,20 @@ Small-action-space pe bootstraps fast because each action is visited ~14x by ste
 - No I3_cv regressions on any game
 - R3 borderline on 7-action games (0.046-0.049 vs 0.05 threshold) — marginal fail on LS20/TR87/TU93
 - Next: Step 1281 (pe_delta = compression progress, replaces pe_ema as signal)
+
+**Step 1281 (pe_delta compression progress):** KILL. 100 runs, 527s.
+
+pe_delta = pe_ema_prev - pe_ema. Actions where pe is dropping fastest get priority.
+
+| Game | LPED_cv | CTL_cv | LPED_L1 | CTL_L1 | LPED_R3 |
+|------|---------|--------|---------|--------|---------|
+| ft09 | 4.4176 | 4.4176 | 3/5 | 0/5 | 0.947 |
+| ls20 | 0.0173 | 0.0173 | 0/5 | 0/5 | 0.044 |
+| vc33 | 4.4176 | 4.4176 | 5/5 | 5/5 | 0.924 |
+| (others unchanged vs CTL)  |
+
+Kill criterion: FT09 L1 regressed 4/5 → 3/5 vs 1276 (pe_ema). No improvement on any game.
+
+Root cause: pe_delta bootstrap harder than pe_ema. On FT09 (4103 actions, ~0.05 visits/action at step 200), most actions have pe_ema_prev = pe_ema = 0 → pe_delta = 0. Signal only activates on actions visited ≥2x. For LS20 (7 actions), pe_delta more aggressive than pe_ema (I3_rho -0.586 vs -0.307) — deeper artifact, same CV.
+
+**1276 (pe_ema, alpha=0.1, unnormalized) confirmed as composition. FT09 L1=4/5 is the benchmark.**

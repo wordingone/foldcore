@@ -1,0 +1,105 @@
+{
+  "game": "tr87",
+  "condition": "lpl_pe_delta",
+  "draw": 2,
+  "seed": 201,
+  "steps_taken": 10000,
+  "elapsed_seconds": 4.09,
+  "max_level": 0,
+  "L1_solved": false,
+  "L2_solved": false,
+  "l1_step": null,
+  "l2_step": null,
+  "level_first_step": {},
+  "arc_score": 0.0,
+  "arc_per_level": {},
+  "solver_level_steps": {
+    "1": 14,
+    "2": 39,
+    "3": 60,
+    "4": 81,
+    "5": 95,
+    "6": 123
+  },
+  "repr_log_enc_n": 100,
+  "repr_log_enc_levels": 1,
+  "I3_rho": -0.5357,
+  "I3_rho_pass": false,
+  "I3_cv": 0.017321,
+  "I3_counts_at_200": [
+    29.0,
+    28.0,
+    29.0,
+    28.0,
+    28.0,
+    29.0,
+    29.0
+  ],
+  "I1_enc_within": null,
+  "I1_enc_between": null,
+  "I1_enc_p_value": 1.0,
+  "I1_enc_pass": false,
+  "I1_act_within": null,
+  "I1_act_between": null,
+  "I1_act_p_value": 1.0,
+  "I1_act_pass": false,
+  "I4_entropy_100": 1.9454,
+  "I4_entropy_5000": 1.9459,
+  "I4_reduction_pct": -0.03,
+  "I4_pass": false,
+  "I5_level_actions": null,
+  "I5_pass": null,
+  "R3_jacobian_diff": 0.0451,
+  "R3_n_obs_used": 100,
+  "R3_pass": false,
+  "SAL_rho": -0.4643,
+  "SAL_pass": false,
+  "SAL_n_actions_visited": 7,
+  "pe_snapshots": {
+    "100": {
+      "pe_ema_mean": 0.043899,
+      "pe_ema_max": 0.050111,
+      "pe_delta_mean": -0.003681,
+      "pe_delta_max": -0.003,
+      "pe_delta_top7": [
+        -0.003,
+        -0.004197,
+        -0.003004,
+        -0.003727,
+        -0.004056,
+        -0.003471,
+        -0.004313
+      ]
+    },
+    "1000": {
+      "pe_ema_mean": 0.103461,
+      "pe_ema_max": 0.105244,
+      "pe_delta_mean": 0.000908,
+      "pe_delta_max": 0.00108,
+      "pe_delta_top7": [
+        0.000858,
+        0.00108,
+        0.001023,
+        0.00105,
+        0.000895,
+        0.00055,
+        0.000902
+      ]
+    },
+    "5000": {
+      "pe_ema_mean": 0.101181,
+      "pe_ema_max": 0.107431,
+      "pe_delta_mean": 0.000176,
+      "pe_delta_max": 0.000765,
+      "pe_delta_top7": [
+        0.000221,
+        -0.000264,
+        0.000509,
+        -0.000242,
+        0.000424,
+        -0.000179,
+        0.000765
+      ]
+    }
+  }
+}

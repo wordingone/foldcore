@@ -1,0 +1,108 @@
+{
+  "game": "tu93",
+  "condition": "lpl_pe_delta",
+  "draw": 5,
+  "seed": 501,
+  "steps_taken": 10000,
+  "elapsed_seconds": 2.33,
+  "max_level": 0,
+  "L1_solved": false,
+  "L2_solved": false,
+  "l1_step": null,
+  "l2_step": null,
+  "level_first_step": {},
+  "arc_score": 0.0,
+  "arc_per_level": {},
+  "solver_level_steps": {
+    "1": 18,
+    "2": 28,
+    "3": 47,
+    "4": 64,
+    "5": 93,
+    "6": 121,
+    "7": 135,
+    "8": 156,
+    "9": 185
+  },
+  "repr_log_enc_n": 100,
+  "repr_log_enc_levels": 1,
+  "I3_rho": -0.4643,
+  "I3_rho_pass": false,
+  "I3_cv": 0.017321,
+  "I3_counts_at_200": [
+    28.0,
+    29.0,
+    29.0,
+    28.0,
+    29.0,
+    29.0,
+    28.0
+  ],
+  "I1_enc_within": null,
+  "I1_enc_between": null,
+  "I1_enc_p_value": 1.0,
+  "I1_enc_pass": false,
+  "I1_act_within": null,
+  "I1_act_between": null,
+  "I1_act_p_value": 1.0,
+  "I1_act_pass": false,
+  "I4_entropy_100": 1.9454,
+  "I4_entropy_5000": 1.9459,
+  "I4_reduction_pct": -0.03,
+  "I4_pass": false,
+  "I5_level_actions": null,
+  "I5_pass": null,
+  "R3_jacobian_diff": 0.0447,
+  "R3_n_obs_used": 100,
+  "R3_pass": false,
+  "SAL_rho": -0.2857,
+  "SAL_pass": false,
+  "SAL_n_actions_visited": 7,
+  "pe_snapshots": {
+    "100": {
+      "pe_ema_mean": 0.14783,
+      "pe_ema_max": 0.159225,
+      "pe_delta_mean": -0.00812,
+      "pe_delta_max": -0.006258,
+      "pe_delta_top7": [
+        -0.0094,
+        -0.008352,
+        -0.008912,
+        -0.006258,
+        -0.008407,
+        -0.008783,
+        -0.006727
+      ]
+    },
+    "1000": {
+      "pe_ema_mean": 0.251574,
+      "pe_ema_max": 0.270286,
+      "pe_delta_mean": 0.001226,
+      "pe_delta_max": 0.002725,
+      "pe_delta_top7": [
+        0.002725,
+        0.002513,
+        -0.000116,
+        -0.00061,
+        0.001317,
+        0.00133,
+        0.001423
+      ]
+    },
+    "5000": {
+      "pe_ema_mean": 0.206298,
+      "pe_ema_max": 0.250447,
+      "pe_delta_mean": 0.000931,
+      "pe_delta_max": 0.002776,
+      "pe_delta_top7": [
+        0.000632,
+        -0.001974,
+        0.001964,
+        0.002776,
+        0.001068,
+        0.001027,
+        0.001025
+      ]
+    }
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "game": "ft09",
+  "condition": "lpl_pe_delta",
+  "draw": 2,
+  "seed": 201,
+  "steps_taken": 10000,
+  "elapsed_seconds": 9.68,
+  "max_level": 1,
+  "L1_solved": true,
+  "L2_solved": false,
+  "l1_step": 7399,
+  "l2_step": null,
+  "level_first_step": {
+    "1": 7399
+  },
+  "arc_score": 0.0,
+  "arc_per_level": {
+    "1": 0.0
+  },
+  "solver_level_steps": {
+    "1": 4,
+    "2": 11,
+    "3": 25,
+    "4": 41,
+    "5": 62,
+    "6": 75
+  },
+  "repr_log_enc_n": 100,
+  "repr_log_enc_levels": 2,
+  "I3_rho": 0.9643,
+  "I3_rho_pass": true,
+  "I3_cv": 4.417579,
+  "I3_counts_at_200": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "I1_enc_within": 0.8251,
+  "I1_enc_between": 1.0444,
+  "I1_enc_p_value": 0.02,
+  "I1_enc_pass": true,
+  "I1_act_within": 0.771,
+  "I1_act_between": 1.06,
+  "I1_act_p_value": 0.004,
+  "I1_act_pass": true,
+  "I4_entropy_100": 4.6052,
+  "I4_entropy_5000": 8.2685,
+  "I4_reduction_pct": -79.55,
+  "I4_pass": false,
+  "I5_level_actions": {
+    "1": 212
+  },
+  "I5_pass": null,
+  "R3_jacobian_diff": 0.9322,
+  "R3_n_obs_used": 100,
+  "R3_pass": true,
+  "SAL_rho": -0.6071,
+  "SAL_pass": false,
+  "SAL_n_actions_visited": 7,
+  "pe_snapshots": {
+    "100": {
+      "pe_ema_mean": 5e-06,
+      "pe_ema_max": 0.000855,
+      "pe_delta_mean": -5e-06,
+      "pe_delta_max": 0.0,
+      "pe_delta_top7": [
+        0.0,
+        -0.000627,
+        -0.000595,
+        -0.000796,
+        -0.000769,
+        -0.000647,
+        -0.000855
+      ]
+    },
+    "1000": {
+      "pe_ema_mean": 8e-06,
+      "pe_ema_max": 0.000855,
+      "pe_delta_mean": -8e-06,
+      "pe_delta_max": 0.0,
+      "pe_delta_top7": [
+        0.0,
+        -0.000627,
+        -0.000595,
+        -0.000796,
+        -0.000769,
+        -0.000647,
+        -0.000855
+      ]
+    },
+    "5000": {
+      "pe_ema_mean": 0.002424,
+      "pe_ema_max": 0.009809,
+      "pe_delta_mean": -0.002423,
+      "pe_delta_max": -3e-06,
+      "pe_delta_top7": [
+        -0.000505,
+        -0.000627,
+        -0.000595,
+        -0.000796,
+        -0.000769,
+        -0.000647,
+        -0.000855
+      ]
+    }
+  }
+}
