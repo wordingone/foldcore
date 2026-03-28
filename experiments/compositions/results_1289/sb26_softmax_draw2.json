@@ -1,0 +1,103 @@
+{
+  "game": "sb26",
+  "condition": "softmax",
+  "draw": 2,
+  "seed": 200,
+  "use_softmax": true,
+  "mean_temperature": 11198.3657,
+  "steps_taken": 10000,
+  "elapsed_seconds": 7.36,
+  "max_level": 0,
+  "L1_solved": false,
+  "L2_solved": false,
+  "l1_step": null,
+  "l2_step": null,
+  "level_first_step": {},
+  "arc_score": 0.0,
+  "arc_per_level": {},
+  "solver_level_steps": {
+    "1": 9,
+    "2": 24,
+    "3": 39,
+    "4": 54,
+    "5": 71,
+    "6": 90,
+    "7": 107,
+    "8": 124
+  },
+  "repr_log_enc_n": 100,
+  "repr_log_enc_levels": 1,
+  "I3_rho": 0.3214,
+  "I3_rho_pass": false,
+  "I3_cv": 4.577232,
+  "I3_counts_at_200": [
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "I1_enc_within": null,
+  "I1_enc_between": null,
+  "I1_enc_p_value": 1.0,
+  "I1_enc_pass": false,
+  "I1_act_within": null,
+  "I1_act_between": null,
+  "I1_act_p_value": 1.0,
+  "I1_act_pass": false,
+  "I4_entropy_100": 4.5774,
+  "I4_entropy_5000": 7.8541,
+  "I4_reduction_pct": -71.58,
+  "I4_pass": false,
+  "I5_level_actions": null,
+  "I5_pass": null,
+  "R3_jacobian_diff": 0.9077,
+  "R3_n_obs_used": 100,
+  "R3_pass": true,
+  "SAL_rho": -0.5714,
+  "SAL_pass": false,
+  "SAL_n_actions_visited": 7,
+  "pe_snapshots": {
+    "100": {
+      "mean": 0.000285,
+      "max": 0.043758,
+      "top7": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "1000": {
+      "mean": 0.004247,
+      "max": 0.073281,
+      "top7": [
+        0.0,
+        0.017409,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "5000": {
+      "mean": 0.014203,
+      "max": 0.079248,
+      "top7": [
+        0.010046,
+        0.044785,
+        0.036173,
+        0.013404,
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  }
+}

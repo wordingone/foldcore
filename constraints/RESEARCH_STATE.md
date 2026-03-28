@@ -418,3 +418,10 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **R3 intact:** No R3 regression (0.670 both). R3 kill criterion not triggered.
   - Root cause: adaptive threshold (running median) means momentum fires on ~50% of all steps — far too frequently. High-enc_change actions are visually-interesting clicks, not game-advancing sequences. Temporal structure problem unresolved.
   - Open: fixed/higher-percentile threshold (90th?) would fire less and preserve I3 coverage. Not tested.
+- **Step 1289 (allosteric softmax): KILL — test invalid.** 100 runs (10 games × 2 conditions × 5 draws), 846s.
+  - **SAL overall:** L1=10/50 (0.20) vs CTL=14/50 (0.28). R3=0.6638 vs CTL=0.6694. I4=-50.1% vs CTL=-55.7%. I3_cv=3.22 vs CTL=3.10.
+  - **vc33 catastrophic regression:** SAL 0/5 vs CTL 5/5. ls20 gain: SAL 2/5 vs CTL 0/5. ft09 slight regression: SAL 3/5 vs CTL 4/5.
+  - **DECAY=0.001 killed W_action.** (0.999)^10000 ≈ 5e-5 → W_action ≈ 0 → std(salience) ≈ 1e-5 → T=1/std ≈ 100K. Observed: T_avg=59,570 (range 10K-215K across games). At T=60K, softmax is permanently uniform — allosteric connection never activated.
+  - **Mechanism was never tested.** SAL = accidental uniform-random selection throughout entire run. Result: pe_argmin beats uniform-random (expected).
+  - **R3 intact:** No collapse (0.664 vs 0.669). Weight learning unaffected.
+  - Fix required: remove DECAY from W_action entirely (or normalize salience by ||W_action||) before retesting allosteric selection.
