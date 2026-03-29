@@ -1,101 +1,37 @@
 # Constitution for Recursive Self-Improvement
 
----
-
-## What This Is
-
-Principles and tests any system must satisfy for recursive self-improvement. Architecture-independent. All must hold simultaneously. If a principle is wrong, fix the principle. If an implementation fails, fix the implementation.
+Seven simultaneous constraints for a system that improves itself by criteria it generates. Architecture-independent. All must hold. If a principle is wrong, fix the principle.
 
 ---
 
 ## Definitions
 
-**Frozen frame:** Anything in the system that was chosen by the designer and cannot be changed by the system itself. Parameters, structure, topology, objectives, evaluation criteria.
+**Frozen frame:** Any system element chosen by the designer that the system cannot change.
 
-**Recursive self-improvement:** A system that improves itself by criteria it generates, where "improves" means measurably better performance on tasks the system was not specifically designed for. The singularity is the limit where the frozen frame reaches zero.
-
-**Reflexive map:** A parameterized map W where the computation W(x) both produces the system's output and modifies W itself. Encoding and action selection are the same operation through W, not separate stages. R2 requires the map to be reflexive. R3 measures whether it is. Any component that selects actions without reading from W is a separate evaluator — frozen frame that violates R2.
+**Recursive self-improvement:** A system improves itself by criteria it generates, where "improves" means measurably better performance on tasks it was not specifically designed for.
 
 ---
 
-## The Five Principles
+## Rules
 
-1. **Computation without external objectives.** Remove all loss/reward/metrics — system still produces distinguishable outputs for distinguishable inputs.
-2. **Adaptation from computation, not beside it.** The signal driving self-modification is a byproduct of computation itself, not a separate evaluator.
-3. **Modification tested against prior state.** Self-improvement measured against previous version, not external standard. Improvement on trained + degradation on novel = overfitting.
-4. **Minimal frozen frame.** Every element is either adaptive or irreducible (removing it kills capability per R6). Nothing frozen "for now."
-5. **One immutable ground truth.** One empirical test — not chosen by the system — remains fixed. Binary, fast, architecture-independent, non-trivial, robust.
-
----
-
-## The Rules (all must hold simultaneously)
-
-*Phase 1 (416 experiments) proved: sequential stage-climbing doesn't work. The stages were self-assessed, circularly validated, and the system (LVQ/codebook) hit an architecture ceiling at Stage 7. The correct framing: these are simultaneous constraints, not sequential milestones. A substrate either satisfies ALL of them or it doesn't.*
-
-### R0: The system's dynamics dominate its initial conditions (2026-03-29)
-
-Any starting state converges to the same behavior under R1-R6. The system does not depend on privileged initialization. Environmental input breaks symmetry; the interaction law does the rest.
-
-*R0 is not an independent principle — it is the operational test of whether R1-R6 are jointly sufficient. If the dynamics (R1-R6) are strong enough, initial conditions are overwritten. If initial conditions determine behavior, at least one of R1-R6 is too weak. R0 bridges the constitutional blind spot at t=0: R1-R6 describe a running system, not a birth. R0 demands that birth doesn't matter.*
-
-*Evidence (Step 1313): T_chain=1.17 from deterministic orthogonal init. Prediction transfer survives without random seeds. Dynamics dominate initialization for prediction. RHAE=0 — dynamics do not yet dominate for action.*
-
-*Test: run from multiple different initializations. If T_chain and compression are consistent → R0 satisfied. If init-dependent → R0 fails → dynamics too weak.*
-
-### R1: The system computes without external objectives (Principle I)
-
-Remove all external loss functions, reward signals, and evaluation metrics. The system still produces distinguishable outputs for distinguishable inputs.
-
-*Clarification (revised 2026-03-21, post Hart review):* R1 prohibits external loss functions, reward signals, and evaluation metrics — signals that encode what the system SHOULD achieve. Environmental observations (state transitions, event occurrences, interaction outcomes) are part of the input stream, not evaluative signals. Whether a specific use of environmental data introduces a frozen value judgment is governed by R3 (must be self-modifiable) and R4 (must be minimal or irreducible).
-
-*History: The 2026-03-18 clarification ("must operate without external signal") over-restricted R1 beyond what Principle I says. The original principle prohibits three specific signal types, not all external information. A proposed reclassification (optimization targets vs consequence observations, 2026-03-21) was REJECTED after Hart review — the original Principle I text was already correct. The fix was in the clarification, not the principle.*
-
-**Step 432 result (critical):** Without external labels, P-MNIST classification = 9.8% (below chance). With external labels = 94.48%. The entire classification capability depends on external labels. Self-generated labels compound errors because softmax voting requires correct labels to produce correct predictions.
-
-**Honest framing:** Classification (P-MNIST) is supervised — external labels are load-bearing, not just helpful. Navigation (LS20/FT09/VC33) IS R1-compliant — actions are self-generated by the substrate. The two benchmarks have fundamentally different R1 status.
-
-### R2: Adaptation arises from the computation itself (Principle II)
-
-The mechanism that drives change IS the mechanism that processes input. They are the same operation, not two operations that happen to coexist.
-
-### R3: Every modifiable aspect of the system IS modified by the system
-
-Not "some parameters adapt." ALL parameters, structural choices, functional forms, and representations are modified by the system's own dynamics. If any aspect is hardcoded and the system cannot change it, that aspect is a frozen frame.
-
-*This collapses Stages 2-7 into one rule. The original stages created a false sense of progress — "we passed Stage 4!" while Stages 6-7 remained structurally impossible.*
-
-### R4: Modification is tested against prior state (Principle III)
-
-After any self-modification, the system compares performance to before the modification. Improvement on trained tasks with degradation on novel tasks is overfitting, not improvement.
-
-### R5: Exactly one element is not self-modifiable: the ground truth test (Principle V)
-
-The system can modify everything about itself EXCEPT the empirical test that defines success. This prevents the system from "improving" by redefining improvement.
-
-### R6: No part is deletable without losing all capability
-
-The deletion test (S2 from operational tests). If you can remove a component and the system still works, that component is either redundant (delete it) or the system has separable parts (it hasn't collapsed).
-
-*This was buried in RESEARCH_STATE.md but is arguably more fundamental than half the principles.*
+| Rule | Statement | Falsified if | Evidence | Status |
+|------|-----------|-------------|----------|--------|
+| R0 | The system's dynamics dominate its initial conditions. Any starting state converges to the same behavior. | Different initializations produce different long-term behavior (>10% metric variance across inits). | Step 1313: deterministic orthogonal init produces consistent compression (cr variance <5%). Not tested for action/progress — dynamics dominate prediction but not yet task performance. | **Partial.** Prediction: confirmed. Task performance: untested. |
+| R1 | The system computes without external objectives. No loss functions, reward signals, or evaluation metrics imposed from outside. | System's distinguishable outputs require an external signal to produce. | Self-supervised prediction (Steps 1305+) is R1-compliant — no external reward. Adam's loss function is computed from the system's own predictions. Classification (P-MNIST, Step 432) requires external labels — R1-violating. | **Holds** for prediction/navigation tasks. **Fails** for classification. |
+| R2 | Adaptation arises from the computation itself. The mechanism that drives change IS the mechanism that processes input. | The update mechanism can be removed without changing the forward computation. | Adam violates: forward pass works without Adam (Steps 1305-1308). LPL/Hebbian complies: update IS the forward computation (Steps 1309-1322). TP complies: local targets generated by forward computation (Steps 1329+). | **Tested.** Adam=violates. LPL/TP=complies. Organism interpretation (many components, one coupling law) adopted but not yet falsification-tested. |
+| R3 | Every modifiable aspect IS modified by the system. Weights, structure, representations change through the system's own dynamics. | Any weight or structure element remains unchanged after N steps of operation (wdrift=0). | R3=100/100 by composition (Step 1251). wdrift>0 confirmed across all TP/MLP substrates (Steps 1329-1341). wdrift>0 is necessary but not sufficient — weights change but behavior may not (Step 1304: wdrift=11.5, R3=0). | **Holds** for weight modification. **Open** for structural modification (no substrate modifies its own architecture). |
+| R4 | Modification is tested against prior state. Improvement on trained + degradation on novel = overfitting. | System reports improvement but performance degrades on held-out instances. | Anti-speedup on 3/4 L1-reaching games (Step 1324). TP anti-speedup 0.62 (Step 1330). Step 1335: speedup=1.85 was episode difficulty artifact. Zero genuine second-exposure speedup in 1341 experiments. | **Not satisfied.** No substrate has demonstrated genuine R4 compliance (improvement that survives novel instances). |
+| R5 | One ground truth stays fixed. The empirical test that defines success is the one thing the system cannot change. | System modifies its own evaluation criterion. | Ground truth = ARC-AGI-3 game environments + MBPP tasks. These are external, fixed, opaque to the substrate. The substrate cannot change game rules or scoring. | **Holds** by construction (external benchmark). |
+| R6 | No part is deletable without losing capability. If you can remove a component and the system still works, that component was redundant. | Removing a component leaves system performance unchanged. | Deletion tests performed on composition components (Step 1251+). Not systematically tested on current MLP+TP substrate components. | **Untested** on current architecture. Needs systematic deletion audit. |
 
 ---
 
-## Anti-Inflation Rules
+## Open questions about the constitution itself
 
-1. **The reviewer's test.** Can an external reviewer reproduce the claimed capability from code alone, without reading the constitution or narrative? If not, the capability is in the narrative, not the code.
-2. **R3 audits must account for emergent interactions, not just frozen elements.** Enumerating frozen elements misses load-bearing properties that arise from their coupling. The audit question is not only "what's frozen?" but "what coupling survives?"
-3. **R3 audits include the entire system.** The encoding pipeline (pooling, normalization, centering, action mapping) is part of the frozen frame. A "22-line substrate" that requires avgpool16 + centered_enc + F.normalize is not a 22-line system. Audit everything between raw input and action output.
-4. **Forced != unjustified.** An element where every alternative is killed by a universal constraint is Irreducible, not Unjustified. See R3_AUDIT.md encoding compilation.
-5. **Incumbent components face kill criteria.** If a frozen frame component survives only because alternatives are killed faster, it is not validated — it is protected. The R6 deletion test on a frozen frame component that proves the system has separable parts is evidence of poor design, not irreducibility. (Step 1291: argmin survived 30+ experiments through asymmetric evaluation and a broken metric, not through constitutional compliance.)
+1. **R2 organism interpretation:** R2 currently allows "many components, one coupling law" (prediction error couples all components). This is broader than "one mechanism." The falsification test for the organism interpretation is not specified. If ANY interpretation of R2 allows the experiments we want to run, R2 may be too weak.
 
----
+2. **R4 has never been satisfied.** Every substrate overfits to episode-specific features. This is either a substrate problem (solvable) or an R4 problem (the requirement is too strong for the current test environment).
 
-## R3-Analogous Self-Examination
+3. **R6 is untested on current substrates.** Last systematic deletion test was Step 1251 (composition era). The MLP+TP substrate has not been deletion-audited.
 
-*The search process is structurally ANALOGOUS to the substrate (Finding 12, external audit) but not identical. R3 defined for dynamical systems; the search is LLM-driven. This applies R3's logic by analogy.*
-
-The search has persistent state (git repo, constraint map, skills) and a transition function (read state -> process -> write new state). The search modifies DATA (constraint map) but not OPERATIONS (skills, modes, classification format).
-
-**Score: 1 M, 1 M-ext, 2 I-prov, 4 U.** The search's R3 situation is WORSE than the substrate's. The LLM interpreter is an architectural constraint (~200B parameters), not a design choice — categorically different from substrate frozen elements (22 lines).
-
-**Key insight:** Frozen interpreter + modifiable data. Both the search and substrate face: can everything EXCEPT the interpreter become self-modifiable? Same shape, different substance — useful for hypotheses, not importing conclusions.
+4. **Falsification conditions need review.** The conditions in this table are first drafts. An external reviewer should evaluate whether they are sufficient to actually disprove each rule.
