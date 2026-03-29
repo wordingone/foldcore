@@ -629,9 +629,21 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
     - MBPP: HM 0.658/0.519, HO 0.664/0.503, DM 0.083/0.599
   - **VC33 and LP85 regression:** ARGMIN-PE=5/5 but DHL+HOMEO=0/5 L1. Homeostasis suppresses the action selection dynamics needed on click games.
   - **Linear map path closed:** After Steps 1301+1302, anti-Hebbian + homeostasis = no genuine learning signal in linear map. Two experiments, clear negative. Direction terminated.
-  - **Decision tree outcome:** "Linear map has no genuine learning signal → try non-Hebbian self-supervised objective." → Step 1303 (CNN forward prediction, currently running).
+  - **Decision tree outcome:** "Linear map has no genuine learning signal → try non-Hebbian self-supervised objective." → Steps 1303/1304 (CNN forward prediction).
 
-- **Step 1300 (StochasticGoose PRISM baseline — leaderboard leader): RUNNING.** Jun directive, Leo mail 3662/3663. 11 games × 20 draws = 220 pairs. ~8 of 11 games complete.
+- **Step 1304 (CNN self-supervised forward prediction, masked PRISM): COMPLETE. KILL triggered — but both kill metrics are measurement artifacts.** 18 runs, ~30 min. Random games: ft09/sp80/tu93 (Game A/B/C).
+  - **Kill triggered:** R3=0.0 AND wdrift=0.0 for SG-SELFSUP. But both are artifacts:
+    - **wdrift=0.0 artifact:** `on_level_transition()` resets model AND `_init_state_dict`. After any level/episode reset, drift from last-init is ~0 by design. Measurement compares current weights vs last-reset weights, not vs episode start. SG model resets on every level transition (exact per original SG). Fix: store `_episode_start_state_dict` separately, never reset on level transitions.
+    - **R3=0.0 artifact:** Jacobian metric calibrated for linear maps. Perturbation scale (epsilon=0.01) on a 4-conv-layer network produces near-zero output differences even when weights have changed significantly. Leo predicted this. Fix: use direct weight norm change (wdrift from episode start) as primary R3 proxy.
+  - **Chain aggregates (masked):**
+    - SG-SELFSUP: mean_R3=0.0, mean_RHAE=1.64e-03, mean_wdrift=0.0, mean_action_KL=1.9459, mean_I3cv=16.39
+    - ARGMIN-PE: mean_R3=0.6293, mean_RHAE=0.0, mean_wdrift=43.67, mean_action_KL=9.632, mean_I3cv=2.95
+  - **action_KL=1.94 for SS** (non-zero): action distribution shifts over the episode. Whether this is genuine learning or random-init variance after model resets is unknown.
+  - **RHAE=1.64e-03 for SS**: above RHAE-dead threshold — some level progress occurred.
+  - **Fixes needed for 1305:** (1) Episode-start weight snapshot not reset on level transitions. (2) Prediction loss trajectory at 1K/5K/9K steps (Leo amendment, mail 3678). (3) wdrift = drift from episode start, not last reset.
+  - **Decision:** Not a genuine kill — metrics broken. Need 1305 with fixed measurement before the direction can be called.
+
+- **Step 1300 (StochasticGoose PRISM baseline — leaderboard leader): KILLED** (Jun directive via Leo mail 3673, 2026-03-29). 7/11 games completed before kill. Results partial — not incorporated. Jun directive, Leo mail 3662/3663. 11 games × 20 draws = 220 pairs. ~8 of 11 games complete.
   - Port of DriesSmit/ARC3-solution (exact CNN architecture, training loop, buffer)
   - CNN: Conv2d 32→64→128→256 + MaxPool action head (5 discrete) + spatial coord head (4096)
   - Binary frame-change reward; buffer reset + model reset on level transition

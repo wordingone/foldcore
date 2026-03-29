@@ -1,0 +1,24 @@
+{
+  "chain_summary": {
+    "sg_selfsup": {
+      "mean_R3": 0.0,
+      "mean_RHAE": 0.00164,
+      "mean_wdrift": 0.0,
+      "mean_action_KL": 1.9459,
+      "mean_I3cv": 16.3907
+    },
+    "argmin_pe": {
+      "mean_R3": 0.6293,
+      "mean_RHAE": 0.0,
+      "mean_wdrift": 43.6689,
+      "mean_action_KL": 9.632,
+      "mean_I3cv": 2.9508
+    }
+  },
+  "n_draws": 3,
+  "games_label_only": [
+    "Game A",
+    "Game B",
+    "Game C"
+  ]
+}
