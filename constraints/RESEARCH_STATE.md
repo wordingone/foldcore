@@ -1476,3 +1476,27 @@ Childhood pre-training: 10 ARC games × 500 steps + 3 MBPP × 500 steps (one-tim
 - (d) 2K steps fundamentally insufficient for ANY of these game draws
 
 **Status: RHAE-dead across all 5 steps in deliberation series. Waiting for Leo's next spec.**
+
+---
+
+## Step 1349 (SIGNAL — 3/10 draws non-zero. Seeds 13440-13444 were dead zone, not the substrate.):
+
+MLP+TP entropy baseline on 10 fresh draw seeds (13490-13499). 60 episodes.
+
+**RHAE per draw: [0, 0, 0.000243, 0, 0.000009, 0.000207, 0, 0, 0, 0]**
+**Chain mean: 0.000046. Chain std: 0.000090. Non-zero: 3/10 draws.**
+
+**Games with progress (all on Game A / ARC):**
+- Draw 2 Game A: eff²=0.00073, p2=370 steps
+- Draw 4 Game A: eff²=2.6e-05, p2=1943 steps
+- Draw 5 Game A: eff²=0.000622, p2=401 steps (try1 failed, try2 succeeded = speedup=inf)
+
+**MBPP: 0/10 non-zero. Game B: 0/10 non-zero.**
+
+**Critical finding:** Seeds 13440-13444 used in steps 1344-1348 were ALL in the dead zone (0/5). The deliberation series conclusions were based on pathological seeds. The baseline substrate IS occasionally capable (~30% of game draws).
+
+**cr pattern:** 0.33-0.44 consistently (healthy compression). K=10 cr=1.0 anomaly was sparse-buffer specific.
+
+**Seed pool insight:** RHAE is very sparse (3/30 games, all same game type). ARC-only progress; MBPP never progresses. RHAE variance is high (std 2× mean).
+
+**Next: Step 1350 — reconnect action to learning. Track entropy evolution.**
