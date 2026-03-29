@@ -6,18 +6,27 @@ Only labels (MBPP, Game A, Game B, ...) appear in logs, filenames, and results.
 The sealed mapping (.sealed_game_mapping.json) is written once and not read
 by Eli or Leo during the session.
 
+Protocol (Jun directive, 2026-03-29):
+- Substrate initialization is DETERMINISTIC — no seeds, no draws.
+- 3 games × N conditions = N×3 runs per experiment. No multi-draw loops.
+- Environment breaks symmetry through observations, not random init.
+
 Usage in experiment scripts:
-    from prism_masked import select_games, seal_mapping, label_filename, GAME_LABELS_DISPLAY
+    from prism_masked import select_games, seal_mapping, label_filename, det_weights
 
     GAMES, GAME_LABELS = select_games(seed=STEP)
     # GAMES is internal-only — never print, never log, never pass to Leo.
     # GAME_LABELS maps game_id -> label string (MBPP, Game A, Game B, ...).
     # All output uses GAME_LABELS[game] or just the label string directly.
+
+    # Deterministic weight init (no np.random.seed — same shape = same weights):
+    W1 = det_weights(128, 256)  # orthogonal init from fixed QR
 """
 
 import random
 import os
 import json
+import numpy as np
 
 ARC_POOL = [
     'ft09', 'ls20', 'vc33', 'tr87', 'sp80', 'sb26',
@@ -28,8 +37,11 @@ ARC_POOL = [
 def select_games(seed, n_arc=2, include_mbpp=True):
     """Select games for an experiment step.
 
+    Game selection uses a seed (experiment-level selection, not substrate init).
+    This is kept: which 2 ARC games to use is experiment selection, not substrate randomness.
+
     Args:
-        seed: Experiment step number (used as RNG seed).
+        seed: Experiment step number (used as RNG seed for game selection only).
         n_arc: Number of random ARC games to include (default 2, per Jun directive).
         include_mbpp: If True, MBPP is always included and labeled 'MBPP' (not masked).
 
@@ -38,7 +50,7 @@ def select_games(seed, n_arc=2, include_mbpp=True):
         labels: dict mapping game_id -> label string for all output.
 
     Example:
-        GAMES, GAME_LABELS = select_games(seed=1310)
+        GAMES, GAME_LABELS = select_games(seed=1313)
         # GAMES = ['mbpp', 'ft09', 'vc33']  ← internal, do NOT expose
         # GAME_LABELS = {'mbpp': 'MBPP', 'ft09': 'Game A', 'vc33': 'Game B'}
     """
@@ -57,6 +69,27 @@ def select_games(seed, n_arc=2, include_mbpp=True):
             labels[g] = f'Game {chr(65 + i)}'
 
     return games, labels
+
+
+def det_weights(m, n):
+    """Deterministic weight initialization — orthogonal from fixed QR decomposition.
+
+    No randomness. Same (m, n) = same initial weights every time.
+    Environment breaks symmetry through observations, not random init.
+
+    Args:
+        m: Output dimension (rows).
+        n: Input dimension (cols).
+
+    Returns:
+        numpy array of shape (m, n) with orthonormal rows (if m <= n) or cols (if m > n).
+    """
+    # Fixed deterministic input: shaped array normalized to prevent QR overflow
+    k = max(m, n)
+    A = np.arange(1, k * k + 1, dtype=np.float64).reshape(k, k)
+    A = A / np.linalg.norm(A)
+    Q, _ = np.linalg.qr(A)
+    return Q[:m, :n]
 
 
 def seal_mapping(results_dir, games, labels):
@@ -82,7 +115,7 @@ def label_filename(label, step):
         step: Experiment step number.
 
     Returns:
-        Filename string, e.g. 'mbpp_1310.jsonl', 'game_a_1310.jsonl'.
+        Filename string, e.g. 'mbpp_1313.jsonl', 'game_a_1313.jsonl'.
     """
     safe = label.lower().replace(' ', '_')
     return f'{safe}_{step}.jsonl'
@@ -91,3 +124,14 @@ def label_filename(label, step):
 def masked_game_list(labels):
     """Return sorted label list for display in logs (no real game IDs)."""
     return sorted(labels.values(), key=lambda s: (s != 'MBPP', s))
+
+
+def masked_run_log(label, elapsed_seconds):
+    """Return the per-run log line for masked experiments (no-draws protocol).
+
+    STRUCTURAL ENFORCEMENT: Only timing is shown — no stats that could reveal
+    game type (action_KL, wdrift, cr, RHAE). Stats exist only in chain summary.
+
+    Example output: "  Game A:  (5.5s)"
+    """
+    return f"  {label}:  ({elapsed_seconds:.1f}s)"

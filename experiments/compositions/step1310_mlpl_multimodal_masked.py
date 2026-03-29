@@ -1,35 +1,36 @@
 """
-Step 1309 — Linear LPL reflexive map, MBPP in the pool (dual-modality)
-Leo mail 3697, 2026-03-29.
+Step 1310 — Multi-layer predictive coding (Whittington & Bogacz 2017)
+Leo mail 3703+3705, 2026-03-29.
 
-Architecture: linear reflexive map with LPL Hebbian (confirmed composition from step1253b/1282).
-  obs → _enc_frame → centered 256-dim → W_action (n_actions × 256) → action
-  Update: LPL Hebbian on W_action (eta_h=0.05, predictive term eta_p=0.005)
-  Action: adaptive softmax (temperature = 1/std(scores))
-
-MBPP added to game pool. obs from mbpp_game.py is 256-dim float32 — same _enc_frame
-fallback path as other games. No dual-modality encoding needed.
+Architecture: 3-layer predictive coding (W&B 2017)
+  enc(256) → W1(128×256) → h1(128) → W2(64×128) → h2(64) → W3(n_actions×64) → action_scores
+  Top-down predictions: enc_pred = W1.T @ h1, h1_pred = W2.T @ h2
+  Prediction errors: e1 = enc - enc_pred, e2 = h1 - h1_pred, e3 = h2 (W&B top-layer convention)
+  K=5 inference iterations per step (gradient descent on free energy ||e1||² + ||e2||²)
+  Weight updates: local error Hebbian rules (approx backprop, R2-compliant)
 
 Why this step:
-  1307/1306 killed curiosity direction (maximize encoding change). Both tested same
-  hypothesis, both ≈ entropy baseline. Now returning to confirmed LPL (step1282) with
-  MBPP in the pool — first test of whether prediction=action on text produces any signal.
+  1309 KILLED (single-layer LPL cr=1.44 > RAND). Credit assignment requires proper error signals.
+  Multi-layer predictive coding gives local error signals at each layer. e3 = h2 (Leo mail 3705:
+  W&B top-layer convention — activity IS the error signal at top layer, no prediction from above).
+
+pred_loss: Layer 1 reconstruction error ||e1||² / ||enc||² — natural compression metric.
+  If depth enables learning: enc_pred converges toward enc → e1 decreases → cr < 1.0.
+  RAND: W1/W2/W3 fixed random, pred_loss ≈ 1.0 throughout (no compression).
 
 Conditions:
-  LPL:  linear reflexive map, LPL Hebbian on W_action
-  RAND: random action baseline
+  MLPL: multi-layer predictive coding, all weights updated
+  RAND: pure random actions, W1/W2/W3 fixed (random init)
 
 Kill criteria (chain-level, masked):
-  Primary:
-    - LPL (1/cr × action_KL) ≤ RAND (1/cr × action_KL) → KILL
-    - LPL action_KL < 0.01 → collapsed → KILL
-  Secondary (informative):
-    - LPL RHAE ≤ RAND RHAE
+  Primary:   MLPL cr ≥ 1.0 → KILL (depth not enabling prediction compression)
+  Secondary: MLPL (1/cr × action_KL) ≤ RAND → KILL (not better than random overall)
+  Tertiary:  MLPL action_KL < 0.01 → collapsed → KILL
 
-Protocol: random seed 1309, masked PRISM (Game A/B/C), 3 draws × 2 conditions = 18 runs.
-Games: ['cn04', 'mbpp', 'sb26'] (pre-computed, shown in JSONL only).
+Protocol: random seed 1310, masked PRISM (MBPP + 2 ARC games), 3 draws × 2 conditions = 18 runs.
 """
-import sys, os, time, json, random, logging
+import sys, os, time, json, logging
+
 sys.path.insert(0, 'B:/M/the-search')
 sys.path.insert(0, 'B:/M/the-search/experiments')
 sys.path.insert(0, 'B:/M/the-search/experiments/archive')
@@ -44,19 +45,18 @@ from prism_masked import select_games, seal_mapping, label_filename, masked_game
 
 # --- Masked PRISM game selection ---
 # GAMES is internal-only. Never print, never log, never pass to Leo.
-# All output uses GAME_LABELS values (labels) only.
-GAMES, GAME_LABELS = select_games(seed=1309)
+GAMES, GAME_LABELS = select_games(seed=1310)
 
 N_DRAWS = 3
 MAX_STEPS = 2_000
-MAX_SECONDS = 300  # 5-min hard cap per episode
+MAX_SECONDS = 300
 
 LOSS_CHECKPOINTS = [500, 1000, 1500, 2000]
 
-CONDITIONS = ['lpl', 'rand']
-LABELS = {'lpl': 'LPL', 'rand': 'RAND'}
+CONDITIONS = ['mlpl', 'rand']
+LABELS = {'mlpl': 'MLPL', 'rand': 'RAND'}
 
-RESULTS_DIR = os.path.join('B:/M/the-search/experiments/compositions', 'results_1309')
+RESULTS_DIR = os.path.join('B:/M/the-search/experiments/compositions', 'results_1310')
 PDIR = 'B:/M/the-search/experiments/results/prescriptions'
 
 SOLVER_PRESCRIPTIONS = {
@@ -74,13 +74,16 @@ SOLVER_PRESCRIPTIONS = {
 
 ACTION_OFFSET = {'ls20': -1, 'vc33': 7}
 
-# LPL hyperparameters (from confirmed step1253b / step1282)
+# Multi-layer predictive coding hyperparameters
 ENC_DIM = 256
-ETA_H = 0.05
-ETA_P = 0.005
-W_GRAD_CLIP = 1.0
+H1_DIM  = 128
+H2_DIM  = 64
+ETA     = 0.001   # weight learning rate
+INF_LR  = 0.05   # inference learning rate (gradient descent on free energy)
+K_INF   = 5      # inference iterations per step
 W_INIT_SCALE = 0.01
-T_MIN = 0.01  # minimum softmax temperature denominator
+W_CLIP  = 100.0
+T_MIN   = 0.01   # minimum softmax temperature denominator
 
 
 # ---------------------------------------------------------------------------
@@ -114,10 +117,9 @@ def load_prescription(game_name):
 
 def compute_solver_level_steps(game_name, seed=1):
     gn = game_name.lower().strip()
-    # MBPP: use oracle (type ground-truth code directly)
     if gn == 'mbpp' or gn.startswith('mbpp_'):
         import mbpp_game
-        return mbpp_game.compute_solver_steps(0)  # problem 0 oracle
+        return mbpp_game.compute_solver_steps(0)
 
     prescription = load_prescription(game_name)
     if prescription is None:
@@ -150,16 +152,26 @@ def compute_solver_level_steps(game_name, seed=1):
 
 
 # ---------------------------------------------------------------------------
-# LPL substrate
+# MLPL substrate
 # ---------------------------------------------------------------------------
 
-class LPLSubstrate:
-    """Linear reflexive map with LPL Hebbian. Confirmed from step1282/1253b.
-    W_action (n_actions × 256) both encodes and selects. LPL update on W_action.
+class MLPLSubstrate:
+    """Multi-layer predictive coding (Whittington & Bogacz 2017).
 
-    Pred loss: EMA per-action forward model. W_pred[a] ← EMA of enc(obs_next) given action a.
-    pred_loss = ||enc_next - W_pred[a]||² / ||enc_next||² (relative prediction error).
-    RAND and LPL use the same metric — RAND never improves, LPL does if it learns structure.
+    3-layer hierarchy:
+      enc(256) → W1(128×256) → h1(128) → W2(64×128) → h2(64) → W3(n×64) → scores
+
+    Inference: K gradient steps on free energy F = ||e1||² + ||e2||²
+      e1 = enc - W1.T @ h1  (Layer 1 prediction error)
+      e2 = h1 - W2.T @ h2  (Layer 2 prediction error)
+      e3 = h2               (W&B top-layer: activity IS the error signal)
+
+    Weight updates (approx backprop via local error Hebbian rules):
+      W1 += eta * outer(h1, e1)
+      W2 += eta * outer(h2, e2)
+      W3 += eta * outer(action_onehot, h2)  [= eta * outer(e3_as_onehot, h2)]
+
+    pred_loss = ||e1||² / ||enc||²  (Layer 1 reconstruction quality)
     """
 
     def __init__(self, n_actions, seed):
@@ -167,18 +179,14 @@ class LPLSubstrate:
         self._rng = np.random.RandomState(seed)
         rng_w = np.random.RandomState(seed + 99999)
 
-        self.W = rng_w.randn(n_actions, ENC_DIM).astype(np.float32) * W_INIT_SCALE
-        self.W_init = self.W.copy()
+        self.W1 = rng_w.randn(H1_DIM, ENC_DIM).astype(np.float32) * W_INIT_SCALE
+        self.W2 = rng_w.randn(H2_DIM, H1_DIM).astype(np.float32) * W_INIT_SCALE
+        self.W3 = rng_w.randn(n_actions, H2_DIM).astype(np.float32) * W_INIT_SCALE
 
-        # EMA forward predictor: W_pred[a] ≈ E[enc_next | action=a]
-        self.W_pred = np.zeros((n_actions, ENC_DIM), np.float32)
-        self._W_pred_n = np.zeros(n_actions, np.float32)
+        self._W1_init = self.W1.copy()
 
         self.running_mean = np.zeros(ENC_DIM, np.float32)
         self.n_obs = 0
-
-        self._prev_enc = None
-        self._last_centered = None
         self.step = 0
         self._action_counts = np.zeros(n_actions, np.float32)
 
@@ -193,62 +201,77 @@ class LPLSubstrate:
             self.running_mean = (1 - a) * self.running_mean + a * x
         return x - self.running_mean
 
+    def _infer(self, enc):
+        """K inference iterations to minimize free energy F = ||e1||² + ||e2||².
+        Returns (h1, h2, e1, e2) after convergence.
+        """
+        h1 = self.W1 @ enc   # initial bottom-up: (H1,)
+        h2 = self.W2 @ h1    # initial bottom-up: (H2,)
+
+        for _ in range(K_INF):
+            enc_pred = self.W1.T @ h1  # (ENC_DIM,) top-down prediction of enc
+            e1 = enc - enc_pred         # (ENC_DIM,)
+            h1_pred = self.W2.T @ h2   # (H1,) top-down prediction of h1
+            e2 = h1 - h1_pred          # (H1,)
+
+            # Gradient descent: dF/dh1 = -W1@e1 + e2, dF/dh2 = -W2@e2
+            h1 = h1 + INF_LR * (self.W1 @ e1 - e2)
+            h2 = h2 + INF_LR * (self.W2 @ e2)
+
+        enc_pred = self.W1.T @ h1
+        e1 = enc - enc_pred
+        h1_pred = self.W2.T @ h2
+        e2 = h1 - h1_pred
+
+        return h1, h2, e1, e2
+
     def process(self, obs_raw):
         self.step += 1
-        centered = self._centered_encode(obs_raw)
-        self._last_centered = centered
-        enc = self.W @ centered  # (n_actions,)
+        enc = self._centered_encode(obs_raw)
 
-        # Adaptive softmax selection
-        std_enc = float(np.std(enc))
-        T = max(1.0 / (std_enc + 1e-8), T_MIN)
-        logits = np.abs(enc) * T
+        h1, h2, e1, e2 = self._infer(enc)
+
+        # Action: adaptive softmax on W3 @ h2
+        action_scores = self.W3 @ h2
+        std_s = float(np.std(action_scores))
+        T = max(1.0 / (std_s + 1e-8), T_MIN)
+        logits = action_scores * T
         logits -= logits.max()
         probs = np.exp(logits)
         probs /= probs.sum()
         action = int(self._rng.choice(self.n_actions, p=probs))
-
         self._action_counts[action] += 1
 
-        # LPL update: Hebbian (Oja) + predictive
-        hebb = np.outer(enc, centered) - (enc ** 2)[:, None] * self.W
-        delta = ETA_H * hebb
-        if self._prev_enc is not None:
-            delta += ETA_P * np.outer(enc - self._prev_enc, centered)
-        norm = float(np.linalg.norm(delta))
-        if norm > W_GRAD_CLIP:
-            delta *= W_GRAD_CLIP / norm
-        self.W += delta
-        np.clip(self.W, -100.0, 100.0, out=self.W)
+        # Weight updates (local error Hebbian)
+        action_onehot = np.zeros(self.n_actions, np.float32)
+        action_onehot[action] = 1.0
 
-        self._prev_enc = enc.copy()
-        return action
+        self.W1 += ETA * np.outer(h1, e1)             # (H1, ENC_DIM)
+        self.W2 += ETA * np.outer(h2, e2)             # (H2, H1)
+        self.W3 += ETA * np.outer(action_onehot, h2)  # (n_actions, H2)
 
-    def update_after_step(self, obs_next, action, reward):
-        # Encode next obs WITHOUT updating running_mean (that happens in process())
-        enc_next = self._centered_encode(obs_next, update_mean=False)
-        a = action % self.n_actions
+        np.clip(self.W1, -W_CLIP, W_CLIP, out=self.W1)
+        np.clip(self.W2, -W_CLIP, W_CLIP, out=self.W2)
+        np.clip(self.W3, -W_CLIP, W_CLIP, out=self.W3)
 
-        # EMA update of forward predictor
-        self._W_pred_n[a] += 1
-        lr = 1.0 / (self._W_pred_n[a] + 1)
-        self.W_pred[a] = (1 - lr) * self.W_pred[a] + lr * enc_next
-
-        # Pred loss: how far from the EMA prediction
-        err = enc_next - self.W_pred[a]
-        enc_norm_sq = float(np.dot(enc_next, enc_next))
-        pred_loss = float(np.dot(err, err)) / (enc_norm_sq + 1e-8)
-
+        # pred_loss = ||e1||² / ||enc||²
+        enc_norm_sq = float(np.dot(enc, enc))
+        pred_loss = float(np.dot(e1, e1)) / (enc_norm_sq + 1e-8)
         self._recent_pred_losses.append(pred_loss)
         for ck in LOSS_CHECKPOINTS:
             if self._pred_loss_at[ck] is None and self.step >= ck:
                 self._pred_loss_at[ck] = round(float(np.mean(self._recent_pred_losses)), 6)
 
+        return action
+
+    def update_after_step(self, obs_next, action, reward):
+        pass  # all learning happens in process()
+
     def on_level_transition(self):
-        self._prev_enc = None
+        pass
 
     def compute_weight_drift(self):
-        return float(np.linalg.norm(self.W - self.W_init))
+        return float(np.linalg.norm(self.W1 - self._W1_init))
 
     def get_pred_loss_trajectory(self):
         return dict(self._pred_loss_at)
@@ -262,19 +285,25 @@ class LPLSubstrate:
 # ---------------------------------------------------------------------------
 
 class RandSubstrate:
-    """Pure random action selection. No learning.
-    Same EMA forward predictor metric as LPL — RAND never improves at prediction."""
+    """Pure random action selection. W1, W2 fixed (random init, never updated).
+    pred_loss = ||e1||² / ||enc||² with fixed W1 — provides stable baseline (~1.0).
+    """
 
     def __init__(self, n_actions, seed):
         self.n_actions = n_actions
         self._rng = np.random.RandomState(seed)
-        # EMA forward predictor (same structure as LPL, never improves for RAND)
-        self.W_pred = np.zeros((n_actions, ENC_DIM), np.float32)
-        self._W_pred_n = np.zeros(n_actions, np.float32)
+        rng_w = np.random.RandomState(seed + 99999)
+
+        # Fixed weights (same init as MLPL, never updated)
+        self.W1 = rng_w.randn(H1_DIM, ENC_DIM).astype(np.float32) * W_INIT_SCALE
+        self.W2 = rng_w.randn(H2_DIM, H1_DIM).astype(np.float32) * W_INIT_SCALE
+        rng_w.randn(n_actions, H2_DIM)  # consume same seed slots as MLPL
+
         self.running_mean = np.zeros(ENC_DIM, np.float32)
         self.n_obs = 0
         self.step = 0
         self._action_counts = np.zeros(n_actions, np.float32)
+
         self._recent_pred_losses = deque(maxlen=50)
         self._pred_loss_at = {ck: None for ck in LOSS_CHECKPOINTS}
 
@@ -282,29 +311,36 @@ class RandSubstrate:
         self.step += 1
         x = _enc_frame(np.asarray(obs_raw, dtype=np.float32))
         self.n_obs += 1
-        a_lr = 1.0 / self.n_obs
-        self.running_mean = (1 - a_lr) * self.running_mean + a_lr * x
+        a = 1.0 / self.n_obs
+        self.running_mean = (1 - a) * self.running_mean + a * x
+        enc = x - self.running_mean
+
+        # Fixed inference (same K iterations, no weight updates)
+        h1 = self.W1 @ enc
+        h2 = self.W2 @ h1
+        for _ in range(K_INF):
+            enc_pred = self.W1.T @ h1
+            e1 = enc - enc_pred
+            h1_pred = self.W2.T @ h2
+            e2 = h1 - h1_pred
+            h1 = h1 + INF_LR * (self.W1 @ e1 - e2)
+            h2 = h2 + INF_LR * (self.W2 @ e2)
+
+        enc_pred = self.W1.T @ h1
+        e1 = enc - enc_pred
+        enc_norm_sq = float(np.dot(enc, enc))
+        pred_loss = float(np.dot(e1, e1)) / (enc_norm_sq + 1e-8)
+        self._recent_pred_losses.append(pred_loss)
+        for ck in LOSS_CHECKPOINTS:
+            if self._pred_loss_at[ck] is None and self.step >= ck:
+                self._pred_loss_at[ck] = round(float(np.mean(self._recent_pred_losses)), 6)
+
         action = int(self._rng.randint(self.n_actions))
         self._action_counts[action] += 1
         return action
 
     def update_after_step(self, obs_next, action, reward):
-        x_next = _enc_frame(np.asarray(obs_next, dtype=np.float32))
-        enc_next = x_next - self.running_mean
-        a = action % self.n_actions
-
-        self._W_pred_n[a] += 1
-        lr = 1.0 / (self._W_pred_n[a] + 1)
-        self.W_pred[a] = (1 - lr) * self.W_pred[a] + lr * enc_next
-
-        err = enc_next - self.W_pred[a]
-        enc_norm_sq = float(np.dot(enc_next, enc_next))
-        pred_loss = float(np.dot(err, err)) / (enc_norm_sq + 1e-8)
-
-        self._recent_pred_losses.append(pred_loss)
-        for ck in LOSS_CHECKPOINTS:
-            if self._pred_loss_at[ck] is None and self.step >= ck:
-                self._pred_loss_at[ck] = round(float(np.mean(self._recent_pred_losses)), 6)
+        pass
 
     def on_level_transition(self):
         pass
@@ -320,8 +356,8 @@ class RandSubstrate:
 
 
 def make_substrate(condition, n_actions, seed):
-    if condition == 'lpl':
-        return LPLSubstrate(n_actions=n_actions, seed=seed)
+    if condition == 'mlpl':
+        return MLPLSubstrate(n_actions=n_actions, seed=seed)
     return RandSubstrate(n_actions=n_actions, seed=seed)
 
 
@@ -385,11 +421,10 @@ def run_episode(env, substrate, n_actions, solver_level_steps, seed):
             fresh_episode = True
             continue
 
-        obs_arr = np.asarray(obs, dtype=np.float32)
-
         if steps == 200:
             i3_counts_at_200 = action_counts.copy()
 
+        obs_arr = np.asarray(obs, dtype=np.float32)
         action = substrate.process(obs_arr) % n_actions
         action_counts[action] += 1
         action_log.append(action)
@@ -500,36 +535,54 @@ def run_draw(condition, game_name, draw_idx, solver_level_steps):
 # ---------------------------------------------------------------------------
 
 def kill_assessment(chain_summary):
-    lpl = chain_summary['lpl']
+    mlpl = chain_summary['mlpl']
     rand = chain_summary['rand']
 
-    lpl_cr = lpl.get('mean_compression_ratio')
+    mlpl_cr = mlpl.get('mean_compression_ratio')
     rand_cr = rand.get('mean_compression_ratio')
-    lpl_kl = lpl.get('mean_action_KL')
+    mlpl_kl = mlpl.get('mean_action_KL')
     rand_kl = rand.get('mean_action_KL')
 
     lines = []
     kill = False
 
-    if lpl_cr is not None and rand_cr is not None and lpl_kl is not None and rand_kl is not None:
-        lpl_score = (1.0 / (lpl_cr + 1e-8)) * lpl_kl
+    # Primary: MLPL cr ≥ 1.0 → KILL
+    if mlpl_cr is not None:
+        if mlpl_cr >= 1.0:
+            lines.append(
+                f"  >>> KILL: MLPL cr={mlpl_cr:.4f} ≥ 1.0 → depth not enabling prediction compression"
+            )
+            kill = True
+        else:
+            lines.append(
+                f"  >>> SIGNAL: MLPL cr={mlpl_cr:.4f} < 1.0 → depth compresses prediction errors"
+            )
+
+    # Secondary: combined score comparison
+    if (mlpl_cr is not None and rand_cr is not None
+            and mlpl_kl is not None and rand_kl is not None):
+        mlpl_score = (1.0 / (mlpl_cr + 1e-8)) * mlpl_kl
         rand_score = (1.0 / (rand_cr + 1e-8)) * rand_kl
-        if lpl_score <= rand_score:
-            lines.append(f"  >>> KILL: LPL (1/cr × kl)={lpl_score:.2f} ≤ RAND={rand_score:.2f}")
+        cmp = '>' if mlpl_score > rand_score else '≤'
+        tag = 'SIGNAL' if mlpl_score > rand_score else 'MISS'
+        lines.append(
+            f"  >>> {tag}: MLPL (1/cr × kl)={mlpl_score:.2f} {cmp} RAND={rand_score:.2f}"
+        )
+        if mlpl_score <= rand_score:
+            lines.append("  >>> KILL: MLPL score ≤ RAND score")
+            kill = True
+
+    # Collapse check
+    if mlpl_kl is not None:
+        if mlpl_kl < 0.01:
+            lines.append(f"  >>> KILL: MLPL action_KL={mlpl_kl:.4f} < 0.01 → collapsed")
             kill = True
         else:
-            lines.append(f"  >>> SIGNAL: LPL (1/cr × kl)={lpl_score:.2f} > RAND={rand_score:.2f} → LPL improves compression×diversity")
+            lines.append(f"  >>> OK: MLPL action_KL={mlpl_kl:.4f} ≥ 0.01")
 
-    if lpl_kl is not None:
-        if lpl_kl < 0.01:
-            lines.append(f"  >>> KILL: LPL action_KL={lpl_kl:.4f} < 0.01 → collapsed")
-            kill = True
-        else:
-            lines.append(f"  >>> OK: LPL action_KL={lpl_kl:.4f} ≥ 0.01")
-
-    lpl_rhae = lpl.get('mean_RHAE', 0.0)
+    mlpl_rhae = mlpl.get('mean_RHAE', 0.0)
     rand_rhae = rand.get('mean_RHAE', 0.0)
-    lines.append(f"  >>> SECONDARY: LPL RHAE={lpl_rhae:.2e} vs RAND RHAE={rand_rhae:.2e} (informative)")
+    lines.append(f"  >>> SECONDARY: MLPL RHAE={mlpl_rhae:.2e} vs RAND RHAE={rand_rhae:.2e}")
 
     if kill:
         lines.append("  >>> KILL TRIGGERED")
@@ -543,16 +596,33 @@ def kill_assessment(chain_summary):
 # Main
 # ---------------------------------------------------------------------------
 
+def _mean_loss_traj(all_results, cond, checkpoints):
+    by_ck = {ck: [] for ck in checkpoints}
+    for r in all_results:
+        if r['condition'] != cond:
+            continue
+        traj = r['episode_A'].get('pred_loss_traj', {})
+        for ck in checkpoints:
+            v = traj.get(ck)
+            if v is not None:
+                by_ck[ck].append(v)
+    return {str(ck): (round(float(np.mean(v)), 6) if v else None)
+            for ck, v in by_ck.items()}
+
+
 def main():
     os.makedirs(RESULTS_DIR, exist_ok=True)
-    print(f"Step 1309 — Linear LPL reflexive map, MBPP in pool")
+    print(f"Step 1310 — Multi-layer predictive coding (W&B 2017)")
     print(f"Games: {masked_game_list(GAME_LABELS)} (ARC games masked)")
     print(f"Conditions: {CONDITIONS}")
+    print(f"Architecture: enc(256)→W1(128×256)→h1→W2(64×128)→h2→W3(n×64)→action")
+    print(f"K_INF={K_INF}, ETA={ETA}, INF_LR={INF_LR}")
     print(f"MAX_STEPS={MAX_STEPS}, LOSS_CHECKPOINTS={LOSS_CHECKPOINTS}")
+    print(f"pred_loss = ||e1||²/||enc||² (Layer 1 reconstruction error)")
     print(f"Total: {len(CONDITIONS) * len(GAMES) * N_DRAWS} runs")
     print()
 
-    # Seal mapping — do not read during session
+    # Seal game mapping — do not read during session
     seal_mapping(RESULTS_DIR, GAMES, GAME_LABELS)
 
     # Pre-compute solver baselines
@@ -565,7 +635,6 @@ def main():
             solver_steps_cache[game] = {}
     print()
 
-    # Per-game × draw × condition loop
     all_results = []
     chain_data = {c: {'RHAE': [], 'wdrift': [], 'action_KL': [], 'I3cv': [],
                       'compression_ratio': []} for c in CONDITIONS}
@@ -582,14 +651,14 @@ def main():
                 all_results.append(result)
 
             elapsed_draw = time.time() - t0
+            # masked_draw_log: timing only — no stats that could reveal game type
             print(masked_draw_log(label, draw_idx, elapsed_draw))
 
         # Write per-game JSONL — filename uses label, not game name
         game_results = [r for r in all_results if r['game'] == game]
-        out_path = os.path.join(RESULTS_DIR, label_filename(label, 1309))
+        out_path = os.path.join(RESULTS_DIR, label_filename(label, 1310))
         with open(out_path, 'w') as f:
             for r in game_results:
-                # Strip game name from output record before writing
                 masked_r = {k: v for k, v in r.items() if k != 'game'}
                 masked_r['label'] = label
                 f.write(json.dumps(masked_r) + '\n')
@@ -618,15 +687,17 @@ def main():
             'pred_loss_trajectory': _mean_loss_traj(all_results, cond, LOSS_CHECKPOINTS),
         }
 
-    summary = {'chain_summary': chain_summary, 'n_draws': N_DRAWS,
-               'games_label_only': masked_game_list(GAME_LABELS)}
+    summary = {
+        'chain_summary': chain_summary,
+        'n_draws': N_DRAWS,
+        'games_label_only': masked_game_list(GAME_LABELS),
+    }
     with open(os.path.join(RESULTS_DIR, 'summary.json'), 'w') as f:
         json.dump(summary, f, indent=2)
 
-    # Print chain summary
     sep = '=' * 100
     print(f"\n{sep}")
-    print(f"STEP 1309 — CHAIN-LEVEL SUMMARY\n")
+    print(f"STEP 1310 — CHAIN-LEVEL SUMMARY\n")
     for cond in CONDITIONS:
         lbl = LABELS[cond]
         s = chain_summary[cond]
@@ -644,20 +715,6 @@ def main():
         print(line)
     print(sep)
     print(f"\nResults saved to {RESULTS_DIR}\n")
-
-
-def _mean_loss_traj(all_results, cond, checkpoints):
-    by_ck = {ck: [] for ck in checkpoints}
-    for r in all_results:
-        if r['condition'] != cond:
-            continue
-        traj = r['episode_A'].get('pred_loss_traj', {})
-        for ck in checkpoints:
-            v = traj.get(ck)
-            if v is not None:
-                by_ck[ck].append(v)
-    return {str(ck): (round(float(np.mean(v)), 6) if v else None)
-            for ck, v in by_ck.items()}
 
 
 if __name__ == '__main__':
