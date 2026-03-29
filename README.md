@@ -106,23 +106,25 @@ No one has built this yet. The search is finding the pieces.
 
 ## The Open Question
 
-Can R2-compliant dynamics produce the same capability as gradient?
+Can the substrate generalize from one game instance to another?
+
+The compression gap is closing: target propagation achieves 92% R2-compliantly (Step 1329). But compression doesn't produce speedup — it produces ANTI-speedup (Step 1330: speedup=0.62). The substrate compresses try1's specific layout and is WORSE on try2's different instance. Same pattern with CNN+Adam (Step 1324: 3/4 L1-reaching games showed anti-speedup). The problem is no longer "can R2-compliant dynamics compress?" — it's "can ANY substrate generalize across instances rather than memorize one?"
 
 Empirically mapped compression by update rule (Steps 1305-1328):
 
-| Update rule | Compression (cr) | R2 status | Task progress | Key step |
+| Update rule | Compression | R2 status | Speedup | Key step |
 |---|---|---|---|---|
-| LPL Hebbian | 5% (cr=0.95) | Compliant | None | 1310 |
-| LPL normalized | 9% (cr=0.91) | Compliant | None | 1328 |
-| LPL on CNN features | -1% (cr=1.01, diverges) | Compliant | None | 1327 |
-| DFA (random backward) | 34% (cr=0.66) | Compliant | None | 1326 |
-| Adam (full gradient) | 99.7% (cr=0.003) | Violating | speedup=10.5× on sp80 | 1324 |
+| LPL Hebbian | 5% | Compliant | null | 1310 |
+| LPL normalized | 9% | Compliant | null | 1328 |
+| DFA (random backward) | 34% | Compliant | null | 1326 |
+| Target propagation | 92% | Compliant | **0.62 (anti)** | 1329/1330 |
+| Adam (full gradient) | 99.7% | Violating | 10.5× on 1 game, anti on 3 | 1324 |
 
-Key findings from the spectrum:
-- Encoding quality is NOT the bottleneck (Step 1327: LPL diverges on rich CNN features)
-- LPL weakness is fundamental, not instability (Step 1328: normalization gives +4%, not +90%)
-- DFA proves error reaching all layers helps (34% > 9%) but random direction limits it
-- The 66% gap between DFA and Adam = direction quality + adaptive magnitude
+Key findings:
+- Compression is solved R2-compliantly: target propagation achieves 92% (Step 1329)
+- But compression produces ANTI-speedup (Step 1330: 0.62). Experience makes the substrate WORSE.
+- The same pattern appears with Adam (Step 1324: anti-speedup on 3/4 L1-reaching games)
+- The bottleneck is GENERALIZATION, not compression. The substrate memorizes one instance instead of learning transferable structure.
 
 But LPL is ONE point in the space of R2-compliant update rules. Between "pure local Hebbian" and "full Adam backprop" lies a spectrum of update mechanisms with varying R2 compliance and varying power:
 
