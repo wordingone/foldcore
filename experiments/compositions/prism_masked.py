@@ -193,6 +193,22 @@ def format_speedup(speedup):
     return f"{speedup:.4f}"
 
 
+def speedup_for_chain(speedup):
+    """Convert speedup to chain-mean-ready value (Leo directive, 2026-03-29).
+
+    Convention: speedup = 0 when progress never reached or ratio is undefined.
+    Only finite values represent computable transfer. No N/A exclusions.
+
+    None → 0.0   (neither try reached progress)
+    inf  → 0.0   (try1 failed; try2 success is luck, not transfer from try1)
+    0.0  → 0.0   (try1 success, try2 failed — negative transfer)
+    float → float (both tries reached progress — valid measurement)
+    """
+    if speedup is None or speedup == float('inf'):
+        return 0.0
+    return float(speedup)
+
+
 def write_experiment_results(results_dir, step, speedup_by_condition,
                               all_results, conditions, game_labels=None):
     """Write summary.json (speedup only) and diagnostics.json (everything else).

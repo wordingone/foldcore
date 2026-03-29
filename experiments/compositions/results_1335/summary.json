@@ -1,0 +1,65 @@
+{
+  "step": 1335,
+  "draws": {
+    "swap": [
+      {
+        "label": "MBPP",
+        "speedup": null,
+        "cr": null,
+        "n_actions": 128
+      },
+      {
+        "label": "Game A",
+        "speedup": 0.2007,
+        "cr": 0.0679,
+        "n_actions": 4103
+      },
+      {
+        "label": "Game B",
+        "speedup": 0.0,
+        "cr": null,
+        "n_actions": 7
+      }
+    ],
+    "rep1": [
+      {
+        "label": "MBPP",
+        "speedup": null,
+        "cr": null,
+        "n_actions": 128
+      },
+      {
+        "label": "Game A",
+        "speedup": null,
+        "cr": 0.0499,
+        "n_actions": 4103
+      },
+      {
+        "label": "Game B",
+        "speedup": 0.0,
+        "cr": null,
+        "n_actions": 7
+      }
+    ],
+    "rep2": [
+      {
+        "label": "MBPP",
+        "speedup": null,
+        "cr": null,
+        "n_actions": 128
+      },
+      {
+        "label": "Game A",
+        "speedup": null,
+        "cr": 0.0454,
+        "n_actions": 4103
+      },
+      {
+        "label": "Game B",
+        "speedup": 0.0,
+        "cr": null,
+        "n_actions": 7
+      }
+    ]
+  }
+}

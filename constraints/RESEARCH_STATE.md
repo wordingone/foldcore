@@ -1127,3 +1127,26 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
 - **R4 direction:** Not killed permanently. Mechanism is correct (overfitting IS occurring — count=3). Calibration needs adjustment. To revisit when TP baseline behavior is better understood.
 
 - **Decision:** KILL R4-TP as specified (speedup below TP). LANDMARK: TP baseline speedup=1.8492 — first finite >1 speedup. → Leo spec: confirm landmark, determine if 1.85 is stable across more games.
+  - **⚠ RETRACTED by step 1335.** See below.
+
+---
+
+## Step 1335 (NEW — TP episode swap + replication, KILL: 1334 speedup was episode difficulty artifact):
+
+3 draws: SWAP (seed=1334, seeds swapped), REP1 (seed=1335), REP2 (seed=1336). 18 episodes. Level-masked.
+
+- **TP-SWAP Game A: speedup=0.2007** ← BELOW 0.7 → KILL criterion triggered.
+  - 1334 used try1=seed0 (slow), try2=seed1 (fast). speedup = p(seed0)/p(seed1) = 1.85.
+  - 1335 SWAP: try1=seed1 (fast), try2=seed0 (slow). speedup = p(seed1)/p(seed0) = 0.20.
+  - seed0 is simply a harder episode than seed1 for this game. No learning transfer.
+  - The 1.85 in step 1334 was entirely explained by episode difficulty asymmetry.
+- **REP1 Game A: N/A (no progress in either try). Game B: 0.0. REP2: same.**
+- **Chain aggregate (new convention, N/A→0):**
+  - SWAP: (0 + 0.2007 + 0.0) / 3 = **0.0669**
+  - REP1: 0.0 / 3 = **0.0**
+  - REP2: 0.0 / 3 = **0.0**
+  - Grand (9 games): **0.0223 ≈ 0**
+- **TP compression still excellent:** cr=0.0679 (SWAP), 0.0499 (REP1), 0.0454 (REP2). ~93-95% compression.
+- **Core finding (confirmed):** TP compresses well but does NOT confer second-exposure advantage. Compression ≠ generalization.
+- **Metric correction (Leo, 2026-03-29):** speedup=0 when progress never reached. Chain = mean over ALL games including MBPP. `speedup_for_chain()` added to prism_masked.py. Step 1334 TP re-calc: (0+1.85+0)/3=0.616 — net negative even before swap test.
+- **Decision:** KILL. 1334 landmark retracted. TP chain ≈ 0.06. Anti-speedup confirmed. → Leo spec.
