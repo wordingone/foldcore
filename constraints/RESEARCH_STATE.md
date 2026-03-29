@@ -1447,3 +1447,32 @@ K=10 + action-conditional selection (argmax ||pred_h3_next - h3|| over 32 candid
 - K10-MODEL (1347): 200 model-selected actions → RHAE=0, MBPP cr improves but no L1
 
 **Root problem confirmed:** No substrate has EVER reached L1 on these game draws. The bottleneck is not the update rule, not action selection, not action frequency. The substrate has zero prior knowledge — starts from scratch every episode. 1348 tests whether accumulated cross-game experience changes this.
+
+---
+
+## Step 1348 (KILL — No childhood signal. RHAE=0 same as fresh. cr=1.0 persists.):
+
+Childhood pre-training: 10 ARC games × 500 steps + 3 MBPP × 500 steps (one-time). Snapshot weights. Restore before each of 5 eval draws. Same seeds (13440-13444). 30 eval episodes.
+
+**CHILDHOOD RHAE per draw: [0.0, 0.0, 0.0, 0.0, 0.0]. Chain mean = 0.000000. Non-zero: 0/5 draws.**
+
+**Snapshot bug (confound):** Game B got fresh weights in 4/5 draws — ARC childhood checkpoint (action_head=[4103, 512]) couldn't restore to a MBPP game (action_head=[7, 512]). Draw 4: full restore succeeded (Game B was ARC), still RHAE=0.
+
+**cr=1.0 everywhere.** Same as K=10 deliberation. Childhood produces no compression improvement on 2K eval steps.
+
+**Childhood duration:** 46.9s for 13 games (500 steps each). Buffer size: 4867 ARC transitions, 1495 MBPP transitions.
+
+**Decision tree outcome:** Even with pre-trained weights from 13 games of experience, substrate still can't reach L1 in 2K eval steps. Prior knowledge from related games doesn't transfer to new game in 2K steps.
+
+**Three directions exhausted (1344-1348):**
+- Better optimizer (Adam vs TP): no effect
+- Deliberation (K=10 internal training per action): no effect
+- Cross-game prior knowledge (childhood): no effect
+
+**Open hypotheses:**
+- (a) More childhood games needed (10 is insufficient)
+- (b) Architecture doesn't support transfer (MLP weights don't generalize across game types)
+- (c) Problem requires in-context adaptation — prior knowledge is insufficient, substrate must adapt WITHIN the episode using the right mechanism
+- (d) 2K steps fundamentally insufficient for ANY of these game draws
+
+**Status: RHAE-dead across all 5 steps in deliberation series. Waiting for Leo's next spec.**
