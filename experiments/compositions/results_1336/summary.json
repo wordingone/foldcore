@@ -1,0 +1,27 @@
+{
+  "step": 1336,
+  "chain_speedup": {
+    "multi": 0.0,
+    "single": 0.0
+  },
+  "games": {
+    "MBPP": {
+      "single": {
+        "speedup": null,
+        "cr": null
+      }
+    },
+    "Game A": {
+      "single": {
+        "speedup": Infinity,
+        "cr": 0.0381
+      }
+    },
+    "Game B": {
+      "single": {
+        "speedup": 0.0,
+        "cr": null
+      }
+    }
+  }
+}

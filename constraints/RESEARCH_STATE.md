@@ -1150,3 +1150,44 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
 - **Core finding (confirmed):** TP compresses well but does NOT confer second-exposure advantage. Compression ≠ generalization.
 - **Metric correction (Leo, 2026-03-29):** speedup=0 when progress never reached. Chain = mean over ALL games including MBPP. `speedup_for_chain()` added to prism_masked.py. Step 1334 TP re-calc: (0+1.85+0)/3=0.616 — net negative even before swap test.
 - **Decision:** KILL. 1334 landmark retracted. TP chain ≈ 0.06. Anti-speedup confirmed. → Leo spec.
+
+---
+
+## Metric Update — RHAE(try2) is the single metric (Jun directive via Leo, 2026-03-29)
+
+**Old metric:** second_exposure_speedup (steps_to_first_progress ratio), speedup_for_chain convention.
+**New metric:** RHAE(try2) = mean(efficiency²) across all games, measured on try2.
+- efficiency = optimal_steps / steps_to_first_progress(try2), capped at 1
+- efficiency = 0 when no progress in try2
+- ARC: optimal_steps = solver's steps for level 1. MBPP: optimal_steps = len(correct_solution).
+- Speedup is demoted to diagnostic.
+- **Primary output:** ONE NUMBER. `RHAE(try2) = X.XXXX`
+- summary.json primary field: `rhae_try2`. Everything else nested under `diagnostics`.
+- **Infrastructure:** `compute_rhae_try2()` added to prism_masked.py. `write_experiment_results()` updated.
+- **Applies to step 1336 and all future experiments.**
+- **Pending:** optimal_steps source for ARC games not yet determined (game MCP doesn't expose solver steps).
+
+---
+
+## Step 1336 (NEW — TP multi-episode diversity → invariance, KILL):
+
+3 games × 2 conditions (MULTI, SINGLE) × 2 tries. Level-masked. Seed-free.
+- MULTI try1: 4 episodes × 500 steps (seeds 0,1,2,3), weights persist across episodes.
+- SINGLE try1: 1 episode × 2K steps (seed 0). Both conditions try2: seed 4, 2K steps.
+
+**RHAE(try2):**
+- MULTI: 0.0000 (no try2 progress in any game)
+- SINGLE: ~0.0000 (Game A try2 progress at step 1511, but efficiency² negligible without optimal_steps; MBPP/Game B failed)
+- Both effectively 0.
+
+**Per-game detail:**
+- MBPP: N/A both conditions (neither try reached progress)
+- Game A/MULTI: try1 progress at step 214, try2 NO progress → efficiency=0
+- Game A/SINGLE: try1 NO progress, try2 progress at step 1511 → efficiency = optimal/1511 ≈ tiny
+- Game B: both conditions failed try2 → efficiency=0
+
+**Compression:** MULTI Game A cr=0.069, SINGLE Game A cr=0.038 (TP still compresses ~93-96%).
+
+**Anti-speedup root cause (confirmed):** TP trains its inverse mappings to reconstruct one episode's distribution. Try2 = different instance of same game = different distribution. Miscalibrated targets → slower, not faster. Multi-episode try1 (4 diverse episodes) does NOT fix this — compression improves (cr=0.069 vs 0.038) but the distribution-mismatch problem persists in try2.
+
+**Decision:** KILL. MULTI chain ≤ SINGLE chain (both 0). Multi-episode diversity doesn't improve transfer. Hypothesis rejected: more diverse try1 training doesn't produce episode-invariant representations. → Leo spec.
