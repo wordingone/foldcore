@@ -104,6 +104,8 @@ The organism: many components, one coupling law (prediction error), shared repre
 - Experience on one environment transfers to the next (second_exposure_speedup > 1)
 - R1-R6 all hold simultaneously. The constitution is not a constraint on the substrate — it is the substrate's design specification.
 
+The substrate needs an internal R4 — a self-generated validation criterion. Current substrates detect training improvement (prediction error drops) but not overfitting (anti-speedup on new instances). Held-out prediction validation (test prediction on observations NOT from the substrate's own actions) would let the substrate detect its own overfitting and react. This makes the self-improvement criterion genuinely self-generated.
+
 No one has built this yet. The search is finding the pieces.
 
 ## The Open Question
