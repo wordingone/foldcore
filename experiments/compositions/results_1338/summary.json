@@ -1,0 +1,13 @@
+{
+  "step": 1338,
+  "rhae_try2": {
+    "mode_tp": 0.0,
+    "mlp_tp": 0.0
+  },
+  "diagnostics": {
+    "speedup": {
+      "mode_tp": 0.0,
+      "mlp_tp": 0.0
+    }
+  }
+}

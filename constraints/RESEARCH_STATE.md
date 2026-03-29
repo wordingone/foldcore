@@ -1191,3 +1191,57 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
 **Anti-speedup root cause (confirmed):** TP trains its inverse mappings to reconstruct one episode's distribution. Try2 = different instance of same game = different distribution. Miscalibrated targets → slower, not faster. Multi-episode try1 (4 diverse episodes) does NOT fix this — compression improves (cr=0.069 vs 0.038) but the distribution-mismatch problem persists in try2.
 
 **Decision:** KILL. MULTI chain ≤ SINGLE chain (both 0). Multi-episode diversity doesn't improve transfer. Hypothesis rejected: more diverse try1 training doesn't produce episode-invariant representations. → Leo spec.
+
+---
+
+## Step 1337 (NEW — MLP-TP vs CNN-TP, CONTINUE: MBPP encoding works, first multimodal compression):
+
+3 games × 2 conditions (MLP-TP, CNN-TP) × 2 tries. Level-masked. Primary metric: RHAE(try2).
+
+**RHAE(try2): MLP-TP = 0.0000, CNN-TP = 0.0000.** Neither reached try2 progress.
+
+**⭐ LANDMARK — MBPP compression:**
+- MLP-TP MBPP cr = **0.0801** — FIRST non-null MBPP encoding (92% compression)
+- CNN-TP MBPP cr = **None** (random actions — CNN structurally blocked from text)
+- MLP processes ALL 3 games uniformly: MBPP cr=0.08, ARC A cr=0.08, ARC B cr=0.09
+- CNN ARC: Game A cr=0.03, Game B cr=0.18 (variable; can't do MBPP)
+
+**Per-game detail:**
+- MBPP/MLP: cr=0.0801, traj={500:0.000574, 1k:0.000203, 2k:4.6e-5}, speedup=N/A
+- Game A/MLP: cr=0.0825, speedup=N/A; Game B/MLP: cr=0.0855, speedup=0.0
+- Game A/CNN: cr=0.0295, speedup=0.1167 (both tries reached progress)
+- Game B/CNN: cr=0.1806, speedup=N/A
+
+**Core finding:** MLP opened the MBPP modality. 92% compression on text = MLP learns character-level patterns. No progress reached: 2K steps not enough to generate valid Python by multinomial sampling (optimal=61 chars; random char distribution produces valid syntax ~0%).
+
+**Why RHAE=0 despite compression:** Prediction quality ≠ action quality. MLP predicts next byte well but doesn't select actions that BUILD toward solution. Functional categorization needed.
+
+**Decision:** CONTINUE (Leo's criterion: MBPP cr=0.08 < 0.9). → Step 1338: Mode-TP.
+
+---
+
+## Infrastructure Fix — ARC optimal_steps proxy (Leo mail 3799, 2026-03-29)
+
+`ARC_OPTIMAL_STEPS_PROXY = 10` added to prism_masked.py. Returns 10 for all ARC games (until real solver available). Makes RHAE non-zero when ARC progress reached. MBPP uses exact solver steps (mbpp_game.compute_solver_steps). Apply from step 1338 results onward.
+
+Step 1337 CNN Game A try2: progress at step 908, optimal=10 → efficiency=0.011, eff²=1.2e-4. RHAE retroactive (3 games): 4e-5. Still near-zero but non-null.
+
+---
+
+## Step 1338 (NEW — Mode-TP vs MLP-TP, KILL: zones episode-specific, same root cause as TP anti-speedup):
+
+3 games × 2 conditions (MODE-TP, MLP-TP) × 2 tries. Zone features: 160-dim. Seed-free.
+Mode map persists try1→try2. Zone update freq=100 steps, threshold=1%.
+
+**RHAE(try2): MODE-TP = 0.0000, MLP-TP = 0.0000.** No progress reached in any game, either condition.
+
+**Zone discovery (MODE-TP):**
+- MBPP: n_zones=1. t1_stab=[16,0,1,1], t2_stab=[1,1,1,1] — stable across tries. Text has consistent changing regions.
+- Game A: n_zones=0 in try2. t1_stab=[3,4,4,3] → 3-4 zones found in try1. t2_stab=[0,0,0,0] → ZERO zones in try2. Zone maps episode-specific.
+- Game B: n_zones=1. t1_stab=[1,1,1,1], t2_stab=[1,1,1,1] — stable.
+
+**Critical finding:** Game A zone discovery FAILS in try2. The accumulated change maps from try1 (calibrated to seed=0 episode) don't generalize to try2 (seed=4). When try2 adds different diffs, the cumulative change rate for try1's zones drops below threshold. Zone transfer fails — same root cause as TP anti-speedup: functional representations calibrated to one episode, not the game.
+
+**Compression:** Both conditions cr≈0.08 (MLP encodes all modalities uniformly, mode map didn't affect compression).
+
+**Decision:** KILL. Mode map C23 in isolation doesn't help — zones are episode-specific, not game-specific. The discovery mechanism works (zones found in try1) but doesn't transfer to try2's different episode. Same structural problem as TP: need representations that capture game mechanics independent of episode layout. → Step 1339: Allosteric temperature (prediction confidence → action precision).
