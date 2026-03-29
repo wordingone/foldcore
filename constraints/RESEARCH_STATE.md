@@ -740,3 +740,16 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **Key finding:** T_chain > 1.0 in the BASE architecture (pure Hebbian W3) confirms cross-episode transfer via predictive coding. However, three-factor pe_next modulation of W3 contributes nothing incremental. W3 update chemistry doesn't differentiate on this metric.
   - **RHAE=0 everywhere.** Compression ≠ task progress.
   - **Decision:** KILL. Three-factor W3 modulation killed. T_chain > 1.0 is a positive baseline finding. → Leo spec.
+
+- **Step 1313 (multi-layer LPL, deterministic init, seed-free, T_chain, masked PRISM): COMPLETE. NO KILL — both predictions confirmed.** 9 runs (6 substrate + 3 fresh-B). Random games: MBPP + 2 masked ARC (seed 1313). Seed-free protocol (Jun directive 2026-03-29).
+  - **Kill criteria: NOT triggered.**
+  - **Chain aggregates (masked):**
+    - MLPL: mean_RHAE=0.00e+00, mean_wdrift=0.0992, mean_action_KL=9.1811, mean_I3cv=3.5258, cr=0.9655, T_chain=1.1695
+    - RAND: mean_RHAE=0.00e+00, mean_wdrift=0.0, mean_action_KL=7.7219, mean_I3cv=1.8991, cr=0.9998
+  - **Both predictions CONFIRMED:**
+    - P1 T_chain > 1.0: CONFIRMED (1.1695) — experience on episode A genuinely improves prediction on episode B. Not an init artifact — both fresh and experienced substrates start from identical deterministic weights.
+    - P2 cr < 1.0: CONFIRMED (0.9655) — prediction improves from deterministic init. Dynamics dominate init.
+  - **Organism confirmed:** One chemistry (local Hebbian prediction error), genuine transfer (T=1.17), no seed dependence. R2-compliant throughout.
+  - **RAND cr ≈ 1.0 (0.9998):** No compression without weight updates. Contrast confirms MLPL compression is real.
+  - **RHAE=0 everywhere.** Compression ≠ task progress yet.
+  - **Decision:** NO KILL. Architecture validated with deterministic init. T_chain confirms transfer. → Next: probe what drives T_chain. Is it W1/W2 (encoding) or W3 (action)? Leo spec.
