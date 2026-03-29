@@ -11,8 +11,16 @@ Protocol (Jun directive, 2026-03-29):
 - 3 games × N conditions = N×3 runs per experiment. No multi-draw loops.
 - Environment breaks symmetry through observations, not random init.
 
+Level masking (Jun directive, 2026-03-29):
+- Level numbers (L1, L2, L3) are NOT reported in any output.
+- Metric: steps_to_first_progress (opaque — first time game state advanced, no level label).
+- Diagnostics: progress_count (how many advances) instead of max_level / level_first_step.
+- Speedup: steps_to_first_progress(try1) / steps_to_first_progress(try2).
+- Apply to step 1333 and all future experiment scripts.
+
 Usage in experiment scripts:
     from prism_masked import select_games, seal_mapping, label_filename, det_weights
+    from prism_masked import compute_progress_speedup
 
     GAMES, GAME_LABELS = select_games(seed=STEP)
     # GAMES is internal-only — never print, never log, never pass to Leo.
@@ -21,6 +29,11 @@ Usage in experiment scripts:
 
     # Deterministic weight init (no np.random.seed — same shape = same weights):
     W1 = det_weights(128, 256)  # orthogonal init from fixed QR
+
+    # Progress-based speedup (level-masked):
+    speedup = compute_progress_speedup(first_progress_try1, first_progress_try2)
+    # first_progress = step at which any game state advancement occurred (opaque)
+    # None if no advancement in the episode.
 """
 
 import random
@@ -140,6 +153,29 @@ def masked_run_log(label, elapsed_seconds):
 # ---------------------------------------------------------------------------
 # Single-metric output (Jun directive, 2026-03-29) — apply to step 1320+
 # ---------------------------------------------------------------------------
+
+def compute_progress_speedup(p1, p2):
+    """Compute second-exposure speedup from steps_to_first_progress values.
+
+    Level-masked: no L1/L2/L3 labels. 'Progress' = any game state advancement.
+
+    Args:
+        p1: steps_to_first_progress in try1 (int or None if no progress).
+        p2: steps_to_first_progress in try2 (int or None if no progress).
+
+    Returns:
+        float: >1 means faster on try2. 0.0 means try1 succeeded, try2 didn't.
+        float('inf'): try1 failed, try2 succeeded.
+        None: neither try made progress.
+    """
+    if p1 is not None and p2 is not None and p2 > 0:
+        return round(p1 / p2, 4)
+    if p1 is None and p2 is not None:
+        return float('inf')
+    if p1 is not None and p2 is None:
+        return 0.0
+    return None
+
 
 def format_speedup(speedup):
     """Format speedup value for stdout display.
