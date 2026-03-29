@@ -135,3 +135,53 @@ def masked_run_log(label, elapsed_seconds):
     Example output: "  Game A:  (5.5s)"
     """
     return f"  {label}:  ({elapsed_seconds:.1f}s)"
+
+
+# ---------------------------------------------------------------------------
+# Single-metric output (Jun directive, 2026-03-29) — apply to step 1320+
+# ---------------------------------------------------------------------------
+
+def format_speedup(speedup):
+    """Format speedup value for stdout display.
+
+    Args:
+        speedup: float (>1 = learned faster on try2), None (L1 not reached), or inf.
+
+    Returns:
+        Formatted string for stdout.
+    """
+    if speedup is None:
+        return "N/A — L1 not reached"
+    if speedup == float('inf'):
+        return "inf (failed try1, succeeded try2)"
+    return f"{speedup:.4f}"
+
+
+def write_experiment_results(results_dir, step, speedup_by_condition,
+                              all_results, conditions):
+    """Write summary.json (speedup only) and diagnostics.json (everything else).
+
+    summary.json: ONE metric per condition — second_exposure_speedup.
+    diagnostics.json: all raw results for post-hoc analysis. NOT printed. NOT
+    referenced in kill decisions.
+
+    Args:
+        results_dir: Output directory.
+        step: Experiment step number.
+        speedup_by_condition: dict mapping condition -> speedup value (float or None).
+        all_results: list of all per-game per-condition result dicts.
+        conditions: list of condition names.
+    """
+    os.makedirs(results_dir, exist_ok=True)
+
+    # summary.json — ONE metric only
+    summary = {
+        'step': step,
+        'speedup': {c: speedup_by_condition.get(c) for c in conditions},
+    }
+    with open(os.path.join(results_dir, 'summary.json'), 'w') as f:
+        json.dump(summary, f, indent=2)
+
+    # diagnostics.json — full results, NOT for kill decisions
+    with open(os.path.join(results_dir, 'diagnostics.json'), 'w') as f:
+        json.dump({'step': step, 'results': all_results}, f, indent=2, default=str)

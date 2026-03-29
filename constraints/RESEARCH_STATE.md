@@ -818,3 +818,18 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **Critical finding — w3drift_GEN < w3drift_BASE:** Generalized update `ETA * pe_next * outer(similarities, h2)` is scaled by pe_next (typically small, ~0.05). This makes generalized updates ~20× smaller than Hebbian updates (ETA * h2). Additionally, some similarities are negative (W3 values can be negative) → partial cancellation of Hebbian. Net effect: GEN's W3 changes LESS than BASE.
   - **Mechanism too weak:** At ETA=0.001 and pe_next≈0.05, generalized update ≈ 5e-5 × similarity × h2. Hebbian = 1e-3 × h2. Ratio ≈ 0.05. Generalization adds <5% to W3 updates. Sample efficiency improvement is real in principle but unmeasurable at this scale.
   - **Decision:** KILL. Additive generalized update too weak (pe_next scale factor). If pe_next were removed (use fixed coefficient = ETA), generalized update would be comparable to Hebbian. → Leo spec.
+
+- **Step 1320 (catalog #1/#16 mode map integration with multi-layer LPL, encoding-space soft mask, second_exposure_speedup, masked PRISM): KILL — mode map never fired (n_active_dims=0 all games), `inf` result is noise.** 6 runs (3 MODEMAP + 3 BASE), try1+try2 each. Random games: MBPP + 2 masked ARC (seed 1320). Seed-free. Single-metric output: second_exposure_speedup (Jun directive 2026-03-29).
+  - **Kill assessment: KILL despite `inf` output.** MODEMAP chain speedup=inf, BASE=N/A. But n_active_dims=0 for MODEMAP on ALL 3 games — mode map never activated. With n_active_dims=0, mask stays all-ones (no suppression), MODEMAP ≡ BASE structurally. The `inf` (Game A try1=fail, try2=L1 at step 1233) is noise, not mode map signal.
+  - **Per-game breakdown (masked):**
+    - MBPP / MODEMAP: speedup=N/A (L1 not reached either try), n_active_dims=0
+    - MBPP / BASE: speedup=N/A
+    - Game A / MODEMAP: speedup=inf (try1 fail, try2 L1@1233), n_active_dims=0
+    - Game A / BASE: speedup=0.0 (try1 L1, try2 fail — inverse luck, both I3cv ~4.5)
+    - Game B / MODEMAP: speedup=N/A, n_active_dims=0
+    - Game B / BASE: speedup=N/A
+  - **Root cause — mode map didn't engage:** MODE_DELTA_THR=0.01 on 256-dim centered encoding. Consecutive-step encoding deltas in this architecture are below 0.01 (W1 updates slowly, Hebbian at ETA=0.001 → enc changes slow). freq_per_dim never exceeds MODE_THRESHOLD=0.1. All dims classified inactive throughout 2K steps.
+  - **Thresholds need calibration:** MODE_DELTA_THR=0.01 is too coarse for this encoding regime. Actual enc deltas are ~0.001-0.005 range. Lowering by 10× (0.001) may activate the map. Alternatively: track relative change (|delta|/|enc|) instead of absolute.
+  - **Single-metric infrastructure (Jun 2026-03-29) confirmed working:** summary.json has only `{"step": 1320, "speedup": {"modemap": Infinity, "base": null}}`. All diagnostics in diagnostics.json. Stdout shows speedup only.
+  - **RHAE=0 everywhere.** Both conditions.
+  - **Decision:** KILL. Mode map never activated — threshold calibration needed or replace absolute delta with relative change detection. → Leo spec.
