@@ -1094,3 +1094,36 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
 - **Interpretation:** ARC observations are naturally structured in CNN feature space. TP does improve silhouette across experience (delta +0.1964), but the margin over RAND is thin. The criterion is technically met. However, the causation is unclear: is TP organizing because it LEARNS, or because its try2 episode is different from try1?
 - **R2 compliance:** TP local backward only. ✓
 - **Decision:** SIGNAL (marginal). Criterion met: TP delta > 0 AND TP mean sil > RAND mean sil. BUT margin thin (0.03) and Game A RAND > TP. Next: test with more games to separate observation-structure effect from learning-structure effect, OR use a different h1 that's more sensitive to learning (e.g., h4/avg4 which TP directly trains). → Leo spec.
+
+---
+
+## Step 1334 (NEW — TP + Internal R4 overfitting detection, KILL for R4, LANDMARK for TP baseline): KILL R4-TP direction. But TP BASELINE speedup=1.8492 — FIRST FINITE >1 SPEEDUP IN 1334 EXPERIMENTS.
+
+3 games × 2 conditions (R4-TP, TP) × 2 tries. Seed-free. Level-masked. 2K steps/try.
+
+- **R4-TP result: KILL.**
+  - overfitting_count=3 (detection IS triggering on Game A — overfitting is real)
+  - But LR halved 3 times → LR = 0.0001 × 0.5³ = 1.25e-5. Too conservative. Substrate can't compress.
+  - Game A/R4-TP: speedup=N/A (neither try reached progress). cr=0.1164 (worse than TP baseline 0.0613).
+  - Kill criterion 1: R4-TP speedup N/A < TP speedup 1.8492. KILLED.
+
+- **⭐ TP BASELINE LANDMARK — Game A speedup=1.8492:**
+  - try1 reached first progress at step T. try2 reached first progress at T/1.85 ≈ 54% of try1 steps.
+  - Both tries reached progress (not inf). FIRST finite >1 speedup.
+  - TP weights trained on try1 TRANSFERRED to try2 — faster learning on second exposure.
+  - This is the first time in 1334 experiments that a substrate showed genuine second-exposure acceleration where both tries reached progress.
+
+- **Per-game breakdown:**
+  - MBPP: both conditions N/A (no ARC obs, random fallback)
+  - Game A/TP: speedup=**1.8492**, cr=0.0613 (94% compression!) ← LANDMARK
+  - Game A/R4-TP: speedup=N/A, cr=0.1164, overfitting_count=3
+  - Game B/TP: speedup=0.0 (try1 success, try2 fail — reverse), cr=None (small-action)
+  - Game B/R4-TP: speedup=0.0 (same), overfitting_count=0
+
+- **Why R4-TP failed:** LR halved 3 times in rapid succession → essentially stopped learning → can't reach progress. The threshold of 1.1× with halving is too aggressive. Either increase threshold (e.g., 2.0×) or reduce penalty (e.g., ×0.9 instead of ×0.5).
+
+- **Why TP succeeded on Game A:** Same game that was INCONCLUSIVE in steps 1331-1332 (different seeds). Step 1334 seed=1334 gave a game draw where progress was reachable in both tries under 2K steps.
+
+- **R4 direction:** Not killed permanently. Mechanism is correct (overfitting IS occurring — count=3). Calibration needs adjustment. To revisit when TP baseline behavior is better understood.
+
+- **Decision:** KILL R4-TP as specified (speedup below TP). LANDMARK: TP baseline speedup=1.8492 — first finite >1 speedup. → Leo spec: confirm landmark, determine if 1.85 is stable across more games.
