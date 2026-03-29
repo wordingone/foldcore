@@ -20,7 +20,7 @@ Level masking (Jun directive, 2026-03-29):
 
 Usage in experiment scripts:
     from prism_masked import select_games, seal_mapping, label_filename, det_weights
-    from prism_masked import compute_progress_speedup
+    from prism_masked import compute_progress_speedup, compute_rhae_try2, write_experiment_results
 
     GAMES, GAME_LABELS = select_games(seed=STEP)
     # GAMES is internal-only — never print, never log, never pass to Leo.
@@ -209,32 +209,71 @@ def speedup_for_chain(speedup):
     return float(speedup)
 
 
-def write_experiment_results(results_dir, step, speedup_by_condition,
-                              all_results, conditions, game_labels=None):
-    """Write summary.json (speedup only) and diagnostics.json (everything else).
+# ---------------------------------------------------------------------------
+# RHAE(try2) — primary metric (Jun directive via Leo, 2026-03-29)
+# ---------------------------------------------------------------------------
 
-    summary.json: ONE metric per condition — second_exposure_speedup.
-    diagnostics.json: all raw results for post-hoc analysis. NOT printed. NOT
-    referenced in kill decisions. Game IDs are MASKED to labels when game_labels
-    is provided — structural enforcement, same as stdout.
+def compute_rhae_try2(try2_progress_by_label, optimal_steps_by_label):
+    """Compute RHAE(try2) = mean(efficiency²) across all games.
+
+    ARC Prize scoring IS the metric. efficiency = optimal_steps / actual_steps,
+    capped at 1. efficiency = 0 when no progress reached.
+
+    Args:
+        try2_progress_by_label: dict mapping label -> steps_to_first_progress
+            (int if progress reached, None if not).
+        optimal_steps_by_label: dict mapping label -> optimal_steps (int).
+            Pass None or missing key for unknown games → treated as 0 efficiency.
+
+    Returns:
+        float: RHAE(try2), mean of efficiency² across all games (0.0 to 1.0).
+    """
+    if not try2_progress_by_label:
+        return 0.0
+    sq = []
+    for label, steps in try2_progress_by_label.items():
+        if steps is None:
+            sq.append(0.0)
+            continue
+        opt = (optimal_steps_by_label or {}).get(label)
+        if opt is None or opt <= 0:
+            sq.append(0.0)
+            continue
+        eff = min(1.0, opt / steps)
+        sq.append(eff ** 2)
+    return round(sum(sq) / len(sq), 6) if sq else 0.0
+
+
+def write_experiment_results(results_dir, step, rhae_by_condition,
+                              all_results, conditions, game_labels=None,
+                              speedup_by_condition=None):
+    """Write summary.json (RHAE(try2) primary) and diagnostics.json.
+
+    summary.json: ONE number per condition — rhae_try2.
+    diagnostics.json: all raw results. NOT printed. NOT referenced in kill
+    decisions. Game IDs are MASKED to labels when game_labels is provided.
 
     Args:
         results_dir: Output directory.
         step: Experiment step number.
-        speedup_by_condition: dict mapping condition -> speedup value (float or None).
+        rhae_by_condition: dict mapping condition -> rhae_try2 float.
         all_results: list of all per-game per-condition result dicts.
         conditions: list of condition names.
-        game_labels: Optional dict mapping game_id -> label. When provided, replaces
-            raw game IDs with masked labels in diagnostics.json. ALWAYS pass this
-            for masked PRISM experiments.
+        game_labels: Optional dict mapping game_id -> label (PRISM masking).
+        speedup_by_condition: Optional diagnostic dict (speedup per condition).
     """
     os.makedirs(results_dir, exist_ok=True)
 
-    # summary.json — ONE metric only
+    # summary.json — ONE number primary
     summary = {
         'step': step,
-        'speedup': {c: speedup_by_condition.get(c) for c in conditions},
+        'rhae_try2': {c: rhae_by_condition.get(c) for c in conditions},
+        'diagnostics': {},
     }
+    if speedup_by_condition is not None:
+        summary['diagnostics']['speedup'] = {
+            c: speedup_by_condition.get(c) for c in conditions
+        }
     with open(os.path.join(results_dir, 'summary.json'), 'w') as f:
         json.dump(summary, f, indent=2)
 
