@@ -1,0 +1,19 @@
+{
+  "chain_summary": {
+    "mi": {
+      "mean_RHAE": 0.0,
+      "mean_action_KL": 12.8102,
+      "mean_I3cv": 12.5461
+    },
+    "rand": {
+      "mean_RHAE": 0.0,
+      "mean_action_KL": 12.9733,
+      "mean_I3cv": 3.2886
+    }
+  },
+  "games_label_only": [
+    "MBPP",
+    "Game A",
+    "Game B"
+  ]
+}

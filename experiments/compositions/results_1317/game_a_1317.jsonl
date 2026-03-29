@@ -1,0 +1,2 @@
+{"steps_taken": 2000, "elapsed_seconds": 0.34, "max_level": 0, "level_first_step": {}, "arc_score": 0.0, "RHAE": 0.0, "I3_cv": 17.3665, "action_kl": 12.8102, "wdrift": 0.0, "condition": "mi", "n_actions": 4103, "label": "Game A"}
+{"steps_taken": 2000, "elapsed_seconds": 0.27, "max_level": 0, "level_first_step": {}, "arc_score": 0.0, "RHAE": 0.0, "I3_cv": 4.5548, "action_kl": 17.5412, "wdrift": 0.0, "condition": "rand", "n_actions": 4103, "label": "Game A"}

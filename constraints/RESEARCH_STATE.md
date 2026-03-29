@@ -787,3 +787,13 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **RHAE=0 everywhere (A and B).** Substrate doesn't solve levels on any game in this set. The RHAE=1.5e-5 from 1314 was game-set-specific (seed=1314 happened to include a game where INV found L1; seed=1316 did not).
   - **Inverse model direction: DEAD.** T_chain=5.72 was the entire case for this direction. It was measurement error. action_KL signal (12.28) persists — INV does change exploration — but no task transfer.
   - **Decision:** KILL direction. Multi-layer LPL + inverse model W3 does not produce genuine task transfer. Cross-episode T_chain measurement must use same-architecture fresh denominator. → Leo spec (new direction).
+
+- **Step 1317 (catalog #17 MI-detected reactive, replication of Step 1161 ARC=0.200, masked PRISM): COMPLETE. KILL — signal did not replicate. RHAE=0 for both MI and RAND.** 6 runs (3 MI + 3 RAND), 2K steps each. Random games: MBPP + 2 masked ARC (seed 1317). Seed-free.
+  - **Kill triggered:** MI RHAE=0.00e+00 ≤ RAND RHAE=0.00e+00 → MI detection doesn't help task performance.
+  - **Chain aggregates (masked):**
+    - MI: mean_RHAE=0.00e+00, mean_action_KL=12.8102, mean_I3cv=12.5461
+    - RAND: mean_RHAE=0.00e+00, mean_action_KL=12.9733, mean_I3cv=3.2886
+  - **Predictions:** P1 (MI action_KL ≠ RAND): CONFIRMED (diff=0.16, marginal). P2 (MI RHAE > 0): WRONG.
+  - **I3cv signal:** MI I3cv=12.55 vs RAND I3cv=3.29. MI concentrates on top-K actions (phase 2 cycling), RAND uniform. This is expected behavior, not a performance signal.
+  - **CRITICAL: replication caveat.** Original step 1161 substrate (sub1161_defense_v67.py) had game-specific click region discovery (saliency-based screen mapping for ARC click games → specific click action indices). This was REMOVED for current protocol (MBPP + masked ARC, general action space). The ARC=0.200 in 1161 may have come from the click region discovery finding the right screen region, not the MI formula itself. The MI formula alone (without game-specific click mapping) produces zero RHAE.
+  - **Decision:** KILL catalog item #17 under general protocol. If click region discovery is the mechanism, that's a separate catalog item (screen saliency detection) worth testing explicitly. → Leo spec.

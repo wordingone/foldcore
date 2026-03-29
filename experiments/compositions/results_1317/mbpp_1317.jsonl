@@ -1,0 +1,2 @@
+{"steps_taken": 2000, "elapsed_seconds": 0.04, "max_level": 0, "level_first_step": {}, "arc_score": 0.0, "RHAE": 0.0, "I3_cv": 2.9052, "action_kl": 12.8102, "wdrift": 0.0, "condition": "mi", "n_actions": 128, "label": "MBPP"}
+{"steps_taken": 2000, "elapsed_seconds": 0.02, "max_level": 0, "level_first_step": {}, "arc_score": 0.0, "RHAE": 0.0, "I3_cv": 0.7787, "action_kl": 3.848, "wdrift": 0.0, "condition": "rand", "n_actions": 128, "label": "MBPP"}
