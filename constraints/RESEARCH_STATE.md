@@ -714,4 +714,17 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **Per-game breakdown omitted (masked PRISM — chain aggregates only).**
   - **Credit assignment confirmed:** Multi-layer outperforms single-layer (1309 cr=1.44 → 1310 cr=0.93). Proper error signals at each layer matter.
   - **RHAE=0 everywhere:** Neither mechanism reaches L1 consistently. Prediction compression ≠ task progress yet.
-  - **Decision:** NO KILL. First multi-layer PC experiment confirms depth enables compression on click games. Next question: can compression drive action selection toward game-advancing actions? → Leo spec.
+  - **Decision:** NO KILL. First multi-layer PC experiment confirms depth enables compression. Next question: does compression continue with more steps and different game set? → Step 1311.
+
+- **Step 1311 (multi-layer PC, 5K steps, masked PRISM): COMPLETE. KILL — cr@5K=0.9805 ≥ 1310 reference cr@2K=0.9282. Compression plateaued.** 18 runs. Random games: MBPP + 2 masked ARC games (seed 1311).
+  - **Kill triggered:** MLPL cr@5K=0.9805 ≥ 0.9282 (step 1310 reference). Primary criterion.
+  - **Chain aggregates (masked):**
+    - MLPL: mean_RHAE=0.0, mean_wdrift=0.3612, mean_action_KL=15.08, mean_I3cv=3.37, mean_cr=0.9805
+    - RAND: mean_RHAE=2.2e-7, mean_wdrift=0.0, mean_action_KL=13.52, mean_cr=1.0011
+  - **pred_loss trajectory (MLPL):** 0.9649 → 0.9668 → 0.9674 → 0.9461 (steps 500/1000/2000/5000). Flat through 500-2000, slight decline at 5000.
+  - **pred_loss trajectory (RAND):** 0.9747 → 0.9743 → 0.9756 → 0.9757 (flat baseline).
+  - **Leo predictions (both WRONG):** P1 cr@5K < 0.8 → got 0.9805. P2 wdrift > 0.5 → got 0.3612.
+  - **SIGNAL despite kill:** MLPL (1/cr × kl)=15.38 > RAND=13.50. Behavioral diversity signal persists.
+  - **Key finding:** Step 1310's compression (cr=0.928) did NOT replicate on a different game set (seed 1311 → different games → weaker compression, cr=0.9805). Compression is game-set-dependent or N=3 draws insufficient to establish a stable result.
+  - **Open question:** Was 1310's compression driven by game selection (favorable game types for visual PC)? Need to understand what enables/disables compression before extending budget.
+  - **Decision:** KILL. Different game set → weaker compression. Architecture may be game-type-sensitive. → Leo spec.

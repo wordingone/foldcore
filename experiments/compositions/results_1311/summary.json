@@ -1,0 +1,37 @@
+{
+  "chain_summary": {
+    "mlpl": {
+      "mean_RHAE": 0.0,
+      "mean_wdrift": 0.3612,
+      "mean_action_KL": 15.0754,
+      "mean_I3cv": 3.3749,
+      "mean_compression_ratio": 0.9805,
+      "pred_loss_trajectory": {
+        "500": 0.964939,
+        "1000": 0.966766,
+        "2000": 0.967399,
+        "5000": 0.946119
+      }
+    },
+    "rand": {
+      "mean_RHAE": 2.2e-07,
+      "mean_wdrift": 0.0,
+      "mean_action_KL": 13.5184,
+      "mean_I3cv": 3.2653,
+      "mean_compression_ratio": 1.0011,
+      "pred_loss_trajectory": {
+        "500": 0.974671,
+        "1000": 0.974302,
+        "2000": 0.975592,
+        "5000": 0.975719
+      }
+    }
+  },
+  "n_draws": 3,
+  "games_label_only": [
+    "MBPP",
+    "Game A",
+    "Game B"
+  ],
+  "kill_threshold_cr": 0.9282
+}
