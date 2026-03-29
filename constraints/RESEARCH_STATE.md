@@ -797,3 +797,24 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **I3cv signal:** MI I3cv=12.55 vs RAND I3cv=3.29. MI concentrates on top-K actions (phase 2 cycling), RAND uniform. This is expected behavior, not a performance signal.
   - **CRITICAL: replication caveat.** Original step 1161 substrate (sub1161_defense_v67.py) had game-specific click region discovery (saliency-based screen mapping for ARC click games → specific click action indices). This was REMOVED for current protocol (MBPP + masked ARC, general action space). The ARC=0.200 in 1161 may have come from the click region discovery finding the right screen region, not the MI formula itself. The MI formula alone (without game-specific click mapping) produces zero RHAE.
   - **Decision:** KILL catalog item #17 under general protocol. If click region discovery is the mechanism, that's a separate catalog item (screen saliency detection) worth testing explicitly. → Leo spec.
+
+- **Step 1318 (catalog #21 eigenoptions on multi-layer LPL W3, argmax(W3@h2), masked PRISM): COMPLETE. KILL — argmax collapse, I3cv=35.73 >> 20.** 6 runs (3 EIGEN + 3 RAND), 2K steps each. Random games: MBPP + 2 masked ARC (seed 1318). Seed-free.
+  - **Kill triggered on two criteria:** EIGEN RHAE=0.00e+00 ≤ RAND RHAE=0.00e+00. EIGEN I3cv=35.73 > 20.
+  - **Chain aggregates (masked):**
+    - EIGEN: mean_RHAE=0.00e+00, mean_action_KL=1.7920, mean_I3cv=35.7280, mean_wdrift=0.1173
+    - RAND: mean_RHAE=0.00e+00, mean_action_KL=13.2751, mean_I3cv=3.3109
+  - **Predictions:** P1 (EIGEN action_KL ≠ RAND): CONFIRMED (1.79 vs 13.28). P2 (EIGEN I3cv > RAND): CONFIRMED (35.73 vs 3.31). P3 (RHAE uncertain): RHAE=0 both.
+  - **Collapse confirmed:** argmax + Hebbian W3 (zero init) creates positive feedback: action 0 chosen (argmax of zeros) → W3[0] += eta*h2 → W3[0]·h2 dominates → action 0 chosen again. Lock-in complete within first few steps. Same collapse as Step 1264.
+  - **Note on action_KL:** RAND action_KL=13.28 is inflated by large action space sparsity (ARC: 4103 actions, 200 samples = very sparse distributions → large KL artifact). I3cv is the reliable metric here.
+  - **Eigenoption concept not dead:** argmax is the wrong read. If W3's structure is used via softmax (1313/1314) or projected subspace (SVD version of the spec), W3 accumulates useful structure (wdrift=0.1173 confirms W1 drifted). The eigenoption concept may work with a different action selection read.
+  - **Decision:** KILL — argmax implementation killed. Eigenoption concept with SVD projection or softmax read remains untested. → Leo spec.
+
+- **Step 1319 (action generalization W3, Hebbian seed + generalized all-rows update, masked PRISM): COMPLETE. KILL — RHAE=0, all predictions wrong, pe_next-scaled generalization negligible.** 6 runs (3 GEN + 3 BASE), 2K steps each. Random games: MBPP + 2 masked ARC (seed 1319). Seed-free.
+  - **Kill triggered:** GEN RHAE=0.00e+00 ≤ BASE RHAE=0.00e+00.
+  - **Chain aggregates (masked):**
+    - GEN: mean_RHAE=0.00e+00, mean_action_KL=9.0735, mean_I3cv=3.4419, mean_wdrift=0.0584, mean_w3drift=0.0065
+    - BASE: mean_RHAE=0.00e+00, mean_action_KL=9.2360, mean_I3cv=3.3404, mean_wdrift=0.0628, mean_w3drift=0.0073
+  - **Predictions:** P1 (GEN action_KL > BASE): WRONG (diff=-0.16). P2 (GEN w3drift > BASE): WRONG (GEN=0.0065 < BASE=0.0073). P3 (no collapse): CONFIRMED (I3cv=3.44 ≤ 20).
+  - **Critical finding — w3drift_GEN < w3drift_BASE:** Generalized update `ETA * pe_next * outer(similarities, h2)` is scaled by pe_next (typically small, ~0.05). This makes generalized updates ~20× smaller than Hebbian updates (ETA * h2). Additionally, some similarities are negative (W3 values can be negative) → partial cancellation of Hebbian. Net effect: GEN's W3 changes LESS than BASE.
+  - **Mechanism too weak:** At ETA=0.001 and pe_next≈0.05, generalized update ≈ 5e-5 × similarity × h2. Hebbian = 1e-3 × h2. Ratio ≈ 0.05. Generalization adds <5% to W3 updates. Sample efficiency improvement is real in principle but unmeasurable at this scale.
+  - **Decision:** KILL. Additive generalized update too weak (pe_next scale factor). If pe_next were removed (use fixed coefficient = ETA), generalized update would be comparable to Hebbian. → Leo spec.

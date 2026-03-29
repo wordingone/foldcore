@@ -1,0 +1,2 @@
+{"steps_taken": 2000, "elapsed_seconds": 2.74, "max_level": 0, "level_first_step": {}, "arc_score": 0.0, "RHAE": 0.0, "I3_cv": 4.6218, "action_kl": 17.8839, "wdrift": 0.0183, "w3drift": 0.0029, "condition": "gen", "n_actions": 4103, "label": "Game A"}
+{"steps_taken": 2000, "elapsed_seconds": 1.64, "max_level": 0, "level_first_step": {}, "arc_score": 0.0, "RHAE": 0.0, "I3_cv": 4.5996, "action_kl": 17.8043, "wdrift": 0.0183, "w3drift": 0.0028, "condition": "base", "n_actions": 4103, "label": "Game A"}

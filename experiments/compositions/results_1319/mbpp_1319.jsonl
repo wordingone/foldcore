@@ -1,0 +1,2 @@
+{"steps_taken": 2000, "elapsed_seconds": 0.35, "max_level": 0, "level_first_step": {}, "arc_score": 0.0, "RHAE": 0.0, "I3_cv": 5.5787, "action_kl": 9.2978, "wdrift": 0.1515, "w3drift": 0.0167, "condition": "gen", "n_actions": 128, "label": "MBPP"}
+{"steps_taken": 2000, "elapsed_seconds": 0.27, "max_level": 0, "level_first_step": {}, "arc_score": 0.0, "RHAE": 0.0, "I3_cv": 5.2555, "action_kl": 9.8802, "wdrift": 0.1639, "w3drift": 0.0192, "condition": "base", "n_actions": 128, "label": "MBPP"}

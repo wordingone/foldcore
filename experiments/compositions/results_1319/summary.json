@@ -1,0 +1,23 @@
+{
+  "chain_summary": {
+    "gen": {
+      "mean_RHAE": 0.0,
+      "mean_action_KL": 9.0735,
+      "mean_I3cv": 3.4419,
+      "mean_wdrift": 0.0584,
+      "mean_w3drift": 0.0065
+    },
+    "base": {
+      "mean_RHAE": 0.0,
+      "mean_action_KL": 9.236,
+      "mean_I3cv": 3.3404,
+      "mean_wdrift": 0.0628,
+      "mean_w3drift": 0.0073
+    }
+  },
+  "games_label_only": [
+    "MBPP",
+    "Game A",
+    "Game B"
+  ]
+}
