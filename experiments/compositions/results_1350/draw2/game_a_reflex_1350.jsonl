@@ -1,0 +1,1 @@
+{"draw": 2, "label": "Game A", "game": "lp85", "condition": "reflex", "p1": null, "p2": 1813, "speedup": Infinity, "eff_sq": 3e-05, "optimal_steps": 10, "cr": 0.4, "max_entropy": 8.3195, "entropy_at_100": 8.319, "entropy_at_500": 8.319, "entropy_at_1000": 8.319, "entropy_at_2000": 8.319, "t1": 15.35, "t2": 18.21}

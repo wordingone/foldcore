@@ -1,0 +1,1 @@
+{"draw": 0, "label": "Game B", "game": "tr87", "condition": "reflex", "p1": null, "p2": null, "speedup": null, "eff_sq": 0.0, "optimal_steps": 10, "cr": 0.36, "max_entropy": 1.9459, "entropy_at_100": 1.9452, "entropy_at_500": 1.9452, "entropy_at_1000": 1.9452, "entropy_at_2000": 1.9452, "t1": 13.33, "t2": 16.06}
