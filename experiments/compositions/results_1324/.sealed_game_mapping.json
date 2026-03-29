@@ -1,0 +1,28 @@
+{
+  "games": [
+    "mbpp",
+    "cd82",
+    "cn04",
+    "ft09",
+    "lp85",
+    "ls20",
+    "sb26",
+    "sp80",
+    "tr87",
+    "tu93",
+    "vc33"
+  ],
+  "labels": {
+    "mbpp": "MBPP",
+    "cd82": "Game 01",
+    "cn04": "Game 02",
+    "ft09": "Game 03",
+    "lp85": "Game 04",
+    "ls20": "Game 05",
+    "sb26": "Game 06",
+    "sp80": "Game 07",
+    "tr87": "Game 08",
+    "tu93": "Game 09",
+    "vc33": "Game 10"
+  }
+}

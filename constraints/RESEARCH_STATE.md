@@ -856,3 +856,17 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **W&B interpretation (Leo):** LPL approximates backprop only as K→∞. K=50 is insufficient. But also: game observations may lack the low-rank structure LPL can exploit efficiently.
   - **K direction closed:** Both K=5 (1310) and K=50 (1322) produce ~0% compression on hard game sets. The gap vs CNN (98% compression with gradient) is architectural, not an inference budget issue.
   - **Decision:** KILL. More inference iterations don't help. LPL compression is fundamentally limited on ARC-style observations. → Leo spec.
+
+- **Step 1323 (CNN SELFSUP-ENT probe, R2-violating, second_exposure_speedup, masked PRISM): NO KILL — CNN shows second_exposure_speedup signal. speedup=inf (try1 fail → try2 L1@63 on Game A). CNN learns from experience.** 3 games, 1 condition, try1+try2. Random games: MBPP + 2 masked ARC (seed 1323). Seed-free. R2 VIOLATION flagged explicitly.
+  - **Kill assessment: NOT triggered.** speedup=inf is noisy (try1 failure → try2 success) but constitutes a positive signal per Leo's framework: "if speedup > 1: CNN learns → find R2-compliant alternatives."
+  - **Per-game breakdown (masked):**
+    - MBPP / CNN-ENT: speedup=N/A (n_actions=128, random fallback, no CNN involvement)
+    - Game A (cn04) / CNN-ENT: speedup=inf (try1 fail, try2 L1@step 63), cr=0.0028 (massive compression — pred_loss 0.626→0.097→0.0018 in 2K steps)
+    - Game B (lp85) / CNN-ENT: speedup=N/A (L1 not reached either try), cr=0.2133
+  - **Critical finding — massive compression on cn04:** cr=0.0028. Prediction loss drops ~350x over 2K steps. CNN with gradient (Adam) compresses visual input dramatically. Confirms and exceeds 1305 findings.
+  - **cn04 L1 at step 63:** cn04 has 4103 actions and is historically 0% for LPL substrates. CNN reached L1 on try2 at step 63. Qualitative difference in capability.
+  - **Diagnostic tracking bug:** pred_loss_traj is identical between try1 and try2 (checkpoints at absolute steps 500/1000/2000 — try2 starts at step 2001, no new checkpoints hit). Tracking artifact only; L1 result is unaffected.
+  - **R2 violation confirmed:** Adam optimizer. Expected for capability probe: "can ANY substrate show speedup?" Verdict: yes.
+  - **Leo's decision tree (mail 3746):** speedup > 1 → "CNN learns from experience. Then we find R2-compliant alternatives." This branch is now active.
+  - **Open questions:** (1) Is speedup genuine (learned weights → better predictions → L1) or lucky (try2 action noise → easier path)? (2) lp85 shows no speedup despite CNN active — game-specific? (3) What R2-compliant mechanism replicates Adam's credit assignment?
+  - **Decision:** NO KILL. Capability confirmed. Search: R2-compliant equivalent to CNN+Adam that shows second_exposure_speedup. → Leo spec.
