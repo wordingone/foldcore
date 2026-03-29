@@ -1,6 +1,6 @@
 # The Search — Compressed
 
-*1322 experiments distilled. Zero noise. Any LLM can pick this up and continue.*
+*Distilled findings from recursive self-improvement experiments on ARC-AGI-3 and MBPP. Zero noise.*
 
 ---
 
@@ -40,7 +40,7 @@ MBPP: text/code generation. 128 ASCII actions. Each action = one character. Pred
 
 **Phase 2 (Steps 417-1081):** 16 substrate families tested, 8 killed. Bans on graph memory and codebook imposed then lifted. Finding: the constraint map is path-dependent. Kill criteria are ~70% family-dependent.
 
-**Phase 3 / Debate (Steps 1082-1250):** Prosecution vs defense on whether the substrate can surpass L1. 170 experiments. Finding: both sides hit the same wall. 200+ bridge mechanisms killed.
+**Phase 3 / Debate (Steps 1082-1250):** Prosecution vs defense on whether the substrate can surpass L1. Finding: both sides hit the same wall. Bridge mechanisms from this era listed in the negative map below.
 
 **Phase 4 / Composition era (Steps 1251+):** Components composed from catalog. R3 solved (100/100, Step 1251). Reflexive map defined. Then: CNN experiments (1305-1308), multi-layer LPL (1309-1322), inverse model, mode map, organism framing. Current phase.
 
@@ -58,7 +58,7 @@ Not an atom. Not a stitched-together monster. An organism.
 
 1. **R2-compliant prediction works, but weakly.** Multi-layer predictive coding (3 layers, local Hebbian updates) achieves 3-7% prediction improvement (Steps 1310-1313). One coupling law (prediction error) drives all layers. This weakness is fundamental — K=50 inference iterations produce identical compression to K=5 (Step 1322). The bottleneck is not convergence speed but the update rule itself.
 
-2. **R2-violating prediction is 14× stronger and the only path to task progress.** CNN+Adam achieves 98% compression (Steps 1305-1307) and is the only architecture producing RHAE > 0 (RHAE=2.4e-5, Step 1306; speedup=10.5× on sp80, Step 1324). The capability gap between R2-compliant and R2-violating is the central tension.
+2. **R2-violating prediction compresses 98% and produces task progress.** CNN+Adam achieves cr=0.003 (Steps 1305-1307). RHAE=2.4e-5 (Step 1306 ENT condition). speedup=10.5× on sp80 (Step 1324). Among tested substrates (Steps 1305-1326), only CNN+Adam produces RHAE > 0.
 
 3. **The bridge from prediction to action is shared representation, not engineered action selection.** 8 action mechanisms tested across ~25 experiments (argmax delta, REINFORCE dreaming, three-factor, inverse model, eigenoptions, MI detection, action generalization, allosteric softmax) — all matched or hurt entropy-driven selection. CNN works because conv layers feed BOTH prediction and action. The world model learns; actions stay diverse; shared features do the bridging. (Steps 1306-1321)
 
@@ -72,7 +72,7 @@ Not an atom. Not a stitched-together monster. An organism.
 
 R2-compliant dynamics (local Hebbian, LPL) produce 3-7% prediction compression and zero task progress. R2-violating dynamics (Adam gradient) produce 98% compression and measurable task progress.
 
-This is NOT "R2 is wrong." LPL Hebbian is ONE R2-compliant update rule. We tested ONE rule and found it too weak. The space of R2-compliant rules is vast. The substrate could DISCOVER its own update rule through R2-compliant dynamics (catalog #14). The discovered rule could be as powerful as gradient. R2 doesn't limit the POWER of the update rule. It limits the SOURCE.
+LPL Hebbian is one R2-compliant update rule. DFA (direct feedback alignment) is another, achieving 34% compression (Step 1326). The space between LPL (7%) and Adam (99.7%) contains update rules of varying R2 compliance and power. R2 doesn't limit the power of the update rule — it limits the source. The spectrum is mapped in "The Open Question" below.
 
 ## What Doesn't Work (negative map)
 
@@ -114,7 +114,13 @@ No one has built this yet. The search is finding the pieces.
 
 Can R2-compliant dynamics produce the same capability as gradient?
 
-An R2-violating substrate (CNN+Adam) achieves second_exposure_speedup=10.5× on one game type (Step 1324). LPL (R2-compliant local prediction error) is fundamentally too weak (Step 1322). The gap is 14× in compression and qualitative in task progress.
+Empirically mapped compression by update rule (Steps 1305-1326):
+
+| Update rule | Compression (cr) | R2 status | Task progress |
+|---|---|---|---|
+| LPL Hebbian | 7% (cr=0.93) | Compliant | None |
+| DFA (forward-only) | 34% (cr=0.66) | Compliant | None |
+| Adam (backprop) | 99.7% (cr=0.003) | Violating | speedup=10.5× on sp80 |
 
 But LPL is ONE point in the space of R2-compliant update rules. Between "pure local Hebbian" and "full Adam backprop" lies a spectrum of update mechanisms with varying R2 compliance and varying power:
 
