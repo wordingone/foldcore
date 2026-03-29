@@ -1,0 +1,263 @@
+{
+  "step": 1342,
+  "results": [
+    {
+      "label": "MBPP",
+      "condition": "ac_model",
+      "n_actions": 128,
+      "try1": {
+        "steps_taken": 2000,
+        "elapsed_seconds": 3.76,
+        "steps_to_first_progress": null,
+        "progress_count": 0,
+        "I3_cv": 0.7408,
+        "action_kl": 13.4604,
+        "action_entropy_norm": 0.9778,
+        "novelty_var_mean": 1e-06,
+        "wdrift": 7.2577,
+        "pred_loss_traj": {
+          "500": 5.8e-05,
+          "1000": 1e-05,
+          "2000": 8e-06
+        },
+        "compression_ratio": 0.1379
+      },
+      "try2": {
+        "steps_taken": 2000,
+        "elapsed_seconds": 4.0,
+        "steps_to_first_progress": null,
+        "progress_count": 0,
+        "I3_cv": 0.7579,
+        "action_kl": 10.5269,
+        "action_entropy_norm": 0.9873,
+        "novelty_var_mean": 0.0,
+        "wdrift": 7.4259,
+        "pred_loss_traj": {
+          "500": 8e-06,
+          "1000": 8e-06,
+          "2000": 8e-06
+        },
+        "compression_ratio": 1.0
+      },
+      "second_exposure_speedup": null,
+      "efficiency_sq_try2": 0.0,
+      "optimal_steps": 61,
+      "compression_ratio": 0.1379
+    },
+    {
+      "label": "Game A",
+      "condition": "ac_model",
+      "n_actions": 7,
+      "try1": {
+        "steps_taken": 2000,
+        "elapsed_seconds": 11.7,
+        "steps_to_first_progress": null,
+        "progress_count": 0,
+        "I3_cv": 0.1267,
+        "action_kl": 15.691,
+        "action_entropy_norm": 0.64,
+        "novelty_var_mean": 3e-06,
+        "wdrift": 5.3056,
+        "pred_loss_traj": {
+          "500": 5.7e-05,
+          "1000": 9e-06,
+          "2000": 8e-06
+        },
+        "compression_ratio": 0.1404
+      },
+      "try2": {
+        "steps_taken": 2000,
+        "elapsed_seconds": 14.43,
+        "steps_to_first_progress": null,
+        "progress_count": 0,
+        "I3_cv": 0.1586,
+        "action_kl": 6.7104,
+        "action_entropy_norm": 0.9476,
+        "novelty_var_mean": 0.0,
+        "wdrift": 5.3246,
+        "pred_loss_traj": {
+          "500": 8e-06,
+          "1000": 8e-06,
+          "2000": 8e-06
+        },
+        "compression_ratio": 1.0
+      },
+      "second_exposure_speedup": null,
+      "efficiency_sq_try2": 0.0,
+      "optimal_steps": 10,
+      "compression_ratio": 0.1404
+    },
+    {
+      "label": "Game B",
+      "condition": "ac_model",
+      "n_actions": 4103,
+      "try1": {
+        "steps_taken": 2000,
+        "elapsed_seconds": 12.85,
+        "steps_to_first_progress": null,
+        "progress_count": 0,
+        "I3_cv": 4.5095,
+        "action_kl": 17.5239,
+        "action_entropy_norm": 0.8703,
+        "novelty_var_mean": 1e-06,
+        "wdrift": 5.404,
+        "pred_loss_traj": {
+          "500": 5.2e-05,
+          "1000": 8e-06,
+          "2000": 6e-06
+        },
+        "compression_ratio": 0.1154
+      },
+      "try2": {
+        "steps_taken": 2000,
+        "elapsed_seconds": 15.61,
+        "steps_to_first_progress": null,
+        "progress_count": 0,
+        "I3_cv": 4.5322,
+        "action_kl": 17.9948,
+        "action_entropy_norm": 0.8704,
+        "novelty_var_mean": 0.0,
+        "wdrift": 5.4606,
+        "pred_loss_traj": {
+          "500": 6e-06,
+          "1000": 6e-06,
+          "2000": 6e-06
+        },
+        "compression_ratio": 1.0
+      },
+      "second_exposure_speedup": null,
+      "efficiency_sq_try2": 0.0,
+      "optimal_steps": 10,
+      "compression_ratio": 0.1154
+    },
+    {
+      "label": "MBPP",
+      "condition": "mlp_tp",
+      "n_actions": 128,
+      "try1": {
+        "steps_taken": 2000,
+        "elapsed_seconds": 3.35,
+        "steps_to_first_progress": null,
+        "progress_count": 0,
+        "I3_cv": 0.7621,
+        "action_kl": 4.2346,
+        "action_entropy_norm": 0.9931,
+        "novelty_var_mean": null,
+        "wdrift": 6.6686,
+        "pred_loss_traj": {
+          "500": 0.000569,
+          "1000": 0.000212,
+          "2000": 5e-05
+        },
+        "compression_ratio": 0.0879
+      },
+      "try2": {
+        "steps_taken": 2000,
+        "elapsed_seconds": 3.52,
+        "steps_to_first_progress": null,
+        "progress_count": 0,
+        "I3_cv": 0.8304,
+        "action_kl": 4.4012,
+        "action_entropy_norm": 0.9941,
+        "novelty_var_mean": null,
+        "wdrift": 6.9969,
+        "pred_loss_traj": {
+          "500": 2.7e-05,
+          "1000": 1.7e-05,
+          "2000": 1.1e-05
+        },
+        "compression_ratio": 0.4074
+      },
+      "second_exposure_speedup": null,
+      "efficiency_sq_try2": 0.0,
+      "optimal_steps": 61,
+      "compression_ratio": 0.0879
+    },
+    {
+      "label": "Game A",
+      "condition": "mlp_tp",
+      "n_actions": 7,
+      "try1": {
+        "steps_taken": 2000,
+        "elapsed_seconds": 13.53,
+        "steps_to_first_progress": null,
+        "progress_count": 0,
+        "I3_cv": 0.1733,
+        "action_kl": 0.0219,
+        "action_entropy_norm": 0.9992,
+        "novelty_var_mean": null,
+        "wdrift": 4.7082,
+        "pred_loss_traj": {
+          "500": 0.000531,
+          "1000": 0.000202,
+          "2000": 5e-05
+        },
+        "compression_ratio": 0.0942
+      },
+      "try2": {
+        "steps_taken": 2000,
+        "elapsed_seconds": 16.64,
+        "steps_to_first_progress": null,
+        "progress_count": 0,
+        "I3_cv": 0.1151,
+        "action_kl": 0.0156,
+        "action_entropy_norm": 0.9996,
+        "novelty_var_mean": null,
+        "wdrift": 4.8986,
+        "pred_loss_traj": {
+          "500": 2.7e-05,
+          "1000": 1.8e-05,
+          "2000": 1.2e-05
+        },
+        "compression_ratio": 0.4444
+      },
+      "second_exposure_speedup": null,
+      "efficiency_sq_try2": 0.0,
+      "optimal_steps": 10,
+      "compression_ratio": 0.0942
+    },
+    {
+      "label": "Game B",
+      "condition": "mlp_tp",
+      "n_actions": 4103,
+      "try1": {
+        "steps_taken": 2000,
+        "elapsed_seconds": 13.42,
+        "steps_to_first_progress": null,
+        "progress_count": 0,
+        "I3_cv": 4.5996,
+        "action_kl": 18.1077,
+        "action_entropy_norm": 0.8775,
+        "novelty_var_mean": null,
+        "wdrift": 4.613,
+        "pred_loss_traj": {
+          "500": 0.000545,
+          "1000": 0.000198,
+          "2000": 4.7e-05
+        },
+        "compression_ratio": 0.0862
+      },
+      "try2": {
+        "steps_taken": 2000,
+        "elapsed_seconds": 16.88,
+        "steps_to_first_progress": null,
+        "progress_count": 0,
+        "I3_cv": 4.4867,
+        "action_kl": 17.7046,
+        "action_entropy_norm": 0.8761,
+        "novelty_var_mean": null,
+        "wdrift": 4.88,
+        "pred_loss_traj": {
+          "500": 2.5e-05,
+          "1000": 1.5e-05,
+          "2000": 1e-05
+        },
+        "compression_ratio": 0.4
+      },
+      "second_exposure_speedup": null,
+      "efficiency_sq_try2": 0.0,
+      "optimal_steps": 10,
+      "compression_ratio": 0.0862
+    }
+  ]
+}

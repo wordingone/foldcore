@@ -1300,3 +1300,53 @@ Mode map persists try1→try2. Zone update freq=100 steps, threshold=1%.
 **Criterion:** MODEL-ACT RHAE ≤ MLP-TP RHAE → KILL. Criterion unchanged for 1341 (prediction error instead of novelty).
 
 **Decision:** KILL. Predicted novelty via forward model doesn't help. Next: step 1341 (curiosity/prediction error criterion — explore where model is most wrong).
+
+---
+
+## Step 1341 (KILL — Curiosity/prediction error: EMA surprise tracking doesn't help either):
+
+3 games × 2 conditions (CURIOSITY, MLP-TP control) × 2 tries. 2K steps per try. Seed-free.
+Warmup=500, EMA surprise per action (init=1.0 optimistic), sample proportional to surprise.
+
+**RHAE(try2): CURIOSITY = 0.0000, MLP-TP = 0.0000.** No progress. KILL paradigm.
+
+**Surprise ratio diagnostic (max/mean surprise, >1 = concentration):**
+- MBPP: 1.347 (try1) / 1.62 (try2) — slight concentration. Some actions have higher error.
+- ARC games: 1.028/1.064 — essentially uniform. Model cannot distinguish action surprises on ARC.
+
+**Entropy:** CURIOSITY MBPP entropy = 0.9959 (nearly uniform), ARC = 0.878 (same as random).
+Curiosity sampling is not concentrating actions meaningfully — the surprise distribution is too flat.
+
+**Root cause:** EMA surprise per action is nearly uniform on ARC. After 1500 curiosity steps with 4103 actions, ~1500 actions observed (37%). Observed actions get surprise updated, unvisited stay at 1.0 → distribution is flat (most actions at 1.0). Even for observed actions, surprise values converge to similar levels (model predicts similar error for all action types). No action-type signal.
+
+**Combined verdict (1340+1341):** Both novelty (1340) and prediction error (1341) fail. Model-based selection via the CURRENT forward model doesn't help regardless of criterion. Root cause: 1-layer linear pred_head can't differentiate action-conditional dynamics.
+
+**Decision:** KILL paradigm for 1-layer pred_head. Root cause identified: action-blind forward model. Next: step 1342 (2-layer nonlinear pred_head + noop-relative novelty — addresses root cause directly).
+
+---
+
+## Step 1342 (KILL — 2-layer action-conditional pred_head: novelty_var still ≈ 0):
+
+3 games × 2 conditions (AC-MODEL, MLP-TP) × 2 tries. 2K steps, warmup=500, K=32 noop-relative novelty.
+pred_head: 2-layer nonlinear (512+6 → ReLU → 512). Action encoding: action_type_vec (6-dim, action % 6).
+
+**RHAE(try2): AC-MODEL = 0.0000, MLP-TP = 0.0000.** No progress. KILL.
+
+**Novelty variance diagnostic (>0.01 = differentiates actions):**
+- MBPP: try1=1e-06, try2=0.0 → flat
+- Game A: try1=3e-06, try2=0.0 → flat
+- Game B: try1=1e-06, try2=0.0 → flat
+
+All three games show novelty_var ≈ 0 (well below 0.01 threshold). The 2-layer head cannot differentiate actions any better than 1-layer.
+
+**Compression:** AC-MODEL cr=0.115-0.140 vs MLP-TP cr=0.086-0.094. 2-layer head is harder to optimize — 25% worse compression by step 2000. More capacity but slower convergence.
+
+**Game A try1 entropy = 0.64 (concentrated) but novelty_var=3e-06:** argmax of noise-level differences concentrates spuriously on one action. Not a signal — numerical noise from extra nonlinearity.
+
+**Root cause confirmed:** action_type_vec = action % 6 collapses spatial information. All 4103 ARC actions → 6 types. Two left-clicks at different (x,y) positions → same type → same prediction → zero novelty difference. For MBPP: 128 characters → 6 types → 'a' and 'g' look identical. The encoding destroys action identity.
+
+**Fix:** Richer action encoding preserving spatial/identity information:
+- ARC: (type_1hot[6], x_norm, y_norm) = 8-dim. Same type but different position → different encoding.
+- MBPP: character identity (128-dim one-hot or embedding). Each char distinct.
+
+**Decision:** KILL. 2-layer pred_head with 6-dim type encoding still can't differentiate actions. Need richer action encoding — spatial position for ARC, character identity for MBPP. Next: Leo to spec step 1343.
