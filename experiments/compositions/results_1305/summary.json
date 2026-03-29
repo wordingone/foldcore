@@ -1,0 +1,40 @@
+{
+  "chain_summary": {
+    "sg_selfsup": {
+      "mean_R3": null,
+      "mean_RHAE": 5e-06,
+      "mean_wdrift": 11.5207,
+      "mean_action_KL": 2.0534,
+      "mean_I3cv": 16.1786,
+      "mean_compression_ratio": 0.0212,
+      "pred_loss_trajectory": {
+        "1000": 0.111388,
+        "3000": 0.005237,
+        "5000": 0.002421,
+        "7000": 0.004229,
+        "9000": 0.002221
+      }
+    },
+    "argmin_pe": {
+      "mean_R3": 0.6314,
+      "mean_RHAE": 1e-06,
+      "mean_wdrift": 43.6707,
+      "mean_action_KL": 10.2787,
+      "mean_I3cv": 2.9508,
+      "mean_compression_ratio": null,
+      "pred_loss_trajectory": {
+        "1000": null,
+        "3000": null,
+        "5000": null,
+        "7000": null,
+        "9000": null
+      }
+    }
+  },
+  "n_draws": 3,
+  "games_label_only": [
+    "Game A",
+    "Game B",
+    "Game C"
+  ]
+}
