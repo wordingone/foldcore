@@ -610,7 +610,28 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **ARGMIN-PE confirmed working:** FT09=5/5, VC33=5/5, LP85=5/5 L1. Linear architecture is necessary — step1299's LP85=0/10 was architecture failure, not task failure.
   - **Decision tree outcome:** "DHL collapses → add homeostatic rate target (per-action scaling toward 1/n_actions)." → Step 1302.
 
-- **Step 1300 (StochasticGoose PRISM baseline — leaderboard leader): RUNNING.** Jun directive, Leo mail 3662/3663. 11 games × 20 draws = 220 pairs. ETA ~8 hours remaining.
+- **Step 1302 (DHL homeostatic rate target + matched anti-Hebbian): COMPLETE. KILL — HM≡HO identity confirms anti-Hebbian contributes zero; R3 is homeostatic artifact.** 220 runs, ~3.5 hours.
+  - **Kill triggered:** I3_cv >3× ARGMIN-PE on 7/11 games (HM condition); collapse on DM (matched-rate-only) 5/11 games.
+  - **Critical finding — HM≡HO identity:** DHL+HOMEO and HOMEO-ONLY have nearly identical R3 and cf on ALL 11 games. Anti-Hebbian contributes zero even at matched rate (eta_anti=0.01 = eta=0.01). Diagnosis confirmed: anti-Hebbian is mechanistically inert because Hebbian updates dominate before decorrelation can act.
+  - **R3 is homeostatic artifact:** R3=0.7+ values reflect W row-norm changes from homeostatic scaling (×0.99/×1.01), NOT direction learning. Jacobian changes because magnitudes change, not because rows learn meaningful directions. Confirmed by HM≡HO (if anti-Hebbian contributed direction learning, HM would differ from HO).
+  - **DM collapse:** DHL-MATCHED (matched rate, no homeostasis) collapses on most games (cf>0.98 on small-action-space games). Rate matching alone does nothing without homeostasis.
+  - **Full results table (R3 / collapse fraction):**
+    - LS20: HM 0.032/0.621, HO 0.032/0.620, DM 0.000/0.999 — all collapse or artifact
+    - FT09: HM 0.761/0.403, HO 0.761/0.441, DM 0.007/0.777 — HM L1=4/5, HO L1=5/5, PE=5/5
+    - VC33: HM 0.728/0.022, HO 0.731/0.021, DM 0.007/0.237 — PE L1=5/5, HM/HO L1=0/5 (regression!)
+    - TR87: HM 0.032/0.515, HO 0.030/0.479, DM 0.000/0.998
+    - SP80: HM 0.705/0.005, HO 0.706/0.005, DM 0.015/0.378
+    - SB26: HM 0.740/0.196, HO 0.745/0.212, DM 0.004/0.986
+    - TU93: HM 0.028/0.437, HO 0.030/0.429, DM 0.000/0.997
+    - CN04: HM 0.763/0.297, HO 0.765/0.134, DM 0.015/0.785
+    - CD82: HM 0.754/0.045, HO 0.755/0.025, DM 0.009/0.200
+    - LP85: HM 0.823/0.498, HO 0.826/0.491, DM 0.016/0.984 — PE L1=5/5, HM/HO L1=0/5 (regression!)
+    - MBPP: HM 0.658/0.519, HO 0.664/0.503, DM 0.083/0.599
+  - **VC33 and LP85 regression:** ARGMIN-PE=5/5 but DHL+HOMEO=0/5 L1. Homeostasis suppresses the action selection dynamics needed on click games.
+  - **Linear map path closed:** After Steps 1301+1302, anti-Hebbian + homeostasis = no genuine learning signal in linear map. Two experiments, clear negative. Direction terminated.
+  - **Decision tree outcome:** "Linear map has no genuine learning signal → try non-Hebbian self-supervised objective." → Step 1303 (CNN forward prediction, currently running).
+
+- **Step 1300 (StochasticGoose PRISM baseline — leaderboard leader): RUNNING.** Jun directive, Leo mail 3662/3663. 11 games × 20 draws = 220 pairs. ~8 of 11 games complete.
   - Port of DriesSmit/ARC3-solution (exact CNN architecture, training loop, buffer)
   - CNN: Conv2d 32→64→128→256 + MaxPool action head (5 discrete) + spatial coord head (4096)
   - Binary frame-change reward; buffer reset + model reset on level transition
