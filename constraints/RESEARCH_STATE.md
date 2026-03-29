@@ -728,3 +728,15 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **Key finding:** Step 1310's compression (cr=0.928) did NOT replicate on a different game set (seed 1311 → different games → weaker compression, cr=0.9805). Compression is game-set-dependent or N=3 draws insufficient to establish a stable result.
   - **Open question:** Was 1310's compression driven by game selection (favorable game types for visual PC)? Need to understand what enables/disables compression before extending budget.
   - **Decision:** KILL. Different game set → weaker compression. Architecture may be game-type-sensitive. → Leo spec.
+
+- **Step 1312 (three-factor W3 + T_chain transfer metric, masked PRISM): COMPLETE. KILL — 3F T_chain=1.5558 ≤ BASE T_chain=1.5590. Three-factor modulation provides no improvement.** 27 substrate runs (18 A:2K + B_exp:1K + 9 B_fresh:1K). Random games: MBPP + 2 masked ARC games (seed 1312).
+  - **Kill triggered:** 3F T_chain=1.5558 ≤ BASE T_chain=1.5590 (primary criterion). Three-factor W3 modulation by pe_next is indistinguishable from pure Hebbian W3.
+  - **Chain aggregates (masked):**
+    - 3F: mean_RHAE=0.00e+00, mean_wdrift=?, mean_action_KL=13.2498, mean_I3cv=?, cr(2K)=0.9027, T_chain=1.5558
+    - BASE: mean_RHAE=0.00e+00, mean_wdrift=0.2461, mean_action_KL=13.2550, mean_I3cv=3.3574, cr(2K)=0.9028, T_chain=1.5590
+  - **T_chain > 1.0 for BOTH conditions:** Experiencing episode A improves prediction on episode B vs a fresh substrate. Transfer exists in the base mechanism. This is real — but equally strong in both conditions.
+  - **pe_next direction confirmed (Leo mail 3712):** High pe_next → larger W3 update. One coupling law throughout (R2 compliant). "Strengthen on surprising outcomes" = curiosity-like. This is the correct formula.
+  - **Predictions (1 confirmed, 2 wrong):** P1 T_chain > 1.0 for both → CONFIRMED. P2 3F T_chain > BASE → WRONG (3F < BASE by 0.0032). P3 3F action_KL ≠ BASE → WRONG (diff=0.0052, negligible).
+  - **Key finding:** T_chain > 1.0 in the BASE architecture (pure Hebbian W3) confirms cross-episode transfer via predictive coding. However, three-factor pe_next modulation of W3 contributes nothing incremental. W3 update chemistry doesn't differentiate on this metric.
+  - **RHAE=0 everywhere.** Compression ≠ task progress.
+  - **Decision:** KILL. Three-factor W3 modulation killed. T_chain > 1.0 is a positive baseline finding. → Leo spec.
