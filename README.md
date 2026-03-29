@@ -63,11 +63,14 @@ Each finding cites the experiments that support it and states what would falsify
 
 | Mechanism | Experiments | Result |
 |-----------|-----------|--------|
-| Prediction-based action selection (10 variants) | Steps 1306-1341, ~30 experiments | All ≈ entropy. Model-based novelty (1340) and curiosity (1341) also fail because forward model is action-blind. |
-| R2-compliant update rules for task progress | Steps 1309-1341, 14+ experiments | Zero RHAE > 0. TP compresses 92% but no level advancement. |
+| Prediction-based action selection (10 variants) | Steps 1306-1343, ~30 experiments | All ≈ entropy. Action-conditional model with rich encoding (1343) showed weak MBPP signal but zero ARC progress. |
+| R2-compliant update rules for task progress | Steps 1309-1348, 14+ experiments | Zero RHAE > 0. TP compresses 54-92% (game-dependent) but no level advancement. |
+| R2-violating (Adam) on hard games | Step 1345 | Adam ALSO scores RHAE=0 on same hard games as TP. NOT credit depth — game difficulty exceeds budget. |
+| Deliberation (fewer actions, more training) | Steps 1346-1347 | K=10 reduces to 200 actions → cr=1.0 (model trains on 200 sparse transitions, memorizes). Model-based selection on cr=1.0 model has no signal. |
 | Multi-episode training for transfer | Step 1336 | Worse than single-episode. Diverse episodes produce interference, not invariance. |
+| Childhood (multi-game pretraining) | Step 1348 | cr=1.0 on evaluation game. Features from 10 random games don't transfer to new games. Cross-game transfer as dead as within-game transfer. |
 | Overfitting detection (internal R4) | Step 1334 | Detection triggers but LR reduction too aggressive. Calibration issue, not concept failure. |
-| Meta-learned plasticity | Steps 1325, 1339 | Theta found correct direction (1325) but credit signal too weak. Theta frozen at init (1339) — implementation bugs identified, normalized credit fix available. |
+| Meta-learned plasticity | Steps 1325, 1339 | Theta found correct direction (1325) but credit signal too weak. Theta frozen at init (1339) — normalized credit fix identified but untested. |
 | Mode map / zone discovery | Step 1338 | Zones are spatial (episode-specific), not functional. try1 zones don't persist to try2. |
 
 ## Compression spectrum (empirically mapped)
@@ -80,17 +83,20 @@ Each finding cites the experiments that support it and states what would falsify
 | Target propagation | 92% | Compliant | 0 | 1329 |
 | Adam (full gradient) | 99.7% | Violating | 2.4e-5 | 1324 |
 
-## Open directions (from catalog, 40 items)
+## Open directions (from catalog, 46 items)
 
-Tested this session and killed: mode map (#16, Step 1338), meta-plasticity (#14, Step 1339).
+Tested this session: mode map (#16, killed 1338), meta-plasticity (#14, killed 1339), action-conditional model (#42, partial signal on MBPP), deliberation (#41, killed 1346-1347), childhood (#44, killed 1348).
+
+**Key eliminative finding (Steps 1344-1348):** Game seeds 13440-13444 are unreachable by ANY substrate (TP or Adam) with 2K random actions. The bottleneck on these games is not the update rule, not action selection, not credit depth, not prior knowledge — it's that random exploration in a 4103-action space with 2K steps has near-zero probability of hitting required action sequences.
 
 Top untested:
-- **Action-conditional forward model** — predict next_obs given (obs, action). Current model is action-blind. Step 1342 in progress.
-- **Equilibrium propagation + learned halting** — R2-compliant deliberation. Substrate decides when to act. Not in literature.
+- **Equilibrium propagation + learned halting (#43)** — R2-compliant deep credit via energy-based settling. Substrate decides when to act. Novel combination not in literature.
+- **Model-based data augmentation** — train on imagined transitions (counterfactual actions) to increase training data diversity without more actions.
+- **Normalized meta-plasticity credit (#46)** — fix for 1339 theta freeze. Identified, not yet tested.
 - **#32/#33: Self-directed pruning / activity-dependent growth** — architecture emerges from dynamics.
 - **#36: "Does the substrate understand what a game is?"** — no experiment has measured internal task-structure representation.
 
-Full catalog: `docs/UNDEREXPLORED_CATALOG.md`
+Full catalog: `docs/UNDEREXPLORED_CATALOG.md` (46 items, updated 2026-03-29)
 
 ## Repository structure
 
