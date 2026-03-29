@@ -1375,3 +1375,19 @@ Action encoding: ARC=(type_1hot[7], x_norm, y_norm, pad)=16-dim. MBPP=char_embed
 **MBPP char_embed starts learning (nov_var=0.004) but collapses in try2 (0.000405):** Try2 model already learned char dynamics from try1. In try2, pred_next is similar for all chars (model converged) → low variance. The char_embed works but novelty variance drops when model is well-calibrated.
 
 **Decision:** KILL. Noop-relative novelty is fundamentally flawed (unobserved noop). Fix: drop noop baseline, use variance across K candidates (self-relative novelty) OR direct ||pred_act - h3||. Next: Leo to spec 1344.
+
+---
+
+## Step 1344 (KILL — Baseline RHAE distribution: 0/15 games, 0/5 draws. 1343 was luck.):
+
+5 draws × (MBPP + 2 ARC) × 2 tries = 30 episodes. MLP+TP entropy. 2K steps. Seed-free.
+Draw seeds: 13440-13444. Different game selections from ARC_POOL.
+
+**RHAE per draw: [0.0, 0.0, 0.0, 0.0, 0.0]. Chain mean = 0.000000.**
+**Non-zero draws: 0/5. Non-zero games: 0/15.**
+
+Assessment: 1343 Game A (RHAE=0.0001) was a single lucky draw. The MLP+TP baseline is RHAE-dead across a broader sample.
+
+**Critical finding — compression anomaly:** All prior steps (1337-1343) showed cr≈0.08 (8% residual = 92% compression). Step 1344 shows cr=0.36-0.46 (36-46% residual = 54-64% compression). FIVE TIMES WORSE. The game selections from seeds 13440-13444 are harder to predict than the 1337-1343 games. The "92% compression" result was specific to easy-to-predict games — it does NOT generalize.
+
+**Decision:** KILL baseline paradigm. MLP+TP+entropy is RHAE-dead. The 92% compression metric was misleading — it measured learning on easy games, not capability. Need a fundamentally different approach: either better exploration (not just entropy) OR different learning objective (not just TP prediction error). Next: Leo to spec direction.
