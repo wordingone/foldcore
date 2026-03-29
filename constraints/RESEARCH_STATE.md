@@ -689,3 +689,17 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **RHAE near zero everywhere:** Neither mechanism reaches L1 consistently. ENT marginally better (3e-6 vs 0).
   - **Finding:** REINFORCE dreaming (maximize imagined encoding change via M=16 samples, EMA baseline) survives by 2.7% margin driven by one ENT outlier. Dream loss decreasing confirms dreaming learns, but "maximize imagined encoding change" is not the right objective — same failure mode as Step 1306 argmax delta. Both select for visually-responsive actions, not task-advancing sequences.
   - **Decision:** Marginal no-kill, but result is within noise. "Maximize imagined change" = wrong dreaming objective across two experiments (1306 deterministic, 1307 stochastic). Need a task-relevant dreaming objective. Next: Leo spec.
+
+- **Step 1308 (PE-spike proportional reset): KILLED before completion.** Jun directive: any experiment >15 min must be unkillable (too important to arbitrarily stop). 1308 was projected at ~90 min → should not have been launched under this rule. Results discarded.
+
+- **Step 1309 (LPL linear reflexive map + MBPP in pool, masked PRISM): COMPLETE. KILL — LPL score=9.19 ≤ RAND score=9.70.** 18 runs, ~30 min. Random games: MBPP + 2 masked ARC games (seed 1309).
+  - **Kill triggered:** KILL score = (1/cr) × action_KL. LPL=9.19 ≤ RAND=9.70. Single-layer Hebbian actively degrades prediction.
+  - **Chain aggregates (masked):**
+    - LPL: mean_wdrift=47.0, mean_action_KL=(chain), mean_cr=1.4383 (cr>1 = degrading)
+    - RAND: mean_wdrift=0.0, mean_cr=1.3772 (cr>1 — EMA lags non-stationary MBPP obs)
+  - **Both conditions cr>1:** EMA per-action predictor non-stationary on MBPP (converges to historical mean, obs distribution shifts). On ARC games, EMA lags game-state changes. Kill criterion still valid — reduces to action_KL dominated comparison.
+  - **wdrift=47 (LPL vs 0 RAND):** W changes substantially from Hebbian updates, but this does NOT improve prediction. Direction vs magnitude divergence — W rotates rather than learning stable predictions.
+  - **MBPP infrastructure confirmed:** 256-dim float32 obs (last 256 bytes normalized), n_actions=128, same _enc_frame pipeline. L1=0/all conditions (no valid Python generated). MBPP always included unmasked as 'MBPP'; 2 ARC games masked as Game A/B.
+  - **Masked PRISM violation (fixed):** During development, game IDs computed and mailed to Leo. Jun corrected: structural enforcement required, not behavioral. Created permanent `prism_masked.py` infrastructure. Step 1310+ uses this infrastructure — game IDs structurally invisible.
+  - **Finding:** Single-layer Hebbian (LPL + predictive term) fails for same reason as Steps 1264/1289-1291: positive feedback without credit assignment. W learns to track high-magnitude responses, not prediction targets. Confirms: update dynamics = the problem. Need depth (multi-layer error signals) or non-Hebbian objective.
+  - **Decision:** KILL. Multi-layer predictive coding next — depth creates proper error signals at each layer (Whittington & Bogacz 2017). → Step 1310.
