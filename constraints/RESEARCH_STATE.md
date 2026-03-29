@@ -886,3 +886,20 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **Runtime:** 180s total (within 5-min cap). 1K steps sufficient to answer the question.
   - **Chain speedup = 10.5** (mean of 1 finite positive game). Dominated by sp80.
   - **Decision:** NOT KILL per primary criterion. Mixed signal: CNN shows genuine speedup on sp80 (game with simple L1 mechanism), anti-speedup on 3 others. The question is what differs about sp80. → Leo spec.
+
+- **Step 1325 (NEW — meta-learned plasticity: parameterized W1 update theta=[alpha, anti, decay], second_exposure_speedup, masked PRISM): KILL — META speedup=inf and BASE speedup=inf from DIFFERENT games (stochasticity dominates). META compresses WORSE than BASE on all 3 games.** 6 runs (3 games × 2 conditions), try1+try2. Random games: MBPP + lp85 + tr87 (seed 1325). Seed-free.
+  - **Kill triggered:** META speedup ≤ BASE (both chain=inf, from different games — noise).
+  - **Per-game breakdown (diagnostics):**
+    - MBPP/META: speedup=None, cr=0.9727, theta=[1.071, -0.004, -0.014]
+    - MBPP/BASE: speedup=None, cr=0.8323 ← BASE compresses BETTER
+    - lp85/META: speedup=inf (try1 fail, try2 L1@296), cr=0.9689
+    - lp85/BASE: speedup=0.0 (try1 L1@563, try2 fail), cr=0.9434
+    - tr87/META: speedup=None, cr=0.9999, theta≈[1.000, 0, 0] (no discovery)
+    - tr87/BASE: speedup=inf (try1 fail, try2 L1@433), cr=0.9999
+  - **Theta DOES drift on MBPP and lp85:** alpha=1.071/1.023 (amplified Hebbian), anti-Hebbian -0.004, decay -0.024. Direction discovered: amplified Hebbian + slight anti-Hebbian + slight decay.
+  - **tr87 theta dead:** theta≈[1,0,0]. tr87 cr=0.9999 — near-zero compression signal → credit formula inactive. Games with no compression provide no theta learning signal.
+  - **Critical finding — credit formula bias:** `credit_hebbian = dot(e1, term_hebb.T @ h1) = ||h1||² × ||e1||²` — always positive. theta[0] always grows regardless of actual prediction improvement. Formula systematically amplifies Hebbian even when it doesn't help. This is why alpha grew but compression worsened (BASE cr < META cr).
+  - **META compression worse than BASE on all 3 games:** Amplified Hebbian (alpha>1) causes larger W1 updates → less stable predictions. Anti-direction of what meta-learning should achieve.
+  - **Game flip (stochasticity):** META and BASE got their inf speedup from different games (META:lp85, BASE:tr87). Both got there by random action luck, not meta-learning benefit.
+  - **ETA_THETA=0.0001:** Possibly too small for meaningful discovery in 2K steps. But fixing the credit formula bias is more important than adjusting eta.
+  - **Decision:** KILL. Credit formula is biased toward Hebbian amplification — needs an unbiased estimator (actual delta, not first-order approximation). If Leo wants to continue: fix credit formula to use before/after delta on same obs. → Leo spec.
