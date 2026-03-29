@@ -18,9 +18,17 @@ Level masking (Jun directive, 2026-03-29):
 - Speedup: steps_to_first_progress(try1) / steps_to_first_progress(try2).
 - Apply to step 1333 and all future experiment scripts.
 
+RHAE optimal_steps (Leo directive, 2026-03-29):
+- MBPP: optimal_steps = len(correct_solution) via mbpp_game.compute_solver_steps.
+- ARC: no solver endpoint. Use ARC_OPTIMAL_STEPS_PROXY = 10 (proxy until solver available).
+  10 is conservative (most ARC games need more than 10 clicks), makes RHAE non-zero
+  when progress reached, allowing condition comparison. RHAE values on ARC are relative,
+  not absolute, until a real solver is available.
+
 Usage in experiment scripts:
     from prism_masked import select_games, seal_mapping, label_filename, det_weights
     from prism_masked import compute_progress_speedup, compute_rhae_try2, write_experiment_results
+    from prism_masked import ARC_OPTIMAL_STEPS_PROXY, get_arc_optimal_steps
 
     GAMES, GAME_LABELS = select_games(seed=STEP)
     # GAMES is internal-only — never print, never log, never pass to Leo.
@@ -40,6 +48,16 @@ import random
 import os
 import json
 import numpy as np
+
+# ARC optimal_steps proxy (Leo directive, 2026-03-29).
+# No solver endpoint available. Proxy = 10 makes RHAE non-zero when progress reached.
+# Replace with game-specific values when a solver/reference is available.
+ARC_OPTIMAL_STEPS_PROXY = 10
+
+
+def get_arc_optimal_steps(game_name=None):
+    """Return optimal_steps for ARC games (proxy until solver available)."""
+    return ARC_OPTIMAL_STEPS_PROXY
 
 ARC_POOL = [
     'ft09', 'ls20', 'vc33', 'tr87', 'sp80', 'sb26',
