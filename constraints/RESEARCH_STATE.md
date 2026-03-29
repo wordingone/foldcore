@@ -1045,3 +1045,52 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **TP still compressing excellently:** Game A cr=0.0686 (93%). The TP mechanism is working well.
   - **Persistent problem:** 2 consecutive game draws (seeds 1331, 1332) did not include a game that reaches L1 in both tries. The mode map hypothesis requires L1 in both try1 AND try2 to measure speedup. Without L1, speedup is undefined.
   - **Decision:** INCONCLUSIVE. The mode map IS working (1R/20C on Game A). The test is simply failing because the game draw keeps selecting games where the substrate can't reach L1 in 2K steps. Need games known to reach L1 (from step 1330 data: Game A-type games reached L1). → Leo spec (suggest fixed game or extended seed search).
+  - **Step 1333 CANCELLED (Leo mail 3780, 2026-03-29):** Leo proposed using sp80 explicitly to guarantee an L1-reaching game. Jun blocked: fixed game draws violate PRISM masking. Eli refused spec per Jun directive. Leo accepted. Mode map direction SUSPENDED.
+
+---
+
+## Direction Status Update (2026-03-29)
+
+### Mode Map — SUSPENDED (not killed)
+- **Mechanism works:** 1R/20C on Game A confirmed. Calibration (1% threshold, K=8 bbox, min 20 clicks) functioning.
+- **Return condition (Leo mail 3780):** Resume when a masked PRISM draw naturally produces progress in BOTH tries without cherry-picking. Do not run mode map experiments until then.
+- **Step 1333 cancellation noted.** Fixed-game draws to bypass null results are a PRISM violation. Not acceptable.
+
+---
+
+## Infrastructure Updates (2026-03-29)
+
+### Level Masking — IMPLEMENTED (Jun directive, 2026-03-29)
+- **What changed:** L1/L2/L3 level numbers are now forbidden in any output. Use `steps_to_first_progress` (opaque — first time game state advanced) instead of `level_first_step.get(1)`.
+- **New metrics:** `progress_count` (how many advances) replaces `max_level`. Speedup = steps_to_first_progress(try1) / steps_to_first_progress(try2).
+- **Infrastructure:** `compute_progress_speedup(p1, p2)` and `format_speedup()` added to `prism_masked.py`.
+- **Apply from step 1333 forward.** All future experiment scripts use level-masked API.
+
+---
+
+## Step 1333 (NEW — TP + silhouette of h1 (avg3, 128-dim), catalog #36, SIGNAL MARGINAL): SIGNAL criterion met by chain average, but RAND is already highly structured on ARC observations.
+
+3 games × 2 conditions (TP, RAND) × 2 tries = 12 episodes. Seed-free. Level-masked (steps_to_first_progress). 2K steps/try.
+
+- **Silhouette chain summary:**
+  - TP mean delta (try2 - try1): **+0.1964** (positive → experience organizes representation)
+  - TP mean sil try2: 0.7805
+  - RAND mean sil: 0.7498
+  - TP > RAND by 0.03 (thin margin)
+- **Speedup: TP=inf (Game A try1 fail, try2 succeeded). RAND=N/A.**
+- **TP compression: cr_mean=0.0518 (94.8% — strongest yet).**
+- **Per-game silhouette:**
+  - MBPP/TP: N/A (not ARC obs)
+  - MBPP/RAND: N/A
+  - Game A/TP: sil_try1=0.5663 → sil_try2=0.8997, delta=**+0.3334** ← large growth
+  - Game A/RAND: sil_try1=0.9407 → sil_try2=0.9414, delta=+0.0007 ← flat AND already 0.94!
+  - Game B/TP: sil_try1=0.6018 → sil_try2=0.6612, delta=+0.0594
+  - Game B/RAND: sil_try1=0.5589 → sil_try2=0.5675, delta=+0.0086
+- **Kill criteria:**
+  - TP delta > 0: NOT killed (criterion 1 passes)
+  - TP sil (0.7805) > RAND sil (0.7498): NOT killed (criterion 2 passes by chain average)
+- **CRITICAL OBSERVATION — RAND Game A already structured:**
+  Game A RAND sil=0.9407 >> TP try1=0.5663. A random (untrained) CNN already extracts HIGHLY clustered 128-dim representations from ARC observations. The "structure" measured may reflect game observation diversity, not learning. TP's try1 silhouette is LOWER than RAND because random-action exploration is more chaotic. After learning, TP reaches 0.8997 (close to, but below, RAND 0.9407 on Game A).
+- **Interpretation:** ARC observations are naturally structured in CNN feature space. TP does improve silhouette across experience (delta +0.1964), but the margin over RAND is thin. The criterion is technically met. However, the causation is unclear: is TP organizing because it LEARNS, or because its try2 episode is different from try1?
+- **R2 compliance:** TP local backward only. ✓
+- **Decision:** SIGNAL (marginal). Criterion met: TP delta > 0 AND TP mean sil > RAND mean sil. BUT margin thin (0.03) and Game A RAND > TP. Next: test with more games to separate observation-structure effect from learning-structure effect, OR use a different h1 that's more sensitive to learning (e.g., h4/avg4 which TP directly trains). → Leo spec.

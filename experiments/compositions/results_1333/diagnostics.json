@@ -1,0 +1,257 @@
+{
+  "step": 1333,
+  "results": [
+    {
+      "game": "MBPP",
+      "condition": "tp",
+      "try1": {
+        "steps_taken": 2000,
+        "elapsed_seconds": 0.01,
+        "steps_to_first_progress": null,
+        "progress_count": 0,
+        "RHAE": 0.0,
+        "I3_cv": 0.8343,
+        "action_kl": 4.2501,
+        "wdrift": 0.0,
+        "pred_loss_traj": {
+          "500": null,
+          "1000": null,
+          "2000": null
+        },
+        "compression_ratio": null
+      },
+      "try2": {
+        "steps_taken": 2000,
+        "elapsed_seconds": 0.02,
+        "steps_to_first_progress": null,
+        "progress_count": 0,
+        "RHAE": 0.0,
+        "I3_cv": 0.7869,
+        "action_kl": 5.3536,
+        "wdrift": 0.0,
+        "pred_loss_traj": {
+          "500": null,
+          "1000": null,
+          "2000": null
+        },
+        "compression_ratio": null
+      },
+      "silhouette_try1": null,
+      "silhouette_try2": null,
+      "silhouette_delta": null,
+      "second_exposure_speedup": null,
+      "compression_ratio": null,
+      "n_actions": 128
+    },
+    {
+      "game": "MBPP",
+      "condition": "rand",
+      "try1": {
+        "steps_taken": 2000,
+        "elapsed_seconds": 0.02,
+        "steps_to_first_progress": null,
+        "progress_count": 0,
+        "RHAE": 0.0,
+        "I3_cv": 0.8343,
+        "action_kl": 4.2501,
+        "wdrift": 0.0,
+        "pred_loss_traj": {
+          "500": null,
+          "1000": null,
+          "2000": null
+        },
+        "compression_ratio": null
+      },
+      "try2": {
+        "steps_taken": 2000,
+        "elapsed_seconds": 0.02,
+        "steps_to_first_progress": null,
+        "progress_count": 0,
+        "RHAE": 0.0,
+        "I3_cv": 0.7869,
+        "action_kl": 5.3536,
+        "wdrift": 0.0,
+        "pred_loss_traj": {
+          "500": null,
+          "1000": null,
+          "2000": null
+        },
+        "compression_ratio": null
+      },
+      "silhouette_try1": null,
+      "silhouette_try2": null,
+      "silhouette_delta": null,
+      "second_exposure_speedup": null,
+      "compression_ratio": null,
+      "n_actions": 128
+    },
+    {
+      "game": "Game A",
+      "condition": "tp",
+      "try1": {
+        "steps_taken": 2000,
+        "elapsed_seconds": 27.03,
+        "steps_to_first_progress": null,
+        "progress_count": 0,
+        "RHAE": 0.0,
+        "I3_cv": 28.1736,
+        "action_kl": 0.4745,
+        "wdrift": 7.3561,
+        "pred_loss_traj": {
+          "500": 0.002328,
+          "1000": 0.000559,
+          "2000": 0.000146
+        },
+        "compression_ratio": 0.0627
+      },
+      "try2": {
+        "steps_taken": 2000,
+        "elapsed_seconds": 27.94,
+        "steps_to_first_progress": 208,
+        "progress_count": 1,
+        "RHAE": 0.0,
+        "I3_cv": 28.1554,
+        "action_kl": 0.3745,
+        "wdrift": 8.2792,
+        "pred_loss_traj": {
+          "500": 9.6e-05,
+          "1000": 5.3e-05,
+          "2000": 2.1e-05
+        },
+        "compression_ratio": 0.2187
+      },
+      "silhouette_try1": 0.5663,
+      "silhouette_try2": 0.8997,
+      "silhouette_delta": 0.3334,
+      "second_exposure_speedup": Infinity,
+      "compression_ratio": 0.0627,
+      "n_actions": 4103
+    },
+    {
+      "game": "Game A",
+      "condition": "rand",
+      "try1": {
+        "steps_taken": 2000,
+        "elapsed_seconds": 1.99,
+        "steps_to_first_progress": null,
+        "progress_count": 0,
+        "RHAE": 0.0,
+        "I3_cv": 4.5548,
+        "action_kl": 17.6333,
+        "wdrift": 0.0,
+        "pred_loss_traj": {
+          "500": null,
+          "1000": null,
+          "2000": null
+        },
+        "compression_ratio": null
+      },
+      "try2": {
+        "steps_taken": 2000,
+        "elapsed_seconds": 2.03,
+        "steps_to_first_progress": null,
+        "progress_count": 0,
+        "RHAE": 0.0,
+        "I3_cv": 4.4407,
+        "action_kl": 17.2303,
+        "wdrift": 0.0,
+        "pred_loss_traj": {
+          "500": null,
+          "1000": null,
+          "2000": null
+        },
+        "compression_ratio": null
+      },
+      "silhouette_try1": 0.9407,
+      "silhouette_try2": 0.9414,
+      "silhouette_delta": 0.0007,
+      "second_exposure_speedup": null,
+      "compression_ratio": null,
+      "n_actions": 4103
+    },
+    {
+      "game": "Game B",
+      "condition": "tp",
+      "try1": {
+        "steps_taken": 2000,
+        "elapsed_seconds": 28.21,
+        "steps_to_first_progress": null,
+        "progress_count": 0,
+        "RHAE": 0.0,
+        "I3_cv": 27.2557,
+        "action_kl": 1.0779,
+        "wdrift": 7.0144,
+        "pred_loss_traj": {
+          "500": 0.002103,
+          "1000": 0.000401,
+          "2000": 8.6e-05
+        },
+        "compression_ratio": 0.0409
+      },
+      "try2": {
+        "steps_taken": 2000,
+        "elapsed_seconds": 30.74,
+        "steps_to_first_progress": null,
+        "progress_count": 0,
+        "RHAE": 0.0,
+        "I3_cv": 28.5677,
+        "action_kl": 0.4159,
+        "wdrift": 7.5163,
+        "pred_loss_traj": {
+          "500": 6.4e-05,
+          "1000": 4e-05,
+          "2000": 1.8e-05
+        },
+        "compression_ratio": 0.2812
+      },
+      "silhouette_try1": 0.6018,
+      "silhouette_try2": 0.6612,
+      "silhouette_delta": 0.0594,
+      "second_exposure_speedup": null,
+      "compression_ratio": 0.0409,
+      "n_actions": 4103
+    },
+    {
+      "game": "Game B",
+      "condition": "rand",
+      "try1": {
+        "steps_taken": 2000,
+        "elapsed_seconds": 2.26,
+        "steps_to_first_progress": null,
+        "progress_count": 0,
+        "RHAE": 0.0,
+        "I3_cv": 4.5548,
+        "action_kl": 17.6333,
+        "wdrift": 0.0,
+        "pred_loss_traj": {
+          "500": null,
+          "1000": null,
+          "2000": null
+        },
+        "compression_ratio": null
+      },
+      "try2": {
+        "steps_taken": 2000,
+        "elapsed_seconds": 2.27,
+        "steps_to_first_progress": null,
+        "progress_count": 0,
+        "RHAE": 0.0,
+        "I3_cv": 4.4407,
+        "action_kl": 17.2303,
+        "wdrift": 0.0,
+        "pred_loss_traj": {
+          "500": null,
+          "1000": null,
+          "2000": null
+        },
+        "compression_ratio": null
+      },
+      "silhouette_try1": 0.5589,
+      "silhouette_try2": 0.5675,
+      "silhouette_delta": 0.0086,
+      "second_exposure_speedup": null,
+      "compression_ratio": null,
+      "n_actions": 4103
+    }
+  ]
+}
