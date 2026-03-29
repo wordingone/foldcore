@@ -1275,3 +1275,28 @@ Mode map persists try1→try2. Zone update freq=100 steps, threshold=1%.
 2. `get_compression_ratio()` uses `get(10000)` but LOSS_CHECKPOINTS=[2000,5000,10000] → cr=None at 5K runs. Fix: use `get(5000)` or use last available checkpoint.
 
 **Decision:** KILL. Credit signal not informative enough in absolute form. Next: normalize credit OR use different credit signal (behavioral change, not pred_loss delta).
+
+---
+
+## Step 1340 (KILL — World model action selection: predicted novelty doesn't guide progress):
+
+3 games × 2 conditions (MODEL-ACT, MLP-TP control) × 2 tries. 2K steps per try. Seed-free. K=32 candidate actions, warmup=64 steps.
+
+**Architecture:** MLP+TP forward model. During model phase: sample K=32 actions, batch-predict next latent h3, select action with max ||pred_h3_next - h3||_2 (maximize predicted novelty). Try2 carries model weights.
+
+**RHAE(try2): MODEL-ACT = 0.0000, MLP-TP = 0.0000.** No progress in any game, either condition.
+
+**Entropy diagnostic (normalized, 1.0=uniform):**
+- MBPP: MODEL try1=0.9816 try2=0.9669 | ENT try1=0.9932 try2=0.9935
+- ARC games: MODEL ~0.874-0.877 | ENT ~0.876-0.877 (nearly identical)
+- MBPP shows slight concentration with model-based selection (0.98 vs 0.99). ARC shows zero difference — model-based selection behaves identically to random on ARC.
+
+**Compression:** cr≈8.5-8.9% (MODEL-ACT), 7.8-8.5% (ENT). Forward model compresses well (91-92%), but action-conditional novelty signal is flat.
+
+**Root cause:** Forward model predicts nearly identical latents for all K=32 candidates from any state. Novelty ||pred_h3 - h3|| is nearly uniform across actions → argmax behaves like random. The model encodes average transitions but not action-specific dynamics. No action-conditional signal = no guidance.
+
+**Note:** Same failure pattern as step 1306 (CNN+argmax on noisy delta). Better compression (92% vs CNN's ~50%) but same structural problem: the forward model doesn't discriminate action-outcome pairs at the latent level.
+
+**Criterion:** MODEL-ACT RHAE ≤ MLP-TP RHAE → KILL. Criterion unchanged for 1341 (prediction error instead of novelty).
+
+**Decision:** KILL. Predicted novelty via forward model doesn't help. Next: step 1341 (curiosity/prediction error criterion — explore where model is most wrong).
