@@ -676,3 +676,16 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - Limitation: SG can't access keyboard actions 5-6 (7-key games like LS20 lose 2 keys)
   - MBPP: random fallback (SG not designed for text obs)
   - Research questions: L2+ reachability, RHAE, second-exposure speedup (zero by design — buffer+model reset at each level), vs RAND/ARGMIN/PE-EMA
+
+- **Step 1307 (REINFORCE dreaming — dream-driven action head update via imagined encoding change): COMPLETE. NO KILL — marginal signal (2.7%).** 18 runs (~84 min). Random games: lp85/tu93/vc33 (Game A/B/C, seed 1307, masked PRISM).
+  - **Kill assessment: NOT triggered.** DREAM (1/cr × kl)=109.87 > ENT=107.00 (2.7% margin). DREAM action_KL=1.82 ≥ 0.01 (no collapse). DREAM RHAE=0.0 ≤ ENT RHAE=3e-6 (informative, not kill).
+  - **Chain aggregates (masked):**
+    - DREAM: mean_RHAE=0.0, mean_wdrift=11.86, mean_action_KL=1.82, mean_I3cv=16.05, mean_cr=0.0166
+    - ENT: mean_RHAE=3e-6, mean_wdrift=11.27, mean_action_KL=1.90, mean_I3cv=15.80, mean_cr=0.0178
+  - **Dream loss trajectory (chain mean):** 9.08 → 1.09 → 1.10 → 0.84 → 0.74 (steps 1K/3K/5K/7K/9K). Decreasing — dreaming learns a policy that selects for imagined large encoding changes.
+  - **Compression ratios near-equal:** DREAM cr=0.0166 vs ENT cr=0.0178. Dreaming does not hurt world model compression at chain level.
+  - **The margin is one outlier:** ENT vc33 draw 1 cr=0.1431 (pred_loss spike at 9K: 0.000121→0.010677). Without this outlier ENT would beat DREAM. N=9 draws insufficient to resolve — result is within noise.
+  - **Per-game pattern:** lp85 ENT dominates (cr 0.00027 vs DREAM 0.014). tu93 ENT slightly better. vc33 ENT has outlier cr=0.1431 that saves DREAM from kill. No game shows clean DREAM > ENT.
+  - **RHAE near zero everywhere:** Neither mechanism reaches L1 consistently. ENT marginally better (3e-6 vs 0).
+  - **Finding:** REINFORCE dreaming (maximize imagined encoding change via M=16 samples, EMA baseline) survives by 2.7% margin driven by one ENT outlier. Dream loss decreasing confirms dreaming learns, but "maximize imagined encoding change" is not the right objective — same failure mode as Step 1306 argmax delta. Both select for visually-responsive actions, not task-advancing sequences.
+  - **Decision:** Marginal no-kill, but result is within noise. "Maximize imagined change" = wrong dreaming objective across two experiments (1306 deterministic, 1307 stochastic). Need a task-relevant dreaming objective. Next: Leo spec.
