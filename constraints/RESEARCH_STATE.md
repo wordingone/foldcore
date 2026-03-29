@@ -643,6 +643,17 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **Fixes needed for 1305:** (1) Episode-start weight snapshot not reset on level transitions. (2) Prediction loss trajectory at 1K/5K/9K steps (Leo amendment, mail 3678). (3) wdrift = drift from episode start, not last reset.
   - **Decision:** Not a genuine kill — metrics broken. Need 1305 with fixed measurement before the direction can be called.
 
+- **Step 1305 (CNN self-supervised forward prediction, measurement fixed): COMPLETE. NO KILL. World model confirmed working.** 18 runs, ~87 min. Random games (seed 1305, masked).
+  - **Fixes from 1304:** (1) `_episode_start_state_dict` stored at creation, never reset on level transitions → true cumulative wdrift. (2) R3 dropped for CNN (Jacobian broken for deep nets). (3) Prediction loss trajectory at 1K/3K/5K/7K/9K added.
+  - **Chain aggregates (masked):**
+    - SG-SELFSUP: mean_RHAE=5.00e-06, mean_wdrift=11.52, mean_action_KL=2.05, mean_I3cv=16.18, mean_compression_ratio=0.0212
+    - PEEMA: mean_RHAE=1.00e-06, mean_wdrift=43.67, mean_action_KL=10.28, mean_R3=0.63
+  - **Prediction loss trajectory (SG-SELFSUP):** 0.111 → 0.005 → 0.002 → 0.004 → 0.002 (steps 1K/3K/5K/7K/9K). 98% drop. World model learns.
+  - **wdrift=11.52:** CNN accumulates ~11 units of weight change over an episode. Confirmed learning.
+  - **action_KL=2.05 chain mean:** behavioral distribution shifts substantially across episode. But game-dependent: one game showed kl~0.01 (near threshold), others 3.2+.
+  - **RHAE near zero:** weights change, behavior changes, but no level progress. Prediction learning doesn't connect to action quality. The missing link: use the world model TO SELECT ACTIONS (Leo spec 1306).
+  - **Decision:** World model proven. Action selection still entropy-driven (not using the model). Next: close the prediction→action loop. → Step 1306.
+
 - **Step 1300 (StochasticGoose PRISM baseline — leaderboard leader): KILLED** (Jun directive via Leo mail 3673, 2026-03-29). 7/11 games completed before kill. Results partial — not incorporated. Jun directive, Leo mail 3662/3663. 11 games × 20 draws = 220 pairs. ~8 of 11 games complete.
   - Port of DriesSmit/ARC3-solution (exact CNN architecture, training loop, buffer)
   - CNN: Conv2d 32→64→128→256 + MaxPool action head (5 discrete) + spatial coord head (4096)
