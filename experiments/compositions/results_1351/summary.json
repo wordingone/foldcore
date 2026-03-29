@@ -1,0 +1,32 @@
+{
+  "step": 1351,
+  "n_draws": 5,
+  "draw_seeds": [
+    13490,
+    13491,
+    13492,
+    13493,
+    13494
+  ],
+  "rhae_per_draw": [
+    0.000129,
+    0.001829,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "chain_mean_rhae": 0.0003915999999999999,
+  "nonzero_draws": 2,
+  "nonzero_games": 2,
+  "total_games": 15,
+  "gameb_progress": 1,
+  "mean_click_frac": 0.1303,
+  "flat_baseline_rhae_d04": [
+    0.0,
+    0.0,
+    0.000243,
+    0.0,
+    9e-06
+  ],
+  "flat_baseline_mean": 5.04e-05
+}

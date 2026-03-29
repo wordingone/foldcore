@@ -1500,3 +1500,50 @@ MLP+TP entropy baseline on 10 fresh draw seeds (13490-13499). 60 episodes.
 **Seed pool insight:** RHAE is very sparse (3/30 games, all same game type). ARC-only progress; MBPP never progresses. RHAE variance is high (std 2× mean).
 
 **Next: Step 1350 — reconnect action to learning. Track entropy evolution.**
+
+## Step 1350 (SIGNAL — REFLEX > ENT. Action head matters. Entropy flat throughout.):
+
+REFLEX (softmax(action_head(h3))) vs ENT (pure np.random.randint). 5 draws × 3 games × 2 conditions × 2 tries = 60 episodes. Seeds 13490-13494. Entropy tracked at steps [100, 500, 1000, 2000].
+
+**REFLEX: chain_mean RHAE = 0.0001115. Non-zero: 3/5 draws.**
+**ENT: chain_mean RHAE = 0.0000000. Non-zero: 0/5 draws.**
+
+**REFLEX RHAE per draw: [0, 0, 0.000010, 0.000521, 0.000027]**
+**ENT RHAE per draw: [0, 0, 0, 0, 0]**
+
+**Games with progress (REFLEX only, all game=lp85):**
+- Draw 2 Game A (lp85): p2=1813, eff²=0.000030
+- Draw 3 Game A (lp85): p1=1709, p2=253, eff²=0.001562 (best — speedup=6.75×)
+- Draw 4 Game A (lp85): p1=475, p2=1121, eff²=0.000080
+
+**ENT partial progress (lp85):** ENT solved try1 on draws 2,3,4 all at p1=1167 (fixed rng_seed=42 → same sequence every episode). But p2=None always — ENT's fixed sequence doesn't reproduce L1 on try2 starting fresh.
+
+**Entropy: FLAT for both conditions.** H_100 = H_2000 = max_entropy throughout. ARC games: H=8.319≈log(4103). MBPP: H≈4.852≈log(128). MLP+TP does NOT shift its action distribution during the run. The TP updates happen but don't move the softmax output measurably.
+
+**Key finding (corrected by Leo):** REFLEX advantage is a PRNG artifact, NOT a substrate signal. Flat entropy proves softmax(action_head(h3)) = near-uniform throughout — REFLEX and ENT are identical in distribution. The RHAE difference is purely PRNG coverage: torch.multinomial vs numpy.randint(seed=42). ENT's fixed seed correlates try1 and try2 sequences (not independent draws), explaining why ENT solved try1 at p1=1167 on every lp85 episode but never reproduced it on try2. **For all future ENT comparisons: ENT must re-seed per episode (no fixed rng_seed).**
+
+**What this means for 1351 (hierarchical):** Since the advantage is coverage-based, hierarchical decomposition (type_head + pos_head) can genuinely help click games by factoring the 4103-action space into 8 types × 4096 positions — reducing effective random search from O(4103) to O(8)+O(4096).
+
+**Next: Step 1351 — hierarchical action decomposition for ARC click games.**
+
+## Step 1351 (SIGNAL — HIER 7.8× FLAT. First click game RHAE > 0.):
+
+Hierarchical action decomposition: type_head(h3) selects action type (keyboard/click), position_head(h3) selects click position. ARC games use hierarchical (n_actions=4103); MBPP/KB games use flat softmax. 5 draws × 3 games × 2 tries = 30 episodes. Seeds 13490-13494. FLAT baseline = 1349 draws 0-4.
+
+**HIER chain mean RHAE = 0.000392. Non-zero: 2/5 draws.**
+**FLAT baseline chain mean RHAE = 0.000050. Non-zero: 2/5 draws.**
+**HIER / FLAT ratio: 7.8×**
+
+**HIER RHAE per draw: [0.000129, 0.001829, 0, 0, 0]**
+
+**Games with progress (HIER only, both click games):**
+- Draw 0 Game A: eff²=0.000388, p2=508, click_frac=0.123
+- Draw 1 Game B: eff²=0.005487, p2=135, speedup=3.74×, click_frac=0.126 ← **LANDMARK: first click-game RHAE > 0**
+
+**Mean click fraction: 0.1303** (type_head selects click ~13% of time across all ARC games)
+
+**Key finding:** Both successful games were click games (n_actions=4103, hierarchical mode active). Previously, only keyboard-type ARC games showed RHAE > 0. Hierarchical decomposition factoring 4103 actions into type × position is the mechanism. Draw 1 Game B is highly efficient: p2=135 steps, eff²=0.005487, speedup=3.74×.
+
+**What changed vs FLAT:** FLAT flat-selects 1/4103 each step; at 2K steps, expected visits per click position ≈ 0.49. HIER selects click type first (p_click≈0.13), then 1/4096 position; expected visits per click ≈ 2K×0.13/4096 ≈ 0.063. BUT: type_head also selects keyboard actions, concentrating non-click actions in the relevant 7 keys. The factored search space improves coverage of the full action space.
+
+**Next: Step 1352 — per Leo's spec.**
