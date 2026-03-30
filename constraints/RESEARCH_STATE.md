@@ -1547,3 +1547,50 @@ Hierarchical action decomposition: type_head(h3) selects action type (keyboard/c
 **What changed vs FLAT:** FLAT flat-selects 1/4103 each step; at 2K steps, expected visits per click position ≈ 0.49. HIER selects click type first (p_click≈0.13), then 1/4096 position; expected visits per click ≈ 2K×0.13/4096 ≈ 0.063. BUT: type_head also selects keyboard actions, concentrating non-click actions in the relevant 7 keys. The factored search space improves coverage of the full action space.
 
 **Next: Step 1352 — per Leo's spec.**
+
+## Step 1352 (SIGNAL — HIER replicates: 4/10 non-zero. Type entropy completely flat.):
+
+HIER replication on 10 fresh draws (seeds 13500-13509). Same architecture as 1351. Adds type_entropy tracking at [100, 500, 1000, 2000] and try1/try2 click_frac.
+
+**HIER chain mean RHAE = 0.0000753. Non-zero: 4/10 draws.** → SIGNAL (≥3/10 threshold)
+**FLAT baseline (1349, 10 draws): chain mean = 0.0000459. Non-zero: 3/10.**
+**Ratio: 1.64×.**
+
+**HIER RHAE per draw: [5.1e-5, 0, 0, 1.25e-4, 0, 0, 0, 3.56e-4, 2.21e-4, 0]**
+
+**Games with progress (all Game A):**
+- Draw 0 Game A (cn04): eff²=0.000154, p2=806, click=0.1255
+- Draw 3 Game A (ls20): eff²=0.000374, p2=517, click=None (flat, 7 actions)
+- Draw 7 Game A (sp80): eff²=0.001068, p2=306, click=0.1155
+- Draw 8 Game A (cn04): eff²=0.000664, p2=388, click=0.122
+
+**New games reached: cn04, ls20, sp80** — previously only lp85 was reachable (different seed pool). No Game B progress (1351 Game B result likely luck).
+
+**Type entropy: COMPLETELY FLAT throughout.** H100=H500=H1000=H2000=2.079=MAX. type_head (random init) stays max-entropy throughout the run. TP training of encoder does not shift type distribution through the untrained type_head.
+
+**Try1→try2 click_frac shift: mean=0.0005 (negligible).**
+
+**Key finding:** HIER replicates at 4/10 (>1351's effective rate per-seed). Type entropy flat confirms: HIER advantage is coverage-based (factored exploration), not learned type selection. 1353 tests whether training type_head can improve over random.
+
+**Next: Step 1353 — trained type_head via change-magnitude self-supervision.**
+
+## Step 1353 (KILL for RHAE. LANDMARK: type_head learns to concentrate.):
+
+Trained type_head via change-magnitude self-supervision: type_target = argmax per-type mean ||obs_after - obs_before||. 5 draws, seeds 13500-13504. HIER baseline = 1352 draws 0-4 (mean=3.52e-5, 2/5 nz).
+
+**TRAINED-HIER chain_mean RHAE = 0.0. Non-zero: 0/5.** → KILL
+**HIER baseline: chain_mean = 3.52e-5, non-zero: 2/5.**
+**REGRESSION: TRAINED worse than HIER.**
+
+**LANDMARK: type entropy drops 0.1593 over episode.** H100=2.028, H500=2.004, H1000=1.965, H2000=1.869 (max=2.079). First evidence that type_head CAN learn to concentrate via self-supervised signal.
+
+**Root cause of regression:** type_target = argmax change favors keyboard actions (change=12-15) over clicks (change=1.7). For click-based ARC games, the high-change keyboard types (esp. type 4: mean=15.6) don't solve the game — the game requires specific click sequences. The trained type_head correctly learns "keyboard produces more visual change" but this is wrong for task progress.
+
+**Mean click_frac: 9.4%** (trained) vs 12.3% (random HIER). Training reduces click selection, hurting RHAE on click games.
+
+**What this proves:**
+1. Type_head CAN learn from self-supervised signals (entropy drops measurably within 2K steps)
+2. Change-magnitude is the wrong target: visual noise ≠ task-relevant change
+3. Need a target that correlates with game advancement, not just visual change
+
+**Next direction:** What target function would correctly select click vs keyboard? Options: (a) transition detection (action type that preceded level transition), (b) prediction-error reduction per type (which type most improves prediction accuracy), (c) RHAE-direct (type that produced task progress, detected by L1 transition). All require L1 to be reached first — bootstrap problem remains.

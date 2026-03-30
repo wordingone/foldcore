@@ -1,0 +1,36 @@
+{
+  "step": 1353,
+  "n_draws": 5,
+  "draw_seeds": [
+    13500,
+    13501,
+    13502,
+    13503,
+    13504
+  ],
+  "rhae_per_draw": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "chain_mean_rhae": 0.0,
+  "nonzero_draws": 0,
+  "hier_baseline_d04": [
+    5.13e-05,
+    0.0,
+    0.0,
+    0.0001247,
+    0.0
+  ],
+  "hier_baseline_mean": 3.52e-05,
+  "type_entropy_traj_mean": {
+    "100": 2.0279,
+    "500": 2.0045,
+    "1000": 1.9651,
+    "2000": 1.8686
+  },
+  "max_type_entropy": 2.0794,
+  "mean_click_frac": 0.0939
+}
