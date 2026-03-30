@@ -1955,3 +1955,28 @@ K=5 ROLLOUT consumes more numpy RNG calls than K=3, leaving global RNG in differ
 **Also:** Budget cap at 1373 steps (K=5) vs 2000 steps (K=3). K=5 gets ~31% fewer real interaction steps, compounding the performance gap.
 
 **Implication:** Rollout direction hit diminishing returns at K=3. Going up in K destroys signal. Need fundamentally different mechanism — rollout MPC over prediction divergence is not the path.
+
+## Step 1372 (WORSE — K=1. K1 wins 2/30, DISC wins 6/30. Rollout direction exhausted.):
+
+K=1 single-step prediction divergence: score = ||pred(obs, a_i) - current_obs||. N=8 candidates. Full 2K steps (0.27ms/step).
+
+**Results:**
+- K1-ARGMAX: chain_mean=3.00e-06, 4/30 nz → KILL
+- SSM-DISCONNECTED: chain_mean=2.80e-05, 6/30 nz → KILL
+- Paired: K1 wins 2/30, DISC wins 6/30, ties 22/30
+- Verdict: WORSE_THAN_DISC
+
+**Complete K comparison (same seeds 13700-13729):**
+| K | ROLLOUT wins | DISC wins | Ties |
+|---|-------------|-----------|------|
+| K=1 (1372) | 2/30 | 6/30 | 22/30 |
+| K=3 (1370) | 4/30 | 2/30 | 24/30 |
+| K=5 (1371) | 1/30 | 5/30 | 24/30 |
+
+K=3 is the only K with any advantage, but NOT monotonic (2 losses). K=1 and K=5 both lose to entropy.
+
+**Rollout direction verdict: EXHAUSTED.** The prediction-divergence curiosity mechanism via dream rollout does not reliably beat entropy exploration. K=3 was a local optimum with insufficient signal. Mechanism is not the path.
+
+**RNG confound note:** DISC chain_mean varies 10-100× across experiments on identical seeds (1370: 2.6e-6, 1371: 2.38e-5, 1372: 2.8e-5). Root cause: ROLLOUT consumes different RNG calls per K, shifting global numpy RNG state when DISC runs. Within-experiment paired comparisons are valid; cross-experiment DISC comparisons are not.
+
+**Next direction needed:** Fundamentally different action selection. Options: (1) SSM state novelty — UCB on h-space, no prediction needed. (2) Gradient-based selection — ∂(pred_loss)/∂(act_embed) to find actions the model is most uncertain about. (3) Abandon rollout curiosity entirely — try a different mechanism family.
