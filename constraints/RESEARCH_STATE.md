@@ -2114,3 +2114,28 @@ Frozen random projection W_fixed connects h to actions: action = softmax(W_fixed
 **DISCONNECTED signal caveat:** DISCONNECTED chain_mean=1.225e-03 is dominated by a high-RHAE outlier draw. The paired comparison (8 DISC wins vs 4 FROZEN wins) is not statistically significant (p=0.927). This is the same draw-variance problem seen throughout the SSM series.
 
 **What this closes:** Frozen random projection as feature→action coupling → CLOSED. An adaptive (learned) projection is needed, or a completely different approach to connecting h to action selection.
+
+## Step 1379 (**ACTION_BLIND — SSM ignores action token completely. Root cause of all SSM failures identified.**):
+
+Replace action embedding with zero vector in SSM forward pass. Conditions: FULL (real action token) vs MASKED (zero vector). Diagnostic: if pred_loss_FULL ≈ pred_loss_MASKED (ratio within 5%), declare ACTION_BLIND.
+
+**Results (seeds 13960-13989):**
+- FULL:   chain_mean=9e-07 (1/30 nz), pred_loss_mean=0.796971
+- MASKED: chain_mean=9e-07 (1/30 nz), pred_loss_mean=0.796955
+- Pred loss ratio = 1.00002 (0.002% difference) → **ACTION_BLIND** (threshold: 5%)
+- RHAE paired: 0 wins, 0 losses, 30 ties, p=1.0 (identical — expected: same disconnected try2 actions)
+
+**Action-blind diagnostic per draw:** 29/30 draws produced IDENTICAL pred_loss values for FULL and MASKED. Only draw 0 differed (FULL=0.693456 vs MASKED=0.692994, 0.07%) — an outlier, not a signal.
+
+**Key finding — SSM completely ignores the action token:** The action embedding has zero influence on prediction. This is structurally inevitable: the obs projection fills the full SSM input dimensionality. The action embedding is concatenated but its gradient is not meaningfully propagated — the prediction loss signal does not route through the action embedding in a way that distinguishes actions.
+
+**Root cause of all SSM experiments (1365-1379):** h contains no action information → no readout can produce useful action selection → all mechanisms (DISCONNECTED, HIER, ROLLOUT, COUNT, FROZEN) produce ≈ random performance. The architecture is action-blind at the prediction layer. h evolves driven purely by observation, not by the consequences of actions.
+
+**What this explains:**
+1. Why DISCONNECTED ≈ FROZEN ≈ COUNT ≈ RAND throughout SSM series — same action-blind h.
+2. Why frozen projection (step 1378) hurts — it adds systematic bias on an h that has no action information.
+3. Why 20+ SSM experiments show near-identical RHAE — the h readout mechanism doesn't matter when h is action-blind.
+
+**What this closes:** Current SSM architecture → CLOSED. Not because SSM is wrong as a paradigm, but because the action token must be part of the state update in a way that gets predicted error backpropagated through it. Fix candidates: (a) predict next action token (not just observation), (b) action-gated SSM state update (A/B matrices conditioned on action), (c) cumulative effect tracker (separate h_action pathway). Any of these would force action-conditional h.
+
+**CRITICAL for next spec:** The fix is architectural, not hyperparameter-level. Predict-action alongside predict-obs, or make the SSM state transition genuinely action-gated. Otherwise any new SSM mechanism is still action-blind.
