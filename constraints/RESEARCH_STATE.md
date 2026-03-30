@@ -1594,3 +1594,25 @@ Trained type_head via change-magnitude self-supervision: type_target = argmax pe
 3. Need a target that correlates with game advancement, not just visual change
 
 **Next direction:** What target function would correctly select click vs keyboard? Options: (a) transition detection (action type that preceded level transition), (b) prediction-error reduction per type (which type most improves prediction accuracy), (c) RHAE-direct (type that produced task progress, detected by L1 transition). All require L1 to be reached first — bootstrap problem remains.
+
+## Step 1354 (KILL for RHAE. Info-gain has same keyboard bias as change-magnitude.):
+
+Info-gain type target: type_target = argmax per-type EMA of TP prediction error ||pred_h3_next - actual_h3_next|| (INFO_GAIN_EMA=0.1). 5 draws, seeds 13500-13504. Baselines: HIER (1352 d0-4, mean=3.52e-5, 2/5 nz), CHANGE (1353, mean=0.0, 0/5 nz).
+
+**INFO chain_mean RHAE = 5e-6. Non-zero: 1/5 (draw0: 2.5e-5).** → KILL
+**HIER baseline: chain_mean = 3.52e-5, 2/5 nz. INFO worse than HIER.**
+
+**Kill criteria check (per Leo spec):**
+1. INFO type_entropy < CHANGE type_entropy → FAIL. INFO H2000=1.9713, CHANGE H2000=1.869. INFO concentrates LESS than CHANGE.
+2. INFO RHAE > HIER RHAE → FAIL. 5e-6 < 3.52e-5.
+3. INFO RHAE > 0 Game B → FAIL. gameb_progress=0.
+
+**Type entropy drop: 0.0752.** H100=2.0465 → H2000=1.9713 (max=2.0794). Less than CHANGE (0.1593). type_head learns but concentrates less aggressively.
+
+**Mean click_frac: 8.71%** — lower than both CHANGE (9.4%) and HIER (12.3%). Info-gain also trains AWAY from clicks.
+
+**Root cause:** TP prediction error ||pred_h3_next - actual_h3_next|| is larger for keyboard actions because KB produces larger h3 encoding changes. EMA_keyboard > EMA_click → type_target = keyboard, same bias as change-magnitude. The signal reflects encoding volatility, not game relevance.
+
+**Mini-chain conclusion (1353-1354):** Both observation-based self-supervised targets (visual change, prediction error) prefer keyboard because keyboard produces larger visual/encoding deltas. This is a fundamental mismatch with click games, not a target formulation problem. Any signal derived from ||obs|| or ||h3|| change magnitude will favor KB on ARC games where KB actions produce 15.6× larger pixel changes than clicks.
+
+**The bootstrap problem is the actual barrier:** The only signals that correctly favor click for click games are task-outcome signals (L1 transition, RHAE). Both require L1 to be reached first. In draws where RHAE>0 (draw0 here, draws 0/3/7/8 in 1352), L1 IS reached — those draws could seed a transition-detection signal if the type_head were updated from them. Direction: online transition detection accumulated only from draws that reach L1, decoupled from the initial random type selection.
