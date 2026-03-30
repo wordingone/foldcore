@@ -16,17 +16,17 @@
   "rhae_per_draw": [
     0.0,
     0.0,
-    0.000117,
     0.0,
     0.0,
     0.0,
     0.0,
-    9e-06,
+    0.0,
+    0.0,
     0.0,
     0.0
   ],
-  "chain_mean_rhae": 1.26e-05,
-  "nonzero_draws": 2,
+  "chain_mean_rhae": 0.0,
+  "nonzero_draws": 0,
   "mlp_tp_baseline": 4.59e-05,
   "max_steps_used": 2000,
   "ms_per_step": 0.11
