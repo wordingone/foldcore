@@ -1,6 +1,6 @@
 # The Search
 
-Experimental record of recursive self-improvement research on ARC-AGI-3 and MBPP. 1367 experiments, 4 phases, 16 architecture families tested.
+Experimental record of recursive self-improvement research on ARC-AGI-3 and MBPP. 1377 experiments, 4 phases, 16 architecture families tested.
 
 ---
 
@@ -65,7 +65,9 @@ Each finding cites the experiments that support it and states what would falsify
 | 13 | Type_head CAN learn from self-supervised signal | Entropy drops 0.16 with change-magnitude target (Step 1353), 0.11 with info-gain (Step 1354). First self-supervised action distribution shift in 1354 experiments. | Type entropy stays flat (=max) under any self-supervised target. |
 | 14 | Both trained type targets suppress clicks and regress RHAE | Change-magnitude (1353): click_frac 0.094, RHAE=0. Info-gain (1354): click_frac 0.087, RHAE=5e-6. Both worse than untrained HIER (click_frac 0.123, RHAE=7.53e-5). Action space asymmetry: keyboard always wins per-step metrics. | A type target that increases click_frac and improves RHAE simultaneously. |
 | 15 | Training the action head HURTS — random actions are optimal | SSM disconnected (1364): RHAE=1.34e-4. Every trained variant scored worse: circular CE (8.5e-6), Gumbel feedback (0.0), surprise REINFORCE (0.0). 4 SSM experiments confirm. | Trained action head outperforms random on matched seeds. |
-| 16 | SSM produces 2.92× better features than MLP for random exploration | SSM disconnected 2K (1364): RHAE=1.34e-4, 3/10 non-zero. MLP flat 2K (1349): 4.59e-5, 3/10 non-zero. Same reachability, higher efficiency per game. Sequence structure provides action-conditional prediction structurally. | MLP matches or exceeds SSM RHAE on 10+ matched draws. |
+| 16 | SSM produces 2.92× better features than MLP for random exploration | SSM disconnected 2K (1364): RHAE=1.34e-4, 3/10 non-zero. MLP flat 2K (1349): 4.59e-5, 3/10 non-zero. Same reachability, higher efficiency per game. Sequence structure provides action-conditional prediction structurally. **Note: 2.92× was draw variance — SSM replication (1365) showed 0.19×. Finding unstable.** | MLP matches or exceeds SSM RHAE on 10+ matched draws. |
+| 17 | Persistent recurrent state is TOXIC across episodes | SSM COUNT-PERSIST: 0/30 nz vs COUNT-RESET: 8/30 nz (Step 1375). h from try1 actively destroys try2 progress — carries action-strategy-specific state that interferes when try2 uses different actions. Replicated: PERSIST also worse in Step 1374 (RAND try1). | Persistent h outperforms reset h on 30+ paired draws. |
+| 18 | Try2 action selection is irrelevant | COUNT-COUNT: 5/30 nz vs COUNT-RAND: 5/30 nz, paired 3-3-24, p=0.656 (Step 1376). With good try1 weights, try2 coverage doesn't matter. Random try2 ≈ COUNT try2. | Try2 action mechanism significantly outperforms random try2 given matched try1. |
 
 ## What doesn't work
 
