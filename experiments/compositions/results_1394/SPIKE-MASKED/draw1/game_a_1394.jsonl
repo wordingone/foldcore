@@ -1,0 +1,1 @@
+{"draw": 1, "label": "Game A", "game": "Game A", "condition": "SPIKE-MASKED", "p1": null, "p2": 644, "speedup": Infinity, "eff_sq": 0.000241, "optimal_steps": 10, "t1": 3.04, "t2": 3.42, "w_norm": 0.0, "w_max": 0.0, "spike_total": 0, "i3_cv": 0.999849790964204, "r3_w_norm": 0.0, "i5_max_level": 1}

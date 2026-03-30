@@ -138,7 +138,7 @@ ft09 (6L, 75 clicks), ls20 (7L, 311 moves), vc33 (7L, 176 clicks), tr87 (6L, 123
 
 **Step 1273 (repr_log fix + dual I1, SP80/FT09/TR87):** COMPLETE (30 runs, 439.4s). **I1 is NOT the wall.** FT09 PHY: I1_enc=3/5 pass (within=0.855, between=1.113) AND I1_act=3/5 pass — both encoding and policy distinguish states when L1 is reached. I1 passes on the same draws, same rate: no bridge problem. SP80/TR87: I1=null (Lmax=0, only 1 level). ControlC FT09: Lmax=0, I1=null. R3: PHY passes SP80/FT09 (5/5), fails TR87 (0.045 < 0.05). I3: FT09 ρ=0.96 both conditions. TR87 CTL ρ=0.75 (pass), PHY ρ=-0.46 to -0.57 (fail). **Wall = what prevents SP80/TR87 from reaching L1.** SP80: uniform response, viability flat. TR87: R3 fails, no self-modification.
 
-**Paradigm shift:** I1 was called "the wall" from Step 1253 to 1272 (20 steps). It was a broken measurement. The encoding DOES distinguish states (I1_enc passes 3/5 on FT09). The allosteric principle works (I1_enc and I1_act pass together). The real wall is L1 reachability on games where the composition can't build Physarum structure.
+**Revision:** I1 was called "the wall" from Step 1253 to 1272 (20 steps). It was a broken measurement. The encoding DOES distinguish states (I1_enc passes 3/5 on FT09). The allosteric principle works (I1_enc and I1_act pass together). The real wall is L1 reachability on games where the composition can't build Physarum structure.
 
 **Step 1274 (full 10-game PRISM chain):** COMPLETE (100 runs, 26.3 min). Chain ARC=0.0000010. Full failure mode map:
 
@@ -163,7 +163,7 @@ ft09 (6L, 75 clicks), ls20 (7L, 311 moves), vc33 (7L, 176 clicks), tr87 (6L, 123
 5. **Easy L1** (vc33, lp85): Physarum composition provides no unique advantage — argmin alone sufficient.
 6. **PHY advantage** (ft09 only): R3+I3+I1 all pass, PHY L1=4/5 vs CTL=0/5. Composition provides real benefit on exactly ONE game.
 
-**Key finding:** Composition works on FT09 only. The wall is not I1 (encoding works when L1 is reached), but stage prerequisites (R3 failing → no Physarum dynamics; I3 failing → Physarum reinforcement hurts coverage). LP85/VC33 L1 is free — CTL argmin also solves.
+**Finding:** Composition works on FT09 only. The wall is not I1 (encoding works when L1 is reached), but stage prerequisites (R3 failing → no Physarum dynamics; I3 failing → Physarum reinforcement hurts coverage). LP85/VC33 L1 is free — CTL argmin also solves.
 
 **Step 1275 (novelty-gated tube flow):** KILL. Novelty gate zero effect on I3. Root cause: Physarum conflates "changes encoding" with "should explore." Responsive actions produce the most novel deltas, so novelty gating still reinforces them. Physarum dynamics component KILLED after 5 consecutive failures (1271-1275).
 
@@ -184,7 +184,7 @@ ft09 (6L, 75 clicks), ls20 (7L, 311 moves), vc33 (7L, 176 clicks), tr87 (6L, 123
 
 Root cause: W_pred (256×256 linear) cannot discriminate loop vs game-advancing actions. Loop actions at different game states produce different encoding deltas → W_pred can't learn stable predictions → pe stays high for loop actions. PE diagnostic confirms no differentiation: LS20 top7 pe@5000 all similar (0.30-0.43), TR87 top7 all similar (0.085-0.103). New regression on TU93 (I3 -0.00 vs CTL 0.86). I3 regressed further on LS20/TR87 (worse than Physarum). FT09 L1 maintained (pe≈0 on click games, mechanism neutral). KILL: per-action prediction error signal is too noisy to differentiate action types in high-dimensional encoding space.
 
-**Critical realization from 1276 PE diagnostic:** FT09 pe≈0 for all actions (mean 0.001). LPE ≈ pure argmin on FT09. Yet FT09 L1=4/5 vs CTL 0/5. The ONLY difference is LPL encoding modification (R3). The FT09 advantage was never from dynamics (Physarum or LPE). It's from R3. 12 steps investigating dynamics (1264-1276) when the encoding was doing all the work.
+**Realization from 1276 PE diagnostic:** FT09 pe≈0 for all actions (mean 0.001). LPE ≈ pure argmin on FT09. Yet FT09 L1=4/5 vs CTL 0/5. The ONLY difference is LPL encoding modification (R3). The FT09 advantage was never from dynamics (Physarum or LPE). It's from R3. 12 steps investigating dynamics (1264-1276) when the encoding was doing all the work.
 
 **Step 1277 (strip dynamics, bare LPL+argmin):** COMPLETE (100 runs, 7.9 min). Hypothesis overturned — and more precise.
 
@@ -192,7 +192,7 @@ FT09 L1=0/5 (same as CTL). R3 encoding alone does NOT explain FT09 advantage. Pe
 
 I3 FULLY RECOVERED: LS20=0.64(5/5), TR87=0.75(5/5), TU93=0.86(5/5) — all match CTL exactly. Pe dynamics WERE the regression source. Strip them → CTL I3 behavior restored.
 
-**Key finding — pe scale sensitivity:** Pe signal has opposite effects by action space size:
+**Finding — pe scale sensitivity:** Pe signal has opposite effects by action space size:
 - Large (FT09, 4103 actions): pe_ema mean=0.001, max=0.055. Tiny pe sufficient to differentiate game-advancing from loop clicks at scale. HELPS.
 - Small (LS20, 7 actions): pe_ema mean=0.35. Pe values dominate argmin, kill coverage. HURTS.
 - SELECTION_ALPHA=0.1 appropriate for FT09 but 100x too strong for LS20.
@@ -468,7 +468,7 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **LS20 single-winner collapse:** lock=1.00, MI=0.006 (near-zero entropy → near-zero MI), sil=0.99(k=2) — collapses to 2-state (on/off). Small action space (7 actions) → insufficient diversity to prevent winner lock.
   - **L1: 0/15** (all conditions). W_readout frozen → actions are random projections of activations → no connection to game-advancing actions.
   - **R3: 0.0000** on all games. Oja plasticity updates W_drive only; W_readout frozen → Jacobian of action selection vs obs unchanged → R3=0. Expected for diagnostic.
-  - **Key finding:** Capacity exists (N=64 can form multiple attractors on FT09/SP80). The problem is not capacity — it's that W_readout must be learned to connect activation patterns to useful actions. Frozen readout = random action selection regardless of internal state richness.
+  - **Finding:** Capacity exists (N=64 can form multiple attractors on FT09/SP80). The problem is not capacity — it's that W_readout must be learned to connect activation patterns to useful actions. Frozen readout = random action selection regardless of internal state richness.
   - **LINEAR baseline:** lock=0.49-0.90, cyc=5.4-17.2 (more cycling than MINIMAL due to LPL Hebbian update), R3=0.0001-0.0008. Both conditions fail L1 equally.
 - **Step 1293 (three-factor plasticity on recurrent weights): CONDITIONAL PASS — no kill triggered, two predictions failed.** 36 runs (3 games × 3 conditions × 4 draws, N_DRAWS=4 for budget compliance), ~288s.
   - **Kill criteria: NOT triggered.** 3F k=2.0/3.5/4.8 (>1.5 on FT09/SP80), lock=1.00/0.75/0.49 (>0.8 on LS20 only, not all games). UNGATED ≠ THREE-FACTOR (pe gate demonstrably matters: FT09 lock 0.93→0.75, corr 0.835→0.083).
@@ -487,7 +487,7 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **Prediction 3 (3F won't collapse): CONFIRMED on FT09/SP80, FAILED on LS20.** Small action space (7 actions) locks regardless of plasticity rule — same as 1292b. FT09/SP80 have stable multi-attractor dynamics with three-factor plasticity.
   - **Prediction 4 (attractor-state corr > 0.3 on FT09): FAILED.** 3F corr=0.083 — attractors stable but NOT game-phase-aware. The internal states don't reorganize to track game progression.
   - **Prediction 2 (UNGATED collapses): PARTIALLY CONFIRMED.** UNG lock=0.928 vs 3F lock=0.748 on FT09. Pe gate reduces lock. But FROZEN lock=0.551 — recurrence itself adds lock even with pe gating.
-  - **Critical unexpected finding:** FROZEN has LESS lock than THREE-FACTOR on FT09 (0.55 vs 0.75). Recurrent connections create winner-excites-itself feedback at inference time, independent of learning. The pe gate prevents chronic weight drift (3F corr=0.083 vs UNG corr=0.835) but doesn't prevent inference-time recurrent reinforcement.
+  - **Finding:** FROZEN has LESS lock than THREE-FACTOR on FT09 (0.55 vs 0.75). Recurrent connections create winner-excites-itself feedback at inference time, independent of learning. The pe gate prevents chronic weight drift (3F corr=0.083 vs UNG corr=0.835) but doesn't prevent inference-time recurrent reinforcement.
   - **Pe gate confirmed effective:** Three-factor rule prevents temporal drift (corr: 3F=0.083 vs UNG=0.835), reduces lock (0.928→0.748 on FT09), and triggers 42x more surprise-reorganization vs FROZEN (2.2). The gate works — it just doesn't solve the structural problem.
   - **R3=0.0 everywhere** (W_readout frozen, expected).
   - **Decision tree outcome (Leo spec):** "Prediction 3 confirmed, 4 wrong → attractors form but not game-phase-aware. Need different surprise signal or longer timescale." Recurrence-adds-lock finding is NEW — not in decision tree. Recurrent winner feedback is a structural problem separate from the learning rule.
@@ -512,8 +512,8 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
 | ZD mi | 0.016 | 0.156 | 0.374 |
 | ND mi | 0.021 | 0.861 | 0.373 |
 
-  - **Key finding 1:** Zero-diagonal makes it WORSE (0.926 > 0.748). Off-diagonal recurrent entries form lock chains independently of self-excitation. Plain removal insufficient.
-  - **Key finding 2:** Negative diagonal (-0.1) reduces FT09 lock to 0.549, just below FROZEN baseline (0.551). Active self-suppression creates refractory-like dynamics from within W_recur.
+  - **Finding 1:** Zero-diagonal makes it WORSE (0.926 > 0.748). Off-diagonal recurrent entries form lock chains independently of self-excitation. Plain removal insufficient.
+  - **Finding 2:** Negative diagonal (-0.1) reduces FT09 lock to 0.549, just below FROZEN baseline (0.551). Active self-suppression creates refractory-like dynamics from within W_recur.
   - **Corr reversal:** ZD creates high temporal correlation (0.891) but MORE lock. ND creates near-zero corr (-0.008) but LESS lock. Active inhibition suppresses both locking AND temporal structure.
   - **ND MI explosion:** ND FT09 mi=0.861 vs 3F mi=0.476. Higher sequential MI suggests richer action sequence dynamics when self-suppression forces winner cycling.
   - **MBPP baseline confirmed:** All 3 conditions: L1=0/1, arc=0.000. Random action substrate generates no valid Python. Numerical overflow in 3F MBPP (W_drive instability at 10K steps of continuous ASCII input — different from ARC game episodic resets).
@@ -601,7 +601,7 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
 
 - **Step 1301 (DHL anti-collapse linear reflexive map): COMPLETE. KILL — anti-Hebbian had zero effect.** 165 runs, ~58 min.
   - **Kill triggered:** DHL collapse >80% on 6/11 games. I3_cv >3× ARGMIN-PE on 11/11 games.
-  - **Critical finding:** DHL collapse fraction = OJA-ONLY collapse fraction on EVERY game. Anti-Hebbian (eta_anti=0.001, K=20) has zero measurable effect on collapse dynamics. Diagnosis: Oja (eta=0.01) is 10× stronger — Oja collapses small-action-space games in first ~100 steps before anti-Hebbian can stabilize.
+  - **Finding:** DHL collapse fraction = OJA-ONLY collapse fraction on EVERY game. Anti-Hebbian (eta_anti=0.001, K=20) has zero measurable effect on collapse dynamics. Diagnosis: Oja (eta=0.01) is 10× stronger — Oja collapses small-action-space games in first ~100 steps before anti-Hebbian can stabilize.
   - **Collapse by game type:**
     - Small action spaces (LS20=7, TR87=6, TU93~6): both DHL+OJA collapse ~0.998 (instantaneous single-winner lock)
     - Large click spaces (VC33=4103, SP80, CD82): both DHL+OJA cf~0.20-0.39 (NOT collapsing — K=20 is 0.5% coverage, insufficient)
@@ -612,7 +612,7 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
 
 - **Step 1302 (DHL homeostatic rate target + matched anti-Hebbian): COMPLETE. KILL — HM≡HO identity confirms anti-Hebbian contributes zero; R3 is homeostatic artifact.** 220 runs, ~3.5 hours.
   - **Kill triggered:** I3_cv >3× ARGMIN-PE on 7/11 games (HM condition); collapse on DM (matched-rate-only) 5/11 games.
-  - **Critical finding — HM≡HO identity:** DHL+HOMEO and HOMEO-ONLY have nearly identical R3 and cf on ALL 11 games. Anti-Hebbian contributes zero even at matched rate (eta_anti=0.01 = eta=0.01). Diagnosis confirmed: anti-Hebbian is mechanistically inert because Hebbian updates dominate before decorrelation can act.
+  - **Finding — HM≡HO identity:** DHL+HOMEO and HOMEO-ONLY have nearly identical R3 and cf on ALL 11 games. Anti-Hebbian contributes zero even at matched rate (eta_anti=0.01 = eta=0.01). Diagnosis confirmed: anti-Hebbian is mechanistically inert because Hebbian updates dominate before decorrelation can act.
   - **R3 is homeostatic artifact:** R3=0.7+ values reflect W row-norm changes from homeostatic scaling (×0.99/×1.01), NOT direction learning. Jacobian changes because magnitudes change, not because rows learn meaningful directions. Confirmed by HM≡HO (if anti-Hebbian contributed direction learning, HM would differ from HO).
   - **DM collapse:** DHL-MATCHED (matched rate, no homeostasis) collapses on most games (cf>0.98 on small-action-space games). Rate matching alone does nothing without homeostasis.
   - **Full results table (R3 / collapse fraction):**
@@ -628,8 +628,8 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
     - LP85: HM 0.823/0.498, HO 0.826/0.491, DM 0.016/0.984 — PE L1=5/5, HM/HO L1=0/5 (regression!)
     - MBPP: HM 0.658/0.519, HO 0.664/0.503, DM 0.083/0.599
   - **VC33 and LP85 regression:** ARGMIN-PE=5/5 but DHL+HOMEO=0/5 L1. Homeostasis suppresses the action selection dynamics needed on click games.
-  - **Linear map path closed:** After Steps 1301+1302, anti-Hebbian + homeostasis = no genuine learning signal in linear map. Two experiments, clear negative. Direction terminated.
-  - **Decision tree outcome:** "Linear map has no genuine learning signal → try non-Hebbian self-supervised objective." → Steps 1303/1304 (CNN forward prediction).
+  - **Linear map path closed:** After Steps 1301+1302, anti-Hebbian + homeostasis = no learning signal in linear map. Two experiments, clear negative. Direction terminated.
+  - **Decision tree outcome:** "Linear map has no learning signal → try non-Hebbian self-supervised objective." → Steps 1303/1304 (CNN forward prediction).
 
 - **Step 1304 (CNN self-supervised forward prediction, masked PRISM): COMPLETE. KILL triggered — but both kill metrics are measurement artifacts.** 18 runs, ~30 min. Random games: ft09/sp80/tu93 (Game A/B/C).
   - **Kill triggered:** R3=0.0 AND wdrift=0.0 for SG-SELFSUP. But both are artifacts:
@@ -725,7 +725,7 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **pred_loss trajectory (RAND):** 0.9747 → 0.9743 → 0.9756 → 0.9757 (flat baseline).
   - **Leo predictions (both WRONG):** P1 cr@5K < 0.8 → got 0.9805. P2 wdrift > 0.5 → got 0.3612.
   - **SIGNAL despite kill:** MLPL (1/cr × kl)=15.38 > RAND=13.50. Behavioral diversity signal persists.
-  - **Key finding:** Step 1310's compression (cr=0.928) did NOT replicate on a different game set (seed 1311 → different games → weaker compression, cr=0.9805). Compression is game-set-dependent or N=3 draws insufficient to establish a stable result.
+  - **Finding:** Step 1310's compression (cr=0.928) did NOT replicate on a different game set (seed 1311 → different games → weaker compression, cr=0.9805). Compression is game-set-dependent or N=3 draws insufficient to establish a stable result.
   - **Open question:** Was 1310's compression driven by game selection (favorable game types for visual PC)? Need to understand what enables/disables compression before extending budget.
   - **Decision:** KILL. Different game set → weaker compression. Architecture may be game-type-sensitive. → Leo spec.
 
@@ -737,7 +737,7 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **T_chain > 1.0 for BOTH conditions:** Experiencing episode A improves prediction on episode B vs a fresh substrate. Transfer exists in the base mechanism. This is real — but equally strong in both conditions.
   - **pe_next direction confirmed (Leo mail 3712):** High pe_next → larger W3 update. One coupling law throughout (R2 compliant). "Strengthen on surprising outcomes" = curiosity-like. This is the correct formula.
   - **Predictions (1 confirmed, 2 wrong):** P1 T_chain > 1.0 for both → CONFIRMED. P2 3F T_chain > BASE → WRONG (3F < BASE by 0.0032). P3 3F action_KL ≠ BASE → WRONG (diff=0.0052, negligible).
-  - **Key finding:** T_chain > 1.0 in the BASE architecture (pure Hebbian W3) confirms cross-episode transfer via predictive coding. However, three-factor pe_next modulation of W3 contributes nothing incremental. W3 update chemistry doesn't differentiate on this metric.
+  - **Finding:** T_chain > 1.0 in the BASE architecture (pure Hebbian W3) confirms cross-episode transfer via predictive coding. However, three-factor pe_next modulation of W3 contributes nothing incremental. W3 update chemistry doesn't differentiate on this metric.
   - **RHAE=0 everywhere.** Compression ≠ task progress.
   - **Decision:** KILL. Three-factor W3 modulation killed. T_chain > 1.0 is a positive baseline finding. → Leo spec.
 
@@ -749,7 +749,7 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **Both predictions CONFIRMED:**
     - P1 T_chain > 1.0: CONFIRMED (1.1695) — experience on episode A genuinely improves prediction on episode B. Not an init artifact — both fresh and experienced substrates start from identical deterministic weights.
     - P2 cr < 1.0: CONFIRMED (0.9655) — prediction improves from deterministic init. Dynamics dominate init.
-  - **Organism confirmed:** One chemistry (local Hebbian prediction error), genuine transfer (T=1.17), no seed dependence. R2-compliant throughout.
+  - **Organism confirmed:** One chemistry (local Hebbian prediction error), transfer (T=1.17), no seed dependence. R2-compliant throughout.
   - **RAND cr ≈ 1.0 (0.9998):** No compression without weight updates. Contrast confirms MLPL compression is real.
   - **RHAE=0 everywhere.** Compression ≠ task progress yet.
   - **Decision:** NO KILL. Architecture validated with deterministic init. T_chain confirms transfer. → Next: probe what drives T_chain. Is it W1/W2 (encoding) or W3 (action)? Leo spec.
@@ -760,8 +760,8 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
     - INV: mean_RHAE=1.50e-05, mean_wdrift=0.1791, mean_action_KL=12.1533, mean_I3cv=2.3364, cr=0.8661, T_chain=5.7188
     - BASE: mean_RHAE=6.00e-06, mean_wdrift=0.2175, mean_action_KL=8.3825, mean_I3cv=3.9482, cr=0.8152, T_chain=3.2263
   - **Predictions:** P1 (INV action_KL ≠ BASE): CONFIRMED (diff=3.77). P2 (INV T_chain > BASE): CONFIRMED. P3 (INV cr ≈ BASE): WRONG (diff=0.051).
-  - **KEY FINDING — T_chain=5.72 vs 3.23:** Inverse model produces 77% more transfer than Hebbian. Largest T_chain difference seen. Confirms: when W3 is prediction-error-coupled (not just Hebbian), cross-episode transfer of action-state associations is qualitatively stronger.
-  - **KEY FINDING — RHAE=1.5e-5:** INV is the FIRST architecture to show RHAE above the 1e-6 floor (argmin floor). Small but non-trivial. INV exploration (different from pure systematic argmin) found at least one level.
+  - **Finding — T_chain=5.72 vs 3.23:** Inverse model produces 77% more transfer than Hebbian. Largest T_chain difference seen. Confirms: when W3 is prediction-error-coupled (not just Hebbian), cross-episode transfer of action-state associations is qualitatively stronger.
+  - **Finding — RHAE=1.5e-5:** INV is the FIRST architecture to show RHAE above the 1e-6 floor (argmin floor). Small but non-trivial. INV exploration (different from pure systematic argmin) found at least one level.
   - **Why cr regressed:** Inverse model changes action selection → different observations → different W1/W2 trajectories. INV explores differently (action_KL 12.15 vs 8.38), visiting states with harder-to-predict observations. Indirect effect on compression, not a direct W3→W1/W2 coupling.
   - **Decision:** KILL per spec criteria (cr). But T_chain signal and RHAE both point toward this direction. Fix: decouple cr kill from inverse model — if T_chain>3 is the primary signal, cr may be wrong kill criterion here. → Leo spec.
 
@@ -773,7 +773,7 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **Predictions:** P1 (cr ≈ BASE): WRONG (still cr=1.0017 > BASE=0.9987). P2 (T_chain > BASE): WRONG (1.01 ≤ 439). P3 (RHAE ≥ BASE): CONFIRMED (both 0).
   - **BASE T_chain=439 is game-set anomaly:** One game produced near-zero experienced_B pred_loss (BASE learned episode A so well that episode B fit trivially). Dominates chain mean. Not a signal — a numerical artifact of this specific game set with this seed.
   - **eta/10 killed the signal:** INV-SLOW T_chain=1.01 vs 1314's INV T_chain=5.72. Reduced rate eliminated transfer. Not just reduced — near-zero. Rate is the mechanism.
-  - **Key finding:** Inverse model transfer scales with W3 learning rate. eta → large T_chain signal. eta/10 → near-zero T_chain. The transfer is rate-sensitive, not architecture-sensitive. But full eta caused cr regression from exploration disruption.
+  - **Finding:** Inverse model transfer scales with W3 learning rate. eta → large T_chain signal. eta/10 → near-zero T_chain. The transfer is rate-sensitive, not architecture-sensitive. But full eta caused cr regression from exploration disruption.
   - **Decision:** KILL. Trade-off between rate and cr can't be resolved by rate reduction. Need different approach: decoupled W3 learning (e.g., normalize W3 updates, or separate T_chain from cr kill criterion). → Leo spec.
 
 - **Step 1316 (inverse model W3, full eta, RHAE-based T_chain, masked PRISM): COMPLETE. KILL — T_chain=5.72 was measurement artifact, not task transfer.** 9 episodes. Random games: MBPP + 2 masked ARC (seed 1316). Seed-free.
@@ -783,10 +783,10 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
     - T_chain_pred (fresh-INV denom)=1.0036
     - RHAE_experienced_B=0.00e+00, RHAE_fresh_B=0.00e+00
   - **Prediction 1 (experienced_RHAE_B > fresh_RHAE_B): WRONG.** Both zero.
-  - **CRITICAL FINDING — T_chain=5.72 was denominator artifact:** 1314 used fresh-BASE as denominator. 1316 used fresh-INV. With proper denominator: T_chain_pred=1.0036. The 5.72 in 1314 measured BASE-cold-start vs INV-experienced (cross-architecture comparison), not experience effect. Fresh-BASE predicts episode B worse than experienced-INV because it's a different architecture with different action distribution — not because of transfer.
+  - **FINDING — T_chain=5.72 was denominator artifact:** 1314 used fresh-BASE as denominator. 1316 used fresh-INV. With proper denominator: T_chain_pred=1.0036. The 5.72 in 1314 measured BASE-cold-start vs INV-experienced (cross-architecture comparison), not experience effect. Fresh-BASE predicts episode B worse than experienced-INV because it's a different architecture with different action distribution — not because of transfer.
   - **RHAE=0 everywhere (A and B).** Substrate doesn't solve levels on any game in this set. The RHAE=1.5e-5 from 1314 was game-set-specific (seed=1314 happened to include a game where INV found L1; seed=1316 did not).
   - **Inverse model direction: DEAD.** T_chain=5.72 was the entire case for this direction. It was measurement error. action_KL signal (12.28) persists — INV does change exploration — but no task transfer.
-  - **Decision:** KILL direction. Multi-layer LPL + inverse model W3 does not produce genuine task transfer. Cross-episode T_chain measurement must use same-architecture fresh denominator. → Leo spec (new direction).
+  - **Decision:** KILL direction. Multi-layer LPL + inverse model W3 does not produce task transfer. Cross-episode T_chain measurement must use same-architecture fresh denominator. → Leo spec (new direction).
 
 - **Step 1317 (catalog #17 MI-detected reactive, replication of Step 1161 ARC=0.200, masked PRISM): COMPLETE. KILL — signal did not replicate. RHAE=0 for both MI and RAND.** 6 runs (3 MI + 3 RAND), 2K steps each. Random games: MBPP + 2 masked ARC (seed 1317). Seed-free.
   - **Kill triggered:** MI RHAE=0.00e+00 ≤ RAND RHAE=0.00e+00 → MI detection doesn't help task performance.
@@ -815,7 +815,7 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
     - GEN: mean_RHAE=0.00e+00, mean_action_KL=9.0735, mean_I3cv=3.4419, mean_wdrift=0.0584, mean_w3drift=0.0065
     - BASE: mean_RHAE=0.00e+00, mean_action_KL=9.2360, mean_I3cv=3.3404, mean_wdrift=0.0628, mean_w3drift=0.0073
   - **Predictions:** P1 (GEN action_KL > BASE): WRONG (diff=-0.16). P2 (GEN w3drift > BASE): WRONG (GEN=0.0065 < BASE=0.0073). P3 (no collapse): CONFIRMED (I3cv=3.44 ≤ 20).
-  - **Critical finding — w3drift_GEN < w3drift_BASE:** Generalized update `ETA * pe_next * outer(similarities, h2)` is scaled by pe_next (typically small, ~0.05). This makes generalized updates ~20× smaller than Hebbian updates (ETA * h2). Additionally, some similarities are negative (W3 values can be negative) → partial cancellation of Hebbian. Net effect: GEN's W3 changes LESS than BASE.
+  - **Finding — w3drift_GEN < w3drift_BASE:** Generalized update `ETA * pe_next * outer(similarities, h2)` is scaled by pe_next (typically small, ~0.05). This makes generalized updates ~20× smaller than Hebbian updates (ETA * h2). Additionally, some similarities are negative (W3 values can be negative) → partial cancellation of Hebbian. Net effect: GEN's W3 changes LESS than BASE.
   - **Mechanism too weak:** At ETA=0.001 and pe_next≈0.05, generalized update ≈ 5e-5 × similarity × h2. Hebbian = 1e-3 × h2. Ratio ≈ 0.05. Generalization adds <5% to W3 updates. Sample efficiency improvement is real in principle but unmeasurable at this scale.
   - **Decision:** KILL. Additive generalized update too weak (pe_next scale factor). If pe_next were removed (use fixed coefficient = ETA), generalized update would be comparable to Hebbian. → Leo spec.
 
@@ -837,7 +837,7 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
 - **Step 1321 (shared representation: action from h1, no W3, second_exposure_speedup, masked PRISM): KILL — both conditions L1=0, difficult game draw (cd82/cn04), speedup unmeasurable. But: SHARED collapse-resistant where BASE collapses.** 6 runs (3 SHARED + 3 BASE), try1+try2. Random games: MBPP + cd82 + cn04 (seed 1321). Seed-free.
   - **Kill triggered:** Both conditions L1=0, speedup=N/A for all games.
   - **Game draw issue:** seed 1321 selected cd82 and cn04 — both historically 0% L1 rate (large action spaces, no composition has solved them). Kill is a game-draw artifact, not architecture verdict.
-  - **Key diagnostic — SHARED is collapse-resistant:**
+  - **Diagnostic — SHARED is collapse-resistant:**
     - SHARED I3cv: MBPP=2.53, cd82=4.46, cn04=7.13 — stable coverage throughout
     - BASE I3cv: MBPP=5.68, cd82=4.53, cn04=35.66 (COLLAPSE!) → 55.10 in try2
     - W3 positive feedback collapsed BASE on cn04. SHARED has no W3 → no collapse.
@@ -861,9 +861,9 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **Kill assessment: NOT triggered.** speedup=inf is noisy (try1 failure → try2 success) but constitutes a positive signal per Leo's framework: "if speedup > 1: CNN learns → find R2-compliant alternatives."
   - **Per-game breakdown (masked):**
     - MBPP / CNN-ENT: speedup=N/A (n_actions=128, random fallback, no CNN involvement)
-    - Game A (cn04) / CNN-ENT: speedup=inf (try1 fail, try2 L1@step 63), cr=0.0028 (massive compression — pred_loss 0.626→0.097→0.0018 in 2K steps)
+    - Game A (cn04) / CNN-ENT: speedup=inf (try1 fail, try2 L1@step 63), cr=0.0028 (compression — pred_loss 0.626→0.097→0.0018 in 2K steps)
     - Game B (lp85) / CNN-ENT: speedup=N/A (L1 not reached either try), cr=0.2133
-  - **Critical finding — massive compression on cn04:** cr=0.0028. Prediction loss drops ~350x over 2K steps. CNN with gradient (Adam) compresses visual input dramatically. Confirms and exceeds 1305 findings.
+  - **Finding — compression on cn04:** cr=0.0028. Prediction loss drops ~350x over 2K steps. CNN with gradient (Adam) compresses visual input dramatically. Confirms and exceeds 1305 findings.
   - **cn04 L1 at step 63:** cn04 has 4103 actions and is historically 0% for LPL substrates. CNN reached L1 on try2 at step 63. Qualitative difference in capability.
   - **Diagnostic tracking bug:** pred_loss_traj is identical between try1 and try2 (checkpoints at absolute steps 500/1000/2000 — try2 starts at step 2001, no new checkpoints hit). Tracking artifact only; L1 result is unaffected.
   - **R2 violation confirmed:** Adam optimizer. Expected for capability probe: "can ANY substrate show speedup?" Verdict: yes.
@@ -885,7 +885,7 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **Anti-speedup pattern (cd82/cn04/ls20):** Trained weights HURT try2 performance. Likely mechanism: CNN trained on seed A's visual patterns → lower entropy on try2 → deterministically explores wrong direction OR seeds A/B have different visual layouts, trained model confidently predicts wrong outcomes.
   - **Runtime:** 180s total (within 5-min cap). 1K steps sufficient to answer the question.
   - **Chain speedup = 10.5** (mean of 1 finite positive game). Dominated by sp80.
-  - **Decision:** NOT KILL per primary criterion. Mixed signal: CNN shows genuine speedup on sp80 (game with simple L1 mechanism), anti-speedup on 3 others. The question is what differs about sp80. → Leo spec.
+  - **Decision:** NOT KILL per primary criterion. Mixed signal: CNN shows speedup on sp80 (game with simple L1 mechanism), anti-speedup on 3 others. The question is what differs about sp80. → Leo spec.
 
 - **Step 1325 (NEW — meta-learned plasticity: parameterized W1 update theta=[alpha, anti, decay], second_exposure_speedup, masked PRISM): KILL — META speedup=inf and BASE speedup=inf from DIFFERENT games (stochasticity dominates). META compresses WORSE than BASE on all 3 games.** 6 runs (3 games × 2 conditions), try1+try2. Random games: MBPP + lp85 + tr87 (seed 1325). Seed-free.
   - **Kill triggered:** META speedup ≤ BASE (both chain=inf, from different games — noise).
@@ -898,7 +898,7 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
     - tr87/BASE: speedup=inf (try1 fail, try2 L1@433), cr=0.9999
   - **Theta DOES drift on MBPP and lp85:** alpha=1.071/1.023 (amplified Hebbian), anti-Hebbian -0.004, decay -0.024. Direction discovered: amplified Hebbian + slight anti-Hebbian + slight decay.
   - **tr87 theta dead:** theta≈[1,0,0]. tr87 cr=0.9999 — near-zero compression signal → credit formula inactive. Games with no compression provide no theta learning signal.
-  - **Critical finding — credit formula bias:** `credit_hebbian = dot(e1, term_hebb.T @ h1) = ||h1||² × ||e1||²` — always positive. theta[0] always grows regardless of actual prediction improvement. Formula systematically amplifies Hebbian even when it doesn't help. This is why alpha grew but compression worsened (BASE cr < META cr).
+  - **Finding — credit formula bias:** `credit_hebbian = dot(e1, term_hebb.T @ h1) = ||h1||² × ||e1||²` — always positive. theta[0] always grows regardless of actual prediction improvement. Formula systematically amplifies Hebbian even when it doesn't help. This is why alpha grew but compression worsened (BASE cr < META cr).
   - **META compression worse than BASE on all 3 games:** Amplified Hebbian (alpha>1) causes larger W1 updates → less stable predictions. Anti-direction of what meta-learning should achieve.
   - **Game flip (stochasticity):** META and BASE got their inf speedup from different games (META:lp85, BASE:tr87). Both got there by random action luck, not meta-learning benefit.
   - **ETA_THETA=0.0001:** Possibly too small for meaningful discovery in 2K steps. But fixing the credit formula bias is more important than adjusting eta.
@@ -934,7 +934,7 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
     - Game A/BASELINE-LPL: cr=0.8523 (best baseline — 15% compression)
     - Game B/CNN-LPL: cr=1.0184 (diverges — LPL WORSENS on CNN features)
     - Game B/BASELINE-LPL: cr=1.0 (zero compression)
-  - **Critical finding — LPL DIVERGES on rich features:** CNN features are non-negative (post-ReLU), dense, and high-variance. LPL's outer product update `W1 += ETA * outer(h1, e1)` amplifies this high-variance input → weights grow → larger h1 → larger e1 → positive feedback. Avgpool features are lower variance → LPL is stable but still barely compresses.
+  - **Finding — LPL DIVERGES on rich features:** CNN features are non-negative (post-ReLU), dense, and high-variance. LPL's outer product update `W1 += ETA * outer(h1, e1)` amplifies this high-variance input → weights grow → larger h1 → larger e1 → positive feedback. Avgpool features are lower variance → LPL is stable but still barely compresses.
   - **Gap hierarchy now complete:**
     - LPL on rich features: cr=1.01 (DIVERGES)
     - LPL on avgpool: cr=0.95 (near-zero compression)
@@ -970,7 +970,7 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **Per-game breakdown (diagnostics):**
     - MBPP/TP: cr=None (MBPP → random fallback)
     - MBPP/DFA: cr=None
-    - Game A/TP: cr=0.0823, traj={500: 0.003121, 1000: 0.001045, 2000: 0.000257} — massive compression
+    - Game A/TP: cr=0.0823, traj={500: 0.003121, 1000: 0.001045, 2000: 0.000257} — compression
     - Game A/DFA: cr=0.6389, traj={500: 0.002556, 1000: 0.002166, 2000: 0.001633}
     - Game B/TP: cr=None (n_actions=7, very small game — few observations)
     - Game B/DFA: cr=None
@@ -1026,7 +1026,7 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - **Mode map findings:**
     - Game A: 1 region, 1 centroid found after try1. Mode map active in try2.
     - Game B: 0 regions found even after 4000 steps. Pixel changes too diffuse OR change_freq everywhere < 5% threshold.
-  - **Critical issue — over-restriction on Game A:** Mode map restricted Game A to 1 click centroid + 5 keyboard. try2 action_kl=0.0082 (near-zero — substrate stuck clicking same position). compare try1 action_kl=0.8257 (normal exploration). 1 centroid is too few for a game that likely requires multiple click positions. The mode map actively PREVENTED exploration rather than guiding it.
+  - **Issue — over-restriction on Game A:** Mode map restricted Game A to 1 click centroid + 5 keyboard. try2 action_kl=0.0082 (near-zero — substrate stuck clicking same position). compare try1 action_kl=0.8257 (normal exploration). 1 centroid is too few for a game that likely requires multiple click positions. The mode map actively PREVENTED exploration rather than guiding it.
   - **TP transfer still evident in Game A try2:** try2 loss at 500 steps = 0.000103 vs try1 loss at 500 = 0.002629 — 25× lower starting loss. Pre-trained weights transfer to try2. But over-restriction in action space prevents L1.
   - **Game B try2 diverges (cr=9.35):** Loss goes UP in try2 (0.001577 → 0.014741). Trained model miscalibrates on seed_1 episode. Confirms anti-speedup mechanism is active even with mode map.
   - **Two problems identified:**
@@ -1089,7 +1089,7 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
 - **Kill criteria:**
   - TP delta > 0: NOT killed (criterion 1 passes)
   - TP sil (0.7805) > RAND sil (0.7498): NOT killed (criterion 2 passes by chain average)
-- **CRITICAL OBSERVATION — RAND Game A already structured:**
+- **OBSERVATION — RAND Game A already structured:**
   Game A RAND sil=0.9407 >> TP try1=0.5663. A random (untrained) CNN already extracts HIGHLY clustered 128-dim representations from ARC observations. The "structure" measured may reflect game observation diversity, not learning. TP's try1 silhouette is LOWER than RAND because random-action exploration is more chaotic. After learning, TP reaches 0.8997 (close to, but below, RAND 0.9407 on Game A).
 - **Interpretation:** ARC observations are naturally structured in CNN feature space. TP does improve silhouette across experience (delta +0.1964), but the margin over RAND is thin. The criterion is technically met. However, the causation is unclear: is TP organizing because it LEARNS, or because its try2 episode is different from try1?
 - **R2 compliance:** TP local backward only. ✓
@@ -1107,15 +1107,15 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - Game A/R4-TP: speedup=N/A (neither try reached progress). cr=0.1164 (worse than TP baseline 0.0613).
   - Kill criterion 1: R4-TP speedup N/A < TP speedup 1.8492. KILLED.
 
-- **⭐ TP BASELINE LANDMARK — Game A speedup=1.8492:**
+- **TP BASELINE — Game A speedup=1.8492:**
   - try1 reached first progress at step T. try2 reached first progress at T/1.85 ≈ 54% of try1 steps.
   - Both tries reached progress (not inf). FIRST finite >1 speedup.
   - TP weights trained on try1 TRANSFERRED to try2 — faster learning on second exposure.
-  - First substrate to show genuine second-exposure acceleration where both tries reached progress.
+  - First substrate to show second-exposure acceleration where both tries reached progress.
 
 - **Per-game breakdown:**
   - MBPP: both conditions N/A (no ARC obs, random fallback)
-  - Game A/TP: speedup=**1.8492**, cr=0.0613 (94% compression!) ← LANDMARK
+  - Game A/TP: speedup=**1.8492**, cr=0.0613 (94% compression!) ← speedup > 1
   - Game A/R4-TP: speedup=N/A, cr=0.1164, overfitting_count=3
   - Game B/TP: speedup=0.0 (try1 success, try2 fail — reverse), cr=None (small-action)
   - Game B/R4-TP: speedup=0.0 (same), overfitting_count=0
@@ -1126,7 +1126,7 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
 
 - **R4 direction:** Not killed permanently. Mechanism is correct (overfitting IS occurring — count=3). Calibration needs adjustment. To revisit when TP baseline behavior is better understood.
 
-- **Decision:** KILL R4-TP as specified (speedup below TP). LANDMARK: TP baseline speedup=1.8492 — first finite >1 speedup. → Leo spec: confirm landmark, determine if 1.85 is stable across more games.
+- **Decision:** KILL R4-TP as specified (speedup below TP). TP baseline speedup=1.8492 — first finite >1 speedup. → Leo spec: confirm if 1.85 is stable across more games.
   - **⚠ RETRACTED by step 1335.** See below.
 
 ---
@@ -1149,7 +1149,7 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
 - **TP compression still excellent:** cr=0.0679 (SWAP), 0.0499 (REP1), 0.0454 (REP2). ~93-95% compression.
 - **Core finding (confirmed):** TP compresses well but does NOT confer second-exposure advantage. Compression ≠ generalization.
 - **Metric correction (Leo, 2026-03-29):** speedup=0 when progress never reached. Chain = mean over ALL games including MBPP. `speedup_for_chain()` added to prism_masked.py. Step 1334 TP re-calc: (0+1.85+0)/3=0.616 — net negative even before swap test.
-- **Decision:** KILL. 1334 landmark retracted. TP chain ≈ 0.06. Anti-speedup confirmed. → Leo spec.
+- **Decision:** KILL. 1334 speedup retracted. TP chain ≈ 0.06. Anti-speedup confirmed. → Leo spec.
 
 ---
 
@@ -1200,7 +1200,7 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
 
 **RHAE(try2): MLP-TP = 0.0000, CNN-TP = 0.0000.** Neither reached try2 progress.
 
-**⭐ LANDMARK — MBPP compression:**
+**MBPP compression:**
 - MLP-TP MBPP cr = **0.0801** — FIRST non-null MBPP encoding (92% compression)
 - CNN-TP MBPP cr = **None** (random actions — CNN structurally blocked from text)
 - MLP processes ALL 3 games uniformly: MBPP cr=0.08, ARC A cr=0.08, ARC B cr=0.09
@@ -1240,7 +1240,7 @@ Mode map persists try1→try2. Zone update freq=100 steps, threshold=1%.
 - Game A: n_zones=0 in try2. t1_stab=[3,4,4,3] → 3-4 zones found in try1. t2_stab=[0,0,0,0] → ZERO zones in try2. Zone maps episode-specific.
 - Game B: n_zones=1. t1_stab=[1,1,1,1], t2_stab=[1,1,1,1] — stable.
 
-**Critical finding:** Game A zone discovery FAILS in try2. The accumulated change maps from try1 (calibrated to seed=0 episode) don't generalize to try2 (seed=4). When try2 adds different diffs, the cumulative change rate for try1's zones drops below threshold. Zone transfer fails — same root cause as TP anti-speedup: functional representations calibrated to one episode, not the game.
+**Finding:** Game A zone discovery FAILS in try2. The accumulated change maps from try1 (calibrated to seed=0 episode) don't generalize to try2 (seed=4). When try2 adds different diffs, the cumulative change rate for try1's zones drops below threshold. Zone transfer fails — same root cause as TP anti-speedup: functional representations calibrated to one episode, not the game.
 
 **Compression:** Both conditions cr≈0.08 (MLP encodes all modalities uniformly, mode map didn't affect compression).
 
@@ -1388,7 +1388,7 @@ Draw seeds: 13440-13444. Different game selections from ARC_POOL.
 
 Assessment: 1343 Game A (RHAE=0.0001) was a single lucky draw. The MLP+TP baseline is RHAE-dead across a broader sample.
 
-**Critical finding — compression anomaly:** All prior steps (1337-1343) showed cr≈0.08 (8% residual = 92% compression). Step 1344 shows cr=0.36-0.46 (36-46% residual = 54-64% compression). FIVE TIMES WORSE. The game selections from seeds 13440-13444 are harder to predict than the 1337-1343 games. The "92% compression" result was specific to easy-to-predict games — it does NOT generalize.
+**Finding — compression anomaly:** All prior steps (1337-1343) showed cr≈0.08 (8% residual = 92% compression). Step 1344 shows cr=0.36-0.46 (36-46% residual = 54-64% compression). FIVE TIMES WORSE. The game selections from seeds 13440-13444 are harder to predict than the 1337-1343 games. The "92% compression" result was specific to easy-to-predict games — it does NOT generalize.
 
 **Decision:** KILL baseline paradigm. MLP+TP+entropy is RHAE-dead. The 92% compression metric was misleading — it measured learning on easy games, not capability. Need a fundamentally different approach: either better exploration (not just entropy) OR different learning objective (not just TP prediction error). Next: Leo to spec direction.
 
@@ -1416,7 +1416,7 @@ K=10 vs K=1 action decimation. Same 5 draw seeds (13440-13444). MLP+TP, entropy.
 **K=10 RHAE per draw: [0.0, 0.0, 0.0, 0.0, 0.0]. Chain mean = 0.000000. Non-zero: 0/5 draws.**
 **K=1  RHAE per draw: [0.0, 0.0, 0.0, 0.0, 0.0]. Chain mean = 0.000000. Non-zero: 0/5 draws.**
 
-**Critical diagnostic — K=10 cr=1.0 on ALL 15 games.** K=1 cr=0.36-0.44 (as in 1344). With K=10, the substrate collects only 200 action-transitions (vs 2000 for K=1). Fewer unique training examples → model doesn't compress. More training updates on sparse data ≠ better features. The internal training batches are repeatedly fitting the same ~200 examples.
+**Diagnostic — K=10 cr=1.0 on ALL 15 games.** K=1 cr=0.36-0.44 (as in 1344). With K=10, the substrate collects only 200 action-transitions (vs 2000 for K=1). Fewer unique training examples → model doesn't compress. More training updates on sparse data ≠ better features. The internal training batches are repeatedly fitting the same ~200 examples.
 
 **Decision tree outcome: NO DELIBERATION SIGNAL.** 200 random actions also can't reach progress. Leo's prediction confirmed: "K=10 random will be WORSE than K=1 random because fewer shots at the right action." Both fail at zero.
 
@@ -1493,7 +1493,7 @@ MLP+TP entropy baseline on 10 fresh draw seeds (13490-13499). 60 episodes.
 
 **MBPP: 0/10 non-zero. Game B: 0/10 non-zero.**
 
-**Critical finding:** Seeds 13440-13444 used in steps 1344-1348 were ALL in the dead zone (0/5). The deliberation series conclusions were based on pathological seeds. The baseline substrate IS occasionally capable (~30% of game draws).
+**Finding:** Seeds 13440-13444 used in steps 1344-1348 were ALL in the dead zone (0/5). The deliberation series conclusions were based on pathological seeds. The baseline substrate IS occasionally capable (~30% of game draws).
 
 **cr pattern:** 0.33-0.44 consistently (healthy compression). K=10 cr=1.0 anomaly was sparse-buffer specific.
 
@@ -1520,7 +1520,7 @@ REFLEX (softmax(action_head(h3))) vs ENT (pure np.random.randint). 5 draws × 3 
 
 **Entropy: FLAT for both conditions.** H_100 = H_2000 = max_entropy throughout. ARC games: H=8.319≈log(4103). MBPP: H≈4.852≈log(128). MLP+TP does NOT shift its action distribution during the run. The TP updates happen but don't move the softmax output measurably.
 
-**Key finding (corrected by Leo):** REFLEX advantage is a PRNG artifact, NOT a substrate signal. Flat entropy proves softmax(action_head(h3)) = near-uniform throughout — REFLEX and ENT are identical in distribution. The RHAE difference is purely PRNG coverage: torch.multinomial vs numpy.randint(seed=42). ENT's fixed seed correlates try1 and try2 sequences (not independent draws), explaining why ENT solved try1 at p1=1167 on every lp85 episode but never reproduced it on try2. **For all future ENT comparisons: ENT must re-seed per episode (no fixed rng_seed).**
+**Finding (corrected by Leo):** REFLEX advantage is a PRNG artifact, NOT a substrate signal. Flat entropy proves softmax(action_head(h3)) = near-uniform throughout — REFLEX and ENT are identical in distribution. The RHAE difference is purely PRNG coverage: torch.multinomial vs numpy.randint(seed=42). ENT's fixed seed correlates try1 and try2 sequences (not independent draws), explaining why ENT solved try1 at p1=1167 on every lp85 episode but never reproduced it on try2. **For all future ENT comparisons: ENT must re-seed per episode (no fixed rng_seed).**
 
 **What this means for 1351 (hierarchical):** Since the advantage is coverage-based, hierarchical decomposition (type_head + pos_head) can genuinely help click games by factoring the 4103-action space into 8 types × 4096 positions — reducing effective random search from O(4103) to O(8)+O(4096).
 
@@ -1538,11 +1538,11 @@ Hierarchical action decomposition: type_head(h3) selects action type (keyboard/c
 
 **Games with progress (HIER only, both click games):**
 - Draw 0 Game A: eff²=0.000388, p2=508, click_frac=0.123
-- Draw 1 Game B: eff²=0.005487, p2=135, speedup=3.74×, click_frac=0.126 ← **LANDMARK: first click-game RHAE > 0**
+- Draw 1 Game B: eff²=0.005487, p2=135, speedup=3.74×, click_frac=0.126 ← first click-game RHAE > 0
 
 **Mean click fraction: 0.1303** (type_head selects click ~13% of time across all ARC games)
 
-**Key finding:** Both successful games were click games (n_actions=4103, hierarchical mode active). Previously, only keyboard-type ARC games showed RHAE > 0. Hierarchical decomposition factoring 4103 actions into type × position is the mechanism. Draw 1 Game B is highly efficient: p2=135 steps, eff²=0.005487, speedup=3.74×.
+**Finding:** Both successful games were click games (n_actions=4103, hierarchical mode active). Previously, only keyboard-type ARC games showed RHAE > 0. Hierarchical decomposition factoring 4103 actions into type × position is the mechanism. Draw 1 Game B is highly efficient: p2=135 steps, eff²=0.005487, speedup=3.74×.
 
 **What changed vs FLAT:** FLAT flat-selects 1/4103 each step; at 2K steps, expected visits per click position ≈ 0.49. HIER selects click type first (p_click≈0.13), then 1/4096 position; expected visits per click ≈ 2K×0.13/4096 ≈ 0.063. BUT: type_head also selects keyboard actions, concentrating non-click actions in the relevant 7 keys. The factored search space improves coverage of the full action space.
 
@@ -1570,11 +1570,11 @@ HIER replication on 10 fresh draws (seeds 13500-13509). Same architecture as 135
 
 **Try1→try2 click_frac shift: mean=0.0005 (negligible).**
 
-**Key finding:** HIER replicates at 4/10 (>1351's effective rate per-seed). Type entropy flat confirms: HIER advantage is coverage-based (factored exploration), not learned type selection. 1353 tests whether training type_head can improve over random.
+**Finding:** HIER replicates at 4/10 (>1351's effective rate per-seed). Type entropy flat confirms: HIER advantage is coverage-based (factored exploration), not learned type selection. 1353 tests whether training type_head can improve over random.
 
 **Next: Step 1353 — trained type_head via change-magnitude self-supervision.**
 
-## Step 1353 (KILL for RHAE. LANDMARK: type_head learns to concentrate.):
+## Step 1353 (KILL for RHAE. type_head learns to concentrate.):
 
 Trained type_head via change-magnitude self-supervision: type_target = argmax per-type mean ||obs_after - obs_before||. 5 draws, seeds 13500-13504. HIER baseline = 1352 draws 0-4 (mean=3.52e-5, 2/5 nz).
 
@@ -1582,7 +1582,7 @@ Trained type_head via change-magnitude self-supervision: type_target = argmax pe
 **HIER baseline: chain_mean = 3.52e-5, non-zero: 2/5.**
 **REGRESSION: TRAINED worse than HIER.**
 
-**LANDMARK: type entropy drops 0.1593 over episode.** H100=2.028, H500=2.004, H1000=1.965, H2000=1.869 (max=2.079). First evidence that type_head CAN learn to concentrate via self-supervised signal.
+**type entropy drops 0.1593 over episode.** H100=2.028, H500=2.004, H1000=1.965, H2000=1.869 (max=2.079). First evidence that type_head CAN learn to concentrate via self-supervised signal.
 
 **Root cause of regression:** type_target = argmax change favors keyboard actions (change=12-15) over clicks (change=1.7). For click-based ARC games, the high-change keyboard types (esp. type 4: mean=15.6) don't solve the game — the game requires specific click sequences. The trained type_head correctly learns "keyboard produces more visual change" but this is wrong for task progress.
 
@@ -1842,7 +1842,7 @@ SSM disconnected 2K steps + ACT_TEMP=0.1 (softmax(logits/T) instead of T=1.0). S
 - chain_mean=2.67e-05, 3/10 nz
 - MLP+TP baseline: 4.59e-5 → KILL
 
-**Key diagnostic:**
+**Diagnostic:**
 - Action entropy at T=0.1: 8.3195 bits = log(4103) = MAXIMUM. Temperature made no difference.
 - Autocorrelation (try1): 0.0 / (try2): 0.0007. No temporal structure.
 
@@ -1850,7 +1850,7 @@ SSM disconnected 2K steps + ACT_TEMP=0.1 (softmax(logits/T) instead of T=1.0). S
 
 **What would help:** Either (a) larger W_act init scale so logits have more variance, or (b) argmax instead of softmax (T→0), or (c) change mechanism entirely (prediction-divergence curiosity operates on a completely different signal than logits).
 
-## Step 1367 (**SIGNAL — ROLLOUT-ARGMAX beats baseline. First genuine SSM signal.**):
+## Step 1367 (**SIGNAL — ROLLOUT-ARGMAX beats baseline.**):
 
 Two-condition MPC experiment. At each real step: sample 32 candidate actions, simulate K=10 dream steps per candidate (using SSM's own predictions as next obs), score = cumulative prediction divergence. ARGMIN selects most predictable; ARGMAX selects most diverging.
 
@@ -1898,7 +1898,7 @@ Paired comparison: same 10 seeds for ROLLOUT-ARGMAX (K=3 N=8) vs SSM-DISCONNECTE
 - SSM-DISCONNECTED: chain_mean=0.0, 0/10 nz → KILL
 - Paired: ROLLOUT wins 2/10, DISCONNECTED wins 0/10, ties 8/10
 
-**Key finding:** Draw variance is the measurement problem. Seeds 13690-13699 happen to be hard draws — both conditions near zero. But ROLLOUT still outperforms DISCONNECTED on every non-zero draw. Mechanism IS real.
+**Finding:** Draw variance is the measurement problem. Seeds 13690-13699 happen to be hard draws — both conditions near zero. But ROLLOUT still outperforms DISCONNECTED on every non-zero draw. Mechanism IS real.
 
 **Chain mean instability across seed sets:**
 - Step 1367 ROLLOUT K=10 N=32: 9.70e-5 (seeds 13670+) — 2× baseline
@@ -1950,7 +1950,7 @@ Same 30 seeds (13700-13729) as 1370. K=5 N=8 ARGMAX vs SSM-DISCONNECTED. Budget 
 - 1371 DISC: chain_mean=2.38e-5, 5/30 nz
 K=5 ROLLOUT consumes more numpy RNG calls than K=3, leaving global RNG in different state when DISC runs. Cross-experiment DISC comparison is invalid. Within-experiment paired comparison (ROLLOUT vs DISC in same run) is still valid.
 
-**Key finding:** More dream steps (K=3→K=5) makes rollout WORSE, not better. Mechanism: by step K=5, predicted obs diverge far from reality due to compounding prediction errors. Divergence score is dominated by prediction noise, not genuine environmental novelty. K=3 is near the boundary where predictions are still somewhat meaningful.
+**Finding:** More dream steps (K=3→K=5) makes rollout WORSE, not better. Mechanism: by step K=5, predicted obs diverge far from reality due to compounding prediction errors. Divergence score is dominated by prediction noise, not genuine environmental novelty. K=3 is near the boundary where predictions are still somewhat meaningful.
 
 **Also:** Budget cap at 1373 steps (K=5) vs 2000 steps (K=3). K=5 gets ~31% fewer real interaction steps, compounding the performance gap.
 
@@ -2005,7 +2005,7 @@ Count-based exploration: `argmin(visit_count)`, ties broken randomly. No SSM sta
 
 **Still significant:** 5/30 draws with nonzero RHAE for COUNT (vs 2-6 for previous SSM experiments). COUNT is 0.1ms/step — same speed as DISC, much faster than rollout. Systematic coverage in 2K steps is achievable for small-to-medium action spaces.
 
-**Key insight:** Count-based exploration beats all prediction-based approaches tested. Systematic coverage is more effective than curiosity-driven exploration for this game pool. The RTRL prediction component may not be adding value for action selection.
+**Insight:** Count-based exploration beats all prediction-based approaches tested. Systematic coverage is more effective than curiosity-driven exploration for this game pool. The RTRL prediction component may not be adding value for action selection.
 
 **Next:** Validate COUNT signal on new seeds to check if draw 10 was a fluke. Also: is the count-based selection doing anything, or is it just that more uniform coverage over the action space (vs entropy/rollout) is what matters?
 
@@ -2019,7 +2019,7 @@ Tests whether persistent recurrent state h from try1 improves try2 RHAE. Both co
 - Paired: PERSIST wins 5/30, RESET wins 4/30, ties 21/30
 - Sign test p=0.5000 (one-sided) → NOT_SIGNIFICANT → **KILL**
 
-**Key finding:** RESET actually outperformed PERSIST (chain_mean 5.38e-5 vs 2.74e-5). Persistent h provides no benefit — and may slightly hurt by initializing try2 with a state shaped by try1's random trajectory rather than starting fresh.
+**Finding:** RESET actually outperformed PERSIST (chain_mean 5.38e-5 vs 2.74e-5). Persistent h provides no benefit — and may slightly hurt by initializing try2 with a state shaped by try1's random trajectory rather than starting fresh.
 
 **h_norm diagnostic:** h_norm at step 1999 was small for ARC games (0.01-0.09), larger for MBPP (0.17-0.30). h is not saturating but remains low throughout 2000 steps of random actions + RTRL. State carries very little information.
 
@@ -2049,7 +2049,7 @@ Tests whether structured (COUNT) exploration in try1 builds h worth carrying. Th
 
 **Finding 2 — COUNT try1 builds better weights (p=0.090):** COUNT-RESET (3.391e-04) >> RAND-RESET (7.770e-05). Systematic coverage in try1 gives RTRL more diverse, uniform training signal. Random exploration leaves RTRL undertrained on many states. The W_pred and SSM weights learned under COUNT are more general.
 
-**Critical implication:** Weight quality from try1 matters more than h quality. The right design: (1) use COUNT (or better) for try1 to build good weights, (2) reset h at try2 start. h carries action-strategy-specific state, not general environment knowledge. Weights carry general prediction patterns.
+**Implication:** Weight quality from try1 matters more than h quality. The right design: (1) use COUNT (or better) for try1 to build good weights, (2) reset h at try2 start. h carries action-strategy-specific state, not general environment knowledge. Weights carry general prediction patterns.
 
 **COUNT-RESET chain_mean=3.391e-04 = 7.4× baseline.** This is a new high-water mark for RESET-style conditions. Validates that COUNT exploration builds meaningfully better RTRL weights. Next question: can we do better than random try2 actions? If weights are now good, is there a better try2 selector?
 
@@ -2062,9 +2062,9 @@ Given COUNT try1 weights, does COUNT try2 help vs RAND try2?
 - COUNT-RAND:  chain_mean=2.45e-05, 5/30 nz → KILL
 - Paired: COUNT-COUNT wins 3/30, COUNT-RAND wins 3/30, ties 24/30, p=0.6562 → NOT_SIGNIFICANT
 
-**Key finding:** COUNT try2 provides zero benefit over RAND try2. On these seeds, both conditions killed, and they're nearly identical. The action selection in try2 is irrelevant once weights from try1 are in place.
+**Finding:** COUNT try2 provides zero benefit over RAND try2. On these seeds, both conditions killed, and they're nearly identical. The action selection in try2 is irrelevant once weights from try1 are in place.
 
-**Critical draw variance finding:** COUNT-RAND in step 1376 (seeds 13800-13829) gives chain_mean=2.45e-05 (KILL). COUNT-RAND in step 1375 (seeds 13770-13799) gave chain_mean=3.391e-04 (SIGNAL, 7.4× baseline). Same mechanism, different seeds, 14× different result. The step 1375 "signal" was likely dominated by a few favorable draws in that seed range.
+**Draw variance finding:** COUNT-RAND in step 1376 (seeds 13800-13829) gives chain_mean=2.45e-05 (KILL). COUNT-RAND in step 1375 (seeds 13770-13799) gave chain_mean=3.391e-04 (SIGNAL, 7.4× baseline). Same mechanism, different seeds, 14× different result. The step 1375 "signal" was likely dominated by a few favorable draws in that seed range.
 
 **What this means:** The 7.4× result in step 1375 is not stable. Draw variance at 30 draws is too high to distinguish mechanism signal from seed set luck. Neither COUNT exploration nor h persistence produces reliable above-baseline results. The fundamental measurement problem remains unsolved.
 
@@ -2078,7 +2078,7 @@ Definitive 100-draw test: COUNT try1 vs RAND try1. Try2 always random, h always 
 - Paired: COUNT wins 0/100, RAND wins 0/100, ties 100/100
 - Sign test p=1.0000 → **NOT_SIGNIFICANT → COUNT direction CLOSED**
 
-**Critical finding — perfect tie:** COUNT and RAND produce **identical** RHAE on every single draw. Not just similar — exact same values. After PRNG fix, try2 RNG is seeded identically for both conditions. Since try2 actions are therefore identical, and h is reset to 0, the only possible source of difference is the weights trained during try1 (under COUNT vs RAND strategies). Those weights are also effectively identical — RTRL in 2000 steps on the masked PRISM environment produces negligible weight updates regardless of try1 action strategy.
+**Finding — perfect tie:** COUNT and RAND produce **identical** RHAE on every single draw. Not just similar — exact same values. After PRNG fix, try2 RNG is seeded identically for both conditions. Since try2 actions are therefore identical, and h is reset to 0, the only possible source of difference is the weights trained during try1 (under COUNT vs RAND strategies). Those weights are also effectively identical — RTRL in 2000 steps on the masked PRISM environment produces negligible weight updates regardless of try1 action strategy.
 
 **PRNG confound confirmed:** Step 1375's COUNT-RESET vs RAND-RESET signal (p=0.090, 7.4× baseline) was 100% the PRNG confound. The "effect" was different try2 RNG seeds producing different random trajectories — not better weights from COUNT exploration. Step 1376's COUNT-RESET absolute values (KILL) were not confounded (both conditions had same COUNT try1) but were draw-variance limited.
 
@@ -2105,11 +2105,11 @@ Frozen random projection W_fixed connects h to actions: action = softmax(W_fixed
 - 0/30 draws near-max (H_norm > 0.95)
 - **h IS structured** (H_norm ≈ 0.72 << 1.0). Leo's prediction 1 (entropy near-max, 60%) was wrong.
 
-**Key finding — structured h, coupled projection still kills:** Leo's prediction 3 was "if entropy is low, FROZEN > DISCONNECTED (70%)." The opposite happened: h has structure, but the frozen projection produces worse performance than random. DISCONNECTED outperformed FROZEN on 8/30 draws vs 4/30.
+**Finding — structured h, coupled projection still kills:** Leo's prediction 3 was "if entropy is low, FROZEN > DISCONNECTED (70%)." The opposite happened: h has structure, but the frozen projection produces worse performance than random. DISCONNECTED outperformed FROZEN on 8/30 draws vs 4/30.
 
 **Why coupling hurts despite structured h:** W_fixed is random and never updated. It maps h structure into action bias that is arbitrary — not related to game-solving. The bias reduces exploration diversity: FROZEN concentrates actions toward whatever W_fixed @ h favors at each step. Since W_fixed is random, this concentrated exploration is systematically worse than random (which maintains uniform coverage). In effect: random projection from structured h = pseudo-systematic bias = worse than pure random.
 
-**Critical implication:** A frozen random projection is not "neutral" — it actively imposes structure that competes with uniform coverage. Any feature→action channel must be ADAPTIVE (learned) to be useful. Random coupling is worse than no coupling.
+**Implication:** A frozen random projection is not "neutral" — it actively imposes structure that competes with uniform coverage. Any feature→action channel must be ADAPTIVE (learned) to be useful. Random coupling is worse than no coupling.
 
 **DISCONNECTED signal caveat:** DISCONNECTED chain_mean=1.225e-03 is dominated by a high-RHAE outlier draw. The paired comparison (8 DISC wins vs 4 FROZEN wins) is not statistically significant (p=0.927). This is the same draw-variance problem seen throughout the SSM series.
 
@@ -2127,7 +2127,7 @@ Replace action embedding with zero vector in SSM forward pass. Conditions: FULL 
 
 **Action-blind diagnostic per draw:** 29/30 draws produced IDENTICAL pred_loss values for FULL and MASKED. Only draw 0 differed (FULL=0.693456 vs MASKED=0.692994, 0.07%) — an outlier, not a signal.
 
-**Key finding — SSM completely ignores the action token:** The action embedding has zero influence on prediction. This is structurally inevitable: the obs projection fills the full SSM input dimensionality. The action embedding is concatenated but its gradient is not meaningfully propagated — the prediction loss signal does not route through the action embedding in a way that distinguishes actions.
+**Finding — SSM completely ignores the action token:** The action embedding has zero influence on prediction. This is structurally inevitable: the obs projection fills the full SSM input dimensionality. The action embedding is concatenated but its gradient is not meaningfully propagated — the prediction loss signal does not route through the action embedding in a way that distinguishes actions.
 
 **Root cause of all SSM experiments (1365-1379):** h contains no action information → no readout can produce useful action selection → all mechanisms (DISCONNECTED, HIER, ROLLOUT, COUNT, FROZEN) produce ≈ random performance. The architecture is action-blind at the prediction layer. h evolves driven purely by observation, not by the consequences of actions.
 
@@ -2138,7 +2138,7 @@ Replace action embedding with zero vector in SSM forward pass. Conditions: FULL 
 
 **What this closes:** Current SSM architecture → CLOSED. Not because SSM is wrong as a paradigm, but because the action token must be part of the state update in a way that gets predicted error backpropagated through it. Fix candidates: (a) predict next action token (not just observation), (b) action-gated SSM state update (A/B matrices conditioned on action), (c) cumulative effect tracker (separate h_action pathway). Any of these would force action-conditional h.
 
-**CRITICAL for next spec:** The fix is architectural, not hyperparameter-level. Predict-action alongside predict-obs, or make the SSM state transition genuinely action-gated. Otherwise any new SSM mechanism is still action-blind.
+**For next spec:** The fix is architectural, not hyperparameter-level. Predict-action alongside predict-obs, or make the SSM state transition genuinely action-gated. Otherwise any new SSM mechanism is still action-blind.
 
 ## Step 1380 (**GATE_FAILS — multiplicative action gating doesn't force action conditioning. Prediction objective inherently indifferent to actions.**):
 
@@ -2224,7 +2224,7 @@ INJECT pred_loss = NaN (all draws). Root cause: injecting non-zero h_act into h 
 **Comparison validity despite confound:**
 INJECT_MASKED ≈ STANDARD in both pred_loss and RHAE → "random h_obs + no h_act" ≈ "trained h_obs + no h_act." This means h_obs training contributes negligibly to RHAE (consistent with 1379-1381 findings). Therefore: INJECT comparison (random h_obs + action h_act) vs STANDARD (trained h_obs + no h_act) is still meaningful — action injection is the variable of interest.
 
-**Key finding — geometry lottery:**
+**Finding — geometry lottery:**
 INJECT chain_mean = 4.72e-05 (11× STANDARD = 4.30e-06). Sporadic large signal: one draw RHAE ≈ 9.85e-04 (>21× MLP_TP_BASELINE). By sign test, INJECT loses more draws than it wins. This is consistent with Leo's prediction: "20% chance INJECT RHAE > STANDARD — frozen projection can read action dims but random W_fixed maps them arbitrarily." When W_fixed geometry happens to map h_act dims to useful action biases, large RHAE results. This is rare.
 
 **What the injection confirmed:**
@@ -2329,7 +2329,7 @@ Selective SSM + obs_diff target + spatial action encoding: [type_onehot(7), x/63
 - Action-blind ratio: **1.0371** (threshold: 1.05) → **DIAGNOSTIC_FAIL**
 - Full experiment aborted per gate.
 
-**Key finding — encoding does matter (partially):**
+**Finding — encoding does matter (partially):**
 | Encoding | Ratio | Action sensitivity |
 |----------|-------|--------------------|
 | One-hot 16-dim (steps 1383-1384) | 1.000-1.002 | 0% |
@@ -2356,7 +2356,7 @@ Spatial encoding does break partial action-blindness. Full break likely requires
 - Paired: wins=1, losses=1, ties=28, p=0.75
 - Verdict: **KILL** (spatial not better than one-hot)
 
-**Key finding — both conditions exceed MLP_TP_BASELINE:**
+**Finding — both conditions exceed MLP_TP_BASELINE:**
 - MLP_TP_BASELINE = 4.59e-5
 - SPATIAL-DIFF chain_mean = 7.32e-5 (1.59× baseline)
 - ONEHOT-DIFF  chain_mean = 7.34e-5 (1.60× baseline)
@@ -2389,7 +2389,7 @@ Encoding hypothesis tested and closed: spatial structure doesn't help beyond one
 - HEBBIAN total_transitions = 4763 (~159/draw avg) — W_read IS being updated
 - FROZEN beats HEBBIAN on average (losses=4 > wins=3)
 
-**Critical finding — W_read doesn't help:**
+**Finding — W_read doesn't help:**
 - FROZEN (random W_fixed, never updated) outperforms HEBBIAN (4763 Hebbian updates)
 - Transition-credit assignment (last 5 actions before level-change) is too noisy: level transitions happen mid-exploration, K=5 actions before transition are not reliably the causal actions
 - W_read accumulates noise faster than signal across 4763 transitions
@@ -2409,7 +2409,7 @@ Encoding hypothesis tested and closed: spatial structure doesn't help beyond one
 **Direction change check:**
 SSM+RTRL paradigm with both gradient paths (obs_next, obs_diff) and Hebbian readout path exhausted across 8 experiments. Next: Leo to specify Path C direction or paradigm pivot. Awaiting Leo spec.
 
-## Step 1387 (**KILL (p=0.1445) but INTERVENTION chain_mean 87× above baseline — strongest RHAE signal in SSM era.**):
+## Step 1387 (**KILL (p=0.1445) but INTERVENTION chain_mean 87× above baseline — INTERVENTION chain_mean 87× above baseline.**):
 
 **Architecture:** No SSM. No neural network. Pure tabular intervention tracker.
 - 8×8 region grid on 64×64 canvas = 64 regions. effect_magnitude[region] += |pixel_change_at_5x5_target_window|
@@ -2427,7 +2427,7 @@ SSM+RTRL paradigm with both gradient paths (obs_next, obs_diff) and Hebbian read
 - Paired: wins=6, losses=2, ties=22, p=0.1445
 - Verdict: KILL (p > 0.10)
 
-**Critical finding — localized effect measurement detects real signal:**
+**Finding — localized effect measurement detects real signal:**
 - INTERVENTION beats RANDOM on 6 of 8 non-tied draws. Chain_mean ratio = 218×.
 - The localized measurement (5×5 window at click target) successfully distinguishes action effects from background noise.
 - First substrate to produce RHAE substantially above MLP_TP_BASELINE without SSM or neural network.
@@ -2458,7 +2458,7 @@ New paradigm opened: tabular intervention tracking. Only 1 experiment (vs ≥5 n
 - INTERVENTION nz = 12/50, RANDOM nz = 15/50
 - Paired: wins=10, losses=11, ties=29, p=0.668. Verdict: INTERVENTION_WORSE
 
-**Critical discrepancy from 1387:**
+**Discrepancy from 1387:**
 - 1387 RANDOM: nz=3/30 (10% nonzero rate). 1388 RANDOM: nz=15/50 (30% nonzero rate). 3× jump.
 - Combined across 1387+1388 (80 draws): INTERVENTION nz=18/80, RANDOM nz=18/80 — identical nonzero rate.
 - 1387's 6-2 result was not replicated in 1388 (10-11). Combined: 16W-13L-51T. Not significant.
@@ -2489,7 +2489,7 @@ Does more dense exploration in try1 (not argmin) help? Would try1 with uniform r
 - INTERVENTION-SAME nz = 10/50, RANDOM-SAME nz = 12/50
 - Paired: wins=9, losses=10, ties=31, p=0.676. Verdict: INTERVENTION_WORSE
 
-**Critical finding — mechanism fails even with matching layouts:**
+**Finding — mechanism fails even with matching layouts:**
 Leo's forward test: "If same-seed fails: even with matching layouts, pixel-magnitude-based effect tracking doesn't identify useful interaction points."
 Result: same-seed fails. RANDOM-SAME outperforms INTERVENTION-SAME on chain_mean (4.75×).
 
@@ -2610,7 +2610,7 @@ Leo's prediction confirmed: "Responsive but irrelevant (cosmetic buttons) won't 
 **Mandatory diagnostic result:**
 - SPIKE w_norm_try1 ≈ 9.7 (STDP learned)
 - MASKED w_norm_try1 = 0.0 (no LTP without CA_PRE from clicks)
-- Pattern_diff = 46,875,000 (massive, >> 0.05 threshold)
+- Pattern_diff = 46,875,000 (>> 0.05 threshold)
 - **DIAGNOSTIC PASS.** STDP conjunction detection IS action-conditional: CA_PRE (click) is required for LTP. Without click, obs_change alone → ca=0.6 → LTD → W stays 0.
 
 **Full experiment results (30 draws):**

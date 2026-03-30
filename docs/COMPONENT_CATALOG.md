@@ -75,7 +75,7 @@
 | C21 | **Reservoir dynamics** (ESN) | YES (Steps 438-439, 787) | Random recurrent network. Fixed W_h, read out via W_out. | Rank-1 collapse via Hebbian (Step 439). BUT: echo-state h WORKS in 916 (Step 916). Already extracted — recurrent h is a component of 916. |
 | C22 | **Eigenform self-observation** | YES (Steps 620-629) | Substrate reads its own edge-count distribution, computes thresholds. | Produces non-zero output (94-99% NEUTRAL, 0-10% AVOID). No performance effect on L1. Untested on L2. |
 
-### Mode Map + Isolated CC (Step 576) — CRITICAL
+### Mode Map + Isolated CC (Step 576)
 | # | Component | Tested in isolation? | What it does | Extraction test |
 |---|-----------|---------------------|-------------|-----------------|
 | C23 | **Mode map + CC zone discovery** | YES (Step 576: VC33 5/5) | Frame differencing → pixel mode map → connected component isolation → zone identification → burst navigation. | **HIGHEST EXTRACTION PRIORITY.** Only autonomous multi-game discovery mechanism. Used graph for navigation AFTER discovery, but the DISCOVERY itself (mode map → CC isolation) doesn't require per-(state,action) storage. Test: mode map + CC discovery + 800b navigation (no graph). |
@@ -122,7 +122,7 @@
 
 ## Cross-Cutting Analysis
 
-### Components that appear in 2+ families (strongest extraction candidates):
+### Components that appear in 2+ families (extraction candidates):
 
 | Component | Families | Status |
 |-----------|---------|--------|

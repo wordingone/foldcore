@@ -1,0 +1,1 @@
+{"draw": 1, "label": "MBPP", "game": "MBPP", "condition": "INTENTIONAL", "p1": null, "p2": null, "speedup": null, "eff_sq": 0.0, "optimal_steps": 61, "t1": 0.54, "t2": 0.51, "pred_loss_mean": 2.478242, "pred_loss_try2": 0.459102, "r3_weight_diff": 0.0, "i3_cv": 0.30403156543643534, "action_kl": 0.047503, "i5_max_level": 0}
