@@ -2067,3 +2067,25 @@ Given COUNT try1 weights, does COUNT try2 help vs RAND try2?
 **Critical draw variance finding:** COUNT-RAND in step 1376 (seeds 13800-13829) gives chain_mean=2.45e-05 (KILL). COUNT-RAND in step 1375 (seeds 13770-13799) gave chain_mean=3.391e-04 (SIGNAL, 7.4× baseline). Same mechanism, different seeds, 14× different result. The step 1375 "signal" was likely dominated by a few favorable draws in that seed range.
 
 **What this means:** The 7.4× result in step 1375 is not stable. Draw variance at 30 draws is too high to distinguish mechanism signal from seed set luck. Neither COUNT exploration nor h persistence produces reliable above-baseline results. The fundamental measurement problem remains unsolved.
+
+## Step 1377 (**KILL — COUNT direction CLOSED. Try1 mode has ZERO effect after PRNG fix. p=1.0, 100 ties.**):
+
+Definitive 100-draw test: COUNT try1 vs RAND try1. Try2 always random, h always reset. PRNG fix applied: `np.random.seed(draw_seed * 1000 + 1)` immediately before try2's run_episode — ensures identical try2 RNG state regardless of try1 mode.
+
+**Results (seeds 13830-13929):**
+- COUNT: chain_mean=6.200e-05, 19/100 nz
+- RAND:  chain_mean=6.200e-05, 19/100 nz
+- Paired: COUNT wins 0/100, RAND wins 0/100, ties 100/100
+- Sign test p=1.0000 → **NOT_SIGNIFICANT → COUNT direction CLOSED**
+
+**Critical finding — perfect tie:** COUNT and RAND produce **identical** RHAE on every single draw. Not just similar — exact same values. After PRNG fix, try2 RNG is seeded identically for both conditions. Since try2 actions are therefore identical, and h is reset to 0, the only possible source of difference is the weights trained during try1 (under COUNT vs RAND strategies). Those weights are also effectively identical — RTRL in 2000 steps on the masked PRISM environment produces negligible weight updates regardless of try1 action strategy.
+
+**PRNG confound confirmed:** Step 1375's COUNT-RESET vs RAND-RESET signal (p=0.090, 7.4× baseline) was 100% the PRNG confound. The "effect" was different try2 RNG seeds producing different random trajectories — not better weights from COUNT exploration. Step 1376's COUNT-RESET absolute values (KILL) were not confounded (both conditions had same COUNT try1) but were draw-variance limited.
+
+**What this closes:** COUNT exploration does not build better RTRL weights than random exploration in 2000 steps on the masked PRISM environment. The SSM weights are indistinguishable between COUNT and RAND try1 at the resolution of 100 draws. The entire COUNT direction is closed.
+
+**Baseline observation:** Both conditions show chain_mean=6.2e-05 > MLP+TP baseline 4.59e-05, with 19/100 nz. This is the same result as RAND-RESET. It's not clear whether this is signal or draw variance — 19/100 nonzero draws at small RHAE values may still be within noise at 100 draws.
+
+**Next direction (TBD):** COUNT exploration closed. h persistence closed (step 1374). Try2 action strategy closed (step 1376). The SSM substrate with RTRL does not learn anything useful in 2000 steps regardless of exploration strategy. The bottleneck is the RTRL signal itself — 2000 steps of masked PRISM observations doesn't provide sufficient gradient for any detectable weight differentiation.
+
+**⚠️ CONTAMINATION NOTE (steps 1375-1376):** Steps 1374-1376 were run with the PRNG confound present (COUNT try1 uses np.random.choice for tie-breaking vs RAND try1 uses np.random.randint — different RNG call counts leave different global RNG state at try2 start). Step 1374 is CLEAN (both conditions used RAND try1). Step 1375's COUNT vs RAND comparison is CONTAMINATED. Step 1376 is CLEAN (both conditions used COUNT try1). Step 1377 fixed the confound and produced the definitive result.

@@ -1,0 +1,1 @@
+{"draw": 29, "label": "Game B", "game": "Game B", "condition": "COUNT", "p1": 838, "p2": null, "speedup": 0.0, "eff_sq": 0.0, "optimal_steps": 10, "t1": 1.95, "t2": 1.76, "try1_h_norm_1999": 0.078, "pred_loss_final": 0.052025, "i3_cv": 4.5198, "i4_reduction": 0.0052, "i1_pass": null, "i5_max_level": 0, "r3_weight_diff": 0.000385}
