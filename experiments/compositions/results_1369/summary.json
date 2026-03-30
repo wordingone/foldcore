@@ -1,0 +1,56 @@
+{
+  "step": 1369,
+  "n_draws": 10,
+  "draw_seeds": [
+    13690,
+    13691,
+    13692,
+    13693,
+    13694,
+    13695,
+    13696,
+    13697,
+    13698,
+    13699
+  ],
+  "max_steps_used": 2000,
+  "ms_per_step": 0.57,
+  "mlp_tp_baseline": 4.59e-05,
+  "conditions": {
+    "ROLLOUT-ARGMAX": {
+      "chain_mean_rhae": 5.4e-06,
+      "nonzero_draws": 2,
+      "rhae_per_draw": [
+        0.0,
+        2.3e-05,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        3.1e-05,
+        0.0
+      ]
+    },
+    "SSM-DISCONNECTED": {
+      "chain_mean_rhae": 0.0,
+      "nonzero_draws": 0,
+      "rhae_per_draw": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "paired_rollout_wins": 2,
+  "paired_disc_wins": 0,
+  "paired_ties": 8
+}

@@ -1873,3 +1873,18 @@ Two-condition MPC experiment. At each real step: sample 32 candidate actions, si
 **Critical: budget bottleneck.** 7.16ms/step vs 0.09ms baseline = 80× overhead from 32×10 rollout steps. At 2K steps, would exceed budget. Solution: reduce K or N_candidates, or vectorize rollout.
 
 **Next:** Make rollout feasible at 2K steps. Option A: K=3, N=8 (same mechanism, 40× less compute). Option B: K=10, N=4. Option C: vectorized batched rollout. Goal: replicate ARGMAX signal at full 2K steps with more draws.
+
+## Step 1368 (BORDERLINE — K=3 N=8 at 2K steps. chain_mean just below threshold.):
+
+ARGMAX rollout with K=3, N=8. Seeds 13680-13689. Full 2K steps achieved (0.61ms/step).
+
+**Results:**
+- chain_mean=4.08e-05, 4/10 nz → KILL (just below 4.59e-5 baseline by 11%)
+- Draw 0: 3.42e-4 (strong, 7.4× baseline)
+- Draws 2, 6, 7: 2.9e-5, 2.4e-5, 1.3e-5 (weak but non-zero)
+
+**4/10 nz is the best non-zero rate in the SSM direction.** More draws non-zero than 1367 (2/10).
+
+**Comparison to 1367:** 1367 had only 137 effective steps but K=10 N=32 → concentrated signal in 2 draws (3.86e-4, 5.84e-4). 1368 has 1800 effective steps but K=3 N=8 → distributed signal in 4 draws. The mechanism IS working at 2K steps, but K=3 N=8 has less signal-per-step than K=10 N=32. Chain mean just misses threshold.
+
+**Next:** Higher K or N needed to push chain mean above threshold. Or: 30 draws at K=3 N=8 to measure true mean (high variance at 10 draws).
