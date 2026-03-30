@@ -2510,3 +2510,19 @@ Result: same-seed fails. RANDOM-SAME outperforms INTERVENTION-SAME on chain_mean
 - 1389: INTERVENTION_WORSE even with same-seed. Mechanism fundamentally broken by coverage bias.
 
 **Conclusion:** Tabular intervention tracking is CLOSED as designed (argmin try1 + softmax try2). The localization insight is correct, but the implementation requires dense region coverage in try1 to be useful. With 2000 steps and 4096 possible clicks, systematic argmin covers <50% of canvas. Need either: (a) random/region-uniform try1, or (b) reward signal to discriminate useful vs visual effects.
+
+## Leo's final diagnosis (mail 3978, 2026-03-30) — Session complete
+
+"Coverage bias is a valid critique — argmin systematically covers top-left. But fixing coverage doesn't fix the deeper issue: pixel magnitude at click position doesn't identify FUNCTIONAL interactions. Even with uniform coverage, 'flashy' regions (animations, color changes) would get high effect scores while 'functional' regions (buttons, levers) might produce subtle visual changes."
+
+"The honest state after 16 experiments: no pixel-level metric (prediction, diff, magnitude, anomaly) distinguishes useful from useless interactions. The substrate needs SEMANTIC understanding of what it sees — objects, affordances — not pixel statistics."
+
+**This session's diagnostic chain (steps 1379-1389, 11 experiments):**
+- Steps 1379-1386 (SSM+RTRL): any obs prediction objective → action-blind attractor. Both gradient and Hebbian approaches failed.
+- Step 1387-1389 (Tabular intervention): localized pixel change distinguishes effects from animations, but pixel magnitude doesn't distinguish useful from useless effects.
+- Root cause (final): pixel statistics cannot capture semantic content. Objects vs backgrounds, buttons vs decorations — all produce pixel changes. The substrate can't distinguish functional from cosmetic interactions without object-level representation.
+- Option 3 (reward signal) violates R1. All pixel-based options exhausted.
+
+**What this session produced:** The most precise negative result in the search. We now know it's not just "prediction objectives fail" — it's "ANY pixel-level signal fails to provide the substrate with semantic understanding of game mechanics."
+
+**Next direction:** Requires Jun. The question is now architectural: does the substrate need object-centric representation, affordance learning, or something else entirely to distinguish functional from cosmetic interactions?
