@@ -1814,3 +1814,22 @@ Architecture: Same SSM+RTRL as 1360. W_act trained via surprise-modulated REINFO
 1. External reward (level transitions). Substrate doesn't see this as a scalar — only sees info through observations.
 2. Intrinsic curiosity based on DIFFERENTIATING predictions by action: for each a, simulate SSM(concat(obs, embed[a])) and measure prediction spread. Prefer actions with maximal predicted obs change. This is prediction-divergence action selection — no gradient needed, pure forward model.
 3. Count-based exploration (argmin visits) — known to work for RHAE (step 1360 has RHAE from random/argmin warmup).
+
+## Step 1365 (KILL — 1364 result was draw variance, not signal):
+
+Two-condition scale experiment. SSM-2L (replication, seeds 13640-13649) + SSM-4L (depth test). Architecture identical to 1364.
+
+**Results:**
+- SSM-2L: chain_mean=8.60e-06, 1/10 nz (1364 baseline: 1.341e-4, 3/10 nz)
+- SSM-4L: chain_mean=1.70e-06, 1/10 nz
+- MLP+TP baseline: 4.59e-5
+
+**Both conditions BELOW baseline. KILL.**
+
+**1364 retrospective:** Step 1364 result (1.341e-4, 3/10 nz, "2.92× MLP+TP") was draw variance. Seeds 13600-13609 happened to include 3 game draws where the SSM's action-conditional features were sufficient for partial progress. Seeds 13640-13649 replicate at 8.6e-6 (1/10 nz). The SSM disconnected approach is NOT reliably above baseline.
+
+**SSM-4L < SSM-2L (1.7e-6 < 8.6e-6):** Depth hurt. More layers = slower adaptation, same fixed action head. No benefit from additional state complexity.
+
+**Direction status:** SSM disconnected (2K steps, scaling) = KILLED. 4 experiments (1360, 1364, 1365-2L, 1365-4L). The SSM architecture learns (pred_loss decreases) but without a training signal connecting learned features to action selection, RHAE doesn't improve reliably.
+
+**Remaining open question:** Prediction-divergence action selection (simulate SSM(concat(obs, embed[a])) for each a, pick action with maximal predicted obs change). No gradient needed — pure forward model curiosity. This would break the W_act symmetry problem without requiring reward or gradient through discrete actions.
