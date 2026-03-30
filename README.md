@@ -1,6 +1,6 @@
 # The Search
 
-Experimental record of recursive self-improvement research on ARC-AGI-3 and MBPP. 1377 experiments, 4 phases, 16 architecture families tested.
+Experimental record of recursive self-improvement research on ARC-AGI-3 and MBPP. 1379 experiments, 4 phases, 16 architecture families tested.
 
 ---
 
@@ -70,6 +70,7 @@ Each finding cites the experiments that support it and states what would falsify
 | 18 | Try2 action selection is irrelevant | COUNT-COUNT: 5/30 nz vs COUNT-RAND: 5/30 nz, paired 3-3-24, p=0.656 (Step 1376). With good try1 weights, try2 coverage doesn't matter. Random try2 ≈ COUNT try2. | Try2 action mechanism significantly outperforms random try2 given matched try1. |
 | 19 | Disconnected actions = null experiment. Weight transfer is zero. | 100-draw PRNG-fixed paired test (Step 1377). COUNT=RAND exactly: 0-0-100 ties, p=1.0. Same chain_mean (6.2e-5), same nz (19/100). 1375's p=0.090 "transfer" was PRNG artifact (try1 mode shifted try2's random sequence through global RNG coupling — same bug as Step 1350). With disconnected actions, try1 weights CANNOT affect try2 behavior. 17 SSM experiments (1360-1377) measured noise. True baseline: 19% reachability, RHAE=6.2e-5. | Any disconnected-action experiment shows COUNT ≠ RAND with PRNG fix applied. |
 | 20 | SSM prediction features ANTI-CORRELATE with task progress | Frozen projection softmax(W_fixed @ h / T=3) produces non-uniform actions (h_norm=0.72, entropy < max on 30/30 draws). But FROZEN 8/30 nz, RHAE=2.91e-5 vs DISCONNECTED 9/30 nz, RHAE=1.22e-3 (Step 1378). Structured h-based actions are WORSE than random. The prediction features encode "what's predictable" not "what leads to progress." Every action mechanism (17 trained + 1 frozen) worse than random = features point the wrong direction. | Frozen projection outperforms disconnected on 30+ paired draws. |
+| 21 | **SSM is action-blind by construction** | Prediction loss with action tokens: 0.796971. Without action tokens (zeroed): 0.796955. Ratio: 1.00002 (0.002% difference). Verdict: ACTION_BLIND (Step 1379). The action token has ZERO influence on SSM prediction. h encodes only observation autocorrelation. RTRL optimizes obs→obs, which doesn't need actions. This is the ROOT CAUSE of all SSM failures: no action info in h → no mechanism can extract useful actions from h. | SSM prediction loss changes >5% when action tokens are masked. |
 
 ## What doesn't work
 
