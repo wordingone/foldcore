@@ -1934,3 +1934,24 @@ ROLLOUT chain_mean is 7× higher than DISC (1.8e-5 vs 2.6e-6), and ROLLOUT has m
 **Root cause hypothesis:** K=3 N=8 rollout is too weak/noisy on some game types. The prediction-divergence score doesn't reliably rank actions when the SSM hasn't learned meaningful structure for those games. Entropy softmax wins by default when rollout noise doesn't add information.
 
 **Next:** Stronger rollout (higher K or N) OR a qualitatively different action selection mechanism. The SSM+RTRL core is valid (RHAE > 0 signal exists). The action selection on top is still broken for a subset of games.
+
+## Step 1371 (WORSE — K=5 N=8 is worse than K=3 N=8. ROLLOUT 1/30, DISC 5/30.):
+
+Same 30 seeds (13700-13729) as 1370. K=5 N=8 ARGMAX vs SSM-DISCONNECTED. Budget capped at 1373 steps (0.96ms/step).
+
+**Results:**
+- ROLLOUT-ARGMAX (K=5): chain_mean=4.10e-06, 2/30 nz → KILL
+- SSM-DISCONNECTED: chain_mean=2.38e-05, 5/30 nz → KILL
+- Paired: ROLLOUT wins 1/30, DISC wins 5/30, ties 24/30
+- **K=5 is WORSE than K=3 on same seeds.** K=3 had ROLLOUT 4/30, DISC 2/30.
+
+**RNG confound discovered:** DISC results differ between 1370 and 1371 on identical seeds:
+- 1370 DISC: chain_mean=2.6e-6, 2/30 nz
+- 1371 DISC: chain_mean=2.38e-5, 5/30 nz
+K=5 ROLLOUT consumes more numpy RNG calls than K=3, leaving global RNG in different state when DISC runs. Cross-experiment DISC comparison is invalid. Within-experiment paired comparison (ROLLOUT vs DISC in same run) is still valid.
+
+**Key finding:** More dream steps (K=3→K=5) makes rollout WORSE, not better. Mechanism: by step K=5, predicted obs diverge far from reality due to compounding prediction errors. Divergence score is dominated by prediction noise, not genuine environmental novelty. K=3 is near the boundary where predictions are still somewhat meaningful.
+
+**Also:** Budget cap at 1373 steps (K=5) vs 2000 steps (K=3). K=5 gets ~31% fewer real interaction steps, compounding the performance gap.
+
+**Implication:** Rollout direction hit diminishing returns at K=3. Going up in K destroys signal. Need fundamentally different mechanism — rollout MPC over prediction divergence is not the path.
