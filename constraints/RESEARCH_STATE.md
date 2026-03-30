@@ -2476,3 +2476,37 @@ This is draw variance: the mechanism discriminates between game types, not withi
 
 **Open question:**
 Does more dense exploration in try1 (not argmin) help? Would try1 with uniform random (not argmin) build better effect maps? Or does the mechanism need to be combined with a learning substrate (SSM + intervention) to improve try1 coverage?
+
+## Step 1389 (**INTERVENTION_WORSE — same-seed fails. Mechanism doesn't identify useful interaction points even with matching layouts.**):
+
+**Architecture:** Identical to 1388 except TRY2_SEED=0 (same as try1). Both tries play identical game layout.
+- Seeds 14280-14329, 50 draws. Conditions: INTERVENTION-SAME vs RANDOM-SAME.
+
+**Results (summary.json):**
+- MLP_TP_BASELINE = 4.59e-5
+- INTERVENTION-SAME chain_mean = 1.16e-4 (2.5× above baseline)
+- RANDOM-SAME chain_mean = 5.52e-4 (12× above baseline — BEATS INTERVENTION)
+- INTERVENTION-SAME nz = 10/50, RANDOM-SAME nz = 12/50
+- Paired: wins=9, losses=10, ties=31, p=0.676. Verdict: INTERVENTION_WORSE
+
+**Critical finding — mechanism fails even with matching layouts:**
+Leo's forward test: "If same-seed fails: even with matching layouts, pixel-magnitude-based effect tracking doesn't identify useful interaction points."
+Result: same-seed fails. RANDOM-SAME outperforms INTERVENTION-SAME on chain_mean (4.75×).
+
+**Root cause identified — spatial coverage bias:**
+- argmin try1 visits clicks 0, 1, 2, ... 2000 (of 4096 possible). This maps to the top-left portion of the game canvas only (row 0-31 approximately in y).
+- Effect table is built ONLY from top-left region clicks. Bottom-right of canvas never explored in try1.
+- Softmax in try2 focuses on top-left regions with measured effects — systematically biased away from bottom-right where interactive objects may be.
+- RANDOM try2 ignores the biased table and explores uniformly → wins more draws.
+
+**What this closes:**
+- Localized pixel change at target: signal exists but can't be acted on without dense coverage of the canvas.
+- Argmin try1 + spatial effect table = spatially biased, worse than random try2.
+- Same-seed doesn't help: the coverage bias makes the effect table misleading even with identical layout.
+
+**Intervention paradigm (1387-1389) — 3 experiments:**
+- 1387: KILL (p=0.14), chain_mean 88× baseline. Appeared promising.
+- 1388: INTERVENTION_WORSE on different seeds. Draw variance confound.
+- 1389: INTERVENTION_WORSE even with same-seed. Mechanism fundamentally broken by coverage bias.
+
+**Conclusion:** Tabular intervention tracking is CLOSED as designed (argmin try1 + softmax try2). The localization insight is correct, but the implementation requires dense region coverage in try1 to be useful. With 2000 steps and 4096 possible clicks, systematic argmin covers <50% of canvas. Need either: (a) random/region-uniform try1, or (b) reward signal to discriminate useful vs visual effects.
