@@ -1,6 +1,6 @@
 # The Search
 
-Experimental record of recursive self-improvement research on ARC-AGI-3 and MBPP. 1341 experiments, 4 phases, 16 architecture families tested.
+Experimental record of recursive self-improvement research on ARC-AGI-3 and MBPP. 1367 experiments, 4 phases, 16 architecture families tested.
 
 ---
 
@@ -20,7 +20,7 @@ This is not a theoretical exercise. The constitution is extracted from observing
 
 ARC Prize scoring. External judgment. The substrate plays each game twice: try1 (fresh weights), try2 (carrying try1's weights). MBPP (text) always in the game pool. efficiency = optimal_actions / actual_actions. efficiency = 0 when progress never reached.
 
-**Current best RHAE(try2) from R2-compliant substrate: 0.0** (1341 experiments, zero non-zero results).
+**Current best RHAE(try2) from R2-compliant substrate: ~1e-5 to 1e-4** depending on game draw (Steps 1349-1366). ~10% of randomly drawn games are reachable by random exploration in 2K steps. No architecture reliably exceeds this range — draw variance dominates substrate signal across 33 experiments and 2 paradigms (MLP+TP, SSM+RTRL).
 
 **Reference (R2-violating):** CNN+Adam RHAE=2.4e-5, speedup=10.5x on sp80 (Steps 1305-1324).
 
