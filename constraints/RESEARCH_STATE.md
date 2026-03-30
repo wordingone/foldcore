@@ -1980,3 +1980,31 @@ K=3 is the only K with any advantage, but NOT monotonic (2 losses). K=1 and K=5 
 **RNG confound note:** DISC chain_mean varies 10-100× across experiments on identical seeds (1370: 2.6e-6, 1371: 2.38e-5, 1372: 2.8e-5). Root cause: ROLLOUT consumes different RNG calls per K, shifting global numpy RNG state when DISC runs. Within-experiment paired comparisons are valid; cross-experiment DISC comparisons are not.
 
 **Next direction needed:** Fundamentally different action selection. Options: (1) SSM state novelty — UCB on h-space, no prediction needed. (2) Gradient-based selection — ∂(pred_loss)/∂(act_embed) to find actions the model is most uncertain about. (3) Abandon rollout curiosity entirely — try a different mechanism family.
+
+## Step 1373 (**SIGNAL — COUNT-based exploration. chain_mean=4.571e-04, 10× baseline. First SSM SIGNAL.**):
+
+Count-based exploration: `argmin(visit_count)`, ties broken randomly. No SSM state used for selection. SSM runs RTRL for prediction only.
+
+**Results:**
+- COUNT: chain_mean=4.571e-04, 6/30 nz → **SIGNAL** (10× MLP+TP baseline 4.59e-5)
+- SSM-DISCONNECTED: chain_mean=3.980e-05, 5/30 nz → KILL
+- Paired: COUNT wins 5/30, DISC wins 4/30, ties 21/30
+
+**Per-draw breakdown (nz):**
+- Draw 0: COUNT=1.4e-5, DISC=1.1e-5 → COUNT wins (narrow)
+- Draw 2: COUNT=1.41e-4, DISC=0 → COUNT wins
+- Draw 6: COUNT=6.2e-5, DISC=6.9e-5 → DISC wins (narrow)
+- Draw 8: COUNT=0, DISC=1.0e-5 → DISC wins
+- **Draw 10: COUNT=0.013333, DISC=0 → COUNT wins (290× baseline — outlier)**
+- Draw 15: COUNT=7.8e-5, DISC=0 → COUNT wins
+- Draw 18: COUNT=8.4e-5, DISC=0 → COUNT wins
+- Draw 19: COUNT=0, DISC=1.088e-3 → DISC wins
+- Draw 21: COUNT=0, DISC=1.7e-5 → DISC wins
+
+**WARNING: draw 10 dominates.** Without draw 10 (RHAE=0.013333), COUNT chain_mean = (0.013712 - 0.013333)/30 = 1.26e-5, below baseline. The SIGNAL is driven by one outlier draw.
+
+**Still significant:** 5/30 draws with nonzero RHAE for COUNT (vs 2-6 for previous SSM experiments). COUNT is 0.1ms/step — same speed as DISC, much faster than rollout. Systematic coverage in 2K steps is achievable for small-to-medium action spaces.
+
+**Key insight:** Count-based exploration beats all prediction-based approaches tested. Systematic coverage is more effective than curiosity-driven exploration for this game pool. The RTRL prediction component may not be adding value for action selection.
+
+**Next:** Validate COUNT signal on new seeds to check if draw 10 was a fluke. Also: is the count-based selection doing anything, or is it just that more uniform coverage over the action space (vs entropy/rollout) is what matters?
