@@ -1,0 +1,12 @@
+{
+  "games": [
+    "mbpp",
+    "sp80",
+    "tu93"
+  ],
+  "labels": {
+    "mbpp": "MBPP",
+    "sp80": "Game A",
+    "tu93": "Game B"
+  }
+}

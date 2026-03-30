@@ -1717,3 +1717,33 @@ SSM+RTRL paradigm shift. 2-layer diagonal Mamba SSM, pure numpy, online RTRL. Fi
 **What this shows:** SSM state accumulates and prediction head trains (pred_loss decreases). The recurrent architecture IS learning something. But without connecting the action selection to the learned representation, RHAE doesn't improve.
 
 **Next: Step 1361 — act_head in RTRL graph. Both pred_head and act_head update B/C/A_param/W_delta.**
+
+## Step 1361 (KILL — circular prediction trap. Action entropy flat. act_head RTRL ineffective.):
+
+SSM+RTRL with act_head in RTRL graph (ACT_LR_SCALE=1.0). Seeds 13620-13629, 2000 steps.
+
+**chain_mean RHAE = 8.5e-06. Non-zero: 1/10.** → KILL (0.19× 1360 result of 3.26e-05)
+**1360 (fixed act_head): 3.26e-05, 1/10 nz.**
+
+**Action entropy: FLAT throughout.** H=8.3195 (max=log(4103)=8.32) at steps 100, 500, 1000 for ALL draws and games.
+
+**Obs prediction head: TRAINS.** pred_loss decreases (SSM learns to predict projected obs).
+
+**Root cause — circular prediction trap:**
+- act_loss = CE(softmax(W_act @ y_t), a_t) where a_t was chosen by the SAME softmax
+- With near-uniform policy: CE gradient ≈ (1/N - indicator_a_t) ≈ zero for any individual action
+- W_act barely updates. SSM state shaped only by obs_loss.
+- No escape from uniform distribution regardless of alpha.
+- Even if state y_t becomes informative (obs prediction trains), W_act has no signal to learn which features are action-relevant.
+
+**What this eliminates:** Cross-entropy self-prediction of own actions as auxiliary RTRL loss. Does NOT escape circular trap regardless of scale (1.0 vs 0.1 won't change zero gradient from near-uniform policy).
+
+**What still works:** Obs prediction trains SSM state (pred_loss decreases). SSM architecture is learning.
+
+**Open question:** How to connect obs-predictive state to non-uniform action selection without external reward? 
+Options not yet tested:
+1. Interleaved autoregressive: SSM predicts action tokens (not self-prediction — predict NEXT obs-step then act-step separately)
+2. Direct novelty signal: select actions whose predicted obs differ most from seen obs (prediction-based curiosity)
+3. Information gain from SSM state about observation prediction (novel)
+
+**Next: Leo to specify direction given circular trap finding.**
