@@ -2564,3 +2564,37 @@ Leo's prediction confirmed: "Responsive but irrelevant (cosmetic buttons) won't 
 **Closed:** All tabular pixel-domain approaches (magnitude, localization, slot-ratio). Root cause is consistent: pixel statistics detect visual changes but cannot identify semantically meaningful interactions. The substrate needs to understand WHAT objects are and WHAT they do, not just THAT they changed.
 
 **Next direction:** Jun's call. 17 experiments confirm: pixel-level signal family exhausted. Object-level representation required.
+
+## Step 1391 (**DIAGNOSTIC_FAIL — homeostatic regularization also action-blind.**):
+
+**Architecture:** SelectiveSSM (2 layers, D=128, N=32) + homeostatic regularizer. Every 100 steps, normalize h to zero mean / unit variance per dimension (Turrigiano 2008 / BCM 1982 style). Prediction target: absolute embedding (JEPA-style, not diff). Spatial action encoding: [type(7), x_norm, y_norm] = 9 dims.
+
+**Hypothesis (Leo, mail 3981):** The action-blind attractor persists because nothing prevents gradient from extinguishing action info. Homeostatic regularization forces all h dimensions to maintain variance — if action info occupies any h dimensions, regularizer prevents them from collapsing.
+
+**Spec from Leo (mail 3981). Gate check: all 11 gates passed. Seeds 14380-14409, 30 draws. Conditions: REG vs NOREG. Diagnostic: REG vs REG-MASKED.**
+
+**Mandatory diagnostic (3 draws, ~81s):**
+- REG pred_t2:    [0.13524, 0.116609, 0.129549]
+- MASKED pred_t2: [0.133682, 0.117074, 0.129078]
+- Action-blind ratio (MASKED/REG): **0.9959**
+- Threshold: > 1.05
+- **DIAGNOSTIC_FAIL.** Full experiment aborted.
+
+**Interpretation:** The homeostatic regularizer normalizes h but doesn't force h to encode actions. The gradient still finds a near-zero-variance fixed point for action-relevant dimensions (within each 100-step window before renormalization). Renormalization then rescales those dimensions back to unit variance — but they encode only obs autocorrelation, not actions. Result: MASKED ≈ REG (ratio ≈ 1.0). The attractor survives homeostasis.
+
+**Full SSM+RTRL+regularization summary (9 experiments, 1379-1391):**
+| Step | Mechanism | Diagnostic ratio | Verdict |
+|------|-----------|-----------------|---------|
+| 1379 | Linear SSM | action-blind | KILL |
+| 1380 | Selective/gating | action-blind | KILL |
+| 1381 | Inverse dynamics | action-blind | KILL |
+| 1382 | Hard injection | n/a | KILL |
+| 1383 | Selective Mamba | action-blind | KILL |
+| 1384 | obs_diff objective | action-blind | DIAG_FAIL |
+| 1385 | Spatial enc + obs_diff | 1.037 | KILL (RHAE) |
+| 1386 | Hebbian readout | n/a | KILL |
+| 1391 | Homeostatic reg | 0.9959 | DIAG_FAIL |
+
+**Conclusion:** Homeostatic regularization is not the solution. The fundamental issue is the prediction objective — obs prediction (in any form) is achievable without encoding action info. To break the attractor, the learning signal itself must be action-contingent, not just the substrate architecture.
+
+**Full pixel/SSM domain status:** 18 experiments total. Both SSM (prediction-based) and tabular (pixel statistics) families exhausted. Next direction requires Jun.

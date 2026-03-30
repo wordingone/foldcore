@@ -1,0 +1,17 @@
+{
+  "step": 1391,
+  "verdict": "DIAGNOSTIC_FAIL",
+  "action_blind_ratio": 0.9959,
+  "diag_draws": 3,
+  "diag_reg_pred_t2": [
+    0.13524,
+    0.116609,
+    0.129549
+  ],
+  "diag_msk_pred_t2": [
+    0.133682,
+    0.117074,
+    0.129078
+  ],
+  "note": "Full experiment aborted \u2014 homeostatic regularization also action-blind."
+}
