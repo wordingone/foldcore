@@ -2008,3 +2008,23 @@ Count-based exploration: `argmin(visit_count)`, ties broken randomly. No SSM sta
 **Key insight:** Count-based exploration beats all prediction-based approaches tested. Systematic coverage is more effective than curiosity-driven exploration for this game pool. The RTRL prediction component may not be adding value for action selection.
 
 **Next:** Validate COUNT signal on new seeds to check if draw 10 was a fluke. Also: is the count-based selection doing anything, or is it just that more uniform coverage over the action space (vs entropy/rollout) is what matters?
+
+## Step 1374 (KILL — h persistence does NOT help. p=0.50. RESET outperformed PERSIST.):
+
+Tests whether persistent recurrent state h from try1 improves try2 RHAE. Both conditions: random actions (disconnected). PERSIST: try2 starts with h₀ = h_final from try1. RESET: try2 starts with h₀ = 0.
+
+**Results (seeds 13740-13769):**
+- PERSIST: chain_mean=2.74e-05, 5/30 nz → KILL
+- RESET:   chain_mean=5.38e-05, 6/30 nz → SIGNAL (above baseline 4.59e-5)
+- Paired: PERSIST wins 5/30, RESET wins 4/30, ties 21/30
+- Sign test p=0.5000 (one-sided) → NOT_SIGNIFICANT → **KILL**
+
+**Key finding:** RESET actually outperformed PERSIST (chain_mean 5.38e-5 vs 2.74e-5). Persistent h provides no benefit — and may slightly hurt by initializing try2 with a state shaped by try1's random trajectory rather than starting fresh.
+
+**h_norm diagnostic:** h_norm at step 1999 was small for ARC games (0.01-0.09), larger for MBPP (0.17-0.30). h is not saturating but remains low throughout 2000 steps of random actions + RTRL. State carries very little information.
+
+**R3 (weight diff):** r3_weight_diff small (1e-5 to 0.005 across games). Weights barely moved from initialization in 2000 steps.
+
+**Interpretation:** The SSM h built during random-action try1 is noise — random observations + random RTRL updates without coherent structure to preserve. Carrying this into try2 doesn't help. Expected in retrospect: h persistence is only useful when try1 builds *meaningful* state via a real mechanism. Step 1374 tested the memory axis with the worst possible upstream condition.
+
+**RESET=SIGNAL caveat:** RESET chain_mean=5.38e-5 above baseline on seeds 13740-13769 is draw variance — not a stable signal. Same mechanism (random actions) on different seeds produces 0 to 5.38e-5. Reinforces that seed ranges produce misleading chain_mean estimates without sufficient draws.
