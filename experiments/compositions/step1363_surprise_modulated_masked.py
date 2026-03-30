@@ -1,31 +1,33 @@
 """
-Step 1362 — SSM+RTRL with act_head, alpha=0.1 (reduced action loss weight).
-Leo mail 3884/3885, 2026-03-30.
-
-Amendment from 1361: alpha reduced from 1.0 to 0.1 to prevent circular prediction
-trap dominance. At alpha=1.0, CE(uniform->uniform) gradient≈0, entropy stays flat.
-Also fixes ent_2000 capture (ENT_CHECKPOINTS now ends at 1999, not 2000).
+Step 1363 — Neuromodulatory bridge: prediction surprise modulates W_act learning rate.
+Leo mail 3888, 2026-03-30. Three-factor plasticity.
 
 Architecture:
-- 2-layer diagonal SSM (Mamba-style). Pure numpy. No PyTorch.
-- Input: concat(fixed_proj(obs, PROJ_DIM=64), act_embed[a_{t-1}]) -> D=128
-- Per layer: h_t = diag(A_t) * h_{t-1} + B @ x_t, y_t = C @ h_t
-  A_t = exp(-softplus(W_delta @ x_t) * A_param)
-- Prediction head: W_pred @ y_t -> next projected obs (RTRL-trained)
-- Action head: W_act @ y_t -> action logits (ALSO RTRL-trained via cross-entropy)
-- Combined RTRL: both heads update B, C, A_param, W_delta
+- Same 2-layer diagonal SSM + RTRL as step 1360 (obs prediction only).
+- W_act NOT in RTRL graph (RTRL trace too weak for W_act credit assignment).
+- Instead: prediction SURPRISE acts as a global neuromodulator.
 
-Key properties:
-- History: state accumulates (obs, action) sequence
-- Credit assignment: RTRL sensitivity trace for A_param
-- Action-awareness: action embedding is part of SSM input
-- Try1 weights carry to try2 (R4 compliance)
+Surprise-modulated REINFORCE:
+    surprise_t = |pred_loss_t - pred_loss_ema_t|
+    pred_loss_ema_t = 0.99 * ema_{t-1} + 0.01 * pred_loss_t
+    W_act += ACT_LR * surprise_t * outer(log_grad_t, y_t)
+    where log_grad[i] = δ(i==a_t) - π_t[i]  (REINFORCE direction)
+
+Three-factor plasticity:
+  - Presynaptic: y_t (SSM output)
+  - Postsynaptic: a_t (chosen action)
+  - Neuromodulator: surprise_t (unexpected prediction = high dopamine)
+
+Key difference from step 1307 (REINFORCE with pred error as reward):
+  1307 used signed prediction error as reward → direction depends on sign.
+  This uses ABSOLUTE surprise as magnitude → always reinforces taken direction.
 
 Protocol:
 - 10 draws, seeds 13600-13609
 - 2K steps per episode (or fewer if Tier 1 timing exceeds budget)
-- Warmup=500 random steps before using action head
-- Kill: chain_mean RHAE > 4.59e-5 (MLP+TP 1349 baseline) -> SIGNAL
+- Warmup=500 steps before using action head or W_act updates
+- Kill: chain_mean RHAE > 3.26e-5 (1360 SSM baseline) → SIGNAL
+- Baseline comparison: step 1360 (same seeds, same SSM, W_act fixed)
 """
 
 import os
@@ -51,7 +53,7 @@ from prism_masked import (
 # Config
 # ---------------------------------------------------------------------------
 
-STEP        = 1362
+STEP        = 1363
 N_DRAWS     = 10
 DRAW_SEEDS  = [13600 + i for i in range(N_DRAWS)]
 TRY1_STEPS  = 2000
@@ -61,17 +63,21 @@ MAX_SECONDS = 280
 
 RESULTS_DIR = os.path.join('B:/M/the-search/experiments/compositions', f'results_{STEP}')
 
-MLP_TP_BASELINE = 4.59e-5  # Step 1349 mean RHAE
-TAU             = 1.0      # Gumbel-softmax temperature
+MLP_TP_BASELINE  = 4.59e-5  # Step 1349
+SSM_BASE_1360    = 3.26e-5  # Step 1360 — primary comparison for this step
 
-# SSM config (Leo mail 3876)
+# SSM config (same as 1360)
 PROJ_DIM      = 64    # fixed random projection: obs -> this
 ACT_EMBED_DIM = 16    # action embedding dim
 D             = 128   # SSM model dimension
 N_STATE       = 32    # SSM state dimension per layer
 N_LAYERS      = 2     # number of SSM layers
-WARMUP        = 500   # random actions before using action head
-SSM_LR        = 1e-3  # RTRL learning rate
+WARMUP        = 500   # steps before using action head or W_act updates
+SSM_LR        = 1e-3  # RTRL learning rate (obs prediction)
+
+# Neuromodulation config
+ACT_LR              = 1e-3   # W_act update learning rate
+SURPRISE_EMA_ALPHA  = 0.01   # EMA decay: pred_loss_ema = 0.01*new + 0.99*old
 
 MAX_N_ACTIONS   = 4103
 ENT_CHECKPOINTS = [100, 500, 1000, 1999]
@@ -118,7 +124,6 @@ def _encode_obs(obs_arr):
     if _is_arc_obs(arr):
         frame = np.round(arr).astype(np.int32).squeeze(0)
         frame = np.clip(frame, 0, 15)
-        # Vectorized one-hot: (16, 64, 64) -> flatten to 65536
         one_hot = (frame[None, :, :] == np.arange(16, dtype=np.int32)[:, None, None]).astype(np.float32)
         return one_hot.flatten()
     return arr.flatten()
@@ -135,31 +140,11 @@ def _det_init(m, n, scale=0.01):
         W = det_weights(m, n)
         return (W * scale).astype(np.float32)
     else:
-        # Vectorized sin pattern — deterministic, no QR overhead
         i = np.arange(m, dtype=np.float64).reshape(-1, 1)
         j = np.arange(n, dtype=np.float64).reshape(1, -1)
         W = np.sin(i * 1.7 + j * 2.3 + 1.0)
         norms = np.linalg.norm(W, axis=1, keepdims=True)
         return (W / (norms + 1e-8) * scale).astype(np.float32)
-
-
-# ---------------------------------------------------------------------------
-# Gumbel-softmax (differentiable discrete sampling)
-# ---------------------------------------------------------------------------
-
-def gumbel_softmax(logits, tau=1.0):
-    """Gumbel-softmax reparameterization. Returns soft one-hot (N_actions,).
-
-    Forward: differentiable relaxation. argmax gives discrete action for env.
-    Gradient flows through soft_a to W_act via obs prediction loss.
-    """
-    u = np.random.uniform(size=logits.shape).astype(np.float32)
-    u = np.clip(u, 1e-20, 1.0 - 1e-20)
-    g = (-np.log(-np.log(u))).astype(np.float32)
-    z = (logits + g) / tau
-    z = z - z.max()
-    exp_z = np.exp(z)
-    return exp_z / exp_z.sum()
 
 
 # ---------------------------------------------------------------------------
@@ -174,76 +159,47 @@ class SSMLayer:
         self.n = n_state
         self.lr = lr
 
-        # Learnable parameters
-        self.B       = _det_init(n_state, d, scale=0.1)    # (N, D)
-        self.C       = _det_init(d, n_state, scale=0.1)    # (D, N)
-        self.A_param = np.ones(n_state, dtype=np.float32) * 0.5  # (N,) -> A_diag~0.7
-        self.W_delta = np.zeros((n_state, d), dtype=np.float32)  # (N, D)
-        self.b_delta = np.zeros(n_state, dtype=np.float32)       # (N,)
+        self.B       = _det_init(n_state, d, scale=0.1)
+        self.C       = _det_init(d, n_state, scale=0.1)
+        self.A_param = np.ones(n_state, dtype=np.float32) * 0.5
+        self.W_delta = np.zeros((n_state, d), dtype=np.float32)
+        self.b_delta = np.zeros(n_state, dtype=np.float32)
 
-        # Recurrent state + RTRL sensitivity trace
         self.h = np.zeros(n_state, dtype=np.float32)
-        self.S = np.zeros(n_state, dtype=np.float32)  # d(h_t)/d(A_param)
+        self.S = np.zeros(n_state, dtype=np.float32)
 
-        # Stored activations for RTRL (set during forward)
-        self._x         = None
-        self._h_prev    = None
-        self._A_diag    = None
-        self._delta     = None
-        self._delta_pre = None
+        self._x = self._h_prev = self._A_diag = self._delta = self._delta_pre = None
 
     def forward(self, x):
-        """Forward pass. x: (D,) -> y: (D,)."""
         self._x = x
         self._h_prev = self.h.copy()
-
         delta_pre = np.clip(self.W_delta @ x + self.b_delta, -20.0, 20.0)
-        delta = np.log1p(np.exp(delta_pre))  # softplus, (N,)
+        delta = np.log1p(np.exp(delta_pre))
         self._delta_pre = delta_pre
         self._delta = delta
-
-        A_diag = np.exp(-delta * self.A_param)  # (N,) in (0, 1]
+        A_diag = np.exp(-delta * self.A_param)
         self._A_diag = A_diag
-
-        self.h = A_diag * self._h_prev + self.B @ x  # (N,)
-        return self.C @ self.h                        # (D,)
+        self.h = A_diag * self._h_prev + self.B @ x
+        return self.C @ self.h
 
     def rtrl_update(self, e_y):
-        """RTRL update. e_y: error in D-space. Returns e_x: error propagated to input D-space."""
         if self._x is None:
             return np.zeros(self.d, dtype=np.float32)
-
-        e_h = self.C.T @ e_y    # (N,) error in state space
-
-        # Propagate to input using OLD B (before B update)
-        e_x = self.B.T @ e_h   # (D,)
-
-        # Update C: dL/dC = outer(e_y, h_t)
+        e_h = self.C.T @ e_y
+        e_x = self.B.T @ e_h
         self.C -= self.lr * np.outer(e_y, self.h)
-
-        # Update B: dL/dB = outer(e_h, x)
         self.B -= self.lr * np.outer(e_h, self._x)
-
-        # Sensitivity trace: S_t = A_diag * S_{t-1} + (-delta * A_diag * h_{t-1})
         self.S = self._A_diag * self.S + (-self._delta * self._A_diag * self._h_prev)
-
-        # Update A_param: dL/dA = e_h * S_t
         self.A_param -= self.lr * (e_h * self.S)
         self.A_param = np.clip(self.A_param, 0.01, 10.0)
-
-        # Update W_delta via chain rule through softplus and A_diag
-        # dL/d(delta) = e_h * (-A_param * A_diag * h_prev)
-        # dL/d(delta_pre) = dL/d(delta) * sigmoid(delta_pre)
         sigmoid_dp = 1.0 / (1.0 + np.exp(-self._delta_pre))
         dL_d_delta = e_h * (-self.A_param * self._A_diag * self._h_prev)
         dL_d_logit = dL_d_delta * sigmoid_dp
         self.W_delta -= self.lr * np.outer(dL_d_logit, self._x)
         self.b_delta -= self.lr * dL_d_logit
-
         return e_x
 
     def reset_state(self):
-        """Reset recurrent state. Keep learned weights."""
         self.h[:] = 0.0
         self.S[:] = 0.0
         self._x = self._h_prev = self._A_diag = self._delta = self._delta_pre = None
@@ -254,32 +210,28 @@ class SSMLayer:
 # ---------------------------------------------------------------------------
 
 class MambaSSMSubstrate:
-    """2-layer Mamba-style SSM with online RTRL. Agnostic to action space structure."""
+    """SSM + RTRL (obs prediction) + surprise-modulated REINFORCE (W_act)."""
 
     def __init__(self, n_actions, max_steps=TRY1_STEPS):
         self.n_actions = n_actions
         self.max_steps = max_steps
         self._in_dim = PROJ_DIM + ACT_EMBED_DIM
 
-        # Fixed random obs projection (lazy: initialized on first obs)
-        self._obs_proj = None   # (PROJ_DIM, obs_dim) float32
+        self._obs_proj = None
 
-        # Action embedding table: fixed (not trained). Differentiable via Gumbel-softmax.
-        self._E_act = _det_init(n_actions, ACT_EMBED_DIM, scale=0.1)  # (n_actions, 16)
+        # Action embedding: fixed. Discrete lookup (no differentiable path needed).
+        self._act_embed = _det_init(n_actions, ACT_EMBED_DIM, scale=0.1)
 
-        # Input merge: concat(PROJ_DIM, ACT_EMBED_DIM) -> D
-        self._W_in = _det_init(D, self._in_dim, scale=0.1)  # (D, in_dim)
+        self._W_in = _det_init(D, self._in_dim, scale=0.1)
         self._b_in = np.zeros(D, dtype=np.float32)
 
-        # SSM layers (2x)
         self._layers = [SSMLayer(D, N_STATE, SSM_LR) for _ in range(N_LAYERS)]
 
-        # Prediction head: D -> PROJ_DIM (learnable via RTRL)
-        self._W_pred = _det_init(PROJ_DIM, D, scale=0.1)   # (PROJ_DIM, D)
+        self._W_pred = _det_init(PROJ_DIM, D, scale=0.1)
         self._b_pred = np.zeros(PROJ_DIM, dtype=np.float32)
 
-        # Action head: D -> n_actions (trained via obs gradient through feedback loop)
-        self._W_act = _det_init(n_actions, D, scale=0.1)   # (n_actions, D)
+        # Action head: trained via surprise-modulated REINFORCE (NOT RTRL).
+        self._W_act = _det_init(n_actions, D, scale=0.1)
         self._b_act = np.zeros(n_actions, dtype=np.float32)
 
         # Running state
@@ -287,10 +239,8 @@ class MambaSSMSubstrate:
         self._prev_action = 0
         self._prev_y      = None
 
-        # Gumbel-softmax feedback state (for W_act 1-step gradient)
-        self._cur_soft_a      = np.zeros(n_actions, dtype=np.float32)  # soft_a at step t
-        self._soft_a_for_wact = None   # soft_a from step t-1 (used in update_after_step)
-        self._y_for_wact      = None   # y from step t-1 (outer product for W_act grad)
+        # Neuromodulation state
+        self._pred_loss_ema = None   # exponential moving average of pred_loss
 
         # Diagnostics
         self._try1_ent        = {}
@@ -299,104 +249,54 @@ class MambaSSMSubstrate:
         self._try2_state_norm = {}
         self._in_try2         = False
         self._pred_losses     = []
-
-    # ---- Obs projection ----
+        self._surprise_vals   = []
 
     def _init_obs_proj(self, obs_flat):
         obs_dim = obs_flat.shape[0]
-        # Deterministic sin-pattern projection (no QR — obs_dim can be 65536)
         i = np.arange(PROJ_DIM, dtype=np.float64).reshape(-1, 1)
         j = np.arange(obs_dim, dtype=np.float64).reshape(1, -1)
         W = np.sin(i * 1.234 + j * 0.00731 + 0.5)
         norms = np.linalg.norm(W, axis=1, keepdims=True)
         self._obs_proj = (W / (norms + 1e-8)).astype(np.float32)
 
-    # ---- Forward pass ----
-
     def _ssm_forward(self, proj_obs):
-        """Full SSM forward: proj_obs (PROJ_DIM,) -> y (D,).
-
-        Action embed = soft_a @ E_act (differentiable weighted sum).
-        At warmup steps, soft_a is a one-hot (same as discrete lookup).
-        """
-        act_emb = self._cur_soft_a @ self._E_act          # (ACT_EMBED_DIM,) differentiable
-        x_in = np.concatenate([proj_obs, act_emb])         # (in_dim,)
-        x = self._W_in @ x_in + self._b_in               # (D,)
+        act_emb = self._act_embed[self._prev_action]
+        x_in = np.concatenate([proj_obs, act_emb])
+        x = self._W_in @ x_in + self._b_in
         y = x
         for layer in self._layers:
             y = layer.forward(y)
         return y
 
-    # ---- RTRL update ----
-
-    def _rtrl_step(self, proj_obs_next, y, soft_a_for_wact, y_for_wact):
-        """Obs prediction loss only. W_act trained via 1-step obs gradient feedback.
-
-        Gradient path: obs_loss → y_t → h_t → B@x_t → x_t[PROJ_DIM:] (act_embed_{t-1})
-                      → soft_a_{t-1} @ E_act → gumbel_softmax(W_act @ y_{t-1}) → W_act
-        """
-        # --- Observation prediction loss (MSE) ---
-        pred = self._W_pred @ y + self._b_pred             # (PROJ_DIM,)
-        obs_error = pred - proj_obs_next                   # (PROJ_DIM,)
-        e_obs = self._W_pred.T @ obs_error                # (D,) using OLD W_pred
-        self._W_pred -= SSM_LR * np.outer(obs_error, y)
-        self._b_pred -= SSM_LR * obs_error
-
-        # --- RTRL backward through SSM layers ---
-        e_combined = e_obs                                 # (D,)
+    def _rtrl_step(self, proj_obs_next, y):
+        """Obs prediction RTRL only. Returns pred_loss."""
+        pred = self._W_pred @ y + self._b_pred
+        error = pred - proj_obs_next
+        e = self._W_pred.T @ error
+        self._W_pred -= SSM_LR * np.outer(error, y)
+        self._b_pred -= SSM_LR * error
         for layer in reversed(self._layers):
-            e_combined = layer.rtrl_update(e_combined)
-        # e_combined is now grad w.r.t. x_t (first SSM layer input = W_in @ x_in)
-
-        obs_loss = float(np.mean(obs_error ** 2))
-
-        # --- W_act 1-step gradient via action embed feedback ---
-        # x_t = W_in @ concat(obs_proj_t, soft_a_{t-1} @ E_act)
-        # e_combined = grad w.r.t. W_in @ x_in. Backprop through W_in:
-        if soft_a_for_wact is not None and y_for_wact is not None:
-            e_x_in = self._W_in.T @ e_combined             # (in_dim,) using OLD W_in
-            e_embed = e_x_in[PROJ_DIM:]                    # (ACT_EMBED_DIM,) grad w.r.t. act_embed
-            # act_embed = soft_a @ E_act  →  grad w.r.t. soft_a:
-            e_soft_a = self._E_act @ e_embed               # (n_actions,)
-            # Softmax Jacobian: J^T @ e = s * (e - dot(e, s))
-            s = soft_a_for_wact
-            e_logits = s * (e_soft_a - float(np.dot(e_soft_a, s)))  # (n_actions,)
-            # logits = W_act @ y_{t-1}  →  grad w.r.t. W_act:
-            self._W_act -= SSM_LR * np.outer(e_logits, y_for_wact)
-            self._b_act -= SSM_LR * e_logits
-
-        return obs_loss
-
-    # ---- Substrate interface ----
+            e = layer.rtrl_update(e)
+        return float(np.mean(error ** 2))
 
     def process(self, obs_arr):
         obs_flat = _encode_obs(obs_arr)
         if self._obs_proj is None:
             self._init_obs_proj(obs_flat)
 
-        proj_obs = self._obs_proj @ obs_flat              # (PROJ_DIM,)
-
-        # Store previous soft_a and y for W_act gradient (used in update_after_step)
-        self._soft_a_for_wact = self._cur_soft_a.copy()
-        self._y_for_wact = self._prev_y  # may be None at step 0
-
-        y = self._ssm_forward(proj_obs)                   # uses _cur_soft_a
+        proj_obs = self._obs_proj @ obs_flat
+        y = self._ssm_forward(proj_obs)
         self._prev_y = y
 
-        # Action selection via Gumbel-softmax
         if self._step < WARMUP:
-            # One-hot for warmup: same as discrete lookup, no gradient leak
             action = int(np.random.randint(self.n_actions))
-            soft_a = np.zeros(self.n_actions, dtype=np.float32)
-            soft_a[action] = 1.0
         else:
-            logits = self._W_act @ y + self._b_act        # (n_actions,)
-            soft_a = gumbel_softmax(logits, tau=TAU)
-            action = int(np.argmax(soft_a))
+            logits = self._W_act @ y + self._b_act
+            logits = logits - logits.max()
+            probs = np.exp(logits)
+            probs /= probs.sum()
+            action = int(np.random.choice(self.n_actions, p=probs))
 
-        self._cur_soft_a = soft_a
-
-        # Diagnostics at checkpoints (using deterministic softmax for entropy)
         if self._step in ENT_CHECKPOINTS:
             logits = self._W_act @ y + self._b_act
             logits = logits - logits.max()
@@ -420,32 +320,50 @@ class MambaSSMSubstrate:
             return
         obs_next_flat = _encode_obs(np.asarray(obs_next, dtype=np.float32))
         proj_obs_next = self._obs_proj @ obs_next_flat
-        obs_loss = self._rtrl_step(proj_obs_next, self._prev_y,
-                                   self._soft_a_for_wact, self._y_for_wact)
-        self._pred_losses.append(obs_loss)
+
+        pred_loss = self._rtrl_step(proj_obs_next, self._prev_y)
+        self._pred_losses.append(pred_loss)
+
+        # Compute prediction surprise
+        if self._pred_loss_ema is None:
+            self._pred_loss_ema = pred_loss
+        surprise = abs(pred_loss - self._pred_loss_ema)
+        self._pred_loss_ema = (SURPRISE_EMA_ALPHA * pred_loss
+                               + (1.0 - SURPRISE_EMA_ALPHA) * self._pred_loss_ema)
+        self._surprise_vals.append(surprise)
+
+        # Surprise-modulated REINFORCE update for W_act (only after warmup)
+        if self._step > WARMUP and surprise > 0.0:
+            y = self._prev_y
+            logits = self._W_act @ y + self._b_act
+            logits = logits - logits.max()
+            probs = np.exp(logits)
+            probs /= probs.sum()
+            # REINFORCE direction: ∂log π(a_t)/∂logits_i = δ(i==a_t) - π_i
+            log_grad = -probs.copy()
+            log_grad[int(action)] += 1.0
+            self._W_act += ACT_LR * surprise * np.outer(log_grad, y)
+            self._b_act += ACT_LR * surprise * log_grad
 
     def on_level_transition(self):
         for layer in self._layers:
             layer.reset_state()
         self._prev_y = None
-        self._soft_a_for_wact = None
-        self._y_for_wact = None
 
     def reset_for_try2(self):
-        """Reset recurrent state. Keep learned weights (R4 compliance)."""
+        """Reset recurrent state. Keep learned weights + EMA (R4 compliance)."""
         for layer in self._layers:
             layer.reset_state()
         self._prev_y = None
-        self._cur_soft_a = np.zeros(self.n_actions, dtype=np.float32)
-        self._soft_a_for_wact = None
-        self._y_for_wact = None
         self._step = 0
         self._prev_action = 0
         self._in_try2 = True
+        # Keep: _W_act, _W_pred, _pred_loss_ema (calibrated baseline carries to try2)
 
     def get_stats(self):
         pred_loss_mean  = round(float(np.mean(self._pred_losses)), 6)  if self._pred_losses  else None
         pred_loss_final = round(float(np.mean(self._pred_losses[-50:])), 6) if len(self._pred_losses) >= 50 else pred_loss_mean
+        surprise_mean   = round(float(np.mean(self._surprise_vals)), 6) if self._surprise_vals else None
         return {
             'try1_act_ent':    self._try1_ent,
             'try2_act_ent':    self._try2_ent,
@@ -453,6 +371,7 @@ class MambaSSMSubstrate:
             'try2_state_norm': self._try2_state_norm,
             'pred_loss_mean':  pred_loss_mean,
             'pred_loss_final': pred_loss_final,
+            'surprise_mean':   surprise_mean,
         }
 
 
@@ -563,6 +482,7 @@ def run_draw(draw_idx, draw_seed, max_steps):
             'try2_state_norm_1999': stats['try2_state_norm'].get(1999),
             'pred_loss_mean':  stats['pred_loss_mean'],
             'pred_loss_final': stats['pred_loss_final'],
+            'surprise_mean':   stats['surprise_mean'],
         }
         masked_row = mask_result_row(row, game_labels)
 
@@ -572,7 +492,8 @@ def run_draw(draw_idx, draw_seed, max_steps):
 
         draw_results.append(masked_row)
         elapsed_total = round(time.time() - t0, 1)
-        print(f"    {label}: p1={p1} p2={p2} eff_sq={eff_sq:.6f} pred_loss={stats['pred_loss_final']} ({elapsed_total}s)")
+        print(f"    {label}: p1={p1} p2={p2} eff_sq={eff_sq:.6f} "
+              f"pred_loss={stats['pred_loss_final']} surp={stats['surprise_mean']} ({elapsed_total}s)")
 
     rhae = compute_rhae_try2(try2_progress, optimal_steps_d)
     print(f"  Draw {draw_idx} RHAE={rhae:.6e}")
@@ -594,7 +515,7 @@ def main():
         na_t1 = MAX_N_ACTIONS
 
     sub_t1 = MambaSSMSubstrate(n_actions=na_t1)
-    # Warmup to exclude lazy-init overhead from timing
+    # Pre-warmup: exclude lazy-init (obs projection init) from timing
     run_episode(env_t1, sub_t1, na_t1, seed=0, max_steps=50)
     t_tier1 = time.time()
     run_episode(env_t1, sub_t1, na_t1, seed=0, max_steps=TIER1_STEPS)
@@ -614,10 +535,11 @@ def main():
         print(f"  Under budget — proceeding with {max_steps} steps")
 
     # ── Full run ──────────────────────────────────────────────────────────
-    print(f"\n=== STEP {STEP}: Mamba SSM + RTRL (Gumbel-softmax feedback loop) ===")
-    print(f"N_DRAWS={N_DRAWS}, max_steps={max_steps}, WARMUP={WARMUP}, TAU={TAU}")
+    print(f"\n=== STEP {STEP}: SSM + surprise-modulated REINFORCE ===")
+    print(f"N_DRAWS={N_DRAWS}, max_steps={max_steps}, WARMUP={WARMUP}")
     print(f"SSM: D={D}, N_STATE={N_STATE}, N_LAYERS={N_LAYERS}, PROJ_DIM={PROJ_DIM}")
-    print(f"W_act trained via obs gradient through action embed feedback (no CE loss)")
+    print(f"ACT_LR={ACT_LR}, SURPRISE_EMA_ALPHA={SURPRISE_EMA_ALPHA}")
+    print(f"Baseline comparison: 1360 (SSM fixed W_act) = {SSM_BASE_1360:.2e}")
     print(f"MLP+TP baseline (1349): {MLP_TP_BASELINE:.2e}")
 
     os.makedirs(RESULTS_DIR, exist_ok=True)
@@ -633,27 +555,28 @@ def main():
     chain_mean = round(sum(rhae_list) / len(rhae_list), 7)
     nz = sum(1 for r in rhae_list if r > 0)
 
-    # Summary
     summary = {
-        'step':           STEP,
-        'n_draws':        N_DRAWS,
-        'draw_seeds':     DRAW_SEEDS,
-        'rhae_per_draw':  rhae_list,
-        'chain_mean_rhae': chain_mean,
-        'nonzero_draws':  nz,
-        'mlp_tp_baseline': MLP_TP_BASELINE,
-        'max_steps_used': max_steps,
-        'ms_per_step':    round(ms_per_step, 2),
+        'step':              STEP,
+        'n_draws':           N_DRAWS,
+        'draw_seeds':        DRAW_SEEDS,
+        'rhae_per_draw':     rhae_list,
+        'chain_mean_rhae':   chain_mean,
+        'nonzero_draws':     nz,
+        'ssm_base_1360':     SSM_BASE_1360,
+        'mlp_tp_baseline':   MLP_TP_BASELINE,
+        'max_steps_used':    max_steps,
+        'ms_per_step':       round(ms_per_step, 2),
     }
     with open(os.path.join(RESULTS_DIR, 'summary.json'), 'w') as f:
         json.dump(summary, f, indent=2)
 
     print(f"\n=== RESULTS ===")
-    print(f"SSM+RTRL chain_mean RHAE = {chain_mean:.3e}  ({nz}/{N_DRAWS} nz)")
-    print(f"MLP+TP baseline (1349):    {MLP_TP_BASELINE:.3e}")
-    verdict = "SIGNAL" if chain_mean > MLP_TP_BASELINE else "KILL"
+    print(f"SSM+surprise chain_mean RHAE = {chain_mean:.3e}  ({nz}/{N_DRAWS} nz)")
+    print(f"SSM baseline (1360):           {SSM_BASE_1360:.3e}")
+    print(f"MLP+TP baseline (1349):        {MLP_TP_BASELINE:.3e}")
+    verdict = "SIGNAL" if chain_mean > SSM_BASE_1360 else "KILL"
     print(f"Verdict: {verdict}")
-    print(f"(Kill criterion: chain_mean > {MLP_TP_BASELINE:.2e})")
+    print(f"(Kill criterion: chain_mean > {SSM_BASE_1360:.2e})")
 
     return chain_mean
 

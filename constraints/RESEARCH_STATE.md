@@ -1747,3 +1747,32 @@ Options not yet tested:
 3. Information gain from SSM state about observation prediction (novel)
 
 **Next: Leo to specify direction given circular trap finding.**
+
+---
+
+## Step 1362 — alpha=0.1 transitional (KILL):
+
+Alpha=0.1 run (OLD 1362, completed before cancel): chain_mean=1.26e-05, 2/10 nz. KILL.
+Alpha reduction doesn't fix circular trap — gradient ≈ zero regardless of scale.
+
+## Step 1362 REVISED — Gumbel-softmax feedback loop (KILL):
+
+Architecture: W_act trained via obs gradient through action feedback loop.
+- No CE loss. Only obs prediction MSE.
+- Gumbel-softmax: soft_a = gumbel_softmax(W_act @ y_t). action = argmax(soft_a). act_embed = soft_a @ E_act.
+- W_act gradient: 1-step backprop through W_in → E_act → Gumbel Jacobian → W_act.
+
+**chain_mean RHAE = 0.000e+00. Non-zero: 0/10.** → KILL (worse than all prior SSM runs)
+
+**Root cause analysis:** 1-step backprop signal too weak. The gradient of obs_loss_{t} w.r.t. W_act reaches only through the single-step dependency (action at t-1 → x_t → h_t → y_t → obs_loss_t). With N=4103 actions, the Gumbel noise variance swamps the 1-step signal. After warmup the soft_a is near-uniform, so the softmax Jacobian (s*(e - dot(e,s))) is also near-zero (same circular trap problem).
+
+**What this eliminates:** Gumbel-softmax feedback + 1-step obs gradient for W_act. Gradient too sparse.
+
+## Step 1363 (running) — Surprise-modulated REINFORCE:
+
+Architecture: Same SSM+RTRL as 1360. W_act trained separately via three-factor plasticity.
+- surprise_t = |pred_loss_t - pred_loss_ema_t|
+- W_act += ACT_LR * surprise_t * REINFORCE_direction(a_t, y_t)
+- Direction: outer(log_grad, y_t) where log_grad[i] = δ(i==a_t) - π_i
+- Not using surprise as reward (1307) — using as MAGNITUDE modulator.
+- Comparison baseline: 1360 (3.26e-05). Kill: chain_mean ≤ 3.26e-05.
