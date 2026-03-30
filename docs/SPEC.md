@@ -2,7 +2,7 @@
 
 ## Problem
 
-720+ experiments are decoupled scripts. A new architecture takes ~500 lines of custom harness code. It should take <30.
+Experiment scripts are decoupled. A new architecture takes ~500 lines of custom harness code. It should take <30.
 
 ## Solution
 

@@ -2,7 +2,7 @@
 
 *Revised 2026-03-25. Compressed per doc-system limits. Full narratives in RESEARCH_STATE.md. Component extraction catalog in COMPONENT_CATALOG.md.*
 
-*1067+ experiments across 16 families. ALL BANS LIFTED permanently (2026-03-25). See bans/POLICY.md for history. Codebook and graph findings remain valid as data.*
+*ALL BANS LIFTED permanently (2026-03-25). Codebook and graph findings remain valid as data.*
 
 **Classification:**
 - **Task Requirement**: What the TASK demands of any substrate (derived from successes AND failures across families)
@@ -200,7 +200,7 @@ The task is interactive (unknown environment, no separate training phase). Any s
 
 ---
 
-## The State of the Search (1067+ experiments, 16+ families, ALL BANS LIFTED)
+## The State of the Search
 
 *Revised 2026-03-25. See RESEARCH_STATE.md for full log, COMPONENT_CATALOG.md for extraction inventory.*
 

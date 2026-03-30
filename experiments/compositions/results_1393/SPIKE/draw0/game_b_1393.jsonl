@@ -1,0 +1,1 @@
+{"draw": 0, "label": "Game B", "game": "Game B", "condition": "SPIKE", "p1": null, "p2": 3991, "speedup": Infinity, "eff_sq": 6e-06, "optimal_steps": 10, "t1": 4.63, "t2": 4.32, "w_norm": 0.0, "w_max": 0.0, "spike_total": 4, "i3_cv": 1.0168885036159143, "r3_w_norm": 0.0, "i5_max_level": 1}

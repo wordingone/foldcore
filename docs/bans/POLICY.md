@@ -21,9 +21,9 @@ None. All bans lifted permanently (Jun directive, 2026-03-25).
 
 ## Lifted Bans
 
-- [Codebook (Step 416)](codebook_step416.md) — LVQ spatial engine. **LIFTED** (Jun, 2026-03-25). Original killing finding: fully characterized as LVQ (1988). 600+ post-ban experiments mapped the feasible region without it.
-- [Graph (Step 777)](graph_step777.md) — per-(state, action) data structures. **LIFTED** (Jun, 2026-03-25). Original killing finding: negative transfer (Step 776, p<0.0001). Post-ban evidence: 230+ experiments confirmed R3 wall exists WITH and WITHOUT graph.
+- [Codebook (Step 416)](codebook_step416.md) — LVQ spatial engine. **LIFTED** (Jun, 2026-03-25). Original killing finding: fully characterized as LVQ (1988). Post-ban work mapped the feasible region without it.
+- [Graph (Step 777)](graph_step777.md) — per-(state, action) data structures. **LIFTED** (Jun, 2026-03-25). Original killing finding: negative transfer (Step 776, p<0.0001). Post-ban evidence confirmed R3 wall exists WITH and WITHOUT graph.
 
 ## Lifting History
 
-**2026-03-25 (Jun directive): ALL BANS LIFTED PERMANENTLY.** Context: 1060+ experiments, 150+ ARC-AGI-3 games now live, debate v3 active. The ban-era findings (PB1-PB25) remain valid as DATA — the mechanisms that failed still failed. But the bans as CONSTRAINTS on the search are removed. Any mechanism, any architecture, any combination is now allowed. The debate win condition (100% ALL LEVELS, verified 25 times) is the only gate.
+**2026-03-25 (Jun directive): ALL BANS LIFTED PERMANENTLY.** The ban-era findings (PB1-PB25) remain valid as DATA — the mechanisms that failed still failed. But the bans as CONSTRAINTS on the search are removed. Any mechanism, any architecture, any combination is now allowed. The win condition (100% ALL LEVELS, verified 25 times) is the only gate.

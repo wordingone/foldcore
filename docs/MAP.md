@@ -1,6 +1,6 @@
 # Constraint Map
 
-*Revised 2026-03-27. 1252+ experiments, 16 architecture families. R3 solved by composition (Step 1251).*
+*Revised 2026-03-30. R3 solved by composition (Step 1251). Self-generated criteria era active (Steps 1305+).*
 
 **Classification:** T = Task Requirement, U = Validated Universal (2+ families), P = Provisional (1 family), S = Substrate-specific (codebook/LVQ), I = Intent (capability gap), E = Engineering (not carried forward), PB = Post-Ban.
 
@@ -233,7 +233,7 @@ RLVR improves pass@1 but DECREASES pass@256 as training progresses. All reasonin
 
 ---
 
-## State of the Search (1252+ experiments, 16 families)
+## State of the Search
 
 ### Solved
 

@@ -1,0 +1,17 @@
+{
+  "step": 1393,
+  "verdict": "DIAGNOSTIC_FAIL",
+  "pattern_diff": 0.4,
+  "per_game_diffs": [
+    1.1,
+    0.0,
+    0.1,
+    1.1,
+    0.0,
+    0.0,
+    1.1,
+    0.0,
+    0.0
+  ],
+  "note": "Full experiment aborted \u2014 feedback loop not producing differentiated firing."
+}
