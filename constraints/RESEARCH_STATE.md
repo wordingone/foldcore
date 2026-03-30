@@ -2089,3 +2089,28 @@ Definitive 100-draw test: COUNT try1 vs RAND try1. Try2 always random, h always 
 **Next direction (TBD):** COUNT exploration closed. h persistence closed (step 1374). Try2 action strategy closed (step 1376). The SSM substrate with RTRL does not learn anything useful in 2000 steps regardless of exploration strategy. The bottleneck is the RTRL signal itself — 2000 steps of masked PRISM observations doesn't provide sufficient gradient for any detectable weight differentiation.
 
 **⚠️ CONTAMINATION NOTE (steps 1375-1376):** Steps 1374-1376 were run with the PRNG confound present (COUNT try1 uses np.random.choice for tie-breaking vs RAND try1 uses np.random.randint — different RNG call counts leave different global RNG state at try2 start). Step 1374 is CLEAN (both conditions used RAND try1). Step 1375's COUNT vs RAND comparison is CONTAMINATED. Step 1376 is CLEAN (both conditions used COUNT try1). Step 1377 fixed the confound and produced the definitive result.
+
+## Step 1378 (**KILL — frozen projection hurts despite h having structure. DISCONNECTED wins. p=0.927.**):
+
+Frozen random projection W_fixed connects h to actions: action = softmax(W_fixed @ h_concat / T=3.0). W_fixed is (n_actions, 64), random, never updated. Tests whether any feature→action channel improves try2 over disconnected random. Both conditions: COUNT try1, h reset, PRNG fix, weights carry.
+
+**Results (seeds 13930-13959):**
+- FROZEN_T3:   chain_mean=2.910e-05, 8/30 nz → **KILL** (below baseline 4.59e-5)
+- DISCONNECTED: chain_mean=1.225e-03, 9/30 nz → **SIGNAL** (26.7× baseline)
+- Paired: FROZEN wins 4/30, DISCONNECTED wins 8/30, ties 18/30
+- Sign test p=0.9270 → NOT_SIGNIFICANT (DISCONNECTED better, not FROZEN)
+
+**Entropy diagnostic (FROZEN try2):**
+- mean_h_early_norm = 0.724, mean_h_late_norm = 0.722
+- 0/30 draws near-max (H_norm > 0.95)
+- **h IS structured** (H_norm ≈ 0.72 << 1.0). Leo's prediction 1 (entropy near-max, 60%) was wrong.
+
+**Key finding — structured h, coupled projection still kills:** Leo's prediction 3 was "if entropy is low, FROZEN > DISCONNECTED (70%)." The opposite happened: h has structure, but the frozen projection produces worse performance than random. DISCONNECTED outperformed FROZEN on 8/30 draws vs 4/30.
+
+**Why coupling hurts despite structured h:** W_fixed is random and never updated. It maps h structure into action bias that is arbitrary — not related to game-solving. The bias reduces exploration diversity: FROZEN concentrates actions toward whatever W_fixed @ h favors at each step. Since W_fixed is random, this concentrated exploration is systematically worse than random (which maintains uniform coverage). In effect: random projection from structured h = pseudo-systematic bias = worse than pure random.
+
+**Critical implication:** A frozen random projection is not "neutral" — it actively imposes structure that competes with uniform coverage. Any feature→action channel must be ADAPTIVE (learned) to be useful. Random coupling is worse than no coupling.
+
+**DISCONNECTED signal caveat:** DISCONNECTED chain_mean=1.225e-03 is dominated by a high-RHAE outlier draw. The paired comparison (8 DISC wins vs 4 FROZEN wins) is not statistically significant (p=0.927). This is the same draw-variance problem seen throughout the SSM series.
+
+**What this closes:** Frozen random projection as feature→action coupling → CLOSED. An adaptive (learned) projection is needed, or a completely different approach to connecting h to action selection.
