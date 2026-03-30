@@ -1,0 +1,17 @@
+{
+  "step": 1383,
+  "verdict": "DIAGNOSTIC_FAIL",
+  "action_blind_ratio": 1.0021,
+  "diag_draws": 3,
+  "diag_selective_pred_t2": [
+    0.118198,
+    0.138228,
+    0.134861
+  ],
+  "diag_masked_pred_t2": [
+    0.118745,
+    0.138371,
+    0.134995
+  ],
+  "note": "Full experiment aborted \u2014 selection mechanism not action-conditional."
+}
