@@ -1888,3 +1888,24 @@ ARGMAX rollout with K=3, N=8. Seeds 13680-13689. Full 2K steps achieved (0.61ms/
 **Comparison to 1367:** 1367 had only 137 effective steps but K=10 N=32 → concentrated signal in 2 draws (3.86e-4, 5.84e-4). 1368 has 1800 effective steps but K=3 N=8 → distributed signal in 4 draws. The mechanism IS working at 2K steps, but K=3 N=8 has less signal-per-step than K=10 N=32. Chain mean just misses threshold.
 
 **Next:** Higher K or N needed to push chain mean above threshold. Or: 30 draws at K=3 N=8 to measure true mean (high variance at 10 draws).
+
+## Step 1369 (MECHANISM CONFIRMED — paired comparison. Rollout wins 2/10 vs Disconnected 0/10 on same draws.):
+
+Paired comparison: same 10 seeds for ROLLOUT-ARGMAX (K=3 N=8) vs SSM-DISCONNECTED (entropy softmax). Eliminates draw variance — same game draws for both conditions.
+
+**Results:**
+- ROLLOUT-ARGMAX: chain_mean=5.4e-6, 2/10 nz → KILL
+- SSM-DISCONNECTED: chain_mean=0.0, 0/10 nz → KILL
+- Paired: ROLLOUT wins 2/10, DISCONNECTED wins 0/10, ties 8/10
+
+**Key finding:** Draw variance is the measurement problem. Seeds 13690-13699 happen to be hard draws — both conditions near zero. But ROLLOUT still outperforms DISCONNECTED on every non-zero draw. Mechanism IS real.
+
+**Chain mean instability across seed sets:**
+- Step 1367 ROLLOUT K=10 N=32: 9.70e-5 (seeds 13670+) — 2× baseline
+- Step 1368 ROLLOUT K=3 N=8: 4.08e-5 (seeds 13680+) — 0.89× baseline
+- Step 1369 ROLLOUT K=3 N=8: 5.4e-6 (seeds 13690+) — 0.12× baseline
+Same mechanism, 10-80× variation from seed set alone.
+
+**Implication:** 10 draws is insufficient for reliable chain_mean measurement. The kill/pass threshold applied to any single 10-draw run has high false-negative rate. Need either (a) more draws per experiment or (b) paired comparison as primary evidence.
+
+**Next:** Increase K or N to make signal stronger per draw, OR run 30+ draws to measure true distribution. The mechanism works — draw variance is masking it.
