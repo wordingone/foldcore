@@ -11,7 +11,7 @@ Derivation: Suppose compare could be modified by s. The MECHANISM by which s mod
 ## Implications
 1. The question shifts from "can the system modify its interpreter?" (no) to "is the interpreter + state space expressive enough to simulate any modification?" (expressiveness question).
 2. Codebook state (R^d centroids) cannot represent update rules -> l_F structurally impossible. Program-bearing state (op-codes as edge data) CAN represent operations -> l_F possible in principle.
-3. 900+ experiments, 0 substrates at l_F -- consistent with pessimistic answers but has not established impossibility.
+3. No substrate has reached l_F — consistent with pessimistic answers but has not established impossibility.
 
 ## Supersedes / Superseded by
 Strengthened by Proposition 14b (CSE uniqueness).

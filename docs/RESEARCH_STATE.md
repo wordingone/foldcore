@@ -570,7 +570,7 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
     - LS20, TR87, SP80, SB26, TU93, CN04, CD82: 0/20 all conditions
   - **FT09 ARGMIN anomaly:** RAND=14/20 but ARGMIN=0/20. FT09 n_actions=4096 (64×64 grid), 10K steps covers only ~2.4 visits/action. Systematic coverage fails — argmin needs ~4096 steps before revisiting. Random with 10K steps finds the needed position by chance (75/4096 target density). This is the ARGMIN coverage trap for large action spaces.
   - **RHAE (chain mean):** RAND=8.22e-06 (above 1e-6 threshold), ARGMIN=8.18e-07 (RHAE-DEAD), PE-EMA=8.86e-07 (RHAE-DEAD). Confirmed: only the floor exists above 1e-6. Our current architectures are RHAE-dead at the chain level.
-  - **Second-exposure speedup — FIRST TIME MEASURED across 1298 experiments:**
+  - **Second-exposure speedup — FIRST TIME MEASURED:**
     - RAND: 28 pairs, 2.77x (artifact — random has no cross-episode memory; sampling bias)
     - ARGMIN: 40 pairs, **15.57x** (mechanistic — visit counts persist, episode B starts with prior coverage map)
     - PE-EMA: 55 pairs, **1.16x** (near-null — substrate memory carries state but minimal exploitation)
@@ -881,7 +881,7 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
     - sp80: try1 L1@84, try2 L1@8 → speedup=10.5x (STRONG SIGNAL)
   - **Games with no L1 on either try (7/11):** ft09, lp85, sb26, tr87, tu93, vc33, MBPP.
     - lp85 notable: cr=224.9584 (pred_loss INCREASED 225× over 1K steps — CNN destabilized on lp85).
-  - **sp80 L1@8 in try2:** After training on try1, substrate reached L1 in just 8 actions. sp80 is a uniform-response game (107 actions, key movements). CNN learned action-outcome patterns from try1 → immediately found level-advancing action on try2. This is the clearest learning-from-experience signal seen across all 1324 experiments.
+  - **sp80 L1@8 in try2:** After training on try1, substrate reached L1 in just 8 actions. sp80 is a uniform-response game (107 actions, key movements). CNN learned action-outcome patterns from try1 → immediately found level-advancing action on try2. This is the clearest learning-from-experience signal in the search.
   - **Anti-speedup pattern (cd82/cn04/ls20):** Trained weights HURT try2 performance. Likely mechanism: CNN trained on seed A's visual patterns → lower entropy on try2 → deterministically explores wrong direction OR seeds A/B have different visual layouts, trained model confidently predicts wrong outcomes.
   - **Runtime:** 180s total (within 5-min cap). 1K steps sufficient to answer the question.
   - **Chain speedup = 10.5** (mean of 1 finite positive game). Dominated by sp80.
@@ -1097,7 +1097,7 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
 
 ---
 
-## Step 1334 (NEW — TP + Internal R4 overfitting detection, KILL for R4, LANDMARK for TP baseline): KILL R4-TP direction. But TP BASELINE speedup=1.8492 — FIRST FINITE >1 SPEEDUP IN 1334 EXPERIMENTS.
+## Step 1334 (NEW — TP + Internal R4 overfitting detection, KILL for R4, LANDMARK for TP baseline): KILL R4-TP direction. But TP BASELINE speedup=1.8492 — FIRST FINITE >1 SPEEDUP.
 
 3 games × 2 conditions (R4-TP, TP) × 2 tries. Seed-free. Level-masked. 2K steps/try.
 
@@ -1111,7 +1111,7 @@ Open questions: Is the wall the window size (need N≫10 for full sequence captu
   - try1 reached first progress at step T. try2 reached first progress at T/1.85 ≈ 54% of try1 steps.
   - Both tries reached progress (not inf). FIRST finite >1 speedup.
   - TP weights trained on try1 TRANSFERRED to try2 — faster learning on second exposure.
-  - This is the first time in 1334 experiments that a substrate showed genuine second-exposure acceleration where both tries reached progress.
+  - First substrate to show genuine second-exposure acceleration where both tries reached progress.
 
 - **Per-game breakdown:**
   - MBPP: both conditions N/A (no ARC obs, random fallback)
