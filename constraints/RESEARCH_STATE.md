@@ -1849,3 +1849,27 @@ SSM disconnected 2K steps + ACT_TEMP=0.1 (softmax(logits/T) instead of T=1.0). S
 **Root cause:** W_act is initialized with scale=0.01. SSM state y has magnitude ~1 (bounded by architecture). So logits = W_act @ y + b_act have variance ~0.01. Dividing by T=0.1 gives variance ~0.1 — still tiny. softmax(logits/0.1) ≈ uniform for n_actions=4103. Temperature sharpening only works when logits have non-trivial variance. With random W_act and small init scale, they don't.
 
 **What would help:** Either (a) larger W_act init scale so logits have more variance, or (b) argmax instead of softmax (T→0), or (c) change mechanism entirely (prediction-divergence curiosity operates on a completely different signal than logits).
+
+## Step 1367 (**SIGNAL — ROLLOUT-ARGMAX beats baseline. First genuine SSM signal.**):
+
+Two-condition MPC experiment. At each real step: sample 32 candidate actions, simulate K=10 dream steps per candidate (using SSM's own predictions as next obs), score = cumulative prediction divergence. ARGMIN selects most predictable; ARGMAX selects most diverging.
+
+**Results:**
+- ROLLOUT-ARGMIN: chain_mean=0.000, 0/10 nz → KILL
+- ROLLOUT-ARGMAX: chain_mean=9.70e-05, 2/10 nz → **SIGNAL** (2.1× MLP+TP 4.59e-5)
+  - Draw 3: 3.86e-4 (p2=294)
+  - Draw 5: 5.84e-4 (p2=239)
+
+**Constraint:** max_steps=337 only (7.16ms/step hit 5-min budget cap; WARMUP=200 → only 137 effective rollout steps). Signal emerged from just 137 rollout steps.
+
+**Autocorrelation (ARGMAX):** ~0.16 — rollout creates 16% action repetition (vs ~0.024% random). Rollout IS selecting non-uniformly and creating temporal structure.
+
+**Mechanism interpretation:**
+- ARGMAX selects actions leading to states the SSM predicts POORLY (high divergence = unknown territory)
+- This is intrinsic curiosity: prefer actions toward unexplored/novel regions
+- Structured exploration without reward signal or gradient through discrete action
+- ARGMIN (prefer predictable) = exploitation = 0 signal. The games require exploration.
+
+**Critical: budget bottleneck.** 7.16ms/step vs 0.09ms baseline = 80× overhead from 32×10 rollout steps. At 2K steps, would exceed budget. Solution: reduce K or N_candidates, or vectorize rollout.
+
+**Next:** Make rollout feasible at 2K steps. Option A: K=3, N=8 (same mechanism, 40× less compute). Option B: K=10, N=4. Option C: vectorized batched rollout. Goal: replicate ARGMAX signal at full 2K steps with more draws.
