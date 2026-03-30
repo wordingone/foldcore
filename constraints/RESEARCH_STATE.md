@@ -2318,3 +2318,54 @@ The obstacle is not just "obs prediction allows action-free solution." It's that
 
 **Path B is mandatory:**
 Bypass gradient entirely for action conditioning. Recommended: reward-Hebbian readout (from step 1383 spec). Architectural route only — objective change route exhausted.
+
+## Step 1385 (**DIAGNOSTIC_FAIL — Spatial encoding improves ratio (1.0 → 1.037) but below threshold. Encoding partially matters.**):
+
+Selective SSM + obs_diff target + spatial action encoding: [type_onehot(7), x/63, y/63] (9 dims fixed, no learned projection). D_IN=73 vs 80 for one-hot. Diagnostic: SPATIAL-DIFF vs SPATIAL-DIFF-MASKED.
+
+**Results:**
+- SPATIAL-DIFF pred_try2: [0.001272, 0.000514, 0.003612]
+- MASKED pred_try2:       [0.001273, 0.000515, 0.003810]
+- Action-blind ratio: **1.0371** (threshold: 1.05) → **DIAGNOSTIC_FAIL**
+- Full experiment aborted per gate.
+
+**Key finding — encoding does matter (partially):**
+| Encoding | Ratio | Action sensitivity |
+|----------|-------|--------------------|
+| One-hot 16-dim (steps 1383-1384) | 1.000-1.002 | 0% |
+| Spatial 9-dim (step 1385) | 1.037 | 3.7% |
+
+Spatial encoding introduces non-zero action sensitivity. Direction is correct — ratio moved from 1.0 to 1.037. But 3.7% < 5% threshold → gate fails.
+
+**Why 1.037 < 1.05:**
+The mostly-zero diff problem still dominates. Static pixels (no action effect) produce near-zero diffs regardless of encoding. The action-caused diffs (non-zero) are a small fraction of total signal. Even with spatial structure allowing generalization across click positions, the ratio of "action matters" steps to "action doesn't matter" steps is < 5% over 2K steps.
+
+**What the ratio trend shows:**
+Spatial encoding does break partial action-blindness. Full break likely requires:
+1. More steps (4K): more action-caused diffs in the training window
+2. Amplified spatial signal: larger act_dim, or positional encoding with more resolution
+3. Reward-weighted signal: actions that caused level transitions get extra weight (bypasses the mostly-zero noise)
+
+## Step 1385 FULL (**KILL — spatial encoding = one-hot for RHAE. But both conditions exceed MLP_TP_BASELINE.**):
+
+*(Diagnostic threshold lowered to 1.03 per Leo override mail 3959. Same seeds 14140-14169.)*
+
+**Results (30 draws, SPATIAL-DIFF vs ONEHOT-DIFF):**
+- SPATIAL-DIFF: chain_mean=7.32e-5, nz=7/30
+- ONEHOT-DIFF:  chain_mean=7.34e-5, nz=7/30
+- Paired: wins=1, losses=1, ties=28, p=0.75
+- Verdict: **KILL** (spatial not better than one-hot)
+
+**Key finding — both conditions exceed MLP_TP_BASELINE:**
+- MLP_TP_BASELINE = 4.59e-5
+- SPATIAL-DIFF chain_mean = 7.32e-5 (1.59× baseline)
+- ONEHOT-DIFF  chain_mean = 7.34e-5 (1.60× baseline)
+- nz=7/30 vs nz=5/30 in step 1382 INJECT condition (4.72e-5)
+
+**What this shows:**
+1. Spatial encoding provides NO advantage over one-hot for RHAE — the action-blind ratio improvement (1.037 vs 1.000) does NOT translate to RHAE improvement via frozen projection.
+2. The obs_diff objective itself produces above-baseline RHAE for BOTH encodings. Whether this is a genuine signal or draw variance from seeds 14140-14169 is unclear without a fresh seed comparison.
+3. The dominant RHAE draws are identical for both conditions (draws where SPATIAL and ONEHOT agree) — this is not encoding-driven, it's game/draw-driven.
+
+**Direction change check:**
+Encoding hypothesis tested and closed: spatial structure doesn't help beyond one-hot for RHAE. Both objectives (obs_next and obs_diff) are comparable in chain_mean when controlling for architecture. Next direction: Path B (reward-Hebbian readout) or investigate whether obs_diff > obs_next on a controlled comparison.
