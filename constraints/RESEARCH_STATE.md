@@ -1909,3 +1909,28 @@ Same mechanism, 10-80× variation from seed set alone.
 **Implication:** 10 draws is insufficient for reliable chain_mean measurement. The kill/pass threshold applied to any single 10-draw run has high false-negative rate. Need either (a) more draws per experiment or (b) paired comparison as primary evidence.
 
 **Next:** Increase K or N to make signal stronger per draw, OR run 30+ draws to measure true distribution. The mechanism works — draw variance is masking it.
+
+## Step 1370 (NOT MONOTONIC — 30-draw paired test. ROLLOUT wins 4/30, DISC wins 2/30.):
+
+30-draw paired test: ROLLOUT-ARGMAX (K=3 N=8) vs SSM-DISCONNECTED, same seeds 13700-13729. Full 2K steps (0.60ms/step, under budget).
+
+**Results:**
+- ROLLOUT-ARGMAX: chain_mean=1.80e-05, 5/30 nz → KILL
+- SSM-DISCONNECTED: chain_mean=2.60e-06, 2/30 nz → KILL
+- Paired: ROLLOUT wins 4/30, DISCONNECTED wins 2/30, ties 24/30
+- Verdict: **NOT_MONOTONIC** (Leo's kill criterion: losses > 0 → not monotonic)
+
+**Per-draw breakdown (nz only):**
+- Draw 0: ROLLOUT=2.0e-5, DISC=2.5e-5 → **DISC wins** (narrow margin)
+- Draw 6: ROLLOUT=0, DISC=5.2e-5 → **DISC wins** (rollout missed entirely)
+- Draw 12: ROLLOUT=2.16e-4, DISC=0 → ROLLOUT wins
+- Draw 19: ROLLOUT=7.2e-5, DISC=0 → ROLLOUT wins
+- Draw 21: ROLLOUT=2.02e-4, DISC=0 → ROLLOUT wins
+- Draw 25: ROLLOUT=2.9e-5, DISC=0 → ROLLOUT wins
+
+**Analysis:**
+ROLLOUT chain_mean is 7× higher than DISC (1.8e-5 vs 2.6e-6), and ROLLOUT has more nz draws (5 vs 2). But it loses on 2 draws — meaning on some game types, pure entropy softmax outperforms K=3 N=8 rollout. The rollout fails entirely on draw 6 (RHAE=0) where entropy alone succeeds (5.2e-5, above baseline).
+
+**Root cause hypothesis:** K=3 N=8 rollout is too weak/noisy on some game types. The prediction-divergence score doesn't reliably rank actions when the SSM hasn't learned meaningful structure for those games. Entropy softmax wins by default when rollout noise doesn't add information.
+
+**Next:** Stronger rollout (higher K or N) OR a qualitatively different action selection mechanism. The SSM+RTRL core is valid (RHAE > 0 signal exists). The action selection on top is still broken for a subset of games.
