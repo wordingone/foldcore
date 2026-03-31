@@ -1,5 +1,67 @@
 # Research State  - Live Document
-*Source of truth for active work. Restructured 2026-03-27.*
+*Source of truth for active work. Updated 2026-03-31.*
+
+---
+
+## Current State (2026-03-31)
+
+**Direction:** Graph-based exploration with visual salience (dolphin replication).
+**Status:** Full dolphin explorer v1 spec sent to Eli (mail 4079). Implementation confirmed. Run started then crashed (session loss). Needs restart.
+
+### What happened since metamorphosis (2026-03-30/31)
+
+All learning-based substrate directions killed after 1395 experiments (RHAE=0 across all R2-compliant substrates). Switched to graph-based exploration — fixed algorithms, no learning.
+
+**Baseline established:** State-dependent argmin (per-state visit counts, persistent across GAME_OVER).
+- K=5/25 on API at 50K steps (ft09, lp85, r11l, vc33, ls20)
+- K=1/12 on local games at 50K steps (only m0r0)
+
+**Forward nav v1:** State-argmin + transition graph + BFS to frontier.
+- K=2/25 on API at 5K steps (5-min budget). KILLED.
+- lp85 (229 steps), r11l (5215 steps) — both were in the K=5 set. No new games.
+- Navigation barely fired (0-163 nav steps out of 5K). States never exhaust at this step count.
+- Key finding: 5-min budget at 60ms API latency = ~5K steps. K=5 baseline was at 50K steps (~50 min game time).
+
+**Full dolphin explorer v1:** CC segmentation + status bar masking + 5-tier priority + backward BFS.
+- Spec: `docs/specs/dolphin_explorer_v1.md`
+- Reference: github.com/dolphin-in-a-coma/arc-agi-3-just-explore (3rd place preview, 30/52 levels)
+- Kill: K ≤ 2 (must beat forward nav)
+- Status: Implemented by Eli, run crashed. Needs restart.
+
+### Core finding from 1395 experiments
+
+**Navigation > Learning for ARC-AGI-3.** Every K improvement came from better navigation structure:
+- Global argmin → K=3/25
+- Persistent counts (survive GAME_OVER) → K=4/25
+- Per-state counts → K=5/25
+- 792 learning experiments (Hebbian, SSM, MLP, STDP, CNN) → 0 RHAE improvement
+
+The one non-zero RHAE (CNN+Adam, 2.4e-5) violates R2. All R2-compliant learning produced nothing.
+
+### Competition landscape (verified 2026-03-31)
+
+- Best eligible: ~0.25% (SG, post-seed-change)
+- Frontier LLMs: 0.25-0.37% (not competition-eligible, require API)
+- Seed changes killed learned approaches (SG: 12.58% → 0.25%)
+- Graph exploration is seed-invariant (explores from scratch)
+- 135 total environments: 25 public, 55 semi-private, 55 private
+
+### Scoring (from arxiv 2603.24621)
+
+- RHAE per level: S(l,e) = min(1.0, h(l,e) / a(l,e))²
+- h = second-best human action count
+- Environment score: E(e) = Σ(l·S) / (n(n+1)/2) — linear level weighting
+- Level 5 worth 5× Level 1. Depth matters more than breadth.
+- 30-min hard cutoff per game. Actions: 5 keyboard + Undo + click (64×64).
+
+### Kaggle submission
+
+v8: K=0/25. COMPETITION mode calls API internally → fails without internet on Kaggle.
+Fix: Rewrite as Agent subclass (choose_action/is_done). Kaggle's main.py handles scorecards. Blocked on Jun.
+
+---
+
+## Pre-metamorphosis state (2026-03-27, stale below this line)
 
 ---
 
