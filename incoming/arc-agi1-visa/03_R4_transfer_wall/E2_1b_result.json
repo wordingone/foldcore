@@ -1,0 +1,40 @@
+{
+  "experiment": "E2.1b",
+  "issue_ref": "the-search#3",
+  "date": "2026-05-29",
+  "r4_prediction": "out_of_coverage_delta=0 (Leg 2: selection cannot expand coverage)",
+  "meta_accumulated": {
+    "rot": 1,
+    "fh": 10,
+    "mir_h": 19,
+    "up2": 6,
+    "tr": 4
+  },
+  "in_coverage": {
+    "n_tasks": 30,
+    "CORE_ONLY": {
+      "solved": 30,
+      "mean_exp": 7.633333333333334
+    },
+    "CORE_META": {
+      "solved": 30,
+      "mean_exp": 7.633333333333334
+    },
+    "delta_exp": 0.0
+  },
+  "out_of_coverage": {
+    "n_tasks": 100,
+    "n_sampled": 100,
+    "CORE_ONLY": {
+      "solved": 1,
+      "mean_exp": 348.51
+    },
+    "CORE_META": {
+      "solved": 1,
+      "mean_exp": 348.51
+    },
+    "delta_exp": 0.0,
+    "delta_solve": 0
+  },
+  "verdict": "R4_LEG2_CONFIRMED"
+}

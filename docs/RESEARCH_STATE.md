@@ -58,33 +58,41 @@ RSI = recursive self-IMPROVEMENT; improvement presupposes a baseline. The prior 
 
 ---
 
-### E2.1 — Combinatorial meta-layer gate (DONE -> R6_FIRES)
-- Architecture: Option-2 frozen core (logistic prior, ~1MB, trained on synthetic triples biased 70% toward ACCUM_FIRST/ACCUM_SECOND) + LGG depth-2 meta-layer, R2-fused.
+### E2.1 — Combinatorial meta-layer gate (DONE -> R6_FIRES; IN-COVERAGE ONLY)
+- R4 classification: SELECTION-class experiment. Per Leg 2, out-of-coverage ceiling = +0.000. In-coverage gains tested here.
+- Architecture: Option-2 frozen core (logistic prior, ~1MB, biased 70% toward ACCUM_FIRST/ACCUM_SECOND) + LGG depth-2 meta-layer, R2-fused.
+- Coverage split: IN-COVERAGE only (all synthetic tasks expressible by the 12-op basis). Out-of-coverage measurement pending — needs E2.1b (see below).
 - Accumulation family (9 programs): ACCUM_FIRST={crop,fh,tr} × ACCUM_SECOND={rot,up2,mir_h}. 90 tasks.
 - Held-out family (6 programs): HELD_FIRST={fv,dup_h} × ACCUM_SECOND. 30 tasks.
-- Test: does accumulated LGG signal improve held-out mean_exp vs CORE_ONLY?
-- Results (biased core):
-  - CORE_ONLY held-out: 30/30 solved, mean_exp=7.63
-  - CORE_META held-out: 30/30 solved, mean_exp=7.63
-  - Deletion delta: +0.00 (meta non-load-bearing)
-- Uniform core control (unbiased 1/12 prior, meta preloaded with accum signal):
-  - CORE_ONLY: mean_exp=7.57
-  - CORE_META: mean_exp=7.70 (WORSE, delta=-0.13)
-  - Root cause: accum stream produced fh=10 in depth2_success (alternative solutions to accum tasks where fh is also valid). For held-out tasks needing rot at depth-2, meta boosts fh first → extra wasted expansions. Same mechanism as E1b: accumulated wrong-op signal misdirects novel-composition search.
-- Structural finding: LGG accumulates from WHATEVER program solved the task, not the ground-truth program. Task families with multiple valid solutions → noisy signal → meta layer is systematically misleading on novel compositions.
-- Verdict: R6_FIRES. Two distinct failure modes confirm: (1) biased core makes meta redundant, (2) unbiased core makes meta actively harmful.
+- Results (biased core, in-coverage):
+  - CORE_ONLY held-out: 30/30, mean_exp=7.63; CORE_META: 30/30, mean_exp=7.63; delta=0.00
+- Uniform core control (in-coverage):
+  - CORE_ONLY: mean_exp=7.57; CORE_META: mean_exp=7.70 (WORSE, delta=-0.13)
+  - Root cause: LGG accumulated fh=10 from alternative solutions (not ground-truth program). Meta boosts wrong op at depth-2 for tasks needing rot.
+- Structural finding: LGG accumulates from whatever SOLVED the task, not the ground-truth program. Underdetermined task families → noisy meta signal → misdirects novel-composition search.
+- Verdict: R6_FIRES IN-COVERAGE. Per R4 Leg 2, out-of-coverage = +0.000 is PREDICTED (selection cannot expand coverage). E2.1b will confirm.
 - Artifacts: `incoming/arc-agi1-visa/03_R4_transfer_wall/E2_1_experiment.py`, `E2_1_result.json`
 - Commit: dad816fe
 
 ---
 
-## Current Direction: E2.2 (PENDING — Leo response)
+### E2.1b — Out-of-coverage prediction (PENDING — queued)
+- R4 classification: SELECTION-class experiment, out-of-coverage split. Per Leg 2, prediction = +0.000.
+- Design: take E2.1 meta-layer (accumulated from in-closure tasks) and run it against the 395 locked out-of-closure tasks. Measure: does meta change expansions on tasks the core cannot solve?
+- Expected result: 0 improvement, 0 solve rate change — confirming R4 Leg 2 from capability-memory angle. If result contradicts this → flag immediately (contradicts R4 decomposition).
+- Dependency: runs after RESEARCH_STATE fusion update.
 
-E2.1 R6 fires on combinatorial test (synthetic in-closure). K2 logged (2/3 mechanism kills).
+---
 
-Leo's directive (from #11513) held E2.2 pending E2.1 result.
+## Current Direction: E2.2 (PENDING — Leo response on coverage framing)
 
-**E2.2 scope (per Leo #11513):** structural-novelty analysis — does accumulated abstraction improve performance on the OUT-OF-CLOSURE 395? Core design still open; E2.1 biased-core result suggests core pre-encoding the right ops makes meta redundant. The genuine test requires a core that does NOT already encode the solution domain.
+E2.1 R6 fires on in-coverage test. K2 logged (2/3 mechanism kills).
+
+**R4 framing (per Leo #11519):** E2.2 is the COVERAGE-expansion experiment, not another selection test. C6 operationalized: a frozen core that proposes programs outside the seed algebra (expressibility-expanding, not just bias-shifting).
+
+**E2.2 scope:** Does a more capable (coverage-expanding) core + LGG meta-layer beat the 0.7% oracle ceiling on the 395? The R6 gate becomes: does the meta-layer expand coverage beyond frozen core alone — not just reorder within the same inexpressible space?
+
+Core design must NOT pre-encode the held-out solution domain (the E2.1 design failure). Options per Leo #11513: Option-1 (purpose-trained program-proposer) or Option-3 (local LLM at :9876 as generative prior). Leo response pending.
 
 ---
 
@@ -96,6 +104,36 @@ Leo's directive (from #11513) held E2.2 pending E2.1 result.
 | K2 | LGG depth-2 meta-layer non-load-bearing on combinatorial held-out | E2.1 | FIRED 2026-05-29 |
 
 3 mechanism-kills = direction dead. At 2.
+
+---
+
+## R4 Decomposition — Coverage-vs-Selection Spine (formalized 98e10f17; fused here 2026-05-29)
+
+The current direction IS the R4 thread continued from the capability-memory/RSI side. The transfer wall is COVERAGE, not SELECTION.
+
+**Three legs (all confirmed, formally closed in 98e10f17):**
+
+| Leg | Finding | Status |
+|-----|---------|--------|
+| Leg 1 | 119 eval tasks fit a rule on train pairs; 1 transfers to test pair (transfer ≈ 0.01). Coverage wall, not selection. | VERIFIED |
+| Leg 2 | Learned recognition prior (17→32→19 MLP) yields warm−cold = +0.000 transfer. Better selector does nothing; bottleneck is upstream of selection. | CONFIRMED (T1.py / T1_numpy.py in 98e10f17) |
+| Leg 3 | Oracle ceiling ~0.7% with the available seed vocabulary. Even perfect selection is coverage-bounded. | CONFIRMED (same script output) |
+
+**C6 (the mechanism):** Surpassing the designer requires a learned generative program-prior at scale — NOT a better selector over the fixed algebra.
+
+---
+
+**Fusion map — current experiments ARE the R4 decomposition from the capability-memory side:**
+
+| Experiment | R4 mapping |
+|------------|-----------|
+| K1 (vocabulary gap on 395) | Confirms Leg 1+3 from the capability-memory angle: 0/395 solve → no signal accumulates → R6-deletable on novelty as structural fact. |
+| E1b (INTENTIONAL == PASSIVE on novel task) | Confirms Leg 2: INTENTIONAL = a better selector over fixed algebra. delta=+0 on novel composition. Same as warm−cold = +0.000. |
+| E2.1 (LGG meta-layer over 12-op core) | A SELECTION-class experiment. Per Leg 2, out-of-coverage ceiling = +0.000. In-coverage (combinatorial) gains are possible but must be measured SEPARATELY. R6 fires: meta-layer non-load-bearing even in-coverage. |
+| E2.2 (expressibility-expanding core) | The COVERAGE-expansion experiment. C6 operationalized: learned generative core that proposes programs outside the seed algebra. Must beat the 0.7% oracle ceiling. R6 gate becomes: does meta-layer expand coverage beyond frozen core alone? |
+| (a) constitutional decision | IS the R4 forward-pointer. VISA §7 last line: "R4 points directly at semantic-program capability memory BEYOND the seed." (a) = C6 = the prescribed next move. |
+
+**Instrumentation requirement (per Leo #11519):** E2.1 and any LGG experiment MUST report in-coverage and out-of-coverage SEPARATELY. If out-of-coverage ever shows gain from selection alone → contradicts R4 Leg 2 → flag immediately.
 
 ---
 
