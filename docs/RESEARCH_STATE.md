@@ -173,6 +173,18 @@ raw pixels → avgpool4 → centered encoding (C4, 256 dims)
 
 7. **Preview games are comfort zone traps** (Jun observation, 2026-03-28). FT09/VC33/LP85 (the 3 games argmin solves) select for argmin and against reflexive-map-driven selection. The 7 failing games are the real test. 10+ experiments solving only the same 3 games = per-game tuning of the search process itself.
 
+8. **R4 transfer wall decomposed — coverage-vs-selection separation** (ARC-AGI-1 visa, naturalized 2026-05-29). R4 (transfer) is not a selection problem solvable within the seeded primitive algebra; it is a **coverage problem**. Three measured legs from ARC-AGI-1 static batch synthesis (`experiments/components/SUBSTRATE.py` + `incoming/arc-agi1-visa/03_R4_transfer_wall/`), all reproduced and gated:
+
+   - **Leg 1 — fit/transfer collapse (119→1):** 119 eval tasks fit a rule on their train pairs; only 1 transfers to the test pair (transfer ≈ 0.01). The wall is at *rule-vocabulary coverage of held-out tasks*, not rule-selection.
+   - **Leg 2 — selection-fix falsified (+0.000):** A learned recognition prior (17→32→19 MLP, trained on which genes solve training tasks) yields zero transfer improvement over cold any-gene baseline (warm−cold = +0.000). Building a better *selector* does nothing — the bottleneck is upstream of selection.
+   - **Leg 3 — coverage bound (0.7% oracle ceiling):** Even a perfect selector tops out at ~0.7% with the available form-vocabulary. R4 transfer is bounded *above* by vocabulary coverage; for this seeded algebra that bound is ~0.7%. Legs 2 and 3 are one script output (`T1.py` / `T1_numpy.py`): cold = coverage ceiling, warm−cold = selection delta.
+
+   **Mechanism:** tuning the selector/learner over a fixed generative substrate does not expand the solvable set — only changing the substrate's generative primitives moves the ceiling. This is a third paradigm-independent confirmation of the core law (learning/selection over a fixed substrate doesn't expand the reachable set), from the symbolic-synthesis side. Convergent with CONSTITUTION open-Q #9 (Yue et al.) and the-search's 792 R2-compliant learning experiments (RHAE=0 throughout).
+
+   **R4↔R0/R3 coupling:** R4 is not an isolated transfer failure. It is the same wall as R0 (capability tracks the seeded algebra) and R3 (self-modification grows only compositions of the seed — non-load-bearing coverage cache, R6 confirmed). The one mechanism that closes R0+R3+R4 together is vocabulary expansion at scale (learned generative program-prior: DreamCoder / neural-guided synthesis). Any selection-only fix is provably ≤0.7% for a fixed algebra.
+
+   **Scoped citation note:** SUBSTRATE.py's self-modification (`_absorb`) is C1 REVISE — a non-load-bearing coverage cache (R2 separable, R6 non-load-bearing, R3 inert on eval). NOT an RSI system. The C4/C5 PROMOTE verdict covers Legs 1–3. `docs/FORMALIZATION.md` theory doc case (c) remains CONJECTURE.
+
 ---
 
 ## Negative Map (what doesn't work as R3→action bridge)

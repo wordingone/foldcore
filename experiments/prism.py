@@ -448,7 +448,7 @@ class PRISM:
                         weights = substrate.get_weights()
                         substrate.reset()
                         substrate.load_weights(weights)
-                        np.random.seed(env_seed * 1000 + 1)
+                        np.random.seed(int(env_seed * 1000 + 1) % (2**32))
                         p2, t2 = self._run_episode(
                             substrate, env, n_actions,
                             env_seed, self.max_steps, self.max_seconds)
@@ -746,7 +746,7 @@ if __name__ == '__main__':
                             substrate.load_weights(weights)
                         else:
                             substrate.reset()
-                        np.random.seed(draw_seed * 1000 + 1)  # PRNG fix: isolated try2 RNG
+                        np.random.seed(int(draw_seed * 1000 + 1) % (2**32))  # PRNG fix: isolated try2 RNG; % 2^32 prevents uint32 overflow
                         p2, t2 = self._run_episode(env, substrate, seed=4,
                                                     max_steps=self.max_steps)
                     else:
