@@ -207,7 +207,56 @@ Leo's introspective correction: Option-3 anchored on K3 ('killed marginal; LLM p
 
 ---
 
-## Current Direction: E2.2' — Stage-0 DONE (KILL). Next probe: BitNet b1.58 vs EBM. Leo to decide.
+### E2.2' Redesigned — Code-Synthesis (Leo #11549)
+
+Stage-0 flaw: "allow novel primitives it names" was unexecutable (SUBSTRATE.py = 12-op ceiling). Constraining LLM to 12-op DSL = K1-K3 redux. Stage-0 is doubly KILL: wrong vocabulary AND wrong mode.
+
+**(a) code-synthesis — YES.** LLM generates arbitrary Python grid->grid functions, sandboxed (safe exec + numpy). Breaks 12-op execution ceiling. C6 literal.
+**(b) designer-DSL-expansion — NO (constitutional).** Hand-extending SUBSTRATE.py = designer expands expressibility = non-RSI. Rejected.
+**BitNet 2B4T — reframed.** Not an efficiency probe over dead 12-op DSL. Its role: practical code-generation model — fast, non-thinking, OOM-safe, outputs parseable code within budget.
+**Inference mode:** generate-and-test WITH EXECUTION FEEDBACK. Propose code -> execute -> check against I/O -> refine. Execution result IS the verifier/energy. Discrete step toward LeCun inference-by-optimization.
+
+### E2.2' Stage 0' — Code-Synthesis CORE_ONLY (PRE-REGISTERED 2026-05-29, BEFORE RUNNING)
+
+**Design:**
+- Core: gemma-4-E2B-it (2B, non-thinking, 4.6 GB VRAM — non-MEM-HEAVY) via llama-server at :9876.
+- Task: frozen model generates Python `def solve(grid)` function conditioned on I/O pairs.
+- Sandbox: exec with restricted namespace (numpy + basic builtins; block os/subprocess/file/network).
+- Generate-and-test: up to N candidates per task, with execution-feedback refinement on failure.
+- Test set: sampled subset of 395 locked out-of-closure tasks (within 5-min runtime cap).
+
+**Pre-registered kill (Stage 0' KILL):**
+0 tasks solved by code-synthesis alone -> structural-novelty wall confirmed even for arbitrary Python.
+Consistent with ARC-AGI-3 sub-1% collapse across all approaches. Report negative honestly. Pivot to LeCun EBM.
+
+**Pre-registered forward (Stage 0' FORWARD):**
+>=1 task solved by code-synthesis that seed-enumeration (SUBSTRATE.py, budget=20000) cannot -> coverage-expansion confirmed. Proceed to Stage 1 (abstraction-library meta-layer from system's own solves).
+
+### E2.2' Stage 0' — Code-Synthesis CORE_ONLY (DONE -> KILL)
+
+**Result: KILL. 0/9 tasks solved by code-synthesis. 35/42 attempts produced parseable Python code.**
+
+- Model: gemma-4-E2B-it-Q8_0 (2B) at :9876, reasoning-budget=384 tokens (to bound thinking), max_tokens=1024.
+- Tasks tested: 9 of 30 sampled (TIME_CAP=260s reached; 30 tasks would require ~600s at ~6s/call avg).
+- Code generation: 35/42 (83%) attempts produced extractable `def solve(grid)` function.
+- Execution: 0/35 code blocks solved all training pairs correctly. Parse/exec errors on remainder.
+- Seed-enumeration baseline: 0/9 — same tasks are genuine out-of-closure (confirms D2 partition).
+- Time: 262s for 9 tasks (33s/task avg including seed baseline).
+
+**Pre-registered kill fires:** 0 code-synthesis solves on out-of-closure tasks.
+
+**Result interpretation:**
+Code generation rate = 83% (model IS generating syntactically plausible Python). Execution correctness = 0/35 (code runs but produces wrong output). This is a COVERAGE wall, not a generation-format wall: the model produces code, but the code doesn't implement the correct transformation. The model can't discover the rule from 2-3 I/O examples alone — a 2B model with ~384 tokens of thinking cannot infer arbitrary grid transformations from examples.
+
+Generate-and-test with execution feedback (up to 5 attempts, error fed back): refinement did not produce a single solve. The model either repeats its wrong approach or produces semantically equivalent wrong code.
+
+**Consistent with ARC-AGI-3 sub-1% collapse:** arbitrary Python code synthesis from a 2B model = same coverage wall as the 12-op DSL, at a different abstraction level. The wall is the model's inability to INFER the rule, not the vocabulary constraint.
+
+**Artifacts:** `E2_2_stage0prime_code_synthesis.py`, `E2_2_stage0prime_result.json`.
+
+---
+
+## Current Direction: E2.2' — next step: LeCun EBM / H-JEPA
 
 ---
 

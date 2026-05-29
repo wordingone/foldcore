@@ -1,0 +1,352 @@
+{
+  "experiment": "E2.2-stage0prime",
+  "issue_ref": "the-search#3",
+  "date": "2026-05-29",
+  "design": {
+    "core": "gemma-4-E2B-it (2B non-thinking) at :9876",
+    "method": "code-synthesis + sandboxed exec + execution-feedback refinement",
+    "n_tasks_sampled": 30,
+    "n_tasks_tested": 9,
+    "n_candidates_per_task": 5,
+    "sample_seed": 42,
+    "time_cap_s": 260
+  },
+  "baselines": {
+    "seed_enumeration_solves": 0,
+    "oracle_ceiling_pct": 0.7
+  },
+  "llm_results": {
+    "solves": 0,
+    "solve_rate_pct": 0.0,
+    "total_attempts": 42,
+    "parseable_code_attempts": 35
+  },
+  "verdict": "KILL",
+  "total_runtime_s": 262.2,
+  "task_results": [
+    {
+      "task_id": "a934301b",
+      "seed_solved": false,
+      "llm_solved": false,
+      "n_attempts": 5,
+      "attempts": [
+        {
+          "attempt": 0,
+          "code": "def solve(grid):\n    grid_np = np.array(grid, dtype=np.int64)\n    H, W = grid_np.shape",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 1,
+          "code": "def solve(grid):\n    grid_np = np.array(grid, dtype=np.int64)\n    H, W = grid_np.shape",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 2,
+          "code": "def solve(grid):\n    grid_np = np.array(grid, dtype=np.int64)\n    H, W = grid_np.shape\n    \n    # Based on Example 1, the transformation seems to involve isolating specific patterns \n    # or elements",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 3,
+          "code": "def solve(grid):\n    grid_np = np.array(grid, dtype=np.int64)\n    H, W = grid_np.shape\n    \n    # This problem appears to be about identifying specific patterns or structures \n    # and moving/replica",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 4,
+          "code": "def solve(grid):\n    grid_np = np.array(grid, dtype=np.int64)\n    H, W = grid_np.shape\n    output = np.zeros_like(grid_np)",
+          "solved": false,
+          "error": "solve() returned None"
+        }
+      ]
+    },
+    {
+      "task_id": "8597cfd7",
+      "seed_solved": false,
+      "llm_solved": false,
+      "n_attempts": 5,
+      "attempts": [
+        {
+          "attempt": 0,
+          "code": "def solve(grid):\n    \"\"\"\n    Transforms the input grid based on the observed patterns in the examples.\n    The transformation seems to extract the values present in the top-left 2x2 area\n    where non",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 1,
+          "code": "import numpy as np\n\ndef solve(grid):\n    \"\"\"\n    Transforms the input grid based on the observed patterns in the examples.\n    Based on the examples, the transformation seems to extract a specific con",
+          "solved": false,
+          "error": "ImportError: __import__ not found"
+        },
+        {
+          "attempt": 2,
+          "code": "import numpy as np\n\ndef solve(grid):\n    \"\"\"\n    Transforms the input grid based on the observed patterns in the examples.\n    The transformation identifies the presence of specific numbers (2 or 4) \n",
+          "solved": false,
+          "error": "ImportError: __import__ not found"
+        },
+        {
+          "attempt": 3,
+          "code": "import numpy as np\n\ndef solve(grid):\n    \"\"\"\n    Transforms the input grid based on the observed patterns in the examples.\n    The transformation identifies the presence of specific numbers (2 or 4) \n",
+          "solved": false,
+          "error": "ImportError: __import__ not found"
+        },
+        {
+          "attempt": 4,
+          "code": "def solve(grid):\n    \"\"\"\n    Transforms the input grid based on the observed patterns.\n    \n    Analysis of examples:\n    Example 1: Input contains both 2 and 4. Output is [[4, 4], [4, 4]].\n    Exampl",
+          "solved": false,
+          "error": "SyntaxError: unterminated triple-quoted string literal (detected at line 11) (<string>, line 2)"
+        }
+      ]
+    },
+    {
+      "task_id": "692cd3b6",
+      "seed_solved": false,
+      "llm_solved": false,
+      "n_attempts": 5,
+      "attempts": [
+        {
+          "attempt": 0,
+          "code": "def solve(grid):\n    \"\"\"\n    Transforms the input grid based on the observed patterns in the examples.\n    The transformation seems to involve identifying specific patterns (like '2's and '5's)\n    an",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 1,
+          "code": "def solve(grid):\n    \"\"\"\n    Transforms the input grid based on the observed patterns in the examples.\n    The transformation involves identifying specific patterns (like '2's and '5's)\n    and replac",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 2,
+          "code": "def solve(grid):\n    \"\"\"\n    Transforms the input grid based on the observed patterns in the examples.\n    The transformation seems to involve replacing '0's that are near specific patterns (like '2's",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 3,
+          "code": "def solve(grid):\n    \"\"\"\n    Transforms the input grid based on the observed patterns in the examples.\n    The transformation seems to involve replacing '0's that are near specific patterns (like '2's",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 4,
+          "code": "def solve(grid):\n    grid_np = np.array(grid, dtype=np.int64)\n    H, W = grid_np.shape\n    output_grid = grid_np.copy()",
+          "solved": false,
+          "error": "solve() returned None"
+        }
+      ]
+    },
+    {
+      "task_id": "d37a1ef5",
+      "seed_solved": false,
+      "llm_solved": false,
+      "n_attempts": 5,
+      "attempts": [
+        {
+          "attempt": 0,
+          "code": "def solve(grid):\n    grid_np = np.array(grid, dtype=np.int64)\n    H, W = grid_np.shape\n    output_grid = grid_np.copy()",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 1,
+          "code": "def solve(grid):\n    grid_np = np.array(grid, dtype=np.int64)\n    H, W = grid_np.shape\n    output_grid = np.zeros((H, W), dtype=np.int64)",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 2,
+          "code": "def solve(grid):\n    grid_np = np.array(grid, dtype=np.int64)\n    H, W = grid_np.shape\n    output_grid = np.zeros((H, W), dtype=np.int64)",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 3,
+          "code": "def solve(grid):\n    grid_np = np.array(grid, dtype=np.int64)\n    H, W = grid_np.shape\n    output_grid = np.zeros((H, W), dtype=np.int64)",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 4,
+          "code": "def solve(grid):\n    grid_np = np.array(grid, dtype=np.int64)\n    H, W = grid_np.shape\n    output_grid = np.zeros((H, W), dtype=np.int64)",
+          "solved": false,
+          "error": "solve() returned None"
+        }
+      ]
+    },
+    {
+      "task_id": "15663ba9",
+      "seed_solved": false,
+      "llm_solved": false,
+      "n_attempts": 5,
+      "attempts": [
+        {
+          "attempt": 0,
+          "code": "def solve(grid):\n    grid_np = np.array(grid, dtype=np.int64)\n    H, W = grid_np.shape\n    output_grid = np.zeros((H, W), dtype=np.int64)",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 1,
+          "code": "def solve(grid):\n    grid_np = np.array(grid, dtype=np.int64)\n    H, W = grid_np.shape\n    output_grid = np.zeros((H, W), dtype=np.int64)",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 2,
+          "code": "def solve(grid):\n    grid_np = np.array(grid, dtype=np.int64)\n    H, W = grid_np.shape\n    output_grid = np.zeros((H, W), dtype=np.int64)",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 3,
+          "code": "def solve(grid):\n    grid_np = np.array(grid, dtype=np.int64)\n    H, W = grid_np.shape\n    output_grid = np.zeros((H, W), dtype=np.int64)",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 4,
+          "code": "def solve(grid):\n    grid_np = np.array(grid, dtype=np.int64)\n    H, W = grid_np.shape\n    output_grid = np.zeros((H, W), dtype=np.int64)",
+          "solved": false,
+          "error": "solve() returned None"
+        }
+      ]
+    },
+    {
+      "task_id": "17b80ad2",
+      "seed_solved": false,
+      "llm_solved": false,
+      "n_attempts": 5,
+      "attempts": [
+        {
+          "attempt": 0,
+          "code": "def solve(grid):\n    grid = np.array(grid, dtype=np.int64)\n    H, W = grid.shape\n    output = np.zeros_like(grid)",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 1,
+          "code": null,
+          "solved": false,
+          "error": "no parseable code block in response"
+        },
+        {
+          "attempt": 2,
+          "code": "def solve(grid):\n    grid = np.array(grid, dtype=np.int64)\n    H, W = grid.shape\n    output = np.zeros_like(grid)",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 3,
+          "code": null,
+          "solved": false,
+          "error": "no parseable code block in response"
+        },
+        {
+          "attempt": 4,
+          "code": null,
+          "solved": false,
+          "error": "no parseable code block in response"
+        }
+      ]
+    },
+    {
+      "task_id": "29700607",
+      "seed_solved": false,
+      "llm_solved": false,
+      "n_attempts": 5,
+      "attempts": [
+        {
+          "attempt": 0,
+          "code": "def solve(grid):\n    grid = np.array(grid, dtype=np.int64)\n    H, W = grid.shape\n    output = np.zeros((H, W), dtype=np.int64)",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 1,
+          "code": "def solve(grid):\n    grid = np.array(grid, dtype=np.int64)\n    H, W = grid.shape\n    output = np.zeros((H, W), dtype=np.int64)",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 2,
+          "code": null,
+          "solved": false,
+          "error": "no parseable code block in response"
+        },
+        {
+          "attempt": 3,
+          "code": "def solve(grid):\n    grid = np.array(grid, dtype=np.int64)\n    H, W = grid.shape\n    output = np.zeros((H, W), dtype=np.int64)",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 4,
+          "code": null,
+          "solved": false,
+          "error": "no parseable code block in response"
+        }
+      ]
+    },
+    {
+      "task_id": "d5c634a2",
+      "seed_solved": false,
+      "llm_solved": false,
+      "n_attempts": 5,
+      "attempts": [
+        {
+          "attempt": 0,
+          "code": null,
+          "solved": false,
+          "error": "no parseable code block in response"
+        },
+        {
+          "attempt": 1,
+          "code": null,
+          "solved": false,
+          "error": "no parseable code block in response"
+        },
+        {
+          "attempt": 2,
+          "code": "def solve(grid):\n    \"\"\"\n    Transforms the input grid based on observed patterns from the examples.\n    This transformation appears to involve identifying connected components of '2's\n    and mapping",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 3,
+          "code": "def solve(grid):\n    \"\"\"\n    Transforms the input grid based on observed patterns.\n    The transformation seems to identify contiguous regions of '2's and map them\n    to specific output values (3, 1,",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 4,
+          "code": "def solve(grid):\n    \"\"\"\n    Transforms the input grid based on observed patterns.\n    The transformation identifies connected components of '2's and maps them\n    to specific output values (3, 1, or ",
+          "solved": false,
+          "error": "SyntaxError: unterminated triple-quoted string literal (detected at line 5) (<string>, line 2)"
+        }
+      ]
+    },
+    {
+      "task_id": "c7d4e6ad",
+      "seed_solved": false,
+      "llm_solved": false,
+      "n_attempts": 2,
+      "attempts": [
+        {
+          "attempt": 0,
+          "code": "def solve(grid):\n    grid_np = np.array(grid, dtype=np.int64)\n    H, W = grid_np.shape\n    output = np.zeros((H, W), dtype=np.int64)",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 1,
+          "code": "def solve(grid):\n    grid_np = np.array(grid, dtype=np.int64)\n    H, W = grid_np.shape\n    output = np.zeros((H, W), dtype=np.int64)",
+          "solved": false,
+          "error": "solve() returned None"
+        }
+      ]
+    }
+  ]
+}
