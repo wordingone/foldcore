@@ -117,7 +117,7 @@ Deletion-delta > 0 → selection works with clean signal → carry clean-signal 
   requires the CONDITIONAL P(d2|d1, input). Marginal boost is informationally insufficient —
   it cannot know which d2 op a specific novel task needs. This is structural, not noise-related.
 - Verdict: K3 FIRES (3/3). Selection axis DEFINITIVELY dead. Hard pivot triggered.
-- Artifacts: `E2_2b_trace_conditional.py`, `E2_2b_result.json`. Commit: (pending).
+- Artifacts: `E2_2b_trace_conditional.py`, `E2_2b_result.json`. Commit: 3b7c13c2.
 
 ---
 
@@ -128,17 +128,59 @@ Selection axis exhausted. Three kills confirm the R4 decomposition from the capa
 - K2: selection redundant in-coverage (core pre-bias makes meta noise)
 - K3: selection still zero even with clean signal (marginal != conditional, structural)
 
-**Next direction: E2.2' — expressibility-expanding core (C6 operationalized)**
-- Architecture: [frozen core with vocabulary BEYOND the 12-op seed] + [meta-layer to be evaluated]
-- Core candidates: (1) purpose-trained program-proposer; (3) local LLM at :9876 (Qwen/Gemma)
-- Test: does the expanded-vocabulary core beat the 0.7% oracle ceiling on the 395?
-- R6 gate: does meta-layer expand COVERAGE beyond frozen expanded core alone?
+### E2.2' Architecture — Leo directive #11531 (2026-05-29)
 
-Leo to specify core design. K3 fires = selection-axis chapter closed.
+**Core: Option-3 — frozen local LLM at :9876 as generative program-proposer.**
+- Decisive reason (from K3): K3 killed the MARGINAL mechanism P(d2); LLM proposes CONDITIONALLY (P(program | I/O examples)). Option-3 is the only option that doesn't repeat the marginal mistake.
+- C6 operationalization: an LLM IS a learned generative program-prior at scale.
+- Avoids Option-1's synthetic-training-data pre-encoding risk (the E1/E2.1 failure mode).
+- Engineering: llama-server :9876 (Qwen3.6-27B-Q4_K_M.gguf) + SUBSTRATE.py as execution layer.
+
+**Staged (forward-disciplined):**
+
+**Stage 0 — CORE_ONLY coverage probe (PRE-REGISTERED 2026-05-29, BEFORE RUNNING)**
+- Frozen LLM proposes K candidate programs per task, conditioned on I/O examples, emitted as DSL sequences.
+- Parse + execute via SUBSTRATE.py. Count solves.
+- Test set: sampled subset of the 395 locked out-of-closure tasks (within 5-min runtime cap).
+- Baselines: (a) 0.7% oracle ceiling (Leg 3); (b) seed-enumeration solve-rate on same subset.
+- PRE-REGISTERED KILL: frozen LLM-alone does NOT expand coverage above seed/oracle on the sampled subset → coverage-expansion via this core is FALSIFIED. Report the negative; stop.
+- PRE-REGISTERED FORWARD: LLM solves ANY task that seed-enumeration (SUBSTRATE.py, budget=20000) cannot → coverage-expansion confirmed → proceed to Stage 1.
+- R0 refinement (Leo #11531): core-minimality was a proxy for R6-honesty; the staged CORE_ONLY baseline measures R6-honesty directly. LLM is maximal in params but used as a FIXED substrate proposer; the meta-layer is minimal + isolable.
+
+**Stage 1 — meta-layer + R6 kill (GATED on Stage 0 FORWARD)**
+- Add abstraction-accumulation library: LGG-with-holes from system's OWN solved traces, fed back to proposer as macro-ops/exemplars on subsequent novel tasks (DreamCoder wake-sleep loop = C6).
+- R6 kill: CORE_META vs CORE_ONLY on accumulation-held-out novel tasks.
+- Load-bearing (CORE_META > CORE_ONLY) = RSI signal — genuine second-exposure improvement, R4 finally firing.
+- Decorative (delta ≈ 0) = (a) collapsed to 'just an agent'; reported honestly.
+
+**MEM-HEAVY serialization:** LLM at :9876 is a MEM-HEAVY op. Broadcast MEM-HEAVY START/END. One memory-heavy op at a time fleet-wide.
 
 ---
 
-## Current Direction: HARD PIVOT — awaiting E2.2' core design from Leo
+### E2.2' Stage-0 — CORE_ONLY coverage probe (DONE -> KILL)
+
+**Result: KILL. 0 solves across 36 tasks tested, 183 proposals.**
+
+Two runs:
+- Run 1: 30 tasks × K=5, max_tokens=64. Parse failures: 150/150 (thinking overflow — model generates `<think>...</think>` reasoning, 64 tokens consumed entirely by thinking, response never produced).
+- Run 2: 10 tasks × K=3, max_tokens=2048. Parse failures: 17/17 (thinking overflow + 30s API timeout — model thinking takes 20-60s per call, exceeds timeout). 6/10 tasks reached before time cap.
+
+**Pre-registered kill fires:** 0 LLM-only solves / 36 tasks tested.
+
+**Technical failure mode:** Qwen3.6-27B always enters thinking mode. With max_tokens=64: thinking block fills entire budget. With max_tokens=2048: thinking takes 20-60s per call, exceeds 30s request timeout. Neither setting allowed the model to complete and output a program.
+
+**Structural analysis (the real kill reason, independent of parsing):**
+1. The LLM was constrained to the 12-op DSL vocabulary in the system prompt. Any programs it proposes are combinations of these 12 ops — the same vocabulary as seed enumeration. The 395 tasks are out-of-closure UNDER this vocabulary (K1 proof, budget=20000). Constraining the LLM to the DSL = same coverage ceiling as BFS.
+2. The LLM CAN name novel ops (Leo's spec: "12 ops + allow novel compositions / new primitives it names"), but SUBSTRATE.py can only execute the 12 known ops. Novel op names are silently dropped in parse_program (filtered to only BASIS members). The execution layer is bounded by the vocabulary.
+3. Structural conclusion: a frozen LLM proposing programs in the 12-op DSL is informationally equivalent to a better search ordering over the same vocabulary — which is exactly the SELECTION-class mechanism K1-K3 already killed.
+
+**Design question for Leo:** The meaningful version of Option-3 that could actually break coverage is NOT "LLM proposes DSL sequences" but "LLM generates arbitrary Python transforms" (code synthesis — proposes any function grid→grid, executed via eval/sandbox). This changes the experimental design entirely. Is E2.2' a code-synthesis experiment, or does Option-3 require rethinking?
+
+- Artifacts: `E2_2_stage0_coverage_probe.py`, `E2_2_stage0_result.json`. Commit: (this push).
+
+---
+
+## Current Direction: E2.2' Stage-0 KILLED — awaiting Leo redesign (code-synthesis vs DSL constraint)
 
 ---
 

@@ -1,0 +1,164 @@
+{
+  "experiment": "E2.2-stage0",
+  "issue_ref": "the-search#3",
+  "date": "2026-05-29",
+  "design": {
+    "core": "Qwen3.6-27B-Q4_K_M frozen LLM at :9876",
+    "n_tasks_sampled": 10,
+    "n_tasks_tested": 6,
+    "k_proposals_per_task": 3,
+    "sample_seed": 99,
+    "time_cap_s": 260
+  },
+  "baselines": {
+    "seed_enumeration_solves": 0,
+    "oracle_ceiling_pct": 0.7,
+    "oracle_ceiling_expected_solves": 0.07
+  },
+  "llm_results": {
+    "solves": 0,
+    "solve_rate_pct": 0.0,
+    "total_proposals": 17,
+    "parse_failures": 17,
+    "invalid_programs": 0
+  },
+  "verdict": "KILL",
+  "preregistered_kill": "llm_solves <= seed_solves and llm_solves == 0 -> coverage FALSIFIED",
+  "preregistered_forward": "llm_solves > seed_solves -> coverage expanded -> Stage 1",
+  "total_runtime_s": 273.0,
+  "task_results": [
+    {
+      "task_id": "292dd178",
+      "seed_solved": false,
+      "llm_solved": false,
+      "proposals": [
+        {
+          "raw": null,
+          "parsed": null,
+          "solved": false
+        },
+        {
+          "raw": null,
+          "parsed": null,
+          "solved": false
+        },
+        {
+          "raw": null,
+          "parsed": null,
+          "solved": false
+        }
+      ],
+      "seed_exp": 361
+    },
+    {
+      "task_id": "ed74f2f2",
+      "seed_solved": false,
+      "llm_solved": false,
+      "proposals": [
+        {
+          "raw": null,
+          "parsed": null,
+          "solved": false
+        },
+        {
+          "raw": null,
+          "parsed": null,
+          "solved": false
+        },
+        {
+          "raw": null,
+          "parsed": null,
+          "solved": false
+        }
+      ],
+      "seed_exp": 409
+    },
+    {
+      "task_id": "9f27f097",
+      "seed_solved": false,
+      "llm_solved": false,
+      "proposals": [
+        {
+          "raw": null,
+          "parsed": null,
+          "solved": false
+        },
+        {
+          "raw": null,
+          "parsed": null,
+          "solved": false
+        },
+        {
+          "raw": null,
+          "parsed": null,
+          "solved": false
+        }
+      ],
+      "seed_exp": 289
+    },
+    {
+      "task_id": "845d6e51",
+      "seed_solved": false,
+      "llm_solved": false,
+      "proposals": [
+        {
+          "raw": null,
+          "parsed": null,
+          "solved": false
+        },
+        {
+          "raw": null,
+          "parsed": null,
+          "solved": false
+        },
+        {
+          "raw": null,
+          "parsed": null,
+          "solved": false
+        }
+      ],
+      "seed_exp": 349
+    },
+    {
+      "task_id": "fd4b2b02",
+      "seed_solved": false,
+      "llm_solved": false,
+      "proposals": [
+        {
+          "raw": null,
+          "parsed": null,
+          "solved": false
+        },
+        {
+          "raw": null,
+          "parsed": null,
+          "solved": false
+        },
+        {
+          "raw": null,
+          "parsed": null,
+          "solved": false
+        }
+      ],
+      "seed_exp": 277
+    },
+    {
+      "task_id": "f823c43c",
+      "seed_solved": false,
+      "llm_solved": false,
+      "proposals": [
+        {
+          "raw": null,
+          "parsed": null,
+          "solved": false
+        },
+        {
+          "raw": null,
+          "parsed": null,
+          "solved": false
+        }
+      ],
+      "seed_exp": 361
+    }
+  ]
+}
