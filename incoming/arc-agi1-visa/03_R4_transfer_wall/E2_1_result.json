@@ -1,0 +1,105 @@
+{
+  "experiment": "E2.1",
+  "issue_ref": "the-search#3",
+  "date": "2026-05-29",
+  "design": {
+    "accum_programs": [
+      [
+        "crop",
+        "rot"
+      ],
+      [
+        "crop",
+        "up2"
+      ],
+      [
+        "crop",
+        "mir_h"
+      ],
+      [
+        "fh",
+        "rot"
+      ],
+      [
+        "fh",
+        "up2"
+      ],
+      [
+        "fh",
+        "mir_h"
+      ],
+      [
+        "tr",
+        "rot"
+      ],
+      [
+        "tr",
+        "up2"
+      ],
+      [
+        "tr",
+        "mir_h"
+      ]
+    ],
+    "held_programs": [
+      [
+        "fv",
+        "rot"
+      ],
+      [
+        "fv",
+        "up2"
+      ],
+      [
+        "fv",
+        "mir_h"
+      ],
+      [
+        "dup_h",
+        "rot"
+      ],
+      [
+        "dup_h",
+        "up2"
+      ],
+      [
+        "dup_h",
+        "mir_h"
+      ]
+    ],
+    "n_accum_tasks": 90,
+    "n_held_tasks": 30,
+    "budget": 500,
+    "max_depth": 3
+  },
+  "accumulation": {
+    "core_mean_exp": 13.677777777777777,
+    "meta_mean_exp": 13.477777777777778,
+    "meta_depth2_success": {
+      "rot": 1,
+      "fh": 10,
+      "mir_h": 19,
+      "up2": 6,
+      "tr": 4
+    }
+  },
+  "held_out": {
+    "CORE_ONLY": {
+      "solved": 30,
+      "total": 30,
+      "mean_exp": 7.633333333333334
+    },
+    "CORE_META": {
+      "solved": 30,
+      "total": 30,
+      "mean_exp": 7.633333333333334
+    }
+  },
+  "r6_deletion": {
+    "post_deletion_mean_exp": 7.633333333333334,
+    "pre_deletion_mean_exp": 7.633333333333334,
+    "delta": 0.0,
+    "r6_fires": true
+  },
+  "verdict": "R6_FIRES"
+}
