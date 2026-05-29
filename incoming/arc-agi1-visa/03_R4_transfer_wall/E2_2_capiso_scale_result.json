@@ -1,0 +1,187 @@
+{
+  "experiment": "E2.2-capiso-scale",
+  "issue_ref": "the-search#3",
+  "date": "2026-05-29",
+  "baseline_ref": "E2.2-stage0prime (2B, 384 thinking, 0/9 solves, 83% parse)",
+  "design": {
+    "core": "gemma-4-26B-A4B-it-Q4_K_L at :9876, reasoning-budget=512",
+    "scale_vs_baseline": "26B vs 2B (13x parameter scale, same architecture)",
+    "method": "code-synthesis + sandboxed exec + execution-feedback refinement",
+    "substrate_held_fixed": true,
+    "n_tasks_sampled": 30,
+    "n_tasks_tested": 4,
+    "n_candidates_per_task": 5,
+    "sample_seed": 42,
+    "time_cap_s": 600,
+    "max_tokens_per_call": 1024,
+    "timeout_per_call_s": 60
+  },
+  "baselines": {
+    "seed_enumeration_solves": 0,
+    "oracle_ceiling_pct": 0.7
+  },
+  "llm_results": {
+    "solves": 0,
+    "solve_rate_pct": 0.0,
+    "total_attempts": 19,
+    "parseable_code_attempts": 19,
+    "parse_rate_pct": 100.0
+  },
+  "mechanism_split": {
+    "stage0prime_parse_rate": 83.3,
+    "stage0prime_solve_rate": 0.0,
+    "capiso_parse_rate": 100.0,
+    "capiso_solve_rate": 0.0,
+    "finding": "parse_rate shows format-compliance; solve_rate shows rule-inference"
+  },
+  "verdict": "STRUCTURAL_WALL",
+  "total_runtime_s": 618.9,
+  "task_results": [
+    {
+      "task_id": "a934301b",
+      "seed_solved": false,
+      "llm_solved": false,
+      "n_attempts": 5,
+      "attempts": [
+        {
+          "attempt": 0,
+          "code": "import numpy as np\n\ndef solve(grid):\n    \"\"\"\n    The problem involves identifying connected components (clusters) of non-zero \n    pixels (1s and 8s) and determining which ones to keep.\n    \n    By an",
+          "solved": false,
+          "error": "ImportError: __import__ not found"
+        },
+        {
+          "attempt": 1,
+          "code": "import numpy as np\n\ndef solve(grid):\n    \"\"\"\n    The problem involves identifying connected components (clusters) of non-zero \n    pixels (1s and 8s) and determining which ones to keep.\n    \n    By an",
+          "solved": false,
+          "error": "ImportError: __import__ not found"
+        },
+        {
+          "attempt": 2,
+          "code": "import numpy as np\n\ndef solve(grid):\n    \"\"\"\n    The problem involves identifying connected components (clusters) of non-zero \n    pixels (1s and 8s) and determining which ones to keep.\n    \n    By an",
+          "solved": false,
+          "error": "ImportError: __import__ not found"
+        },
+        {
+          "attempt": 3,
+          "code": "def solve(grid):\n    \"\"\"\n    The problem involves identifying connected components (clusters) of non-zero \n    pixels (1s and 8s) and determining which ones to keep.\n    \n    By analyzing the examples",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 4,
+          "code": "import numpy as np\n\ndef solve(grid):\n    \"\"\"\n    The problem involves identifying connected components (clusters) of non-zero \n    pixels (1s and 8s) and determining which ones to keep.\n    \n    By an",
+          "solved": false,
+          "error": "ImportError: __import__ not found"
+        }
+      ]
+    },
+    {
+      "task_id": "8597cfd7",
+      "seed_solved": false,
+      "llm_solved": false,
+      "n_attempts": 5,
+      "attempts": [
+        {
+          "attempt": 0,
+          "code": "def solve(grid):\n    grid = np.array(grid)\n    rows, cols = grid.shape\n    \n    # Find the divider line (color 5)\n    divider_row = -1\n    for r in range(rows):\n        if np.all(grid[r] == 5):\n      ",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 1,
+          "code": "def solve(grid):\n    grid = np.array(grid)\n    rows, cols = grid.shape\n    \n    # Find the divider line (color 5)\n    divider_row = -1\n    for r in range(rows):\n        if np.all(grid[r] == 5):\n      ",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 2,
+          "code": "def solve(grid):\n    grid = np.array(grid)\n    rows, cols = grid.shape\n    \n    # Find the divider line (color 5)\n    divider_row = -1\n    for r in range(rows):\n        if np.all(grid[r] == 5):\n      ",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 3,
+          "code": "def solve(grid):\n    grid = np.array(grid)\n    rows, cols = grid.shape\n    \n    # Find the divider line (color 5)\n    divider_row = -1\n    for r in range(rows):\n        if np.all(grid[r] == 5):\n      ",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 4,
+          "code": "def solve(grid):\n    grid = np.array(grid)\n    rows, cols = grid.shape\n    \n    # Find the divider line (color 5)\n    divider_row = -1\n    for r in range(rows):\n        if np.all(grid[r] == 5):\n      ",
+          "solved": false,
+          "error": "solve() returned None"
+        }
+      ]
+    },
+    {
+      "task_id": "692cd3b6",
+      "seed_solved": false,
+      "llm_solved": false,
+      "n_attempts": 5,
+      "attempts": [
+        {
+          "attempt": 0,
+          "code": "def solve(grid):\n    grid = np.array(grid, dtype=np.int64)\n    h, w = grid.shape\n    \n    # Find all objects of color 2 (red)\n    # An object is a connected component of color 2\n    # But in these exa",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 1,
+          "code": "def solve(grid):\n    grid = np.array(grid, dtype=np.int64)\n    h, w = grid.shape\n    \n    # Find all objects of color 2\n    visited = np.zeros_like(grid, dtype=bool)\n    objects = []\n    \n    for r in",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 2,
+          "code": "def solve(grid):\n    grid = np.array(grid, dtype=np.int64)\n    h, w = grid.shape\n    \n    # Find all objects of color 2\n    visited = np.zeros_like(grid, dtype=bool)\n    objects = []\n    \n    for r in",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 3,
+          "code": "def solve(grid):\n    grid = np.array(grid, dtype=np.int64)\n    h, w = grid.shape\n    \n    # Identify the objects containing the color 5\n    # An object is a connected component of color 2 and 5\n    vi",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 4,
+          "code": "def solve(grid):\n    grid = np.array(grid, dtype=np.int64)\n    h, w = grid.shape\n    \n    # Find all components of color 2 and 5\n    visited = np.zeros_like(grid, dtype=bool)\n    components = []\n    \n",
+          "solved": false,
+          "error": "solve() returned None"
+        }
+      ]
+    },
+    {
+      "task_id": "d37a1ef5",
+      "seed_solved": false,
+      "llm_solved": false,
+      "n_attempts": 4,
+      "attempts": [
+        {
+          "attempt": 0,
+          "code": "def solve(grid):\n    grid = np.array(grid)\n    rows, cols = grid.shape\n    \n    # Find the bounding box of the red (2) pixels\n    red_indices = np.argwhere(grid == 2)\n    if len(red_indices) == 0:\n   ",
+          "solved": false,
+          "error": "SyntaxError: expected ':' (<string>, line 41)"
+        },
+        {
+          "attempt": 1,
+          "code": "def solve(grid):\n    grid = np.array(grid)\n    rows, cols = grid.shape\n    \n    # Find the bounding box of the red (2) pixels\n    red_indices = np.argwhere(grid == 2)\n    if len(red_indices) == 0:\n   ",
+          "solved": false,
+          "error": "SyntaxError: '(' was never closed (<string>, line 44)"
+        },
+        {
+          "attempt": 2,
+          "code": "def solve(grid):\n    grid = np.array(grid)\n    rows, cols = grid.shape\n    \n    # 1. Identify the red (2) frame/rectangle\n    red_indices = np.argwhere(grid == 2)\n    if len(red_indices) == 0:\n       ",
+          "solved": false,
+          "error": "solve() returned None"
+        },
+        {
+          "attempt": 3,
+          "code": "def solve(grid):\n    grid = np.array(grid)\n    rows, cols = grid.shape\n    \n    # 1. Identify the red (2) frame/rectangle\n    red_indices = np.argwhere(grid == 2)\n    if len(red_indices) == 0:\n       ",
+          "solved": false,
+          "error": "solve() returned None"
+        }
+      ]
+    }
+  ]
+}

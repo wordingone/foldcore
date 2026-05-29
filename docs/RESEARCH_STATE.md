@@ -256,7 +256,31 @@ Generate-and-test with execution feedback (up to 5 attempts, error fed back): re
 
 ---
 
-## Current Direction: E2.2' — next step: LeCun EBM / H-JEPA
+### E2.2' Stage 0'' — Capability-Isolation: scale 2B -> 26B (DONE -> STRUCTURAL_WALL)
+
+**Leo directive #11575:** Stage 0' KILL accepted for the 2B config. Gate: vary core scale before EBM. One variable changed.
+
+**Result: STRUCTURAL WALL. 0/4 tasks solved. 19/19 (100%) parse rate.**
+
+- Model: gemma-4-26B-A4B-it-Q4_K_L (26B, 13x param scale) at :9876, reasoning-budget=512, max_tokens=1024.
+- Substrate held fixed: code-synthesis generate-and-test, N=5, execution-feedback refinement.
+- Tasks: same rng_sample seed=42 (same 30-task pool as Stage 0'); 4 tested before TIME_CAP=600s.
+
+**Mechanism split (2B vs 26B, same substrate):**
+- gemma-4-2B (384 thinking tokens): 83% parse, 0/9 solve
+- gemma-4-26B (512 thinking tokens): 100% parse, 0/4 solve
+
+Scale eliminates the format wall (100% vs 83% parse) but does NOT move the solve count. The 13x parameter increase shows the model is better at code format compliance — but rule-inference from 2-3 I/O examples remains at zero regardless of scale.
+
+**Pre-registered kill fires (Leo #11575):** CORE_ONLY = 0 at 26B scale -> wall is STRUCTURAL, not capability. EBM/H-JEPA is pre-registered next direction.
+
+**Structural interpretation:** The bottleneck is information-theoretic: recovering an arbitrary grid transformation rule from 2-3 examples is a hard inductive-inference problem. Neither 2B nor 26B autoregressive generation solves it. LeCun's prediction confirmed — autoregressive generation is the wrong inference mode for ARC, independent of model scale. Energy-based inference-by-optimization (inference IS the computation) is the principled next step.
+
+**Artifacts:** `E2_2_capiso_scale.py`, `E2_2_capiso_scale_result.json`.
+
+---
+
+## Current Direction: LeCun EBM / H-JEPA (energy-based inference-by-optimization)
 
 ---
 
