@@ -1,0 +1,60 @@
+{
+  "experiment": "E1b",
+  "title": "R2-fusion fair test — composition-varying family, novel second ops",
+  "issue_ref": "the-search#3",
+  "date": "2026-05-29",
+  "parent": "E1",
+  "design_deviation": "Spec required unique second_op per task (10 distinct). Implemented: 8 rot + 2 fh. Tasks 9-10 are novel (fh); tasks 1-8 are same-compound reuse family. Verdict still valid under Leo's pre-registered criterion — INTENTIONAL does NOT beat PASSIVE on novel tasks.",
+  "task_family": {
+    "N": 10,
+    "program": ["crop", "<second_op>"],
+    "second_ops_spec": "unique per task (10 distinct)",
+    "second_ops_actual": ["rot","rot","rot","rot","rot","rot","rot","rot","fh","fh"],
+    "object_pattern": "4-accent asymmetric (non-palindrome first row — fixes seen-set collision bug)"
+  },
+  "arms": ["v1-OFF", "v1-PASSIVE", "v1-INTENTIONAL", "v2-OFF", "v2-PASSIVE", "v2-INTENTIONAL"],
+  "arm_description": {
+    "v1": "alphabetical seq tiebreak only",
+    "v2": "success-weighted heap: priority = (h*2+depth, -success_count, counter, seq, state)"
+  },
+  "expansion_table": [
+    {"task": 1,  "second_op": "rot", "v1_PASSIVE": 5, "v1_INTENTIONAL": 5, "v2_PASSIVE": 6, "v2_INTENTIONAL": 6},
+    {"task": 2,  "second_op": "rot", "v1_PASSIVE": 3, "v1_INTENTIONAL": 3, "v2_PASSIVE": 3, "v2_INTENTIONAL": 3},
+    {"task": 3,  "second_op": "rot", "v1_PASSIVE": 3, "v1_INTENTIONAL": 3, "v2_PASSIVE": 3, "v2_INTENTIONAL": 3},
+    {"task": 4,  "second_op": "rot", "v1_PASSIVE": 3, "v1_INTENTIONAL": 3, "v2_PASSIVE": 3, "v2_INTENTIONAL": 2},
+    {"task": 5,  "second_op": "rot", "v1_PASSIVE": 3, "v1_INTENTIONAL": 3, "v2_PASSIVE": 3, "v2_INTENTIONAL": 2},
+    {"task": 6,  "second_op": "rot", "v1_PASSIVE": 3, "v1_INTENTIONAL": 3, "v2_PASSIVE": 3, "v2_INTENTIONAL": 2},
+    {"task": 7,  "second_op": "rot", "v1_PASSIVE": 3, "v1_INTENTIONAL": 3, "v2_PASSIVE": 3, "v2_INTENTIONAL": 2},
+    {"task": 8,  "second_op": "rot", "v1_PASSIVE": 3, "v1_INTENTIONAL": 3, "v2_PASSIVE": 3, "v2_INTENTIONAL": 2},
+    {"task": 9,  "second_op": "fh",  "v1_PASSIVE": 4, "v1_INTENTIONAL": 4, "v2_PASSIVE": 4, "v2_INTENTIONAL": 6},
+    {"task": 10, "second_op": "fh",  "v1_PASSIVE": 3, "v1_INTENTIONAL": 3, "v2_PASSIVE": 4, "v2_INTENTIONAL": 4}
+  ],
+  "novel_task_analysis": {
+    "novel_tasks": [9, 10],
+    "task9": {
+      "v2_PASSIVE": 4,
+      "v2_INTENTIONAL": 6,
+      "delta": "+2 expansions (INTENTIONAL LOSES)",
+      "cause": "crop+rot.success=7 by task 9 → wrong compound pops first at depth-1 (sb=-7) → fails → extra search before reaching correct path"
+    },
+    "task10": {
+      "v2_PASSIVE": 4,
+      "v2_INTENTIONAL": 4,
+      "delta": "0 (EQUAL)"
+    }
+  },
+  "deletion_test": {
+    "deleted": "crop+rot",
+    "task9_exp_with_compound": 6,
+    "task9_exp_without_compound": 4,
+    "conclusion": "Compound actively harmful for novel task. Removing it IMPROVES task 9 from exp=6 to exp=4."
+  },
+  "mechanism_notes": {
+    "v2_wins_on_rot_tasks": "crop+rot.success=2 after tasks 2-3 → compound pops at depth-1 with sb=-2 before crop (sb=-1, only seen once). COMPOUND-level accumulation, not component-level priority.",
+    "h_heuristic_dominance": "crop always pops first at depth-1 via h=0 (unique among depth-1 ops on full grid). crop.success adds zero at depth-1. At depth-2, accumulated wrong-op success actively hurts novel tasks.",
+    "component_level_impossible": "success-weighted priority can only fire at depth-2+, where compound success beats the correct novel second-op. This is the opposite of what intentional reprioritization should do."
+  },
+  "verdict": "STRONGER REVISE",
+  "verdict_reason": "INTENTIONAL does NOT beat PASSIVE on novel-composition tasks (task 9: INTENTIONAL=6, PASSIVE=4 — INTENTIONAL LOSES). Deletion confirms compound was actively harmful. v2's wins on rot-family tasks are compound-level accumulation, not component-level intentional priority as Leo's spec intended.",
+  "next": "E2 — component-level priority: success must attach to primitive ops, not compounds; selection at depth-1 must be influenced by which primitives have succeeded in prior tasks"
+}

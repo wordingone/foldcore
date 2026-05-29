@@ -1,0 +1,39 @@
+{
+  "experiment": "E1",
+  "title": "R2-fusion feasibility — second-exposure speedup on repeated structure",
+  "issue_ref": "the-search#3",
+  "date": "2026-05-29",
+  "task_family": {
+    "N": 10,
+    "program": ["crop", "up2"],
+    "variation": "color, object shape, grid size, object position"
+  },
+  "arms": ["OFF", "PASSIVE", "INTENTIONAL"],
+  "expansion_table": [
+    {"task": 1, "op": "crop+up2", "OFF": 9,  "PASSIVE": 9,  "INTENTIONAL": 9,  "abs_used": {"PASSIVE": false, "INTENTIONAL": false}},
+    {"task": 2, "op": "crop+up2", "OFF": 8,  "PASSIVE": 2,  "INTENTIONAL": 2,  "abs_used": {"PASSIVE": true, "INTENTIONAL": true}},
+    {"task": 3, "op": "crop+up2", "OFF": 8,  "PASSIVE": 2,  "INTENTIONAL": 2,  "abs_used": {"PASSIVE": true, "INTENTIONAL": true}},
+    {"task": 4, "op": "crop+up2", "OFF": 4,  "PASSIVE": 2,  "INTENTIONAL": 2,  "abs_used": {"PASSIVE": true, "INTENTIONAL": true}},
+    {"task": 5, "op": "crop+up2", "OFF": 8,  "PASSIVE": 2,  "INTENTIONAL": 2,  "abs_used": {"PASSIVE": true, "INTENTIONAL": true}},
+    {"task": 6, "op": "crop+up2", "OFF": 4,  "PASSIVE": 2,  "INTENTIONAL": 2,  "abs_used": {"PASSIVE": true, "INTENTIONAL": true}},
+    {"task": 7, "op": "crop+up2", "OFF": 8,  "PASSIVE": 2,  "INTENTIONAL": 2,  "abs_used": {"PASSIVE": true, "INTENTIONAL": true}},
+    {"task": 8, "op": "crop+up2", "OFF": 9,  "PASSIVE": 2,  "INTENTIONAL": 2,  "abs_used": {"PASSIVE": true, "INTENTIONAL": true}},
+    {"task": 9, "op": "crop+up2", "OFF": 7,  "PASSIVE": 2,  "INTENTIONAL": 2,  "abs_used": {"PASSIVE": true, "INTENTIONAL": true}},
+    {"task": 10, "op": "crop+up2", "OFF": 12, "PASSIVE": 2,  "INTENTIONAL": 2,  "abs_used": {"PASSIVE": true, "INTENTIONAL": true}}
+  ],
+  "speedup_summary": {
+    "OFF": {"task1_exp": 9, "tasks2_to_N_median_exp": 8, "ratio": 0.89},
+    "PASSIVE": {"task1_exp": 9, "tasks2_to_N_median_exp": 2, "ratio": 0.22},
+    "INTENTIONAL": {"task1_exp": 9, "tasks2_to_N_median_exp": 2, "ratio": 0.22}
+  },
+  "deletion_test": {
+    "deleted": "crop+up2",
+    "task2_exp_after_deletion": 8,
+    "task2_exp_before_deletion": 2,
+    "regression_ratio": 4.0,
+    "conclusion": "Abstraction load-bearing for task 2; tasks 3-10 still solved by other paths (crop h=0 at depth-1)"
+  },
+  "verdict": "REVISE",
+  "verdict_reason": "Speedup present in PASSIVE (memoization: depth-2 compound absorbed as single primitive). INTENTIONAL == PASSIVE. Reprioritization non-load-bearing. Cause: degenerate single-compound family — 'crop+up2' at depth-1 dominates regardless of success ordering. No novel-composition test possible in this family.",
+  "next": "E1b — fair test using composition-varying family (novel second ops per task)"
+}
