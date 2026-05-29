@@ -40,3 +40,14 @@ The (b) emergence question (can capability arise from local self-modifying rules
 ## Consequence for the active direction
 
 E2-on-seed-basis (LGG over the 12 primitives) was a (b)-path experiment (symbolic primitives, no capability core). SUPERSEDED as the RSI experiment. The new direction (E2'): [frozen minimal capability core] + [self-modification meta-layer], with anti-unification/LGG re-entering as the meta-layer's abstraction-accumulation mechanism, tested on the 395 with the R6-load-bearing kill. The minimal-capability-core design (what is tractable + minimal on the available hardware, within the memory-budget serialization rule) is the next research-design crux.
+
+## Refinement (2026-05-29): minimality is measured via the CORE_ONLY baseline, not assumed via core size
+
+E2.2' (= the E2' named above) resolves the core-design crux: the frozen capability core is a **local LLM at :9876 used as a generative program-proposer** (Option-3), conditional on each task's I/O examples. Chosen because K3 (the-search#3, commit `3b7c13c2`) proved the dead selection axis failed *structurally*: the LGG meta-layer learned the MARGINAL P(d2), but novel synthesis requires the CONDITIONAL P(program | examples). An LLM proposes conditionally — that is the whole point — and it is the direct C6 operationalization (a learned generative program-prior at scale).
+
+This appears to violate R0's "minimal — not a maximal pretrained agent." It does not, once minimality's PURPOSE is made explicit: R0 required minimality as a PROXY for R6-honesty (a maximal core that solves everything alone makes the meta-layer decorative). E2.2' measures R6-honesty DIRECTLY instead of assuming it via core size:
+
+- **Stage 0 (CORE_ONLY):** frozen LLM-alone solve-rate on the 395, vs the 0.7% oracle bound + the seed-enumeration baseline. This IS the direct measurement of how much the (maximal) core does alone. KILL if it does not expand coverage above seed/oracle.
+- **Stage 1 (CORE_META):** add the abstraction-accumulation library (anti-unification/LGG-with-holes from the system's own solved traces, fed back to the proposer as macro-ops/exemplars). R6 kill: CORE_META vs CORE_ONLY on accumulation-held-out novel tasks. Load-bearing = RSI (R4 firing); decorative = (a) collapsed to "just an agent" on this core, reported honestly.
+
+R0 refined: the EXPERIMENTAL meta-layer must be minimal and isolable; the frozen core may be maximal in parameters **provided its standalone contribution is measured (CORE_ONLY)** so R6-honesty is established empirically rather than presumed. The "just an agent" risk R0 guarded against is not banned by construction — it is directly testable, and an informative negative if it fires.
