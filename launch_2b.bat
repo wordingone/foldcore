@@ -1,0 +1,2 @@
+@echo off
+"B:\M\avir-cli\vendor\llama-turboquant\build\bin\llama-server.exe" -m "B:\M\avir-cli\models\gemma-4-E2B-it-Q8_0.gguf" --host 127.0.0.1 --port 9876 --n-gpu-layers 999 --ctx-size 8192 --flash-attn on --jinja --cache-type-k q8_0 --cache-type-v q8_0 --parallel 1 --reasoning-format none --reasoning-budget 384 --reasoning-budget-message "I will now take action." --chat-template-file "B:\M\avir-cli\chat-templates\gemma4_chat_template.jinja" -n 8192 -ub 512 -b 1024

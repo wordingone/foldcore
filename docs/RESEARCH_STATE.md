@@ -282,9 +282,33 @@ Scale eliminates the format wall (100% vs 83% parse) but does NOT move the solve
 
 ---
 
-## Current Direction: Inference-by-optimization / search (prerequisite to Stage 1)
+## E2.3 — Inference-by-optimization: search loop (DONE -> BOTH_MODES_EXHAUSTED)
 
-**Constitutional framing (Leo #11589):** This is NOT EBM/H-JEPA from scratch. This is replacing N=5 independent autoregressive samples with a real SEARCH over the program space — iterative refinement conditioning on best-so-far + execution errors; energy = #train-examples-satisfied; budget ~50-200 evals/task. Stage 1 (RSI meta-layer) remains BLOCKED until a frozen core achieves CORE_ONLY > 0. This experiment attempts to find that core via a better inference mode — clearing the prerequisite.
+**Leo directive #11589:** Replace N=5 independent samples with iterative search conditioned on best-so-far + failure trace. Energy = #train-examples-satisfied (partial credit). Budget 100 evals/task. Same proposer (2B), same tasks.
+
+**Result: BOTH_MODES_EXHAUSTED. 0/2 solves. Best energy = 0.000 (zero partial credit across all 100 evals).**
+
+- Proposer: gemma-4-2B at :9876, reasoning-budget=384.
+- Tasks tested: 2/20 before TIME_CAP=900s.
+- Task 1: 100 evals, best energy=0.00. Task 2: 19 evals (TIME_CAP), best energy=0.00.
+
+**Eval-budget-vs-solve curve (flat at zero):**
+- at 10 evals: 0/2 solved, energy=0
+- at 25 evals: 0/1 solved, energy=0
+- at 50 evals: 0/1 solved, energy=0
+- at 100 evals: 0/1 solved, energy=0
+
+**Critical finding:** Zero partial credit = the search loop never got even ONE training example correct. Not a failure to solve — a failure to make any partial progress. The program space accessible to local 2B code-synthesis (sampling OR search) does not contain solutions to these tasks. Search budget doesn't help if the proposer never hits a partially-correct candidate.
+
+**Pre-registered kill fires (Leo #11589):** CORE_ONLY = 0 for search. BOTH autoregressive (sampling) AND search exhausted at local scale. This is a STRATEGIC FINDING: local-substrate RSI program may not be viable at current capability level. Next step is a strategic escalation conversation — not another variant.
+
+**Artifacts:** `E2_3_search_loop.py`, `E2_3_search_loop_result.json`.
+
+---
+
+## Current Direction: STRATEGIC ESCALATION (awaiting Leo direction)
+
+**Both modes exhausted at local scale (2026-05-29):** Autoregressive sampling (Stage 0', 0/9 solves) + scale (Stage 0'', 0/4 solves at 26B) + search (E2.3, 0/2 solves, zero partial credit) all zero. Per Leo #11589 pre-registered kill: "BOTH autoregressive AND search exhausted at local scale → strategic escalation (not another variant)." Awaiting Leo's strategic direction.
 
 ---
 
