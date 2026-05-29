@@ -76,23 +76,69 @@ RSI = recursive self-IMPROVEMENT; improvement presupposes a baseline. The prior 
 
 ---
 
-### E2.1b — Out-of-coverage prediction (PENDING — queued)
-- R4 classification: SELECTION-class experiment, out-of-coverage split. Per Leg 2, prediction = +0.000.
-- Design: take E2.1 meta-layer (accumulated from in-closure tasks) and run it against the 395 locked out-of-closure tasks. Measure: does meta change expansions on tasks the core cannot solve?
-- Expected result: 0 improvement, 0 solve rate change — confirming R4 Leg 2 from capability-memory angle. If result contradicts this → flag immediately (contradicts R4 decomposition).
-- Dependency: runs after RESEARCH_STATE fusion update.
+### E2.1b — Out-of-coverage prediction (DONE -> R4_LEG2_CONFIRMED)
+- R4 classification: SELECTION-class, out-of-coverage split. Per Leg 2, prediction = +0.000.
+- Result: in-coverage delta=+0.000, out-of-coverage (100/395 sampled) delta=+0.000, solve_delta=0.
+- Verdict: R4 Leg 2 confirmed from capability-memory angle. LGG selection = +0.000 on both sides of the coverage line.
+- Artifacts: `E2_1b_coverage_split.py`, `E2_1b_result.json`. Commit: 2b1b3d88.
 
 ---
 
-## Current Direction: E2.2 (PENDING — Leo response on coverage framing)
+## E2.2(b) — Trace-conditional accumulation, TERMINAL selection-axis test (PRE-REGISTERED 2026-05-29)
 
-E2.1 R6 fires on in-coverage test. K2 logged (2/3 mechanism kills).
+**Purpose (Leo #11525):** One unmeasured cell in the signal-cleanliness axis:
+- E2.1 uniform core + DIRTY signal: delta=-0.13 (meta harmful — noise from alternative solutions)
+- E2.2(b): **uniform core + CLEAN signal** — trace-conditional accumulation; meta is the SOLE bias source
 
-**R4 framing (per Leo #11519):** E2.2 is the COVERAGE-expansion experiment, not another selection test. C6 operationalized: a frozen core that proposes programs outside the seed algebra (expressibility-expanding, not just bias-shifting).
+If meta still non-load-bearing with clean signal → selection axis definitively dead (K3 = 3/3).
 
-**E2.2 scope:** Does a more capable (coverage-expanding) core + LGG meta-layer beat the 0.7% oracle ceiling on the 395? The R6 gate becomes: does the meta-layer expand coverage beyond frozen core alone — not just reorder within the same inexpressible space?
+**Design:**
+- Core: UNIFORM prior (1/12 equiprobable at d0 and d1). Meta is the only bias source.
+- Accumulation: TRACE-CONDITIONAL — only accumulate from sequences that MATCH the ground-truth generating program. If solver finds an alternative valid sequence, do NOT accumulate.
+- Task family: same split as E2.1 (ACCUM_PROGRAMS × N_ACCUM_PER, HELD_PROGRAMS × N_HELD_PER).
 
-Core design must NOT pre-encode the held-out solution domain (the E2.1 design failure). Options per Leo #11513: Option-1 (purpose-trained program-proposer) or Option-3 (local LLM at :9876 as generative prior). Leo response pending.
+**Pre-registered kill (K3):**
+CORE_META deletion-delta ≤ 0 with trace-conditional clean signal → K3 (3/3) → selection axis DEFINITIVELY dead → hard pivot to E2.2' (coverage-expansion core).
+
+**Pre-registered positive:**
+Deletion-delta > 0 → selection works with clean signal → carry clean-signal meta-layer into E2.2' core design.
+
+**Hard-pivot trigger:** K3 fires → next = E2.2' (expressibility-expanding core = C6 operationalized).
+
+---
+
+### E2.2(b) — Trace-conditional accumulation result (DONE -> K3_FIRES)
+- Design: UNIFORM core (1/12) + trace-conditional accumulation (ground-truth match only).
+- Accumulation: 26/89 traces accepted (ground-truth match); 63 rejected (alternative solutions).
+  - depth2_success: {mir_h:19, up2:6, rot:1}. fh=0 (correctly rejected — E2.1 noise confirmed).
+- Held-out: CORE_ONLY mean_exp=7.57, CORE_META mean_exp=7.57. delta=0.
+- R6 deletion delta: +0.000. Meta non-load-bearing even with clean signal.
+- Root cause: LGG depth-2 accumulation learns the MARGINAL P(d2) from accum stream. Novel synthesis
+  requires the CONDITIONAL P(d2|d1, input). Marginal boost is informationally insufficient —
+  it cannot know which d2 op a specific novel task needs. This is structural, not noise-related.
+- Verdict: K3 FIRES (3/3). Selection axis DEFINITIVELY dead. Hard pivot triggered.
+- Artifacts: `E2_2b_trace_conditional.py`, `E2_2b_result.json`. Commit: (pending).
+
+---
+
+## HARD PIVOT — E2.2' (Coverage-Expansion Core)
+
+Selection axis exhausted. Three kills confirm the R4 decomposition from the capability-memory side:
+- K1: selection signal loop UNFED out-of-coverage (vocabulary gap, structural)
+- K2: selection redundant in-coverage (core pre-bias makes meta noise)
+- K3: selection still zero even with clean signal (marginal != conditional, structural)
+
+**Next direction: E2.2' — expressibility-expanding core (C6 operationalized)**
+- Architecture: [frozen core with vocabulary BEYOND the 12-op seed] + [meta-layer to be evaluated]
+- Core candidates: (1) purpose-trained program-proposer; (3) local LLM at :9876 (Qwen/Gemma)
+- Test: does the expanded-vocabulary core beat the 0.7% oracle ceiling on the 395?
+- R6 gate: does meta-layer expand COVERAGE beyond frozen expanded core alone?
+
+Leo to specify core design. K3 fires = selection-axis chapter closed.
+
+---
+
+## Current Direction: HARD PIVOT — awaiting E2.2' core design from Leo
 
 ---
 
@@ -102,8 +148,9 @@ Core design must NOT pre-encode the held-out solution domain (the E2.1 design fa
 |------|-----------|------------|--------|
 | K1 | Success-weighted heap priority over fixed primitive algebra | E1b + K1 probe | FIRED 2026-05-29 |
 | K2 | LGG depth-2 meta-layer non-load-bearing on combinatorial held-out | E2.1 | FIRED 2026-05-29 |
+| K3 | Trace-conditional LGG meta-layer non-load-bearing with clean signal | E2.2(b) | FIRED 2026-05-29 |
 
-3 mechanism-kills = direction dead. At 2.
+3 mechanism-kills = direction dead on SELECTION AXIS. Hard pivot to E2.2' (coverage-expansion).
 
 ---
 

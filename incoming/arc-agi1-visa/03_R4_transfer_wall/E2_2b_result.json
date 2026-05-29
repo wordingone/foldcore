@@ -1,0 +1,108 @@
+{
+  "experiment": "E2.2b",
+  "issue_ref": "the-search#3",
+  "date": "2026-05-29",
+  "design": {
+    "core": "UNIFORM (1/12 for all ops)",
+    "accumulation": "trace-conditional (match ground-truth only)",
+    "accum_programs": [
+      [
+        "crop",
+        "rot"
+      ],
+      [
+        "crop",
+        "up2"
+      ],
+      [
+        "crop",
+        "mir_h"
+      ],
+      [
+        "fh",
+        "rot"
+      ],
+      [
+        "fh",
+        "up2"
+      ],
+      [
+        "fh",
+        "mir_h"
+      ],
+      [
+        "tr",
+        "rot"
+      ],
+      [
+        "tr",
+        "up2"
+      ],
+      [
+        "tr",
+        "mir_h"
+      ]
+    ],
+    "held_programs": [
+      [
+        "fv",
+        "rot"
+      ],
+      [
+        "fv",
+        "up2"
+      ],
+      [
+        "fv",
+        "mir_h"
+      ],
+      [
+        "dup_h",
+        "rot"
+      ],
+      [
+        "dup_h",
+        "up2"
+      ],
+      [
+        "dup_h",
+        "mir_h"
+      ]
+    ],
+    "n_accum_tasks": 90,
+    "n_held_tasks": 30,
+    "budget": 500,
+    "max_depth": 3
+  },
+  "accumulation": {
+    "core_mean_exp": 13.844444444444445,
+    "meta_mean_exp": 13.933333333333334,
+    "accumulated_traces": 26,
+    "rejected_traces": 63,
+    "meta_depth2_success": {
+      "rot": 1,
+      "mir_h": 19,
+      "up2": 6
+    }
+  },
+  "held_out": {
+    "CORE_ONLY": {
+      "solved": 30,
+      "total": 30,
+      "mean_exp": 7.566666666666666
+    },
+    "CORE_META": {
+      "solved": 30,
+      "total": 30,
+      "mean_exp": 7.566666666666666
+    }
+  },
+  "r6_deletion": {
+    "post_deletion_mean_exp": 7.566666666666666,
+    "pre_deletion_mean_exp": 7.566666666666666,
+    "delta": 0.0,
+    "k3_fires": true
+  },
+  "verdict": "K3_FIRES",
+  "preregistered_pivot": "K3_FIRES -> E2.2' (coverage-expansion core, C6 operationalized)"
+}
