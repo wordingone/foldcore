@@ -1,8 +1,23 @@
-# R1-R6 COMPLIANT SUBSTRATE. It SYNTHESIZES its own transformations from a minimal basis,
-# PROPOSES new composite primitives from its own successes (self-modification, R3), tests them
-# against the data (R5 ground truth = the train pairs, external/fixed), the propose-test-keep
-# loop IS the computation (R2), no external objective beyond fitting (R1), grown primitives are
-# load-bearing (R6). I add NOTHING after it starts. It must rediscover capability ITSELF.
+# ARC-AGI-1 COVERAGE/SYNTHESIS REFERENCE — naturalized 2026-05-29 (C1 REVISE).
+#
+# What it does: synthesizes transforms from a seeded primitive basis, fits their params
+# from training pairs (R1 CLEAR — only criterion is task-provided I/O, no external reward),
+# composes them, and runs _absorb() to add successful compositions as named primitives.
+#
+# Gated verdict (ARC-AGI-1 visa, all three tracks):
+#   R2 VIOLATED  — _absorb / keep step is SEPARABLE from the solve path; disabling it
+#                  leaves train solve% unchanged (Δ+0). Same charge as Adam.
+#   R6 NON-LOAD-BEARING — all 5 grown primitives deleted individually → all Δ+0.
+#                          _absorb accumulates a non-load-bearing coverage cache.
+#   R3 INERT on held-out — 0 primitives grown on eval; self-modification gives no
+#                          coverage gain on novel tasks.
+#   C1 REVISE — NOT an RSI / self-improvement system. _absorb is a coverage cache, not
+#               recursive capability improvement. PRISM RHAE=0 (batch synthesizer,
+#               not an interactive agent).
+#
+# Use: coverage/synthesis reference + corroborating data point for the core law
+# (learning/selection over a fixed substrate doesn't expand the reachable set).
+# See RESEARCH_STATE.md Finding 8 for the full R4 decomposition.
 import json,glob,numpy as np,heapq,time
 from scipy import ndimage
 from collections import Counter
@@ -12,7 +27,9 @@ def load(s,n=None):
     return [json.load(open(f)) for f in fs]
 def G(x):return np.array(x)
 
-# ---------- MINIMAL irreducible basis (R6: remove any -> capability lost) ----------
+# ---------- SEEDED PRIMITIVE BASIS (R6 claim below is UNTESTED by the visa — the visa
+# tested the 5 GROWN primitives via _absorb, all non-load-bearing. The seed-basis R6
+# claim predates naturalization and has not been deletion-tested.) ----------
 def bg(x):v,c=np.unique(x,return_counts=True);return int(v[np.argmax(c)])
 def comps(x,diag):
     b=bg(x);O=[];st=np.ones((3,3)) if diag else None
