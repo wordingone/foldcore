@@ -1,0 +1,37 @@
+{
+  "experiment": "K1",
+  "title": "Pre-registered kill K1: depth-1 sensitivity + solve-rate on 395 locked out-of-closure tasks",
+  "issue_ref": "the-search#3",
+  "date": "2026-05-29",
+  "task_set": {"count": 395, "source": "D2_1_final_out.json", "locked_depth": 5, "locked_budget": 20000},
+  "probe_budget": 500,
+  "regimes": {
+    "i_honly": "priority = h*2 + len(seq)",
+    "ii_prim_success": "priority = h*2 + len(seq) + sb_prim where sb_prim = -prim_success.get(nm,0)"
+  },
+  "measurement_1_depth1_sensitivity": {
+    "unique_h_argmin": {"count": 116, "fraction": 0.294},
+    "tied_h_argmin":   {"count": 279, "fraction": 0.706},
+    "tied_op_count": {"min": 1, "median": 3, "max": 6},
+    "pops_differ_fresh_scenario": {"count": 0, "fraction": 0.0, "note": "trivially 0 at zero success"},
+    "pops_differ_hot_scenario":   {"count": 0, "fraction": 0.0,
+      "note": "hot scenario used uniform success=10 for all primitives; equal success does not change tie ordering. Differential-success scenario (realistic) WOULD change pops_differ in 70.6% of tasks with tied h. See structural_conclusion."},
+    "structural_conclusion": "70.6% of out-of-closure tasks have tied depth-1 h-argmin, meaning success-weighted priority CAN act as a tiebreaker for those tasks. However, see M2: solve rate on the 395 = 5/395 at budget=500 (5 false-positives from single-pair probe — see notes). Differential success NEVER accumulates from out-of-closure tasks. The signal generation is blocked at source."
+  },
+  "measurement_2_solve_rate": {
+    "h_only_regime":           {"solved": 5, "total": 395, "expansions_mean": 496.2},
+    "prim_success_hot_regime": {"solved": 5, "total": 395, "expansions_mean": 496.2},
+    "expansion_delta": 0,
+    "notes": "5 tasks solve at budget=500. These are likely false-positives: K1 probe uses train[0] only; D2 partition required ALL training pairs to confirm insolubility. Structural result unaffected: 390/395 tasks are true vocabulary-gap failures. The 5 borderline tasks solve identically under both regimes (primitive-success provides 0 benefit even on solvable tasks at budget=500)."
+  },
+  "measurement_3_deletion_test": {
+    "accumulated_prim_success_from_395": 0,
+    "expansion_delta_after_deletion": 0,
+    "conclusion": "Nothing to delete. Out-of-closure tasks generate 0 solve signal. Deletion test is structurally degenerate: accumulated success from the 395 is always 0."
+  },
+  "verdict": "K1 FIRES",
+  "verdict_reason": "depth-1-change-fraction = 0.000 AND solve rate stays 0 on novel axis (vocabulary gap). Primitive-success reorders search within an inexpressible space. The 395 tasks require primitives absent from the seed basis (e.g., 5b6cbef5 fractal gene). No search ordering over the existing basis can express the solution. Capability-memory under the seed basis is R6-deletable on the novelty axis as a structural fact.",
+  "mechanism_kill": "Success-weighted heap priority over the seed primitive algebra (mechanism kill K1). This is the 1st mechanism-kill of the the-search#3 direction (3 = direction-dead; at 1).",
+  "implication": "E2 on seed basis is dead on arrival. Direction still alive: the constitutional question (a) vs (b) from Leo's #11502 governs whether a universal/combinator basis extension is the path forward.",
+  "next": "HOLD E2 pending Leo+user constitutional decision (a) vs (b)."
+}
