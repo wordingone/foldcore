@@ -306,9 +306,30 @@ Scale eliminates the format wall (100% vs 83% parse) but does NOT move the solve
 
 ---
 
-## Current Direction: STRATEGIC ESCALATION (awaiting Leo direction)
+## E2.x — Capability-Isolation Matrix: CLOSED (Leo #11608, 2026-05-29)
 
-**Both modes exhausted at local scale (2026-05-29):** Autoregressive sampling (Stage 0', 0/9 solves) + scale (Stage 0'', 0/4 solves at 26B) + search (E2.3, 0/2 solves, zero partial credit) all zero. Per Leo #11589 pre-registered kill: "BOTH autoregressive AND search exhausted at local scale → strategic escalation (not another variant)." Awaiting Leo's strategic direction.
+**Sub-thread CLOSED.** The local frozen-LLM-proposer path is fully documented below. No further local variants.
+
+### Capability-Isolation Matrix
+
+| | autoregressive | search |
+|---|---|---|
+| **2B** | 0/9 solve (Stage 0') | 0/2 solve, energy=0.000 (E2.3) |
+| **26B** | 0/4 solve (Stage 0'') | UNTESTED BY DESIGN (see below) |
+
+**Why 26B-search is untested by design (Leo #11608):** The 26B × search cell was scoped as a potential decider (#11607) then immediately pulled (#11608). Reason: the entire E2.x arc tests "is the borrowed frozen local capability adequate to do ARC?" — answer: no, energy flat at 0 across all tested cells. A 26B-search run is a marginal boundary value inside a frame now under reexamination. Not worth a memory-heavy run.
+
+**Honest scope:** These results kill "local frozen-LLM proposer as adequate code-synthesis core." They do NOT claim "search / inference-by-optimization fails at any scale." The failure is in the proposer's capability level, not the inference mode per se.
+
+**Conclusion:** No adequate local frozen core exists within constitutional constraints. Stronger-than-26B models are external (R1 violation). 26B is already 0 in autoregressive mode. The frozen-borrowed-LOCAL-core path is boxed in.
+
+**Next direction:** HOLD. Leo is reframing the core-substrate question with the user — whether the "capability core" should be a borrowed frozen model at all, vs. a representational medium the system compiles new transforms onto (R2-native, "fixed rules on a shared medium, evolving state" — any-to-any direction). Awaiting reframed spec.
+
+---
+
+## Current Direction: HOLD — awaiting Leo's reframed direction on core-substrate question
+
+**E2.x closed (2026-05-29).** Capability-isolation matrix documented and closed above. Leo is in a think-together with the user on whether the core should be a frozen oracle vs. a grown representational medium. No new experiment until Leo sends the reframed direction.
 
 ---
 
