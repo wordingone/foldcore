@@ -272,15 +272,19 @@ Generate-and-test with execution feedback (up to 5 attempts, error fed back): re
 
 Scale eliminates the format wall (100% vs 83% parse) but does NOT move the solve count. The 13x parameter increase shows the model is better at code format compliance — but rule-inference from 2-3 I/O examples remains at zero regardless of scale.
 
-**Pre-registered kill fires (Leo #11575):** CORE_ONLY = 0 at 26B scale -> wall is STRUCTURAL, not capability. EBM/H-JEPA is pre-registered next direction.
+**Pre-registered kill fires (Leo #11575):** CORE_ONLY = 0 at 26B scale. Local autoregressive code-synthesis at feasible scale+budget does not expand coverage. Mechanism split indicates a rule-inference (not format) wall. Pivot: test inference-MODE hypothesis (autoregressive generation vs optimization-search).
 
-**Structural interpretation:** The bottleneck is information-theoretic: recovering an arbitrary grid transformation rule from 2-3 examples is a hard inductive-inference problem. Neither 2B nor 26B autoregressive generation solves it. LeCun's prediction confirmed — autoregressive generation is the wrong inference mode for ARC, independent of model scale. Energy-based inference-by-optimization (inference IS the computation) is the principled next step.
+**Honest claim (Leo #11589 sizing):** 0/4 solve is too small to exclude a low-but-nonzero rate. Thinking budget was held tight (384→512 tokens); "26B at generous budget" and frontier scale are untested. This experiment exhausts local autoregressive code-synthesis at feasible scale+budget — it does NOT settle "autoregressive at any scale cannot." If EBM/search also zeroes, BOTH modes are exhausted locally → strategic escalation, not another variant.
+
+**Why inference-by-optimization is the right next variable:** tests inference MODE (sample-vs-search) more directly than scaling a model we cannot run at frontier size locally. LeCun prior is principled but not yet confirmed — EBM is the test.
 
 **Artifacts:** `E2_2_capiso_scale.py`, `E2_2_capiso_scale_result.json`.
 
 ---
 
-## Current Direction: LeCun EBM / H-JEPA (energy-based inference-by-optimization)
+## Current Direction: Inference-by-optimization / search (prerequisite to Stage 1)
+
+**Constitutional framing (Leo #11589):** This is NOT EBM/H-JEPA from scratch. This is replacing N=5 independent autoregressive samples with a real SEARCH over the program space — iterative refinement conditioning on best-so-far + execution errors; energy = #train-examples-satisfied; budget ~50-200 evals/task. Stage 1 (RSI meta-layer) remains BLOCKED until a frozen core achieves CORE_ONLY > 0. This experiment attempts to find that core via a better inference mode — clearing the prerequisite.
 
 ---
 
