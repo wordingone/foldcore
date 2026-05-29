@@ -58,27 +58,33 @@ RSI = recursive self-IMPROVEMENT; improvement presupposes a baseline. The prior 
 
 ---
 
-## Current Direction: E2' (PENDING — core design open)
+### E2.1 — Combinatorial meta-layer gate (DONE -> R6_FIRES)
+- Architecture: Option-2 frozen core (logistic prior, ~1MB, trained on synthetic triples biased 70% toward ACCUM_FIRST/ACCUM_SECOND) + LGG depth-2 meta-layer, R2-fused.
+- Accumulation family (9 programs): ACCUM_FIRST={crop,fh,tr} × ACCUM_SECOND={rot,up2,mir_h}. 90 tasks.
+- Held-out family (6 programs): HELD_FIRST={fv,dup_h} × ACCUM_SECOND. 30 tasks.
+- Test: does accumulated LGG signal improve held-out mean_exp vs CORE_ONLY?
+- Results (biased core):
+  - CORE_ONLY held-out: 30/30 solved, mean_exp=7.63
+  - CORE_META held-out: 30/30 solved, mean_exp=7.63
+  - Deletion delta: +0.00 (meta non-load-bearing)
+- Uniform core control (unbiased 1/12 prior, meta preloaded with accum signal):
+  - CORE_ONLY: mean_exp=7.57
+  - CORE_META: mean_exp=7.70 (WORSE, delta=-0.13)
+  - Root cause: accum stream produced fh=10 in depth2_success (alternative solutions to accum tasks where fh is also valid). For held-out tasks needing rot at depth-2, meta boosts fh first → extra wasted expansions. Same mechanism as E1b: accumulated wrong-op signal misdirects novel-composition search.
+- Structural finding: LGG accumulates from WHATEVER program solved the task, not the ground-truth program. Task families with multiple valid solutions → noisy signal → meta layer is systematically misleading on novel compositions.
+- Verdict: R6_FIRES. Two distinct failure modes confirm: (1) biased core makes meta redundant, (2) unbiased core makes meta actively harmful.
+- Artifacts: `incoming/arc-agi1-visa/03_R4_transfer_wall/E2_1_experiment.py`, `E2_1_result.json`
+- Commit: dad816fe
 
-E2-on-seed-basis (LGG over the 12-op vocabulary) is SUPERSEDED by constitutional decision (a). It remains a valid combinatorial-transfer test but cannot address structural novelty.
+---
 
-**E2' architecture:**
-```
-System = [frozen minimal capability core: program-proposer for grid transforms]
-       + [self-modification meta-layer: LGG-accumulated structured abstractions,
-          R2-fused, reweighting the core's proposals]
-```
+## Current Direction: E2.2 (PENDING — Leo response)
 
-Tested on the locked 395 (genuine test: can accumulated abstractions improve novel solve-rate when there IS a baseline proposer?).
+E2.1 R6 fires on combinatorial test (synthetic in-closure). K2 logged (2/3 mechanism kills).
 
-**Pre-registered R6 kill:** deletion of meta-layer must degrade novel solve-rate. If not -> decorative -> (a) collapsed -> direction kill.
+Leo's directive (from #11513) held E2.2 pending E2.1 result.
 
-**Open: minimal capability core design.** Three options under evaluation:
-1. Small frozen program-proposer model (purpose-trained on synthetic ARC data)
-2. Learned grid-transform proposal distribution (shallow MLP or frequency table, no external model)
-3. Existing local models (Qwen/Gemma via llama-server at :9876) as frozen proposers
-
-Core choice gates the whole E2' design. Engineering read in progress.
+**E2.2 scope (per Leo #11513):** structural-novelty analysis — does accumulated abstraction improve performance on the OUT-OF-CLOSURE 395? Core design still open; E2.1 biased-core result suggests core pre-encoding the right ops makes meta redundant. The genuine test requires a core that does NOT already encode the solution domain.
 
 ---
 
@@ -87,8 +93,9 @@ Core choice gates the whole E2' design. Engineering read in progress.
 | Kill | Mechanism | Experiment | Status |
 |------|-----------|------------|--------|
 | K1 | Success-weighted heap priority over fixed primitive algebra | E1b + K1 probe | FIRED 2026-05-29 |
+| K2 | LGG depth-2 meta-layer non-load-bearing on combinatorial held-out | E2.1 | FIRED 2026-05-29 |
 
-3 mechanism-kills = direction dead. At 1.
+3 mechanism-kills = direction dead. At 2.
 
 ---
 
