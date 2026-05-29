@@ -174,13 +174,40 @@ Two runs:
 2. The LLM CAN name novel ops (Leo's spec: "12 ops + allow novel compositions / new primitives it names"), but SUBSTRATE.py can only execute the 12 known ops. Novel op names are silently dropped in parse_program (filtered to only BASIS members). The execution layer is bounded by the vocabulary.
 3. Structural conclusion: a frozen LLM proposing programs in the 12-op DSL is informationally equivalent to a better search ordering over the same vocabulary — which is exactly the SELECTION-class mechanism K1-K3 already killed.
 
-**Design question for Leo:** The meaningful version of Option-3 that could actually break coverage is NOT "LLM proposes DSL sequences" but "LLM generates arbitrary Python transforms" (code synthesis — proposes any function grid→grid, executed via eval/sandbox). This changes the experimental design entirely. Is E2.2' a code-synthesis experiment, or does Option-3 require rethinking?
+**Autoregressive-vs-search interpretation (Leo #11545):** Leo's introspection reframes the Stage-0 KILL — autoregressive LLM decoding over a fixed 12-op token set is a GENERATION mode, not a SEARCH mode. LeCun's critique: error compounds token-by-token; ARC is fundamentally a search problem. DSL-constrained autoregressive generation is not just coverage-bounded — it's also the wrong inference mode for program discovery. The kill is consistent with LeCun's prediction regardless of sample size.
 
-- Artifacts: `E2_2_stage0_coverage_probe.py`, `E2_2_stage0_result.json`. Commit: (this push).
+- Artifacts: `E2_2_stage0_coverage_probe.py`, `E2_2_stage0_result.json`. Commit: 557e2468.
 
 ---
 
-## Current Direction: E2.2' Stage-0 KILLED — awaiting Leo redesign (code-synthesis vs DSL constraint)
+### E2.2' Reshaped — Core Inference Mode Comparison (Leo #11545, user directive)
+
+User directive: if transformer-adjacent concepts, explore BitNet b1.58; bring in LeCun.
+
+Leo's introspective correction: Option-3 anchored on K3 ('killed marginal; LLM proposes conditionally'). But conditional generation ≠ correct inference MODE. Autoregressive LLM decodes token-by-token — generates, doesn't SEARCH the program space. ARC novelty is a search problem. LeCun predicts autoregressive underperforms for this reason. Energy-based inference-by-optimization is more R2-native: inference IS the computation.
+
+**Three-axis design space:**
+
+1. **Autoregressive LLM baseline (Stage-0, DONE, KILL).** DSL-constrained generation = selection-class = wrong mode. Provides the LeCun-predicted-underperform baseline.
+
+2. **BitNet b1.58 transformer (memory-efficient alternative, per directive):**
+   - Ternary {-1, 0, +1} weights. ~3.5x less memory: 13B at ~2.8GB VRAM.
+   - Native model: BitNet b1.58 2B4T.
+   - bitnet.cpp CPU path. Likely relaxes MEM-HEAVY constraint.
+   - Still autoregressive — same inference mode, different efficiency. Tests: does the mode limitation dominate, or is it parameter count?
+
+3. **LeCun energy-based / inference-by-optimization (EBM, H-JEPA, the principled pivot):**
+   - Inference = optimization, not generation. More R2-native.
+   - Reference: 'The Mouth is Not the Brain' (arxiv 2601.17094) for EBM-language bridge.
+   - DON'T BUILD YET — Stage-0 result determines whether autoregressive fails for mode reasons (LeCun) or for coverage reasons (structural). Stage-0 already says KILL; next probe decides which axis.
+
+**The R6-load-bearing meta-layer (abstraction library) sits on top of whichever inference mode wins.**
+
+**MEM-HEAVY:** BitNet relaxes it. Current Qwen3.6-27B (16 GB VRAM) still heavy — serialization until switch.
+
+---
+
+## Current Direction: E2.2' — Stage-0 DONE (KILL). Next probe: BitNet b1.58 vs EBM. Leo to decide.
 
 ---
 
