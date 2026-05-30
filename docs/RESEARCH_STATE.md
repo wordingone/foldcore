@@ -784,19 +784,20 @@ Artifacts: `stage1b_object_centric.py`, `stage1b_result.json`. Commits: 2698a9eb
 - Required per-budget fields: curriculum coverage, held coverage, depth distribution, accepted macro count, recurring skeleton count, held macro-subprogram hits, near-miss hits if measured, and transfer with `is_cheaper` attribution.
 - Required premise table: per held task, transfer-budget solved/cost, deep-budget solved/cost, solution hash/body/skeleton/fills, and whether each accepted Stage 1c macro occurs as an exact subprogram.
 - Discriminator: coverage↑ + accepted Stage 1c macro hits in deeper held solutions -> `PREMISE_SELECTION_BOTTLENECK`, Stage 2 proposer warranted. Coverage↑ + deeper held solutions but no Stage 1c macro hits -> `PREMISE_FALSE_EXACT`, exact macro-reuse premise is false. Exact hits absent but semantic near-misses exist -> `PREMISE_NEAR_MISS_SEMANTIC`, semantic abstraction fork. Coverage remains too low -> `PREMISE_COVERAGE_STILL_TOO_LOW`.
-- Gate labels: `PREMISE_INSTRUMENTATION_INCOMPLETE`, `PREMISE_COVERAGE_STILL_TOO_LOW`, `PREMISE_SELECTION_BOTTLENECK`, `PREMISE_FALSE_EXACT`, `PREMISE_NEAR_MISS_SEMANTIC`.
+- Gate labels: `PREMISE_INSTRUMENTATION_INCOMPLETE`, `PREMISE_COVERAGE_STILL_TOO_LOW`, `PREMISE_SELECTION_BOTTLENECK`, `PREMISE_FALSE_EXACT`, `PREMISE_NEAR_MISS_SEMANTIC`, `PREMISE_WEAK_NONMACRO_BUDGET_GAIN`.
 
 **Stage 1d result (2026-05-30; original artifact LastWriteTime 2026-05-29 23:22:08):** `PREMISE_COVERAGE_STILL_TOO_LOW` after Kai/Leo gate correction of raw self-label `PREMISE_NEAR_MISS_SEMANTIC`.
 
-**Stage 1d B30000+minimality follow-up (2026-05-30, Leo #11832, Kai #11845):** `PREMISE_30000_COVERAGE_INCREASED`.
+**Stage 1d B30000+minimality follow-up (2026-05-30, Leo #11832, Kai #11845):** `PREMISE_WEAK_NONMACRO_BUDGET_GAIN`.
 - Budget curve (held tasks, no library, minimality-aware near-miss): B3000=8/200 (4.0%), B6000=8/200 (4.0%), B10000=8/200 (4.0%), B30000=9/200 (4.5%).
 - Exact subprogram hits: `0` at all budgets. Stage 1c macro `COMPOSE(PRIM_CROP,MAP_KEEPONLY)` never appears as BFS solution skeleton for any held task.
 - Near-miss (raw/dominated/non-dominated): 1/1/0 at all budgets. The 1 raw near-miss (task `1cf80156`) is DOMINATED at every budget point: macro depth-1 `COMPOSE(PRIM_CROP,MAP_KEEPONLY)` vs BFS depth-0 `PRIM_CROP`. Non-dominated near-miss = 0 at all budgets.
 - B30000 +1 task: 9/200 vs 8/200 at prior budgets; the new task is solved by depth-1 BFS reach with 0 macro reuse.
-- Script label: `PREMISE_30000_COVERAGE_INCREASED` (coverage increased by 1 task at B30000). Exact=0, non-dominated-near-miss=0 at all budgets including B30000.
-- Interpretation: the 1-task increase is BFS reach (not macro reuse). Fixed holed grammar is effectively budget-saturated for macro-reuse evidence: more budget on this fixed grammar is the wrong lever.
+- Script/runtime label: `PREMISE_30000_COVERAGE_INCREASED` (coverage increased by 1 task at B30000). Treat this as a holding label, not the research interpretation. Exact=0, non-dominated-near-miss=0 at all budgets including B30000.
+- Interpretation: the 1-task increase is BFS reach (not macro reuse). This is weak non-macro budget gain: not strict budget saturation, not `PREMISE_SELECTION_BOTTLENECK`, and not semantic-near-miss support. More raw budget on this fixed grammar is a poor lever for the Stage 1c macro-reuse premise.
 - Dominance table: 4 rows (1 per budget × 1 raw near-miss candidate). All DOMINATED by depth-first rule.
-- Scope: closing fixed-grammar-budget lever. Does NOT auto-validate memory-heavy neural proposer. Next step per Leo #11848 and kai-index/the-search-net-free-matched-eval-gate.md: cheap net-free proposer matched-eval coverage probe.
+- Scope: closing fixed-grammar-budget lever. Does NOT auto-validate memory-heavy neural proposer. Stage 2 entry is gated by a Stage 1e four-arm cross-tier-best-first matched-evaluation probe over one frozen depth-0/1/2 candidate space; Stage 1d b30000 is only the fixed-holed external baseline (`9/200`).
+- Stage 1e pre-run gate: `kai-index/the-search-stage1e-v3-adjudication.md`. The result must be reviewed with `kai-index/the-search-stage1e-result-review-gate.md`; B2 must either exclude Stage 1d held solution skeletons (`arm_b2_uses_held_solution_artifacts=false`) or be relabeled `ARM_B2_HELD_INFORMED_DIAGNOSTIC`.
 - Original artifact: `incoming/arc-agi1-visa/03_R4_transfer_wall/stage1d_premise_truth_result.json`
 - Follow-up artifact: `incoming/arc-agi1-visa/03_R4_transfer_wall/stage1d_premise_truth_b30000_minimality_result.json`
 - Script: `incoming/arc-agi1-visa/03_R4_transfer_wall/stage1d_premise_truth.py`
