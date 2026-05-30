@@ -1,0 +1,150 @@
+{
+  "analysis": "E3-reuse-sparsity",
+  "n_solved": 23,
+  "reuse_frequency": [
+    {
+      "compound": [
+        "mir_h",
+        "mir_v"
+      ],
+      "count": 3,
+      "mdl_gain": 1,
+      "mdl_threshold": 3
+    },
+    {
+      "compound": [
+        "fh",
+        "fv"
+      ],
+      "count": 2,
+      "mdl_gain": 0,
+      "mdl_threshold": 3
+    },
+    {
+      "compound": [
+        "fv",
+        "mir_v"
+      ],
+      "count": 2,
+      "mdl_gain": 0,
+      "mdl_threshold": 3
+    },
+    {
+      "compound": [
+        "crop",
+        "down2"
+      ],
+      "count": 1,
+      "mdl_gain": -1,
+      "mdl_threshold": 3
+    },
+    {
+      "compound": [
+        "crop",
+        "dup_h"
+      ],
+      "count": 1,
+      "mdl_gain": -1,
+      "mdl_threshold": 3
+    },
+    {
+      "compound": [
+        "crop",
+        "fh"
+      ],
+      "count": 1,
+      "mdl_gain": -1,
+      "mdl_threshold": 3
+    },
+    {
+      "compound": [
+        "crop",
+        "fv"
+      ],
+      "count": 1,
+      "mdl_gain": -1,
+      "mdl_threshold": 3
+    },
+    {
+      "compound": [
+        "crop",
+        "up2"
+      ],
+      "count": 1,
+      "mdl_gain": -1,
+      "mdl_threshold": 3
+    },
+    {
+      "compound": [
+        "down2",
+        "up2"
+      ],
+      "count": 1,
+      "mdl_gain": -1,
+      "mdl_threshold": 3
+    },
+    {
+      "compound": [
+        "up2",
+        "up2"
+      ],
+      "count": 1,
+      "mdl_gain": -1,
+      "mdl_threshold": 3
+    },
+    {
+      "compound": [
+        "crop",
+        "down2",
+        "up2"
+      ],
+      "count": 1,
+      "mdl_gain": -1,
+      "mdl_threshold": 2
+    },
+    {
+      "compound": [
+        "crop",
+        "fv",
+        "mir_v"
+      ],
+      "count": 1,
+      "mdl_gain": -1,
+      "mdl_threshold": 2
+    },
+    {
+      "compound": [
+        "down2",
+        "up2",
+        "up2"
+      ],
+      "count": 1,
+      "mdl_gain": -1,
+      "mdl_threshold": 2
+    },
+    {
+      "compound": [
+        "crop",
+        "down2",
+        "up2",
+        "up2"
+      ],
+      "count": 1,
+      "mdl_gain": -1,
+      "mdl_threshold": 2
+    }
+  ],
+  "max_compound_count": 3,
+  "no_split_proof": {
+    "any_compound_feasible": false,
+    "reason": "all compounds have total_count < MDL_threshold + 1"
+  },
+  "program_length_distribution": {
+    "1": 12,
+    "2": 9,
+    "3": 1,
+    "4": 1
+  },
+  "length1_count": 12,
+  "length_ge2_count": 11
+}
