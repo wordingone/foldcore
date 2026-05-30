@@ -1,0 +1,29 @@
+{
+  "experiment": "stage0b-arc-arbitrary-python",
+  "note": "Leo #11728: arbitrary-Python exec()-based ARC test. Matches MBPP side of Stage 0'. This IS the code-synthesis feasibility test. Contrast: stage0 54-op ARC probe was designer-DSL-expansion (hand-added prims), NOT code-synthesis (Refinement 2 EXPLICITLY rejected that path).",
+  "config": {
+    "split_seed": 42,
+    "n_tasks": 50,
+    "n_templates": 182,
+    "exec_timeout_sec": 0.5,
+    "baseline_budget": 10000,
+    "baseline_max_length": 5
+  },
+  "baseline_12op": {
+    "solved": 2,
+    "n_tasks": 50,
+    "solve_rate": 0.04,
+    "mean_cost": 9601.56
+  },
+  "arbitrary_python": {
+    "solved": 1,
+    "n_tasks": 50,
+    "solve_rate": 0.02,
+    "new_solves_beyond_dsl_baseline": 0,
+    "new_solve_ids": [],
+    "template_errors_approx": 1274,
+    "total_evaluations": 8919
+  },
+  "verdict": "CHICKEN-EGG CONFIRMED: arbitrary-Python brute exec solves 0 new tasks beyond 12-op DSL baseline. Search space intractable without proposer. Code-synthesis direction requires proposer/recognizer network, not brute exec().",
+  "bigger_fixed_basis_note": "Stage 0' 54-op ARC (stage0_result.json) = bigger-fixed-basis PROBE, NOT code-synthesis. 54-op is designer-DSL-expansion: +1 new solve (+0.8% cost), same-budget-depth regression (-2 tasks). Verdict: bigger fixed basis marginal at best. This stage0b test is the real code-synthesis feasibility verdict."
+}
