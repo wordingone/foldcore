@@ -395,6 +395,29 @@ Pre-registered outcomes (same partition logic as budget=3000 run):
 
 ---
 
+---
+
+## E4 — Controlled-Reuse Characterization (PRE-REGISTERED 2026-05-30, Leo #11627)
+
+**Question:** What reuse density R* does trace->operator compilation require? Where is ARC on the axis?
+
+**Design:** Synthetic generator over 12-op seed DSL. Plant MOTIF [mir_h, mir_v] with probability rho. Generate tasks with length-4 ground-truth programs. Sweep rho from ~0 (ARC-like) to 1.0. At each rho: source/held-out split (100/100), MDL library (same criterion), held-out search-cost WITH vs WITHOUT + R6 ablation + compound-applicability partition.
+
+**Output:** held-out search-cost-reduction curve vs rho. R* = rho where >10% cost reduction on applicable tasks. ARC location: rho~0 (mir_h__mir_v appears 3/400 ~ 0.75%).
+
+**Consistency check (rho=0 FIRST):** Should replicate ARC null — no applicable tasks, no MDL-positive compounds. Confirms axis calibration.
+
+**Pre-registered outcomes:**
+- monotone reduction-vs-rho -> MECHANISM_WORKS, R* located; ARC < R* confirmed.
+- flat even at high rho -> MECHANISM_FLAT; mechanism/instrument broken (debug).
+- threshold curve -> R* characterized as design requirement on eventual medium.
+
+**Config:** motif=mir_h__mir_v, program_length=4, budget=35000, n_source=100, n_held=100, n_pairs=3, rho=[0.0,0.1,0.2,0.3,0.5,0.7,1.0], master_seed=42.
+
+**Non-memory-heavy.** No model load.
+
+---
+
 ## Mechanism Kill Log
 
 | Kill | Mechanism | Experiment | Status |
