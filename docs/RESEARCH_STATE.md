@@ -507,49 +507,64 @@ This does NOT claim "ARC cannot self-compile." It is scoped to: this DSL + this 
 **R* definition (aggregate-net):** min rho where aggregate_delta < -5.0% AND variance band (mean+std) excludes 0. ALL held tasks, overhead included.
 
 **R* results:**
-- R*_contiguous (B): 1.0 — aggregate-net crossover for all-MDL library
+- R*_contiguous (B): 1.0 — aggregate-net crossover, all-MDL library
 - R*_holed (C): 0.7 — aggregate-net crossover with holed operators
 - Planted-only P: mechanism signal confirmed; R*_P NOT reported as design threshold (isolated condition, overhead not included).
 
 **Key signal (NOT accepted as R*):** script-reported motif-subset threshold = 0.1 from prior E4_rstar_grade run. NOT accepted — was motif-subset, not aggregate-net.
 
-**Distractor load-bearing check:**
+**Distractor load-bearing check + per-rho curve:**
 
-| rho | AGG B | AGG C | Planted P | dist_in_lib | holed_sel |
-|-----|-------|-------|-----------|-------------|-----------|
-| 0.0 | +58.3% | +53.5% | +0.0% | 1.00 | 27.2 |
-| 0.05 | +11.7% | +11.3% | +20.6% | 1.00 | 29.6 |
-| 0.1 | +68.8% | +64.3% | +5.7% | 1.00 | 19.0 |
-| 0.2 | +43.7% | +43.0% | -26.9% | 1.00 | 16.0 |
-| 0.3 | +60.1% | +60.4% | -30.4% | 1.00 | 11.2 |
-| 0.5 | -20.0% | -24.6% | -70.2% | 1.00 | 41.2 |
-| 0.7 | -24.7% | -29.2% | -76.7% | 1.00 | 53.6 | R*_C
-| 1.0 | -85.6% | -91.3% | -94.1% | 1.00 | 81.6 | R*_B
+| rho | AGG B (±std) | AGG C (±std) | Planted P (±std) | dist_in_lib | holed_sel |
+|-----|--------------|--------------|------------------|-------------|-----------|
+| 0.0 | +58.3%±50.0 | +53.5%±44.8 | +0.0%±0.0 | 1.00 | 27.2 |
+| 0.05 | +11.7%±37.1 | +11.3%±36.8 | +20.6%±18.4 | 1.00 | 29.6 |
+| 0.1 | +68.8%±54.7 | +64.3%±44.4 | +5.7%±14.4 | 1.00 | 19.0 |
+| 0.2 | +43.7%±26.0 | +43.0%±28.6 | -26.9%±28.2 | 1.00 | 16.0 |
+| 0.3 | +60.1%±63.3 | +60.4%±63.0 | -30.4%±7.1 | 1.00 | 11.2 |
+| 0.5 | -20.0%±29.4 | -24.6%±27.4 | -70.2%±7.2 | 1.00 | 41.2 |
+| 0.7 | -24.7%±30.5 | -29.2%±28.6 | -76.7%±5.6 | 1.00 | 53.6 | ← R*_C
+| 1.0 | -85.6%±4.8 | -91.3%±3.5 | -94.1%±0.3 | 1.00 | 81.6 | ← R*_B
 
-**Verdict:**
-R* found: aggregate-net crossover at rho=0.7. Mechanism achieves net aggregate improvement at sufficient density.
+**Verdict (scope-qualified, PRISM-gated):**
+**Synthetic aggregate-net R*_holed=0.7 under THIS generator/search/band rule.** B (contiguous) reaches R*=1.0; holed operators lower synthetic R*: 0.7 vs 1.0 (holed_lowers=True). NOTE: rho=0.7 is BARELY band-positive (C mean+std=-0.61, barely excludes 0).
+Load-bearing gates pass: dist_in_lib=1.00 (distractor load-bearing), selected_holed=53.6 (holed ops selected by search).
+**PRISM gate:** General self-compilation claims still require PRISM/multi-domain evidence (MBPP always present + masked ARC). This result is synthetic-only and scoped to this generator and band rule.
+R*_contiguous (B): 1.0 — all-MDL library achieves aggregate crossover.
+
+**Holed lowers R*:** 0.7 vs 1.0 (holed_lowers=True).
 
 **Artifacts:** `E4_holed_operators.py`, `E4_holed_result.json`.
 <!-- /E4-HOLED-RESULT -->
 
 ---
 
-## Next Experiment: Trace-Density Amplification Curve (Leo #11683, 2026-05-30)
+## E3 Trace-Density Amplification Curve — COMPLETE (Leo #11683, 2026-05-30)
 
 **Question:** Is 12-op formation-density failure caused by trace-count insufficiency (curve climbs → amplification bootstraps self-compilation) or representational-base insufficiency (curve stays 0 → base is the ceiling)?
 
-**Design:** Rerun holed formation funnel at 3 source-density steps. ALL augmentation SOURCE-ONLY; held-out stays original 200 tasks, disjoint (NO augmented copies of source in held-out).
-- **Step 1 (real-200, DONE):** 200 source tasks (training-only). Formation funnel: 4 skeletons, 0 MDL-positive. DENSITY_THRESHOLD. [E3_full_corpus_v2_result.json]
-- **Step 2 (full-real):** All training+evaluation tasks MINUS the disjoint held-out 200. ~600 source tasks. Rerun holed funnel.
-- **Step 3 (+aug):** Step 2 source + D4 symmetry (4 rotations) + color-permutation augmentation. Source-only augmentation.
+**Design:** Holed formation funnel at 3 source-density steps. Held-out fixed to 200 training tasks (split_seed=42), disjoint across ALL steps. Gate 3 content-hash leakage check: CLEAN (0 hits, 3600 augmented vs 200 held checked). [E3_density_curve.py, E3_density_curve_result.json]
 
-**Report at each step:** candidates_passed_MDL, gain_distribution, diagnosis → candidates_passed_MDL vs trace-count CURVE.
+**Results:**
 
-**Pre-registered if amplification fails (MDL-negative even at max density):** representational base IS the ceiling → code-synthesis pivot (Refinement 2). Do NOT build code-synthesis until curve lands.
+| Step | Source tasks | Programs | 2plus_cand | MDL-pos | Diagnosis |
+|------|-------------|----------|------------|---------|-----------|
+| 1 (real-200) | 200 | 8 | 0 | 0 | STRUCTURAL_STARVATION |
+| 2 (full-real ~600) | 600 | 13 | 0 | 0 | STRUCTURAL_STARVATION |
+| 3 (+D4 aug ~4200) | 4200 | 91 | 6 | **2** | **PASSED** |
 
-**Status:** PENDING — build `E3_density_curve.py`.
+Top MDL-positive operators (step 3):
+- `eps___HOLE___mir_h__mir_v`: count=16, gain=13.0
+- `fh__mir_h___HOLE___eps`: count=10, gain=7.0
 
-**E4_holed continues in parallel** — R* is the design target regardless of base; R* + amplification curve together calibrate how far ARC is below threshold.
+**VERDICT: CURVE_CLIMBS** — trace-count was the lever. Amplification (D4 augmentation to 4200 source tasks) bootstraps holed operator formation on 12-op base. Representational base is NOT the ceiling.
+
+**E4↔E3 synthesis:**
+R*_holed=0.7 is the density-curve's CLIMB TARGET — the density at which aggregate-net improvement crosses threshold on synthetic controlled data. ARC's real 12-op corpus (200–600 tasks) is below-threshold (MDL=0 at steps 1–2). The CURVE_CLIMBS result means trace-count insufficiency is the bottleneck, not representational-base insufficiency. A climb that plateaus below the holed-MDL density is still below-R*; a climb that reaches the R*=0.7 density is on-threshold. Next: verify whether the 2 formed operators translate to aggregate-net improvement on ARC held-out (closes the loop to E4).
+
+**Pre-registered interpretation applied:** CURVE_CLIMBS → 12-op self-compilation continues (trace-count was the bottleneck). Code-synthesis pivot (Refinement 2) deferred — NOT triggered.
+
+**ARC scope note:** This result is ARC-scoped (12-op DSL has no MBPP basis). Cannot support a general "self-compilation works" claim. PRISM/multi-domain evidence required for generalization claim.
 
 ---
 

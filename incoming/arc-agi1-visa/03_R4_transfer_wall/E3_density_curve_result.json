@@ -1,0 +1,108 @@
+{
+  "experiment": "E3-density-amplification-curve",
+  "note": "Formation funnel at 3 source-density steps. Discriminates trace-count insufficiency vs base insufficiency. Leo #11683 next-experiment spec.",
+  "config": {
+    "budget": 10000,
+    "max_length": 5,
+    "split_seed": 42,
+    "n_held": 200,
+    "aug_transforms": [
+      "rot90",
+      "rot180",
+      "rot270",
+      "fh",
+      "fv",
+      "tr"
+    ]
+  },
+  "corpus_metadata": {
+    "total_loaded": 800,
+    "training": 400,
+    "evaluation": 400,
+    "n_held": 200,
+    "n_full_source_pool": 600,
+    "disjoint": true
+  },
+  "steps": [
+    {
+      "step": 1,
+      "step_name": "real-200 (training-only, matches E3 v2 v3)",
+      "n_source_tasks": 200,
+      "n_programs": 8,
+      "funnel": {
+        "total_pairs_checked": 4,
+        "candidates_2plus_variants": 0,
+        "candidates_passed_MDL": 0,
+        "gain_distribution": {
+          "n": 0,
+          "min": null,
+          "max": null,
+          "mean": null,
+          "n_positive": 0
+        },
+        "diagnosis": "STRUCTURAL_STARVATION"
+      },
+      "mdl_positive_ops": []
+    },
+    {
+      "step": 2,
+      "step_name": "full-real (train+eval minus held-out)",
+      "n_source_tasks": 600,
+      "n_programs": 13,
+      "funnel": {
+        "total_pairs_checked": 11,
+        "candidates_2plus_variants": 0,
+        "candidates_passed_MDL": 0,
+        "gain_distribution": {
+          "n": 0,
+          "min": null,
+          "max": null,
+          "mean": null,
+          "n_positive": 0
+        },
+        "diagnosis": "STRUCTURAL_STARVATION"
+      },
+      "mdl_positive_ops": []
+    },
+    {
+      "step": 3,
+      "step_name": "+aug (full-real + D4 symmetry augmentation)",
+      "n_source_tasks": 4200,
+      "n_programs": 91,
+      "funnel": {
+        "total_pairs_checked": 27,
+        "candidates_2plus_variants": 6,
+        "candidates_passed_MDL": 2,
+        "gain_distribution": {
+          "n": 6,
+          "min": -2.0,
+          "max": 13.0,
+          "mean": 2.0,
+          "n_positive": 2
+        },
+        "diagnosis": "PASSED"
+      },
+      "mdl_positive_ops": [
+        {
+          "name": "eps___HOLE___mir_h__mir_v",
+          "count": 16,
+          "gain": 13,
+          "hole_variants": [
+            "fh",
+            "fv"
+          ]
+        },
+        {
+          "name": "fh__mir_h___HOLE___eps",
+          "count": 10,
+          "gain": 7,
+          "hole_variants": [
+            "dup_h",
+            "mir_v"
+          ]
+        }
+      ]
+    }
+  ],
+  "curve_verdict": "CURVE_CLIMBS: trace-count insufficiency. Amplification bootstraps formation."
+}
