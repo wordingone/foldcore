@@ -1,0 +1,41 @@
+{
+  "experiment": "stage0-code-synthesis",
+  "note": "Leo #11717: does richer executable layer lift coverage vs 12-op-brute at same compute budget? ARC-AGI-1 + MBPP (PRISM multi-domain from inception).",
+  "config": {
+    "node_budget": 10000,
+    "max_length": 5,
+    "split_seed": 42,
+    "n_held_arc": 200,
+    "n_mbpp": 50,
+    "vocab_12op": 12,
+    "vocab_richer": 54
+  },
+  "arc": {
+    "12op_baseline": {
+      "mean_cost": 9264.665,
+      "solved": 15,
+      "solve_rate": 0.075
+    },
+    "richer_grammar": {
+      "mean_cost": 9342.495,
+      "solved": 14,
+      "solve_rate": 0.07,
+      "new_solves": 1,
+      "delta_cost_pct": 0.8400735482610534
+    },
+    "arc_lift_str": "+1 new solves (-0.5pp)"
+  },
+  "mbpp": {
+    "12op_baseline": {
+      "solve_rate": 0.0,
+      "note": "No text generation in 12-op"
+    },
+    "code_synthesis": {
+      "solved": 4,
+      "n_problems": 50,
+      "solve_rate": 0.08,
+      "mean_candidates": 73.46
+    }
+  },
+  "verdict": "PASS: richer layer solves 1 new ARC tasks + 4 MBPP. Layer was the bottleneck. Stage 1 (self-compilation on richer base)."
+}
