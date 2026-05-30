@@ -369,6 +369,30 @@ Without partition: flat aggregate is the ambiguous null (mechanism-dead vs too-d
 
 **Non-memory-heavy.** No model load. Runs alongside Archie's WEB-CAD.
 
+**E3 Library run — budget=3000 result (DONE — 2026-05-30, Leo #11620):** NO_APPLICABLE_TASKS.
+- Source 200 tasks: 13 solved. Candidates: fh__fv (count=2, MDL_gain=0), mir_h__mir_v (count=2, MDL_gain=0). MDL criterion requires count*(len-1)-len > 0; count=2 gives exactly 0 → 0 ops added → grown=seed.
+- Root cause: 200-source SPLIT dropped mir_h__mir_v from ×3 (full-400 baseline) to ×2. ARC diversity = useful compounds recur 2-3× in 400 tasks → split scatters them below the count=3 MDL bar.
+- Artifacts: `E3_library_run.py`, `E3_library_run_result.json`. Commit: 61802a39.
+
+---
+
+**E3 Library run v2 — budget=10000 (PRE-REGISTERED 2026-05-30, Leo #11621):**
+
+ONE variable changed: budget 3000→10000. Hold max_length=5.
+
+Rationale: median solved-cost=12 nodes; failures hit 3000 cap. Budget 10000 reaches tasks needing 3000-10000 BFS at depth≤5. Expected: 23→~35 solves on full 400, which lifts compound recurrence past count=3 even after a 200/200 split.
+
+Steps:
+1. Seed baseline at budget=10000, 400 tasks — report FIRST (confirms more traces).
+2. Partitioned library run: same 200/200 split (seed=42), WITH/WITHOUT + R6 + compound-applicability partition.
+
+Pre-registered outcomes (same partition logic as budget=3000 run):
+- library forms (≥1 MDL compound) + applicable held-out cheaper → MECHANISM_WORKS; diversity-bound ceiling → next = curriculum / richer reuse.
+- library forms + applicable NOT cheaper → MECHANISM_BROKEN; debug.
+- NO_APPLICABLE_TASKS again at budget=10000 → max_length is NEXT lever (length-3 compounds clear MDL at count=2). If that also yields no transferring library → "geometric-primitive ARC lacks compositional reuse self-compilation needs" — real result, not failure.
+
+**Non-memory-heavy.** No model load. Runs alongside Archie's WEB-CAD.
+
 ---
 
 ## Mechanism Kill Log
