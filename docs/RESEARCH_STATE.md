@@ -597,6 +597,60 @@ Formed ops (eps___HOLE___mir_h__mir_v, fh__mir_h___HOLE___eps) are pure D4 augme
 
 ---
 
+### Stage 0b — Arbitrary-Python Exec Feasibility: CHICKEN-EGG CONFIRMED (2026-05-30, Leo #11728)
+
+**Bigger-fixed-basis clarification (Leo #11728):** The prior "Stage 0'" 54-op ARC result (54 hand-added designer primitives solving 7.5% of ARC) is NOT code-synthesis. It is designer-DSL-expansion (Refinement 2 explicitly rejects this path). The real code-synthesis ARC test is arbitrary-Python exec-based generate-and-test.
+
+**Result: CHICKEN-EGG CONFIRMED. 0 new solves beyond 12-op DSL baseline.**
+
+- 182 diverse lambda templates (geometric, value-conditional, structural, color-swap, erase), safe_exec with numpy + threading.Thread timeout.
+- 50 held-out tasks (split_seed=42).
+- 12-op DSL baseline: 2/50 solved. Arbitrary-Python sweep: 1/50 (the 1 solve was already solved by DSL). New solves: 0.
+- Total evaluations: 8919. Template errors (wrong output / exception): 1274.
+- Root cause: search space intractable without proposer. 182 templates × 50 tasks = ~9K evaluations, none of which propose the correct transformation. Proposer is the bottleneck, not the execution layer.
+- Artifacts: `stage0b_arc_synth.py`, `stage0b_result.json`. Commit: 0cdca781.
+
+---
+
+### Stage 1 — Wake-Sleep on Whole-Grid Grammar: HOLLOW; DISCRIMINATION PENDING (2026-05-30, Leo #11734 + #11740)
+
+**Leo #11734 GO:** Wake-sleep self-compilation loop approved. Typed combinators, PRISM multi-domain, net-free, dream-sleep cold-start, transfer from iteration 1, gated JSON, Kai gates.
+
+**Stage 1 grammar (whole-grid — INCOMPLETE):** id, fh, fv, tr, rot, crop, dup_h, dup_v, mir_h, mir_v, up2, down2 + recolor(c1,c2) × 72 + compose + library macros. MISSING: object-extract(pred), map-over-objects(transform), translate(vec), conditionals.
+
+**Result: FAIL (informative) for whole-grid grammar. Discrimination NOT achieved.**
+
+| Iter | ARC solved | ARC rate | Library | Transfer delta |
+|------|-----------|----------|---------|----------------|
+| 1    | 10/30     | 33.3%    | 0→1     | −0.2% (HOLLOW) |
+| 2    | 10/30     | 33.3%    | 1→1     | −0.2% (HOLLOW) |
+| 3    | 10/30     | 33.3%    | 1→1     | −0.2% (HOLLOW) |
+
+1 macro formed: compose(mir_h, mir_v) ≡ rot_180, occurrences=2, savings=1. Flat across all 3 iterations.
+
+**Why discrimination failed (Leo #11740):** Two tasks that both "recolor the largest object red" have DIFFERENT whole-grid programs (object at different positions/shapes in each task) → they look unique to a whole-grid grammar → no macro forms. HOLLOW on whole-grid grammar is consistent with BOTH (a) ARC structure-absence AND (b) object-level grammar-poverty. The discrimination test requires object-centric combinators.
+
+**RESEARCH_STATE action (Leo #11740):** Do NOT promote to structure-absence. Discrimination PENDING object-centric grammar re-run.
+
+- MBPP: 1/50 (2.0%) — whole-grid grammar covers list→list/int problems poorly.
+- Dream-sleep: ran (1/1 macros active in fantasies, count reported).
+- Augmentation status: CLEAN (no D4 augmentation applied).
+- Elapsed: 64s. Artifacts: `stage1_wake_sleep.py`, `stage1_result.json`. Commit: e32aba20.
+
+---
+
+### Stage 1b — Object-Centric Wake-Sleep: IN PROGRESS (2026-05-30, Leo #11740)
+
+**Leo #11740 GO:** Object-centric grammar re-run. Full 200 held-out. Augmentation status stated. Dream-sleep confirmed. Transfer-to-original-held.
+
+**Grammar corrections:** Add object-extract(predicate), map-apply(pred, transform), translate-object(vector), delete, keep-only. Object = connected component (4-connected). Predicates: largest, smallest, non-bg, unique-color, most-common-color, all, color_c (c=1-9). Transforms: recolor_c (c=0-9), delete, keep-only, translate_{dy}_{dx} (8 directions). 16 predicates × 22 transforms = 352 map-apply ops + 10 whole-grid prims.
+
+**Curriculum corrections:** N_CURRICULUM=100 RANDOM from pool (not sorted-by-complexity easiest-30 — eliminates easy-set bias). N_HELD=200 original. Transfer bug fixed (one baseline search per task).
+
+Result: pending. Artifact: `stage1b_object_centric.py`, `stage1b_result.json`.
+
+---
+
 ## Mechanism Kill Log
 
 | Kill | Mechanism | Experiment | Status |
