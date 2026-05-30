@@ -350,6 +350,23 @@ Scale eliminates the format wall (100% vs 83% parse) but does NOT move the solve
 
 **R6 ablation pre-registered:** freeze library at seed → held-out search-cost flat → confirms grown library is load-bearing iff curve bent.
 
+**E3 Seed baseline (DONE — 2026-05-29):** 12-op seed DSL, 400 ARC-AGI-1 training tasks, max_length=5, budget=3000. 23/400 (5.8%) solved. Median cost (solved) = 12 nodes. Trace-generation bar cleared with zero seed expansion (R0/C6 clean). Recurring patterns: fh__fv (×2), mir_h__mir_v (×3), crop__* (×5) — real MDL candidates. Artifacts: `E3_seed_baseline.py`, `E3_seed_baseline_result.json`. Commits: 5893e717.
+
+**E3 Library run — COMPOUND-APPLICABILITY PARTITION (PRE-REGISTERED 2026-05-30, Leo #11619):**
+
+Config: same seed/budget as baseline (one variable). 12-op DSL, max_length=5, budget=3000. Random 200/200 source/held-out split (seed=42).
+
+Partition: for each held-out task, check whether its solution (or best-attempt program) contains a learned compound as a subsequence. Report cost-reduction SEPARATELY:
+- **Compound-applicable** tasks: those whose seed-library program (if found) contains a learned compound sub-sequence, OR whose grown-library program uses a compound op directly.
+- **Non-applicable** tasks: all others.
+
+Partition interpretation (all outcomes informative in one run):
+- applicable cheaper + others flat → MECHANISM_WORKS; ceiling = compound-reuse frequency; next = raise trace yield (budget/length).
+- applicable NOT cheaper → MECHANISM_BROKEN; debug instrument/mechanism.
+- no applicable held-out tasks → NO_APPLICABLE_TASKS; compounds too narrow; next = raise yield.
+
+Without partition: flat aggregate is the ambiguous null (mechanism-dead vs too-diverse vs too-few-traces). Partition makes any outcome attributable.
+
 **Non-memory-heavy.** No model load. Runs alongside Archie's WEB-CAD.
 
 ---

@@ -1,0 +1,370 @@
+{
+  "experiment": "E3-library-run",
+  "config": {
+    "n_tasks": 400,
+    "n_source": 200,
+    "n_held": 200,
+    "max_length": 5,
+    "budget": 3000,
+    "min_count": 2,
+    "split_seed": 42
+  },
+  "seed_ops": [
+    "crop",
+    "down2",
+    "dup_h",
+    "dup_v",
+    "fh",
+    "fv",
+    "id",
+    "mir_h",
+    "mir_v",
+    "rot",
+    "tr",
+    "up2"
+  ],
+  "added_ops": [],
+  "grown_lib_size": 12,
+  "source_solved": 13,
+  "source_solved_programs": [
+    {
+      "id": "8be77c9e",
+      "program": [
+        "mir_v"
+      ],
+      "cost": 9
+    },
+    {
+      "id": "9dfd6313",
+      "program": [
+        "tr"
+      ],
+      "cost": 11
+    },
+    {
+      "id": "a416b8f3",
+      "program": [
+        "dup_h"
+      ],
+      "cost": 3
+    },
+    {
+      "id": "68b16354",
+      "program": [
+        "fv"
+      ],
+      "cost": 6
+    },
+    {
+      "id": "6150a2bd",
+      "program": [
+        "fh",
+        "fv"
+      ],
+      "cost": 66
+    },
+    {
+      "id": "67a3c6ac",
+      "program": [
+        "fh"
+      ],
+      "cost": 5
+    },
+    {
+      "id": "74dd1130",
+      "program": [
+        "tr"
+      ],
+      "cost": 11
+    },
+    {
+      "id": "67e8384a",
+      "program": [
+        "mir_h",
+        "mir_v"
+      ],
+      "cost": 105
+    },
+    {
+      "id": "62c24649",
+      "program": [
+        "mir_h",
+        "mir_v"
+      ],
+      "cost": 105
+    },
+    {
+      "id": "3c9b0459",
+      "program": [
+        "fh",
+        "fv"
+      ],
+      "cost": 66
+    },
+    {
+      "id": "1cf80156",
+      "program": [
+        "crop"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "4c4377d9",
+      "program": [
+        "fv",
+        "mir_v"
+      ],
+      "cost": 81
+    },
+    {
+      "id": "6fa7a44f",
+      "program": [
+        "mir_v"
+      ],
+      "cost": 9
+    }
+  ],
+  "candidates": [
+    {
+      "subseq": [
+        "fh",
+        "fv"
+      ],
+      "count": 2,
+      "mdl_gain": 0
+    },
+    {
+      "subseq": [
+        "mir_h",
+        "mir_v"
+      ],
+      "count": 2,
+      "mdl_gain": 0
+    }
+  ],
+  "aggregate": {
+    "seed_mean_cost": 2863.93,
+    "grown_mean_cost": 2863.93,
+    "r6_mean_cost": 2863.93,
+    "delta_cost": 0.0,
+    "delta_pct": 0.0,
+    "seed_solved": 10,
+    "grown_solved": 10
+  },
+  "partition": {
+    "compound_applicable": null,
+    "applicable_task_ids": [],
+    "non_applicable": {
+      "n": 200,
+      "seed_mean_cost": 2863.93,
+      "grown_mean_cost": 2863.93,
+      "delta_cost": 0.0,
+      "delta_pct": 0.0,
+      "seed_solved": 10,
+      "grown_solved": 10
+    },
+    "non_applicable_task_ids": [
+      "272f95fa",
+      "bd4472b8",
+      "a2fd1cf0",
+      "9aec4887",
+      "31aa019c",
+      "2281f1f4",
+      "fcb5c309",
+      "5168d44c",
+      "6e82a1ae",
+      "8d5021e8",
+      "af902bf9",
+      "82819916",
+      "a9f96cdd",
+      "ce4f8723",
+      "0e206a2e",
+      "8a004b2b",
+      "543a7ed5",
+      "7b7f7511",
+      "137eaa0f",
+      "1190e5a7",
+      "662c240a",
+      "928ad970",
+      "0ca9ddb6",
+      "2bcee788",
+      "b91ae062",
+      "88a62173",
+      "8e1813be",
+      "93b581b8",
+      "4093f84a",
+      "c59eb873",
+      "045e512c",
+      "cce03e0d",
+      "3af2c5a8",
+      "6855a6e4",
+      "007bbfb7",
+      "f8a8fe49",
+      "ba26e723",
+      "caa06a1f",
+      "8403a5d5",
+      "c9e6f938",
+      "22233c11",
+      "ae4f1146",
+      "4290ef0e",
+      "2204b7a8",
+      "25d487eb",
+      "694f12f3",
+      "a64e4611",
+      "6d0aefbc",
+      "8efcae92",
+      "36fdfd69",
+      "6cdd2623",
+      "a85d4709",
+      "1bfc4729",
+      "98cf29f8",
+      "5614dbcf",
+      "40853293",
+      "a68b268e",
+      "b8825c91",
+      "00d62c1b",
+      "d10ecb37",
+      "3aa6fb7a",
+      "9172f3a0",
+      "d6ad076f",
+      "ff28f65a",
+      "e40b9e2f",
+      "ce9e57f2",
+      "29623171",
+      "0520fde7",
+      "5582e5ca",
+      "9d9215db",
+      "810b9b61",
+      "83302e8f",
+      "1e32b0e9",
+      "e48d4e1a",
+      "e509e548",
+      "39a8645d",
+      "28bf18c6",
+      "1a07d186",
+      "23581191",
+      "a61ba2ce",
+      "a79310a0",
+      "3345333e",
+      "f8c80d96",
+      "d5d6de2d",
+      "8731374e",
+      "913fb3ed",
+      "5bd6f4ac",
+      "b1948b0a",
+      "eb281b96",
+      "54d9e175",
+      "f8ff0b80",
+      "db93a21d",
+      "3631a71a",
+      "995c5fa3",
+      "85c4e7cd",
+      "a65b410d",
+      "be94b721",
+      "c3e719e8",
+      "b9b7f026",
+      "47c1f68c",
+      "1f0c79e5",
+      "5daaa586",
+      "88a10436",
+      "6cf79266",
+      "f25fbde4",
+      "50846271",
+      "1c786137",
+      "6e02f1e3",
+      "e8593010",
+      "b782dc8a",
+      "60b61512",
+      "ff805c23",
+      "99fa7670",
+      "d07ae81c",
+      "fafffa47",
+      "b0c4d837",
+      "3de23699",
+      "c9f8e694",
+      "1f876c06",
+      "5c2c9af4",
+      "46f33fce",
+      "776ffc46",
+      "7ddcd7ec",
+      "3bd67248",
+      "7b6016b9",
+      "97a05b5b",
+      "e98196ab",
+      "ddf7fa4f",
+      "25d8a9c8",
+      "f76d97a5",
+      "d8c310e9",
+      "6773b310",
+      "4c5c2cf0",
+      "178fcbfb",
+      "1f85a75f",
+      "444801d8",
+      "bc1d5164",
+      "794b24be",
+      "ce22a75a",
+      "d037b0a7",
+      "67a423a3",
+      "b6afb2da",
+      "22168020",
+      "7fe24cdd",
+      "2c608aff",
+      "b190f7f5",
+      "99b1bc43",
+      "150deff5",
+      "5c0a986e",
+      "c909285e",
+      "7468f01a",
+      "780d0b14",
+      "253bf280",
+      "80af3007",
+      "f15e1fac",
+      "f8b3ba0a",
+      "72322fa7",
+      "48d8fb45",
+      "39e1d7f9",
+      "e6721834",
+      "73251a56",
+      "f25ffba3",
+      "e21d9049",
+      "3ac3eb23",
+      "025d127b",
+      "63613498",
+      "c0f76784",
+      "95990924",
+      "496994bd",
+      "8eb1be9a",
+      "f5b8619d",
+      "e3497940",
+      "d43fd935",
+      "e73095fd",
+      "44d8ac46",
+      "b8cdaf2b",
+      "0b148d64",
+      "c8f0f002",
+      "a740d043",
+      "50cb2852",
+      "4938f0c2",
+      "239be575",
+      "0d3d703e",
+      "0dfd9992",
+      "8f2ea7aa",
+      "c1d99e64",
+      "22eb0ac0",
+      "b527c5c6",
+      "fcc82909",
+      "dae9d2b5",
+      "25ff71a9",
+      "ec883f72",
+      "3428a4f5",
+      "4be741c5",
+      "54d82841",
+      "623ea044",
+      "ed36ccf7",
+      "0a938d79",
+      "28e73c20",
+      "d22278a0"
+    ]
+  },
+  "verdict": "NO_APPLICABLE_TASKS \u2014 compounds too narrow; next: raise trace yield (budget/length)"
+}
