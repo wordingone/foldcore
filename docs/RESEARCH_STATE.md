@@ -639,7 +639,7 @@ Formed ops (eps___HOLE___mir_h__mir_v, fh__mir_h___HOLE___eps) are pure D4 augme
 
 ---
 
-### Stage 1b — Object-Centric Wake-Sleep: IN PROGRESS (2026-05-30, Leo #11740)
+### Stage 1b — Object-Centric Wake-Sleep: CLOSED: STAGE1B_EMPTY_LIBRARY_VACUOUS_TRANSFER (2026-05-30, Leo #11740)
 
 **Leo #11740 GO:** Object-centric grammar re-run. Full 200 held-out. Augmentation status stated. Dream-sleep confirmed. Transfer-to-original-held.
 
@@ -647,27 +647,57 @@ Formed ops (eps___HOLE___mir_h__mir_v, fh__mir_h___HOLE___eps) are pure D4 augme
 
 **Curriculum corrections:** N_CURRICULUM=100 RANDOM from pool (not sorted-by-complexity easiest-30 — eliminates easy-set bias). N_HELD=200 original. Transfer bug fixed (one baseline search per task).
 
-**Result: HOLLOW REDUX. Structure-absence ESTABLISHED. Pre-registered escalation fires.**
+**Result: STAGE1B_EMPTY_LIBRARY_VACUOUS_TRANSFER. Structure-absence NOT established. Escalation held.**
 
 | Iter | ARC solved | ARC rate | Library | Transfer delta |
 |------|-----------|----------|---------|----------------|
-| 1    | 5/100     | 5.0%     | 0       | +0.0% (HOLLOW) |
-| 2    | 5/100     | 5.0%     | 0       | +0.0% (HOLLOW) |
-| 3    | 5/100     | 5.0%     | 0       | +0.0% (HOLLOW) |
+| 1    | 5/100     | 5.0%     | 0       | +0.0% (vacuous; empty library) |
+| 2    | 5/100     | 5.0%     | 0       | +0.0% (vacuous; empty library) |
+| 3    | 5/100     | 5.0%     | 0       | +0.0% (vacuous; empty library) |
 
 - MBPP: 4/50 (8.0%) flat.
-- Library stays EMPTY: 15 solved programs across 3 iterations, none share the same program. MDL_MIN_OCC=2 never met. No macro formation at depth-0 object-centric level or depth-1 compose.
-- Program types: 2/5 use map_apply (object-level), 3/5 whole-grid only — confirming the grammar IS working, the structure is absent.
-- Dream-sleep: ran (30 fantasies sampled per iteration); 0/0 macros active (library empty → no fantasies possible).
+- Library stays EMPTY: no macros formed, so self-compilation was not exercised.
+- Transfer delta=+0.0% is not a transfer negative. With `library_final={}`, the with-library condition is a no-op comparison against baseline.
+- The artifact does not contain solved-program bodies/hashes or `program_type_breakdown`, so claims such as "2/5 use map_apply" are unsupported and must not be used as evidence.
+- The artifact does not contain an `abstraction_funnel`, so it cannot distinguish "no shared structure" from search-yield/depth starvation.
+- Stage 1b used `BUDGET=400`, which the script defines as all 330 depth-0 programs plus only 70 depth-1 compositions. This is too shallow to establish absence of reusable depth-2 structure.
+- Dream-sleep: ran (30 fantasies sampled per iteration), but with an empty library there were no active macros.
 - Augmentation: CLEAN (no D4 augmentation applied).
-- Transfer delta=+0.0%: library empty → mechanism untestable (stronger verdict than HOLLOW — library never bootstrapped at all).
 - Elapsed: 20.9s.
 
-**Discrimination achieved:** HOLLOW on whole-grid grammar (Stage 1) was ambiguous. HOLLOW on object-centric grammar (Stage 1b) discriminates: object-level grammar poverty is ruled out. ARC's solvable programs at BFS depth (≤budget=400) use fully diverse programs — zero reuse even at the level of abstraction that ARC tasks share (object-level operations).
+**Discrimination not achieved:** Stage 1 whole-grid HOLLOW was ambiguous. Stage 1b corrected the grammar surface, but its solved yield was tiny and its library stayed empty. Because no macro library formed, self-compilation transfer was not tested. Object-level grammar poverty is not proven solved, and ARC structure absence is not established.
 
-**Pre-registered escalation fires (Leo #11734):** any-to-any representation question. "If HOLLOW on object-centric grammar: structure-absence established → escalate to any-to-any representation question."
+**Next gate:** Stage 1c depth-2 flat BFS, no recognition/proposer net, preserving the Stage 1b grammar to isolate depth. Required result fields: `max_depth_reached`, `depth_budget_by_level`, solved-program bodies/hashes, `program_type_breakdown`, `abstraction_funnel`, `library_final` with source depths, and original-held transfer with selected macro counts.
 
-Artifacts: `stage1b_object_centric.py`, `stage1b_result.json`. Commit: pending (2698a9eb → PENDING).
+**Escalation rule:** Stage 2 recognition/proposer is justified only after a valid Stage 1c `FORMATION_NEGATIVE_DEPTH2` or `HOLLOW_DEPTH2`. Any-to-any representation remains premature until Stage 2 also produces deeper solves with still-zero reuse/transfer.
+
+Artifacts: `stage1b_object_centric.py`, `stage1b_result.json`. Commits: 2698a9eb, 55fab552.
+
+---
+
+### Stage 1c — Depth-2 Flat BFS (Object-Centric, N_CURRICULUM=200): IN PROGRESS (2026-05-30, Leo #11745/#11749/#11752)
+
+**Design:** Isolates DEPTH as the one variable changed from Stage 1b. Grammar PRESERVED EXACTLY (same predicates, transforms, whole-grid prims). Only change: budget increased to reach depth-2 flat BFS (all compose(depth-0, depth-0) pairs = 330² ≈ 108,900 programs). N_CURRICULUM=200 (doubled from 1b). N_HELD=200 (same). N_ITERATIONS=3.
+
+**One-variable discipline (Leo+Kai):** Do NOT modify combinators. Any grammar change adds a DSL confound and makes the depth-vs-structure discrimination uninterpretable. If grammar needs changing, that is a SEPARATE flagged experiment.
+
+**Pre-registered outcomes (Kai gate, #11748):**
+- `DEPTH_STARVATION`: depth-2 not reached / yield too low to test macro formation.
+- `FORMATION_NEGATIVE_DEPTH2`: enough depth-2 solves, no MDL-positive reusable chunks → structure-absence argument strengthens → Stage 2 (proposer).
+- `HOLLOW_DEPTH2`: macros form but don't reduce original-held cost → mechanism forms but doesn't generalize.
+- `TRANSFER_GENUINE_DEPTH2`: macros reduce held cost by pre-registered margin → net-free bootstrap revives (was depth-starved, not structure-absent).
+
+**Intractability pre-registration:** Full depth-2 flat BFS (108,900+ programs) may be intractable within the 5-min cap. If so, report max budget reached, fraction of depth-2 space covered, and classify as DEPTH_STARVATION (that intractability IS the Stage 2 argument).
+
+**Required Kai gate fields in result JSON:**
+- `max_depth_reached`, `depth_budget_by_level` (programs evaluated per depth level)
+- `solved_programs` (bodies or hashes) + `depth_distribution` (how many solved at each depth)
+- `program_type_breakdown` (map_apply vs whole-grid vs composition solves)
+- `abstraction_funnel` (repeated subprograms, occurrence≥2 candidates, MDL gains, accepted/rejected macros + explicit reasons)
+- `library_final` (macro bodies, occurrences, source task IDs, source-program depths)
+- `transfer` (baseline, with-library, selected macro counts, new solves, aggregate cost delta)
+- `claim_scope` (explicit statement of what the evidence supports)
+- `kai_classification` (one of the four above)
 
 ---
 
