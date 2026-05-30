@@ -1,0 +1,136 @@
+{
+  "experiment": "E3-seed-baseline",
+  "seed_ops": [
+    "crop",
+    "down2",
+    "dup_h",
+    "dup_v",
+    "fh",
+    "fv",
+    "id",
+    "mir_h",
+    "mir_v",
+    "rot",
+    "tr",
+    "up2"
+  ],
+  "config": {
+    "max_length": 5,
+    "budget": 3000
+  },
+  "n_tasks": 400,
+  "n_solved": 23,
+  "solve_rate_pct": 5.75,
+  "median_cost_all": 3001.0,
+  "median_cost_solved": 12.0,
+  "solved_tasks": [
+    "1cf80156",
+    "28bf18c6",
+    "3af2c5a8",
+    "3c9b0459",
+    "46f33fce",
+    "4c4377d9",
+    "6150a2bd",
+    "62c24649",
+    "67a3c6ac",
+    "67e8384a",
+    "68b16354",
+    "6d0aefbc",
+    "6fa7a44f",
+    "7468f01a",
+    "74dd1130",
+    "8be77c9e",
+    "9dfd6313",
+    "a416b8f3",
+    "c59eb873",
+    "c9e6f938",
+    "ed36ccf7",
+    "f25fbde4",
+    "f25ffba3"
+  ],
+  "solved_programs": [
+    [
+      "crop"
+    ],
+    [
+      "crop",
+      "dup_h"
+    ],
+    [
+      "mir_h",
+      "mir_v"
+    ],
+    [
+      "fh",
+      "fv"
+    ],
+    [
+      "crop",
+      "down2",
+      "up2",
+      "up2"
+    ],
+    [
+      "fv",
+      "mir_v"
+    ],
+    [
+      "fh",
+      "fv"
+    ],
+    [
+      "mir_h",
+      "mir_v"
+    ],
+    [
+      "fh"
+    ],
+    [
+      "mir_h",
+      "mir_v"
+    ],
+    [
+      "fv"
+    ],
+    [
+      "mir_h"
+    ],
+    [
+      "mir_v"
+    ],
+    [
+      "crop",
+      "fh"
+    ],
+    [
+      "tr"
+    ],
+    [
+      "mir_v"
+    ],
+    [
+      "tr"
+    ],
+    [
+      "dup_h"
+    ],
+    [
+      "up2"
+    ],
+    [
+      "mir_h"
+    ],
+    [
+      "rot"
+    ],
+    [
+      "crop",
+      "up2"
+    ],
+    [
+      "crop",
+      "fv",
+      "mir_v"
+    ]
+  ]
+}
