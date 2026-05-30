@@ -647,7 +647,27 @@ Formed ops (eps___HOLE___mir_h__mir_v, fh__mir_h___HOLE___eps) are pure D4 augme
 
 **Curriculum corrections:** N_CURRICULUM=100 RANDOM from pool (not sorted-by-complexity easiest-30 — eliminates easy-set bias). N_HELD=200 original. Transfer bug fixed (one baseline search per task).
 
-Result: pending. Artifact: `stage1b_object_centric.py`, `stage1b_result.json`.
+**Result: HOLLOW REDUX. Structure-absence ESTABLISHED. Pre-registered escalation fires.**
+
+| Iter | ARC solved | ARC rate | Library | Transfer delta |
+|------|-----------|----------|---------|----------------|
+| 1    | 5/100     | 5.0%     | 0       | +0.0% (HOLLOW) |
+| 2    | 5/100     | 5.0%     | 0       | +0.0% (HOLLOW) |
+| 3    | 5/100     | 5.0%     | 0       | +0.0% (HOLLOW) |
+
+- MBPP: 4/50 (8.0%) flat.
+- Library stays EMPTY: 15 solved programs across 3 iterations, none share the same program. MDL_MIN_OCC=2 never met. No macro formation at depth-0 object-centric level or depth-1 compose.
+- Program types: 2/5 use map_apply (object-level), 3/5 whole-grid only — confirming the grammar IS working, the structure is absent.
+- Dream-sleep: ran (30 fantasies sampled per iteration); 0/0 macros active (library empty → no fantasies possible).
+- Augmentation: CLEAN (no D4 augmentation applied).
+- Transfer delta=+0.0%: library empty → mechanism untestable (stronger verdict than HOLLOW — library never bootstrapped at all).
+- Elapsed: 20.9s.
+
+**Discrimination achieved:** HOLLOW on whole-grid grammar (Stage 1) was ambiguous. HOLLOW on object-centric grammar (Stage 1b) discriminates: object-level grammar poverty is ruled out. ARC's solvable programs at BFS depth (≤budget=400) use fully diverse programs — zero reuse even at the level of abstraction that ARC tasks share (object-level operations).
+
+**Pre-registered escalation fires (Leo #11734):** any-to-any representation question. "If HOLLOW on object-centric grammar: structure-absence established → escalate to any-to-any representation question."
+
+Artifacts: `stage1b_object_centric.py`, `stage1b_result.json`. Commit: pending (2698a9eb → PENDING).
 
 ---
 

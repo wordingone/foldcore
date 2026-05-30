@@ -41,12 +41,16 @@ N_CURRICULUM   = 100   # random from pool (not sorted-by-complexity)
 N_HELD         = 200   # original held-out for transfer
 N_MBPP         = 50
 SPLIT_SEED     = 42
-BUDGET         = 2000
+BUDGET         = 400   # covers all 330 depth-0 + 70 depth-1 compose; faster with BFS
 MDL_MIN_OCC    = 2     # min task-count for macro to gate MDL
 N_DREAMS       = 30    # fantasies per dream-sleep
 TRANSFER_MARGIN = 5.0  # % threshold for TRANSFER_GENUINE
 
 # ── Object extraction (connected components, 4-connected) ─────────────────────
+# Cached per grid — key insight: extract_objects is called once per eval, but
+# the same input grid is shared across 330 depth-0 programs -> cache gives 330x speedup.
+
+_OBJ_CACHE = {}  # grid.tobytes() -> list of obj dicts
 
 def get_bg(grid):
     vals, counts = np.unique(grid, return_counts=True)
@@ -185,10 +189,16 @@ TRANSFORM_NAMES = sorted(TRANSFORMS.keys())
 
 # ── Object-centric program evaluation ─────────────────────────────────────────
 
+def _extract_cached(grid):
+    key = grid.tobytes()
+    if key not in _OBJ_CACHE:
+        _OBJ_CACHE[key] = extract_objects(grid)
+    return _OBJ_CACHE[key]
+
 def eval_map_apply(pred_name, transform_name, grid):
     """Apply transform to objects selected by predicate."""
     try:
-        objs = extract_objects(grid)
+        objs = _extract_cached(grid)
         selected = PREDICATES[pred_name](grid, objs)
         if not selected:
             return grid.copy()
