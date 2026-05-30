@@ -1,0 +1,36 @@
+{
+  "experiment": "E3-self-compilation",
+  "config": {
+    "n_source": 30,
+    "n_held": 20,
+    "max_length": 4,
+    "budget": 800,
+    "min_count": 2,
+    "grid_size": 4
+  },
+  "seed_ops": [
+    "fh",
+    "fv",
+    "tr",
+    "rot"
+  ],
+  "added_ops": [
+    "fh__fv",
+    "fh__fh",
+    "fv__rot"
+  ],
+  "grown_lib_size": 7,
+  "source_solved": 30,
+  "candidates_found": 4,
+  "held_out": {
+    "baseline_cost_mean": 4.0,
+    "baseline_solved": 20,
+    "grown_cost_mean": 3.9,
+    "grown_solved": 20,
+    "r6_cost_mean": 4.0,
+    "r6_solved": 20,
+    "delta_cost": 0.10000000000000009,
+    "delta_pct": 2.500000000000002
+  },
+  "verdict": "POSITIVE \u2014 self-compilation load-bearing: library compressed held-out search"
+}

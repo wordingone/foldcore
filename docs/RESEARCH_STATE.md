@@ -327,9 +327,30 @@ Scale eliminates the format wall (100% vs 83% parse) but does NOT move the solve
 
 ---
 
-## Current Direction: HOLD — awaiting Leo's reframed direction on core-substrate question
+## Current Direction: E3 — Self-Compilation (search-cost-reduction) (Leo #11615, 2026-05-30)
 
-**E2.x closed (2026-05-29).** Capability-isolation matrix documented and closed above. Leo is in a think-together with the user on whether the core should be a frozen oracle vs. a grown representational medium. No new experiment until Leo sends the reframed direction.
+**Right question (per Leo #11615 + the-search#3 comment 4580884142):**
+*Can the system convert its own traces into reusable intermediate operators that make future program search lower-dimensional?*
+
+**Metric:** search cost (nodes expanded) to solve held-out tasks WITH vs WITHOUT the grown library. NOT solve-rate. Graded + early signal — compression shows before binary solves.
+
+**R1 boundary:** MDL/compression over own trace corpus drives library updates (internal). Search-cost is observed, not fed back as reward.
+
+**Mechanism:** Fixed interpreter + growing typed-operator library. Loop: bounded search composes current ops → abstract recurring sub-compositions from solved+failed traces (anti-unification / frequent-subtree) → MDL criterion keeps operators that compress trace corpus → library grows → next round's search is lower-dimensional.
+
+**Representation:** Typed transform DSL (settled by metric requirement — "lower-dimensional search" presupposes clean composition + measurable dimension; raw Python does not give this).
+
+---
+
+## E3 — Minimal Self-Compilation Experiment (PRE-REGISTERED 2026-05-30, BEFORE RUNNING)
+
+**Pre-registered positive:** held-out search-cost curve bends DOWN as library grows → self-compilation load-bearing (RSI signal). Operators transfer across tasks they were not built from.
+
+**Pre-registered negative:** held-out search-cost curve stays flat → operators episode-specific (anti-speedup finding #3 replicated at the operator level, clean fail). No held-out compression.
+
+**R6 ablation pre-registered:** freeze library at seed → held-out search-cost flat → confirms grown library is load-bearing iff curve bent.
+
+**Non-memory-heavy.** No model load. Runs alongside Archie's WEB-CAD.
 
 ---
 
