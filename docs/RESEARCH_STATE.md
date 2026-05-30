@@ -568,7 +568,16 @@ Top MDL-positive operators (step 3, suspect aug-artifact):
 - (b) Transfer test: formed ops reduce search cost on ORIGINAL un-augmented held-out (BFS with vs without library on original 200 held tasks)
 - (c) If (b) is positive: TRANSFER_GENUINE → 12-op continues. If flat/negative: HOLLOW_CLIMB → augmentation's own symmetry, code-synthesis pivot STANDS.
 
-**In flight:** gated E3_density_curve.py (PID 19676) + E3_transfer_test.py running now. Atomic re-promotion after both complete.
+**Transfer test result (E3_transfer_test.py, c6a7d433) — THE DECIDER:**
+
+| Condition | mean_cost | solved | new_solves | delta |
+|-----------|-----------|--------|------------|-------|
+| Baseline (no library) | 9264.7 | 15/200 | — | — |
+| With holed library (24 compounds) | 9311.5 | 14/200 | 0 | **+0.5%** |
+
+**HOLLOW_CLIMB confirmed.** Formed ops increase cost by +0.5%, 0 new solves, no transfer. Augmentation injected its own symmetry (D4 mirror/flip); library adds overhead without structure gain. Code-synthesis pivot (Refinement 2) STANDS per pre-registration.
+
+**Gated density curve:** in-flight (PID 19676, all 4 Kai gates). Will update artifact completeness field when written.
 
 **ARC scope note:** This result is ARC-scoped (12-op DSL has no MBPP basis). Cannot support a general "self-compilation works" claim. PRISM/multi-domain evidence required for generalization claim.
 
