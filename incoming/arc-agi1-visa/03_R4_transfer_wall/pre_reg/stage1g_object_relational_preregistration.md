@@ -5,7 +5,7 @@
 Gates resolved:
 - [x] Stage 1f FLAT (D'=9 seed-42): object-local geometric expansion did NOT raise reach ceiling. Leo GATED (mail #12058). Recorded as verified negative.
 - [x] Leo GO for pre-registration (mail #12058): "pre-register the object-relational translate-to-anchor spec now — same shape as 1f"
-- [x] Stage 1f seed-1 final result: ≤12 confirmed (see two-seed table below when complete) — GO canonical 1g. [HOLD + mail Leo if ≥14]
+- [x] Stage 1f seed-1 final result: D'=7 ≤12 CONFIRMED — FLAT both seeds (seed-42: D'=9, seed-1: D'=7). GO canonical 1g.
 - [x] Harness build + TEMP-smoke verified by Leo (mail #12062 — gate fires on all 7 injected violations; builder ACTUAL n_leaves=1370; space_hash=0890317fe99bc9f1 != 13a00a0ff95dd026)
 
 Design decisions LOCKED at pre-registration (Leo, mail #12060):
@@ -33,10 +33,10 @@ Pre-registration APPROVED (mail #12060). R1-R6 clean (pure reach measurement, no
 | Stage | Arm | Seed-42 | Seed-1 |
 |-------|-----|---------|--------|
 | 1e | D (330-leaf, random time-limited) | 11 | 8 |
-| 1f | D' (410-leaf, +MAP_GEOM object-local) | 9 | pending |
+| 1f | D' (410-leaf, +MAP_GEOM object-local) | 9 | 7 |
 | 1g | D'' (1370-leaf, +MAP_RELATE object-relational) | TBD | TBD |
 
-Stage 1f conclusion: MAP_GEOM (per-object flip/rotate within bbox) is functional (3 geom_solutions on seed-42) but does NOT raise the aggregate reach ceiling. The binding constraint is NOT per-object geometric expressiveness.
+Stage 1f conclusion: MAP_GEOM (per-object flip/rotate within bbox) is functional (geom_solutions: 3 seed-42, 4 seed-1) but does NOT raise the aggregate reach ceiling. D'∈{7,9} vs Stage 1e D∈{8,11} — within band. The binding constraint is NOT per-object geometric expressiveness.
 
 ---
 
