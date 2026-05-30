@@ -340,18 +340,23 @@ Scale eliminates the format wall (100% vs 83% parse) but does NOT move the solve
 
 ---
 
-## Current Direction: E3 — Self-Compilation (search-cost-reduction) (Leo #11615, 2026-05-30)
+## Current Direction: Stage 0' — Code-Synthesis Feasibility (Leo #11717, 2026-05-30)
 
-**Right question (per Leo #11615 + the-search#3 comment 4580884142):**
-*Can the system convert its own traces into reusable intermediate operators that make future program search lower-dimensional?*
+**Trigger:** 12-op self-compilation CLOSED (HOLLOW_CLIMB, Leo #11717). 12-op base is the representational ceiling — mechanism works at synthetic R*=0.7 (E4), but real ARC structure is below R* at any reachable trace density. Refinement 2 (code-synthesis pivot) triggered.
 
-**Metric:** search cost (nodes expanded) to solve held-out tasks WITH vs WITHOUT the grown library. NOT solve-rate. Graded + early signal — compression shows before binary solves.
+**Right question (Leo #11717):** Does a richer EXECUTABLE LAYER solve more than 12-op brute, at the same compute budget? Isolates layer-vs-proposer: even weak enumeration over a richer grammar should lift coverage if the layer is the bottleneck.
 
-**R1 boundary:** MDL/compression over own trace corpus drives library updates (internal). Search-cost is observed, not fed back as reward.
+**Executable layer:** Sandboxed Python grid→grid (numpy in→out). SANDBOX REQUIRED: subprocess + timeout + restricted builtins + no file/network I/O.
 
-**Mechanism:** Fixed interpreter + growing typed-operator library. Loop: bounded search composes current ops → abstract recurring sub-compositions from solved+failed traces (anti-unification / frequent-subtree) → MDL criterion keeps operators that compress trace corpus → library grows → next round's search is lower-dimensional.
+**Proposer:** Weakest first — bounded-depth enumeration over a Turing-richer-than-12-op grammar (12 ops as leaves + map-over-cells/objects + conditionals on cell/color/shape + coord/color arithmetic). NO learned proposer yet.
 
-**Representation:** Typed transform DSL (settled by metric requirement — "lower-dimensional search" presupposes clean composition + measurable dimension; raw Python does not give this).
+**Metric:** solve-rate code-synthesis vs 12-op-brute, SAME compute budget.
+
+**PRISM multi-domain FROM INCEPTION:** run same generate-and-test on MBPP (Python layer = MBPP is native). Report solve-rate on BOTH ARC grid→grid AND MBPP. Build on existing prism.py / arc1_prism_adapter.py.
+
+**Pre-registered outcomes:**
+- **PASS:** code-synth > 12-op-brute on ARC + non-trivial MBPP → layer was bottleneck → Stage 1 (self-compilation library on richer base + R6 ablation)
+- **CHICKEN-EGG:** solve-rate ≈ brute or near-zero (richer space drowns weak enumeration) → proposer needed → recognition-net-from-own-solves (DreamCoder, R2-adjacent) or curriculum-from-enumeration-solvable-up
 
 ---
 
@@ -539,19 +544,13 @@ R*_contiguous (B): 1.0 — all-MDL library achieves aggregate crossover.
 
 ---
 
-## E3 Trace-Density Amplification Curve — SIGNAL PRESENT, INSTRUMENTATION INCOMPLETE (Leo #11683, #11709, #11713)
+## E3 Trace-Density Amplification Curve — CLOSED: HOLLOW_CLIMB (Leo #11717, 2026-05-30)
 
-**Question:** Is 12-op formation-density failure caused by trace-count insufficiency (curve climbs → amplification bootstraps self-compilation) or representational-base insufficiency (curve stays 0 → base is the ceiling)?
+**Question:** Is 12-op formation-density failure caused by trace-count insufficiency or representational-base insufficiency?
 
-**Design:** Holed formation funnel at 3 source-density steps. Held-out fixed to 200 training tasks (split_seed=42), disjoint across ALL steps.
+**Answer: REPRESENTATIONAL CEILING.** HOLLOW_CLIMB confirmed by transfer test (Leo #11717 accepted). 12-op base closed as the ceiling.
 
-**HOLD — Leo #11713 (2026-05-30):** CURVE_CLIMBS promotion blocked on two missing bars:
-
-1. **Artifact-gate gap:** committed result JSON (7e0bc954) is ungated — lacks `held_task_ids`, per-step `source_construction`, `aug_leakage_check` (Gate 3 content-hash), and `curve_table`. Mail-narrated leakage-clean claim is NOT in the artifact. Gated run in-flight (PID 19676).
-
-2. **Formation ≠ transfer:** `candidates_passed_MDL` going 0→0→2 is formation count, NOT the pre-registered bar. The 2 formed ops (`eps___HOLE___mir_h__mir_v`, `fh__mir_h___HOLE___eps`) are mirror/flip compositions — exactly what D4 augmentation injects. Content-hash leakage being CLEAN rules out identical-copy leakage; it does NOT establish transfer. CURVE_CLIMBS-accepted requires positive transfer: formed ops reduce search cost on the ORIGINAL un-augmented held-out set.
-
-**Interim results (ungated, pending gated rerun):**
+**Gated curve (commit 75754106, all 4 Kai gates):**
 
 | Step | Source tasks | Programs | 2plus_cand | MDL-pos | Diagnosis |
 |------|-------------|----------|------------|---------|-----------|
@@ -559,27 +558,42 @@ R*_contiguous (B): 1.0 — all-MDL library achieves aggregate crossover.
 | 2 (full-real ~600) | 600 | 13 | 0 | 0 | STRUCTURAL_STARVATION |
 | 3 (+D4 aug ~4200) | 4200 | 91 | 6 | **2** | **PASSED** |
 
-Top MDL-positive operators (step 3, suspect aug-artifact):
-- `eps___HOLE___mir_h__mir_v`: count=16, gain=13.0
-- `fh__mir_h___HOLE___eps`: count=10, gain=7.0
+Gate 3 content-hash leakage: CLEAN (hits=0, 3600 augmented vs 200 held). Gate fields in artifact: held_task_ids=200, source_construction per step, aug_leakage_check, curve_table.
 
-**VERDICT: PENDING.** Three bars required for acceptance (Leo #11713):
-- (a) Gated artifact on disk with all 4 Kai fields + aug_leakage_check.hits==0 IN artifact
-- (b) Transfer test: formed ops reduce search cost on ORIGINAL un-augmented held-out (BFS with vs without library on original 200 held tasks)
-- (c) If (b) is positive: TRANSFER_GENUINE → 12-op continues. If flat/negative: HOLLOW_CLIMB → augmentation's own symmetry, code-synthesis pivot STANDS.
-
-**Transfer test result (E3_transfer_test.py, c6a7d433) — THE DECIDER:**
+**Transfer test (commit c6a7d433) — THE DECIDER:**
 
 | Condition | mean_cost | solved | new_solves | delta |
 |-----------|-----------|--------|------------|-------|
 | Baseline (no library) | 9264.7 | 15/200 | — | — |
 | With holed library (24 compounds) | 9311.5 | 14/200 | 0 | **+0.5%** |
 
-**HOLLOW_CLIMB confirmed.** Formed ops increase cost by +0.5%, 0 new solves, no transfer. Augmentation injected its own symmetry (D4 mirror/flip); library adds overhead without structure gain. Code-synthesis pivot (Refinement 2) STANDS per pre-registration.
+Formed ops (eps___HOLE___mir_h__mir_v, fh__mir_h___HOLE___eps) are pure D4 augmentation artifacts — mirror/flip compositions matching the injected transforms. Zero new solves, +0.5% overhead. No transfer to original held-out structure. 12-op base IS the representational ceiling: E4 proved mechanism works at R*=0.7 on synthetic data; real ARC never reaches that density.
 
-**Gated density curve:** complete (commit 75754106). All 4 Kai gates in artifact: held_task_ids=200, source_construction per step, aug_leakage_check.hits=0 in step-3, curve_table (3 rows). Claim-vs-artifact gap closed.
+**Pending Kai gate:** formal close of transfer instrument (independent audit). Verdict dispositive regardless.
 
-**ARC scope note:** This result is ARC-scoped (12-op DSL has no MBPP basis). Cannot support a general "self-compilation works" claim. PRISM/multi-domain evidence required for generalization claim.
+**Artifact chain:** E3_density_curve.py, E3_density_curve_result.json (75754106), E3_transfer_test.py, E3_transfer_test_result.json (c6a7d433).
+
+---
+
+## Stage 0' — Code-Synthesis Feasibility (PRE-REGISTERED 2026-05-30, Leo #11717, BEFORE RUNNING)
+
+**Trigger:** 12-op HOLLOW_CLIMB accepted. Refinement 2 fired.
+
+**Executable layer:** Sandboxed Python grid→grid (numpy). Generate-and-test on train I/O pairs; all-match → apply to held test pair. **SANDBOX REQUIRED:** subprocess + timeout + restricted builtins (no file/network/exec).
+
+**Proposer (weakest first):** Bounded-depth enumeration over Turing-richer grammar:
+- Leaves: 12 seed ops (id, fh, fv, tr, rot, crop, dup_h, dup_v, mir_h, mir_v, up2, down2)
+- Extensions: map-over-cells, map-over-objects, conditionals on cell/color/shape, coord/color arithmetic
+
+**Metric:** solve-rate code-synthesis vs 12-op-brute, **SAME compute budget**.
+
+**PRISM multi-domain FROM INCEPTION:** same generate-and-test on MBPP (Python layer = MBPP is native). Report solve-rate on BOTH ARC grid→grid AND MBPP. Build on existing prism.py / arc1_prism_adapter.py.
+
+**Pre-registered outcomes:**
+- **PASS:** code-synth > 12-op-brute on ARC AND non-trivial MBPP solve-rate → layer was bottleneck → Stage 1 (self-compilation library on richer base + R6 ablation)
+- **CHICKEN-EGG:** code-synth ≈ brute OR near-zero ARC (richer space drowns weak enumeration) → proposer needed first → recognition-net-from-own-solves (DreamCoder/R2-adjacent) or curriculum-from-enumeration-solvable-up
+
+**Gates (Kai #11717):** formal feasibility result after Leo sees solve-rate table. Mail Kai + Leo together.
 
 ---
 
@@ -590,8 +604,9 @@ Top MDL-positive operators (step 3, suspect aug-artifact):
 | K1 | Success-weighted heap priority over fixed primitive algebra | E1b + K1 probe | FIRED 2026-05-29 |
 | K2 | LGG depth-2 meta-layer non-load-bearing on combinatorial held-out | E2.1 | FIRED 2026-05-29 |
 | K3 | Trace-conditional LGG meta-layer non-load-bearing with clean signal | E2.2(b) | FIRED 2026-05-29 |
+| K4 | 12-op self-compilation (holed ops, density amplification) | E3 density curve + transfer test | FIRED 2026-05-30 (HOLLOW_CLIMB) |
 
-3 mechanism-kills = direction dead on SELECTION AXIS. Hard pivot to E2.2' (coverage-expansion).
+3+1 mechanism-kills. K1-K3 = SELECTION AXIS dead. K4 = 12-op REPRESENTATIONAL CEILING. Code-synthesis Stage 0' active.
 
 ---
 
