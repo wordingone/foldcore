@@ -1,6 +1,6 @@
 # the-search — Stage 1g: Object-Relational Translate-to-Anchor — PRE-REGISTERED
 
-**Status: PRE-REGISTERED — all gates resolved; canonical run authorized.**
+**Status: COMPLETE — D''=9 seed-42 FLAT (≤12). Seed-1 skipped per decision tree. MAP_RELATE REJECTED. Leo gate pending (mail #12063).**
 
 Gates resolved:
 - [x] Stage 1f FLAT (D'=9 seed-42): object-local geometric expansion did NOT raise reach ceiling. Leo GATED (mail #12058). Recorded as verified negative.
@@ -34,7 +34,7 @@ Pre-registration APPROVED (mail #12060). R1-R6 clean (pure reach measurement, no
 |-------|-----|---------|--------|
 | 1e | D (330-leaf, random time-limited) | 11 | 8 |
 | 1f | D' (410-leaf, +MAP_GEOM object-local) | 9 | 7 |
-| 1g | D'' (1370-leaf, +MAP_RELATE object-relational) | TBD | TBD |
+| 1g | D'' (1370-leaf, +MAP_RELATE object-relational) | 9 | — (skipped: D''≤12 FLAT) |
 
 Stage 1f conclusion: MAP_GEOM (per-object flip/rotate within bbox) is functional (geom_solutions: 3 seed-42, 4 seed-1) but does NOT raise the aggregate reach ceiling. D'∈{7,9} vs Stage 1e D∈{8,11} — within band. The binding constraint is NOT per-object geometric expressiveness.
 

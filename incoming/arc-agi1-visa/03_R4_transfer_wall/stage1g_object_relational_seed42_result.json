@@ -1,0 +1,1321 @@
+{
+  "experiment": "stage1g_object_relational",
+  "spec": "B:/M/avir/leo/state/the-search-stage1g-object-relational-spec-draft.md",
+  "leo_review": "mail #12060 APPROVED",
+  "seed": 42,
+  "smoke": false,
+  "n_tasks": 200,
+  "n_solved": 9,
+  "n_held_full": 200,
+  "n_leaves": 1370,
+  "n_leaves_asserted": true,
+  "prev_n_leaves": 410,
+  "new_leaves_added": 960,
+  "relate_leaves_count": 960,
+  "relate_modes": [
+    "adjacent_down",
+    "adjacent_left",
+    "adjacent_right",
+    "adjacent_up"
+  ],
+  "space_hash": "0890317fe99bc9f1",
+  "prev_space_hash": "13a00a0ff95dd026",
+  "candidate_set_changed": true,
+  "candidate_eval_budget": 30000,
+  "candidate_eval_budget_asserted": true,
+  "max_depth": 2,
+  "search_algorithm": "random_time_limited",
+  "time_per_task_s": 9.0,
+  "arm_d_seed": 0,
+  "anchor_selection": "largest_connected_component",
+  "held_task_ids": [
+    "007bbfb7",
+    "017c7c7b",
+    "025d127b",
+    "06df4c85",
+    "0a938d79",
+    "11852cab",
+    "1a07d186",
+    "1b2d62fb",
+    "1b60fb0c",
+    "1bfc4729",
+    "1caeab9d",
+    "1cf80156",
+    "1f0c79e5",
+    "2013d3e2",
+    "22168020",
+    "22eb0ac0",
+    "234bbc79",
+    "23581191",
+    "239be575",
+    "25d487eb",
+    "25d8a9c8",
+    "264363fd",
+    "272f95fa",
+    "27a28665",
+    "28bf18c6",
+    "29623171",
+    "2bcee788",
+    "2bee17df",
+    "2dc579da",
+    "31aa019c",
+    "321b1fc6",
+    "3345333e",
+    "3618c87e",
+    "3631a71a",
+    "36d67576",
+    "3906de3d",
+    "3aa6fb7a",
+    "3af2c5a8",
+    "3bd67248",
+    "3bdb4ada",
+    "3c9b0459",
+    "3eda0437",
+    "40853293",
+    "42a50994",
+    "444801d8",
+    "447fd412",
+    "44d8ac46",
+    "4612dd53",
+    "46f33fce",
+    "47c1f68c",
+    "4c4377d9",
+    "508bd3b6",
+    "50cb2852",
+    "543a7ed5",
+    "54d9e175",
+    "5521c0d9",
+    "56ff96f3",
+    "57aa92db",
+    "5ad4f10b",
+    "5bd6f4ac",
+    "5c0a986e",
+    "60b61512",
+    "623ea044",
+    "6430c8c4",
+    "6455b5f5",
+    "662c240a",
+    "67385a82",
+    "673ef223",
+    "6773b310",
+    "67a3c6ac",
+    "67a423a3",
+    "681b3aeb",
+    "68b16354",
+    "6a1e5592",
+    "6d58a25d",
+    "6d75e8bb",
+    "6e02f1e3",
+    "6e82a1ae",
+    "6ecd11f4",
+    "6fa7a44f",
+    "72322fa7",
+    "73251a56",
+    "7468f01a",
+    "74dd1130",
+    "75b8110e",
+    "760b3cac",
+    "776ffc46",
+    "780d0b14",
+    "7837ac64",
+    "794b24be",
+    "7e0986d6",
+    "7f4411dc",
+    "7fe24cdd",
+    "82819916",
+    "83302e8f",
+    "834ec97d",
+    "846bdb03",
+    "855e0971",
+    "868de0fa",
+    "8731374e",
+    "8d5021e8",
+    "8d510a79",
+    "8e5a5113",
+    "8efcae92",
+    "90c28cc7",
+    "913fb3ed",
+    "9172f3a0",
+    "941d9a10",
+    "94f9d214",
+    "95990924",
+    "963e52fc",
+    "97999447",
+    "97a05b5b",
+    "995c5fa3",
+    "9af7a82c",
+    "9ecd008a",
+    "9edfc990",
+    "9f236235",
+    "a1570a43",
+    "a2fd1cf0",
+    "a3325580",
+    "a3df8b1e",
+    "a416b8f3",
+    "a48eeaf7",
+    "a5313dff",
+    "a61ba2ce",
+    "a61f2674",
+    "a68b268e",
+    "a699fb00",
+    "a740d043",
+    "a79310a0",
+    "a87f7484",
+    "a8d7556c",
+    "a9f96cdd",
+    "ac0a08a4",
+    "ae3edfdc",
+    "ae4f1146",
+    "aedd82e4",
+    "b60334d2",
+    "b7249182",
+    "b782dc8a",
+    "b91ae062",
+    "ba26e723",
+    "bb43febb",
+    "bc1d5164",
+    "bdad9b1f",
+    "be94b721",
+    "c1d99e64",
+    "c3f564a4",
+    "c444b776",
+    "c8cbb738",
+    "c9e6f938",
+    "c9f8e694",
+    "caa06a1f",
+    "ce602527",
+    "ce9e57f2",
+    "d037b0a7",
+    "d06dbe63",
+    "d13f3404",
+    "d22278a0",
+    "d2abd087",
+    "d364b489",
+    "d406998b",
+    "d511f180",
+    "d631b094",
+    "d687bc17",
+    "d9f24cd1",
+    "d9fac9be",
+    "dae9d2b5",
+    "db93a21d",
+    "dbc1a6ce",
+    "ded97339",
+    "e179c5f4",
+    "e21d9049",
+    "e26a3af2",
+    "e5062a87",
+    "e509e548",
+    "e6721834",
+    "e8593010",
+    "e8dc4411",
+    "e9614598",
+    "e98196ab",
+    "e9afcf9a",
+    "ea786f4a",
+    "eb281b96",
+    "eb5a1d5d",
+    "ecdecbb3",
+    "ef135b50",
+    "f15e1fac",
+    "f25fbde4",
+    "f25ffba3",
+    "f76d97a5",
+    "f8a8fe49",
+    "f8c80d96",
+    "f8ff0b80",
+    "f9012d9b",
+    "fcb5c309",
+    "fcc82909",
+    "feca6190",
+    "ff28f65a"
+  ],
+  "held_task_ids_match_stage1d": true,
+  "stage1d_result_path": "B:/M/the-search/incoming/arc-agi1-visa/03_R4_transfer_wall/stage1d_premise_truth_b30000_minimality_result.json",
+  "arm_d_per_task": {
+    "007bbfb7": {
+      "solved": false,
+      "n_evals": 293953,
+      "time_limit_hit": true
+    },
+    "017c7c7b": {
+      "solved": false,
+      "n_evals": 203850,
+      "time_limit_hit": true
+    },
+    "025d127b": {
+      "solved": false,
+      "n_evals": 70198,
+      "time_limit_hit": true
+    },
+    "06df4c85": {
+      "solved": false,
+      "n_evals": 12118,
+      "time_limit_hit": true
+    },
+    "0a938d79": {
+      "solved": false,
+      "n_evals": 64420,
+      "time_limit_hit": true
+    },
+    "11852cab": {
+      "solved": false,
+      "n_evals": 52051,
+      "time_limit_hit": true
+    },
+    "1a07d186": {
+      "solved": false,
+      "n_evals": 36957,
+      "time_limit_hit": true
+    },
+    "1b2d62fb": {
+      "solved": false,
+      "n_evals": 105524,
+      "time_limit_hit": true
+    },
+    "1b60fb0c": {
+      "solved": false,
+      "n_evals": 121052,
+      "time_limit_hit": true
+    },
+    "1bfc4729": {
+      "solved": false,
+      "n_evals": 105362,
+      "time_limit_hit": true
+    },
+    "1caeab9d": {
+      "solved": false,
+      "n_evals": 120632,
+      "time_limit_hit": true
+    },
+    "1cf80156": {
+      "solved": true,
+      "n_evals": 91,
+      "time_limit_hit": false,
+      "prog_tuple": [
+        0,
+        512,
+        655
+      ],
+      "prog_str": "('compose', ('prim', 'crop'), ('compose', ('map_relate', 'color_3', 'color_5', 'adjacent_right'), ('map_relate', 'color_5', 'most_common_c', 'adjacent_left')))",
+      "prog_hash": "ac1704d77247",
+      "skeleton_type": "COMPOSE(PRIM_CROP,COMPOSE(MAP_RELATE,MAP_RELATE))",
+      "used_relate": true
+    },
+    "1f0c79e5": {
+      "solved": false,
+      "n_evals": 114762,
+      "time_limit_hit": true
+    },
+    "2013d3e2": {
+      "solved": false,
+      "n_evals": 49928,
+      "time_limit_hit": true
+    },
+    "22168020": {
+      "solved": false,
+      "n_evals": 79219,
+      "time_limit_hit": true
+    },
+    "22eb0ac0": {
+      "solved": false,
+      "n_evals": 65553,
+      "time_limit_hit": true
+    },
+    "234bbc79": {
+      "solved": false,
+      "n_evals": 92125,
+      "time_limit_hit": true
+    },
+    "23581191": {
+      "solved": false,
+      "n_evals": 115592,
+      "time_limit_hit": true
+    },
+    "239be575": {
+      "solved": false,
+      "n_evals": 108727,
+      "time_limit_hit": true
+    },
+    "25d487eb": {
+      "solved": false,
+      "n_evals": 83064,
+      "time_limit_hit": true
+    },
+    "25d8a9c8": {
+      "solved": false,
+      "n_evals": 155619,
+      "time_limit_hit": true
+    },
+    "264363fd": {
+      "solved": false,
+      "n_evals": 13513,
+      "time_limit_hit": true
+    },
+    "272f95fa": {
+      "solved": false,
+      "n_evals": 44068,
+      "time_limit_hit": true
+    },
+    "27a28665": {
+      "solved": false,
+      "n_evals": 132353,
+      "time_limit_hit": true
+    },
+    "28bf18c6": {
+      "solved": false,
+      "n_evals": 163616,
+      "time_limit_hit": true
+    },
+    "29623171": {
+      "solved": false,
+      "n_evals": 43765,
+      "time_limit_hit": true
+    },
+    "2bcee788": {
+      "solved": false,
+      "n_evals": 100895,
+      "time_limit_hit": true
+    },
+    "2bee17df": {
+      "solved": false,
+      "n_evals": 85091,
+      "time_limit_hit": true
+    },
+    "2dc579da": {
+      "solved": false,
+      "n_evals": 121572,
+      "time_limit_hit": true
+    },
+    "31aa019c": {
+      "solved": false,
+      "n_evals": 38310,
+      "time_limit_hit": true
+    },
+    "321b1fc6": {
+      "solved": false,
+      "n_evals": 64790,
+      "time_limit_hit": true
+    },
+    "3345333e": {
+      "solved": false,
+      "n_evals": 52813,
+      "time_limit_hit": true
+    },
+    "3618c87e": {
+      "solved": true,
+      "n_evals": 38433,
+      "time_limit_hit": false,
+      "prog_tuple": [
+        157,
+        600,
+        62
+      ],
+      "prog_str": "('compose', ('map_apply', 'smallest', 'translate_+1_+1'), ('compose', ('map_relate', 'color_4', 'non_bg', 'adjacent_right'), ('map_apply', 'color_1', 'translate_+1_-1')))",
+      "prog_hash": "7f4bab0f66fa",
+      "skeleton_type": "COMPOSE(MAP_TRANSLATE,COMPOSE(MAP_RELATE,MAP_TRANSLATE))",
+      "used_relate": true
+    },
+    "3631a71a": {
+      "solved": false,
+      "n_evals": 1627,
+      "time_limit_hit": true
+    },
+    "36d67576": {
+      "solved": false,
+      "n_evals": 45017,
+      "time_limit_hit": true
+    },
+    "3906de3d": {
+      "solved": false,
+      "n_evals": 97570,
+      "time_limit_hit": true
+    },
+    "3aa6fb7a": {
+      "solved": false,
+      "n_evals": 149560,
+      "time_limit_hit": true
+    },
+    "3af2c5a8": {
+      "solved": false,
+      "n_evals": 111532,
+      "time_limit_hit": true
+    },
+    "3bd67248": {
+      "solved": false,
+      "n_evals": 88276,
+      "time_limit_hit": true
+    },
+    "3bdb4ada": {
+      "solved": false,
+      "n_evals": 64272,
+      "time_limit_hit": true
+    },
+    "3c9b0459": {
+      "solved": true,
+      "n_evals": 9944,
+      "time_limit_hit": false,
+      "prog_tuple": [
+        765,
+        1002,
+        5
+      ],
+      "prog_str": "('compose', ('map_relate', 'color_7', 'color_8', 'adjacent_up'), ('compose', ('map_relate', 'most_common_c', 'color_7', 'adjacent_down'), ('prim', 'rot_180')))",
+      "prog_hash": "a23a471475e5",
+      "skeleton_type": "COMPOSE(MAP_RELATE,COMPOSE(MAP_RELATE,PRIM_ROT_180))",
+      "used_relate": true
+    },
+    "3eda0437": {
+      "solved": false,
+      "n_evals": 41173,
+      "time_limit_hit": true
+    },
+    "40853293": {
+      "solved": false,
+      "n_evals": 20450,
+      "time_limit_hit": true
+    },
+    "42a50994": {
+      "solved": false,
+      "n_evals": 39053,
+      "time_limit_hit": true
+    },
+    "444801d8": {
+      "solved": false,
+      "n_evals": 104665,
+      "time_limit_hit": true
+    },
+    "447fd412": {
+      "solved": false,
+      "n_evals": 65832,
+      "time_limit_hit": true
+    },
+    "44d8ac46": {
+      "solved": false,
+      "n_evals": 81644,
+      "time_limit_hit": true
+    },
+    "4612dd53": {
+      "solved": false,
+      "n_evals": 69609,
+      "time_limit_hit": true
+    },
+    "46f33fce": {
+      "solved": false,
+      "n_evals": 73217,
+      "time_limit_hit": true
+    },
+    "47c1f68c": {
+      "solved": false,
+      "n_evals": 87968,
+      "time_limit_hit": true
+    },
+    "4c4377d9": {
+      "solved": false,
+      "n_evals": 153234,
+      "time_limit_hit": true
+    },
+    "508bd3b6": {
+      "solved": false,
+      "n_evals": 85459,
+      "time_limit_hit": true
+    },
+    "50cb2852": {
+      "solved": false,
+      "n_evals": 65528,
+      "time_limit_hit": true
+    },
+    "543a7ed5": {
+      "solved": false,
+      "n_evals": 65813,
+      "time_limit_hit": true
+    },
+    "54d9e175": {
+      "solved": false,
+      "n_evals": 94992,
+      "time_limit_hit": true
+    },
+    "5521c0d9": {
+      "solved": false,
+      "n_evals": 53861,
+      "time_limit_hit": true
+    },
+    "56ff96f3": {
+      "solved": false,
+      "n_evals": 96901,
+      "time_limit_hit": true
+    },
+    "57aa92db": {
+      "solved": false,
+      "n_evals": 60780,
+      "time_limit_hit": true
+    },
+    "5ad4f10b": {
+      "solved": false,
+      "n_evals": 17778,
+      "time_limit_hit": true
+    },
+    "5bd6f4ac": {
+      "solved": false,
+      "n_evals": 22199,
+      "time_limit_hit": true
+    },
+    "5c0a986e": {
+      "solved": false,
+      "n_evals": 103653,
+      "time_limit_hit": true
+    },
+    "60b61512": {
+      "solved": false,
+      "n_evals": 119899,
+      "time_limit_hit": true
+    },
+    "623ea044": {
+      "solved": false,
+      "n_evals": 74399,
+      "time_limit_hit": true
+    },
+    "6430c8c4": {
+      "solved": false,
+      "n_evals": 67440,
+      "time_limit_hit": true
+    },
+    "6455b5f5": {
+      "solved": false,
+      "n_evals": 46702,
+      "time_limit_hit": true
+    },
+    "662c240a": {
+      "solved": false,
+      "n_evals": 74358,
+      "time_limit_hit": true
+    },
+    "67385a82": {
+      "solved": false,
+      "n_evals": 139152,
+      "time_limit_hit": true
+    },
+    "673ef223": {
+      "solved": false,
+      "n_evals": 82472,
+      "time_limit_hit": true
+    },
+    "6773b310": {
+      "solved": false,
+      "n_evals": 39105,
+      "time_limit_hit": true
+    },
+    "67a3c6ac": {
+      "solved": true,
+      "n_evals": 406,
+      "time_limit_hit": false,
+      "prog_tuple": [
+        2,
+        1057,
+        287
+      ],
+      "prog_str": "('compose', ('prim', 'flip_h'), ('compose', ('map_relate', 'non_bg', 'color_5', 'adjacent_up'), ('map_relate', 'all', 'color_9', 'adjacent_left')))",
+      "prog_hash": "4c9349c209b5",
+      "skeleton_type": "COMPOSE(PRIM_FLIP_H,COMPOSE(MAP_RELATE,MAP_RELATE))",
+      "used_relate": true
+    },
+    "67a423a3": {
+      "solved": false,
+      "n_evals": 122755,
+      "time_limit_hit": true
+    },
+    "681b3aeb": {
+      "solved": false,
+      "n_evals": 116709,
+      "time_limit_hit": true
+    },
+    "68b16354": {
+      "solved": true,
+      "n_evals": 2721,
+      "time_limit_hit": false,
+      "prog_tuple": [
+        1314,
+        3,
+        587
+      ],
+      "prog_str": "('compose', ('map_apply', 'color_9', 'recolor_4'), ('compose', ('prim', 'flip_v'), ('map_relate', 'color_4', 'color_9', 'adjacent_left')))",
+      "prog_hash": "456248230466",
+      "skeleton_type": "COMPOSE(MAP_RECOLOR,COMPOSE(PRIM_FLIP_V,MAP_RELATE))",
+      "used_relate": true
+    },
+    "6a1e5592": {
+      "solved": false,
+      "n_evals": 75182,
+      "time_limit_hit": true
+    },
+    "6d58a25d": {
+      "solved": false,
+      "n_evals": 32651,
+      "time_limit_hit": true
+    },
+    "6d75e8bb": {
+      "solved": false,
+      "n_evals": 102143,
+      "time_limit_hit": true
+    },
+    "6e02f1e3": {
+      "solved": false,
+      "n_evals": 219349,
+      "time_limit_hit": true
+    },
+    "6e82a1ae": {
+      "solved": false,
+      "n_evals": 84549,
+      "time_limit_hit": true
+    },
+    "6ecd11f4": {
+      "solved": false,
+      "n_evals": 13099,
+      "time_limit_hit": true
+    },
+    "6fa7a44f": {
+      "solved": false,
+      "n_evals": 157671,
+      "time_limit_hit": true
+    },
+    "72322fa7": {
+      "solved": false,
+      "n_evals": 30782,
+      "time_limit_hit": true
+    },
+    "73251a56": {
+      "solved": false,
+      "n_evals": 8423,
+      "time_limit_hit": true
+    },
+    "7468f01a": {
+      "solved": false,
+      "n_evals": 84082,
+      "time_limit_hit": true
+    },
+    "74dd1130": {
+      "solved": true,
+      "n_evals": 618,
+      "time_limit_hit": false,
+      "prog_tuple": [
+        187,
+        8,
+        1298
+      ],
+      "prog_str": "('compose', ('map_apply', 'color_2', 'geom_rot_180'), ('compose', ('prim', 'tr'), ('map_apply', 'color_7', 'recolor_8')))",
+      "prog_hash": "df979790c2de",
+      "skeleton_type": "COMPOSE(MAP_GEOM,COMPOSE(PRIM_TR,MAP_RECOLOR))",
+      "used_relate": false
+    },
+    "75b8110e": {
+      "solved": false,
+      "n_evals": 53110,
+      "time_limit_hit": true
+    },
+    "760b3cac": {
+      "solved": false,
+      "n_evals": 151918,
+      "time_limit_hit": true
+    },
+    "776ffc46": {
+      "solved": false,
+      "n_evals": 55666,
+      "time_limit_hit": true
+    },
+    "780d0b14": {
+      "solved": false,
+      "n_evals": 17167,
+      "time_limit_hit": true
+    },
+    "7837ac64": {
+      "solved": false,
+      "n_evals": 5444,
+      "time_limit_hit": true
+    },
+    "794b24be": {
+      "solved": false,
+      "n_evals": 356252,
+      "time_limit_hit": true
+    },
+    "7e0986d6": {
+      "solved": false,
+      "n_evals": 53683,
+      "time_limit_hit": true
+    },
+    "7f4411dc": {
+      "solved": false,
+      "n_evals": 95187,
+      "time_limit_hit": true
+    },
+    "7fe24cdd": {
+      "solved": false,
+      "n_evals": 171034,
+      "time_limit_hit": true
+    },
+    "82819916": {
+      "solved": false,
+      "n_evals": 86503,
+      "time_limit_hit": true
+    },
+    "83302e8f": {
+      "solved": false,
+      "n_evals": 38149,
+      "time_limit_hit": true
+    },
+    "834ec97d": {
+      "solved": false,
+      "n_evals": 277456,
+      "time_limit_hit": true
+    },
+    "846bdb03": {
+      "solved": false,
+      "n_evals": 56280,
+      "time_limit_hit": true
+    },
+    "855e0971": {
+      "solved": false,
+      "n_evals": 44739,
+      "time_limit_hit": true
+    },
+    "868de0fa": {
+      "solved": false,
+      "n_evals": 89582,
+      "time_limit_hit": true
+    },
+    "8731374e": {
+      "solved": false,
+      "n_evals": 1226,
+      "time_limit_hit": true
+    },
+    "8d5021e8": {
+      "solved": false,
+      "n_evals": 211824,
+      "time_limit_hit": true
+    },
+    "8d510a79": {
+      "solved": false,
+      "n_evals": 67098,
+      "time_limit_hit": true
+    },
+    "8e5a5113": {
+      "solved": false,
+      "n_evals": 96491,
+      "time_limit_hit": true
+    },
+    "8efcae92": {
+      "solved": false,
+      "n_evals": 28827,
+      "time_limit_hit": true
+    },
+    "90c28cc7": {
+      "solved": false,
+      "n_evals": 21825,
+      "time_limit_hit": true
+    },
+    "913fb3ed": {
+      "solved": false,
+      "n_evals": 77129,
+      "time_limit_hit": true
+    },
+    "9172f3a0": {
+      "solved": false,
+      "n_evals": 126691,
+      "time_limit_hit": true
+    },
+    "941d9a10": {
+      "solved": false,
+      "n_evals": 71965,
+      "time_limit_hit": true
+    },
+    "94f9d214": {
+      "solved": false,
+      "n_evals": 108658,
+      "time_limit_hit": true
+    },
+    "95990924": {
+      "solved": false,
+      "n_evals": 124836,
+      "time_limit_hit": true
+    },
+    "963e52fc": {
+      "solved": false,
+      "n_evals": 105249,
+      "time_limit_hit": true
+    },
+    "97999447": {
+      "solved": false,
+      "n_evals": 118846,
+      "time_limit_hit": true
+    },
+    "97a05b5b": {
+      "solved": false,
+      "n_evals": 16199,
+      "time_limit_hit": true
+    },
+    "995c5fa3": {
+      "solved": false,
+      "n_evals": 112027,
+      "time_limit_hit": true
+    },
+    "9af7a82c": {
+      "solved": false,
+      "n_evals": 190707,
+      "time_limit_hit": true
+    },
+    "9ecd008a": {
+      "solved": false,
+      "n_evals": 4676,
+      "time_limit_hit": true
+    },
+    "9edfc990": {
+      "solved": false,
+      "n_evals": 9504,
+      "time_limit_hit": true
+    },
+    "9f236235": {
+      "solved": false,
+      "n_evals": 30513,
+      "time_limit_hit": true
+    },
+    "a1570a43": {
+      "solved": true,
+      "n_evals": 21778,
+      "time_limit_hit": false,
+      "prog_tuple": [
+        1297,
+        66,
+        474
+      ],
+      "prog_str": "('compose', ('map_apply', 'color_7', 'recolor_7'), ('compose', ('map_apply', 'color_2', 'translate_+0_+1'), ('map_relate', 'color_2', 'most_common_c', 'adjacent_down')))",
+      "prog_hash": "9f7fe1946134",
+      "skeleton_type": "COMPOSE(MAP_RECOLOR,COMPOSE(MAP_TRANSLATE,MAP_RELATE))",
+      "used_relate": true
+    },
+    "a2fd1cf0": {
+      "solved": false,
+      "n_evals": 67495,
+      "time_limit_hit": true
+    },
+    "a3325580": {
+      "solved": false,
+      "n_evals": 80755,
+      "time_limit_hit": true
+    },
+    "a3df8b1e": {
+      "solved": false,
+      "n_evals": 208714,
+      "time_limit_hit": true
+    },
+    "a416b8f3": {
+      "solved": false,
+      "n_evals": 156923,
+      "time_limit_hit": true
+    },
+    "a48eeaf7": {
+      "solved": false,
+      "n_evals": 94410,
+      "time_limit_hit": true
+    },
+    "a5313dff": {
+      "solved": false,
+      "n_evals": 131960,
+      "time_limit_hit": true
+    },
+    "a61ba2ce": {
+      "solved": false,
+      "n_evals": 61938,
+      "time_limit_hit": true
+    },
+    "a61f2674": {
+      "solved": false,
+      "n_evals": 94898,
+      "time_limit_hit": true
+    },
+    "a68b268e": {
+      "solved": false,
+      "n_evals": 42838,
+      "time_limit_hit": true
+    },
+    "a699fb00": {
+      "solved": false,
+      "n_evals": 142999,
+      "time_limit_hit": true
+    },
+    "a740d043": {
+      "solved": true,
+      "n_evals": 101507,
+      "time_limit_hit": false,
+      "prog_tuple": [
+        1230,
+        0,
+        875
+      ],
+      "prog_str": "('compose', ('map_apply', 'color_1', 'recolor_0'), ('compose', ('prim', 'crop'), ('map_relate', 'color_9', 'color_5', 'adjacent_left')))",
+      "prog_hash": "816028046ec0",
+      "skeleton_type": "COMPOSE(MAP_RECOLOR,COMPOSE(PRIM_CROP,MAP_RELATE))",
+      "used_relate": true
+    },
+    "a79310a0": {
+      "solved": true,
+      "n_evals": 20926,
+      "time_limit_hit": false,
+      "prog_tuple": [
+        839,
+        164,
+        1342
+      ],
+      "prog_str": "('compose', ('map_relate', 'color_8', 'non_bg', 'adjacent_left'), ('compose', ('map_apply', 'unique_color', 'translate_+1_+0'), ('map_apply', 'non_bg', 'recolor_2')))",
+      "prog_hash": "72cb324805aa",
+      "skeleton_type": "COMPOSE(MAP_RELATE,COMPOSE(MAP_TRANSLATE,MAP_RECOLOR))",
+      "used_relate": true
+    },
+    "a87f7484": {
+      "solved": false,
+      "n_evals": 68196,
+      "time_limit_hit": true
+    },
+    "a8d7556c": {
+      "solved": false,
+      "n_evals": 13076,
+      "time_limit_hit": true
+    },
+    "a9f96cdd": {
+      "solved": false,
+      "n_evals": 211259,
+      "time_limit_hit": true
+    },
+    "ac0a08a4": {
+      "solved": false,
+      "n_evals": 182679,
+      "time_limit_hit": true
+    },
+    "ae3edfdc": {
+      "solved": false,
+      "n_evals": 42389,
+      "time_limit_hit": true
+    },
+    "ae4f1146": {
+      "solved": false,
+      "n_evals": 54113,
+      "time_limit_hit": true
+    },
+    "aedd82e4": {
+      "solved": false,
+      "n_evals": 178583,
+      "time_limit_hit": true
+    },
+    "b60334d2": {
+      "solved": false,
+      "n_evals": 117442,
+      "time_limit_hit": true
+    },
+    "b7249182": {
+      "solved": false,
+      "n_evals": 86637,
+      "time_limit_hit": true
+    },
+    "b782dc8a": {
+      "solved": false,
+      "n_evals": 26362,
+      "time_limit_hit": true
+    },
+    "b91ae062": {
+      "solved": false,
+      "n_evals": 148647,
+      "time_limit_hit": true
+    },
+    "ba26e723": {
+      "solved": false,
+      "n_evals": 80904,
+      "time_limit_hit": true
+    },
+    "bb43febb": {
+      "solved": false,
+      "n_evals": 120091,
+      "time_limit_hit": true
+    },
+    "bc1d5164": {
+      "solved": false,
+      "n_evals": 98161,
+      "time_limit_hit": true
+    },
+    "bdad9b1f": {
+      "solved": false,
+      "n_evals": 152070,
+      "time_limit_hit": true
+    },
+    "be94b721": {
+      "solved": false,
+      "n_evals": 96418,
+      "time_limit_hit": true
+    },
+    "c1d99e64": {
+      "solved": false,
+      "n_evals": 29234,
+      "time_limit_hit": true
+    },
+    "c3f564a4": {
+      "solved": false,
+      "n_evals": 2483,
+      "time_limit_hit": true
+    },
+    "c444b776": {
+      "solved": false,
+      "n_evals": 20294,
+      "time_limit_hit": true
+    },
+    "c8cbb738": {
+      "solved": false,
+      "n_evals": 40471,
+      "time_limit_hit": true
+    },
+    "c9e6f938": {
+      "solved": false,
+      "n_evals": 189136,
+      "time_limit_hit": true
+    },
+    "c9f8e694": {
+      "solved": false,
+      "n_evals": 59292,
+      "time_limit_hit": true
+    },
+    "caa06a1f": {
+      "solved": false,
+      "n_evals": 19953,
+      "time_limit_hit": true
+    },
+    "ce602527": {
+      "solved": false,
+      "n_evals": 42373,
+      "time_limit_hit": true
+    },
+    "ce9e57f2": {
+      "solved": false,
+      "n_evals": 122203,
+      "time_limit_hit": true
+    },
+    "d037b0a7": {
+      "solved": false,
+      "n_evals": 146216,
+      "time_limit_hit": true
+    },
+    "d06dbe63": {
+      "solved": false,
+      "n_evals": 90690,
+      "time_limit_hit": true
+    },
+    "d13f3404": {
+      "solved": false,
+      "n_evals": 163545,
+      "time_limit_hit": true
+    },
+    "d22278a0": {
+      "solved": false,
+      "n_evals": 112493,
+      "time_limit_hit": true
+    },
+    "d2abd087": {
+      "solved": false,
+      "n_evals": 106566,
+      "time_limit_hit": true
+    },
+    "d364b489": {
+      "solved": false,
+      "n_evals": 93416,
+      "time_limit_hit": true
+    },
+    "d406998b": {
+      "solved": false,
+      "n_evals": 69649,
+      "time_limit_hit": true
+    },
+    "d511f180": {
+      "solved": false,
+      "n_evals": 52958,
+      "time_limit_hit": true
+    },
+    "d631b094": {
+      "solved": false,
+      "n_evals": 198338,
+      "time_limit_hit": true
+    },
+    "d687bc17": {
+      "solved": false,
+      "n_evals": 36899,
+      "time_limit_hit": true
+    },
+    "d9f24cd1": {
+      "solved": false,
+      "n_evals": 89580,
+      "time_limit_hit": true
+    },
+    "d9fac9be": {
+      "solved": false,
+      "n_evals": 80001,
+      "time_limit_hit": true
+    },
+    "dae9d2b5": {
+      "solved": false,
+      "n_evals": 165598,
+      "time_limit_hit": true
+    },
+    "db93a21d": {
+      "solved": false,
+      "n_evals": 119514,
+      "time_limit_hit": true
+    },
+    "dbc1a6ce": {
+      "solved": false,
+      "n_evals": 86980,
+      "time_limit_hit": true
+    },
+    "ded97339": {
+      "solved": false,
+      "n_evals": 100269,
+      "time_limit_hit": true
+    },
+    "e179c5f4": {
+      "solved": false,
+      "n_evals": 206372,
+      "time_limit_hit": true
+    },
+    "e21d9049": {
+      "solved": false,
+      "n_evals": 72944,
+      "time_limit_hit": true
+    },
+    "e26a3af2": {
+      "solved": false,
+      "n_evals": 13438,
+      "time_limit_hit": true
+    },
+    "e5062a87": {
+      "solved": false,
+      "n_evals": 34061,
+      "time_limit_hit": true
+    },
+    "e509e548": {
+      "solved": false,
+      "n_evals": 40148,
+      "time_limit_hit": true
+    },
+    "e6721834": {
+      "solved": false,
+      "n_evals": 17792,
+      "time_limit_hit": true
+    },
+    "e8593010": {
+      "solved": false,
+      "n_evals": 51230,
+      "time_limit_hit": true
+    },
+    "e8dc4411": {
+      "solved": false,
+      "n_evals": 69357,
+      "time_limit_hit": true
+    },
+    "e9614598": {
+      "solved": false,
+      "n_evals": 123964,
+      "time_limit_hit": true
+    },
+    "e98196ab": {
+      "solved": false,
+      "n_evals": 54385,
+      "time_limit_hit": true
+    },
+    "e9afcf9a": {
+      "solved": false,
+      "n_evals": 216891,
+      "time_limit_hit": true
+    },
+    "ea786f4a": {
+      "solved": false,
+      "n_evals": 237049,
+      "time_limit_hit": true
+    },
+    "eb281b96": {
+      "solved": false,
+      "n_evals": 37904,
+      "time_limit_hit": true
+    },
+    "eb5a1d5d": {
+      "solved": false,
+      "n_evals": 27230,
+      "time_limit_hit": true
+    },
+    "ecdecbb3": {
+      "solved": false,
+      "n_evals": 74739,
+      "time_limit_hit": true
+    },
+    "ef135b50": {
+      "solved": false,
+      "n_evals": 106611,
+      "time_limit_hit": true
+    },
+    "f15e1fac": {
+      "solved": false,
+      "n_evals": 61935,
+      "time_limit_hit": true
+    },
+    "f25fbde4": {
+      "solved": false,
+      "n_evals": 153289,
+      "time_limit_hit": true
+    },
+    "f25ffba3": {
+      "solved": false,
+      "n_evals": 112856,
+      "time_limit_hit": true
+    },
+    "f76d97a5": {
+      "solved": false,
+      "n_evals": 152850,
+      "time_limit_hit": true
+    },
+    "f8a8fe49": {
+      "solved": false,
+      "n_evals": 86468,
+      "time_limit_hit": true
+    },
+    "f8c80d96": {
+      "solved": false,
+      "n_evals": 139223,
+      "time_limit_hit": true
+    },
+    "f8ff0b80": {
+      "solved": false,
+      "n_evals": 108616,
+      "time_limit_hit": true
+    },
+    "f9012d9b": {
+      "solved": false,
+      "n_evals": 103568,
+      "time_limit_hit": true
+    },
+    "fcb5c309": {
+      "solved": false,
+      "n_evals": 50554,
+      "time_limit_hit": true
+    },
+    "fcc82909": {
+      "solved": false,
+      "n_evals": 72713,
+      "time_limit_hit": true
+    },
+    "feca6190": {
+      "solved": false,
+      "n_evals": 179593,
+      "time_limit_hit": true
+    },
+    "ff28f65a": {
+      "solved": false,
+      "n_evals": 229644,
+      "time_limit_hit": true
+    }
+  },
+  "relate_solutions": 8,
+  "evals_total": 17670494,
+  "elapsed_s": 1735.8823664188385
+}
