@@ -1,0 +1,1386 @@
+{
+  "experiment": "stage1c-holed-skeleton-grammar",
+  "grammar_mode": "holed_object_centric",
+  "note": "Leo #11766/#11769/#11785: holed skeleton grammar pivot. Non-tautology MDL: fill bits charged (Kai #11768). 5-label Kai gate. TWO-VARIABLE CHANGE: representation + search order. BUDGET=3000.",
+  "config": {
+    "n_iterations": 3,
+    "n_curriculum": 200,
+    "n_held": 200,
+    "n_mbpp": 50,
+    "split_seed": 42,
+    "budget": 3000,
+    "mdl_min_occ": 2,
+    "n_dreams": 30,
+    "transfer_margin_pct": 5.0
+  },
+  "curriculum_ids": [
+    "de1cd16c",
+    "e40b9e2f",
+    "6b9890af",
+    "9d9215db",
+    "db3e9e38",
+    "4290ef0e",
+    "ba97ae07",
+    "4093f84a",
+    "f1cefba8",
+    "bbc9ae5d",
+    "a8c38be5",
+    "7b6016b9",
+    "05f2a901",
+    "b230c067",
+    "d4f3cd78",
+    "b775ac94",
+    "29ec7d0e",
+    "ddf7fa4f",
+    "98cf29f8",
+    "3e980e27",
+    "d6ad076f",
+    "a65b410d",
+    "d90796e8",
+    "5117e062",
+    "e48d4e1a",
+    "8eb1be9a",
+    "1fad071e",
+    "9565186b",
+    "6d0160f0",
+    "c59eb873",
+    "b548a754",
+    "b94a9452",
+    "b6afb2da",
+    "1190e5a7",
+    "6c434453",
+    "a64e4611",
+    "67e8384a",
+    "99fa7670",
+    "6cf79266",
+    "ff805c23",
+    "8f2ea7aa",
+    "890034e9",
+    "a85d4709",
+    "72ca375d",
+    "496994bd",
+    "10fcaaa3",
+    "6855a6e4",
+    "0962bcdd",
+    "d43fd935",
+    "d07ae81c",
+    "88a10436",
+    "39e1d7f9",
+    "85c4e7cd",
+    "a78176bb",
+    "99b1bc43",
+    "d8c310e9",
+    "2dee498d",
+    "08ed6ac7",
+    "29c11459",
+    "d4a91cb9",
+    "045e512c",
+    "4258a5f9",
+    "23b5c85d",
+    "41e4d17e",
+    "a5f85a15",
+    "b0c4d837",
+    "1e32b0e9",
+    "694f12f3",
+    "5582e5ca",
+    "5168d44c",
+    "952a094c",
+    "56dc2b01",
+    "3ac3eb23",
+    "25ff71a9",
+    "d23f8c26",
+    "1c786137",
+    "dc433765",
+    "8be77c9e",
+    "469497ad",
+    "d5d6de2d",
+    "fafffa47",
+    "137eaa0f",
+    "90f3ed37",
+    "dc0a314f",
+    "aabf363d",
+    "f35d900a",
+    "e76a88a6",
+    "2204b7a8",
+    "7c008303",
+    "0b148d64",
+    "7ddcd7ec",
+    "c8f0f002",
+    "91413438",
+    "0520fde7",
+    "3befdf3e",
+    "cdecee7f",
+    "b2862040",
+    "39a8645d",
+    "4be741c5",
+    "6f8cd79b",
+    "53b68214",
+    "c0f76784",
+    "4522001f",
+    "3f7978a0",
+    "8403a5d5",
+    "b190f7f5",
+    "ec883f72",
+    "88a62173",
+    "3de23699",
+    "91714a58",
+    "63613498",
+    "4938f0c2",
+    "f8b3ba0a",
+    "b27ca6d3",
+    "e50d258f",
+    "7b7f7511",
+    "2dd70a9a",
+    "ed36ccf7",
+    "445eab21",
+    "3428a4f5",
+    "e3497940",
+    "32597951",
+    "d0f5fe59",
+    "54d82841",
+    "746b3537",
+    "93b581b8",
+    "f5b8619d",
+    "50846271",
+    "363442ee",
+    "09629e4f",
+    "4c5c2cf0",
+    "d89b689b",
+    "6aa20dc0",
+    "2c608aff",
+    "928ad970",
+    "00d62c1b",
+    "2281f1f4",
+    "539a4f51",
+    "0e206a2e",
+    "6e19193c",
+    "bda2d7a6",
+    "c909285e",
+    "36fdfd69",
+    "cbded52d",
+    "bd4472b8",
+    "8a004b2b",
+    "d10ecb37",
+    "1e0a9b12",
+    "5614dbcf",
+    "dc1df850",
+    "46442a0e",
+    "b9b7f026",
+    "aba27056",
+    "8e1813be",
+    "228f6490",
+    "ea32f347",
+    "6cdd2623",
+    "ce4f8723",
+    "28e73c20",
+    "b527c5c6",
+    "178fcbfb",
+    "af902bf9",
+    "0d3d703e",
+    "ce22a75a",
+    "484b58aa",
+    "5daaa586",
+    "7df24a62",
+    "b8cdaf2b",
+    "0dfd9992",
+    "beb8660c",
+    "9dfd6313",
+    "48d8fb45",
+    "810b9b61",
+    "1f642eb9",
+    "b8825c91",
+    "cce03e0d",
+    "1f85a75f",
+    "d4469b4b",
+    "77fdfe62",
+    "253bf280",
+    "05269061",
+    "44f52bb0",
+    "7447852a",
+    "6150a2bd",
+    "f2829549",
+    "22233c11",
+    "e73095fd",
+    "150deff5",
+    "b1948b0a",
+    "6d0aefbc",
+    "cf98881b",
+    "c3e719e8",
+    "49d1d64f",
+    "9aec4887",
+    "0ca9ddb6",
+    "62c24649",
+    "80af3007",
+    "1f876c06",
+    "4347f46a",
+    "5c2c9af4"
+  ],
+  "held_task_ids": [
+    "c1d99e64",
+    "25d487eb",
+    "3618c87e",
+    "ae4f1146",
+    "97a05b5b",
+    "22eb0ac0",
+    "dae9d2b5",
+    "68b16354",
+    "a61f2674",
+    "f8a8fe49",
+    "56ff96f3",
+    "a79310a0",
+    "868de0fa",
+    "1f0c79e5",
+    "ecdecbb3",
+    "a1570a43",
+    "d9f24cd1",
+    "e5062a87",
+    "673ef223",
+    "a8d7556c",
+    "e9afcf9a",
+    "9af7a82c",
+    "264363fd",
+    "c8cbb738",
+    "aedd82e4",
+    "44d8ac46",
+    "e98196ab",
+    "f25fbde4",
+    "1b60fb0c",
+    "e26a3af2",
+    "846bdb03",
+    "5ad4f10b",
+    "2bcee788",
+    "ff28f65a",
+    "7f4411dc",
+    "e21d9049",
+    "ac0a08a4",
+    "ea786f4a",
+    "447fd412",
+    "29623171",
+    "ae3edfdc",
+    "234bbc79",
+    "42a50994",
+    "6430c8c4",
+    "f76d97a5",
+    "25d8a9c8",
+    "3906de3d",
+    "dbc1a6ce",
+    "b782dc8a",
+    "a48eeaf7",
+    "e179c5f4",
+    "83302e8f",
+    "7468f01a",
+    "017c7c7b",
+    "007bbfb7",
+    "7e0986d6",
+    "855e0971",
+    "46f33fce",
+    "a3325580",
+    "6d58a25d",
+    "67385a82",
+    "95990924",
+    "27a28665",
+    "3aa6fb7a",
+    "3bd67248",
+    "06df4c85",
+    "681b3aeb",
+    "23581191",
+    "b7249182",
+    "ef135b50",
+    "2dc579da",
+    "bb43febb",
+    "c9e6f938",
+    "fcb5c309",
+    "d06dbe63",
+    "bdad9b1f",
+    "9edfc990",
+    "3c9b0459",
+    "be94b721",
+    "a416b8f3",
+    "ce9e57f2",
+    "73251a56",
+    "60b61512",
+    "b60334d2",
+    "75b8110e",
+    "3af2c5a8",
+    "a2fd1cf0",
+    "bc1d5164",
+    "d511f180",
+    "6e02f1e3",
+    "d631b094",
+    "a740d043",
+    "1a07d186",
+    "6455b5f5",
+    "f8c80d96",
+    "a3df8b1e",
+    "963e52fc",
+    "321b1fc6",
+    "82819916",
+    "67a423a3",
+    "28bf18c6",
+    "74dd1130",
+    "d406998b",
+    "c9f8e694",
+    "11852cab",
+    "ded97339",
+    "543a7ed5",
+    "d22278a0",
+    "4c4377d9",
+    "6fa7a44f",
+    "e9614598",
+    "d037b0a7",
+    "3631a71a",
+    "d9fac9be",
+    "025d127b",
+    "a9f96cdd",
+    "e8593010",
+    "e509e548",
+    "d364b489",
+    "995c5fa3",
+    "a61ba2ce",
+    "9f236235",
+    "57aa92db",
+    "623ea044",
+    "508bd3b6",
+    "a5313dff",
+    "db93a21d",
+    "ba26e723",
+    "8d510a79",
+    "239be575",
+    "6773b310",
+    "5521c0d9",
+    "1bfc4729",
+    "e8dc4411",
+    "7fe24cdd",
+    "d2abd087",
+    "feca6190",
+    "a699fb00",
+    "c444b776",
+    "f9012d9b",
+    "8e5a5113",
+    "8efcae92",
+    "2013d3e2",
+    "d13f3404",
+    "1caeab9d",
+    "3eda0437",
+    "444801d8",
+    "50cb2852",
+    "5bd6f4ac",
+    "0a938d79",
+    "6e82a1ae",
+    "31aa019c",
+    "47c1f68c",
+    "3bdb4ada",
+    "9172f3a0",
+    "834ec97d",
+    "1cf80156",
+    "90c28cc7",
+    "d687bc17",
+    "f8ff0b80",
+    "780d0b14",
+    "1b2d62fb",
+    "9ecd008a",
+    "a87f7484",
+    "f15e1fac",
+    "760b3cac",
+    "f25ffba3",
+    "913fb3ed",
+    "7837ac64",
+    "22168020",
+    "ce602527",
+    "6a1e5592",
+    "eb5a1d5d",
+    "c3f564a4",
+    "4612dd53",
+    "36d67576",
+    "caa06a1f",
+    "794b24be",
+    "5c0a986e",
+    "6d75e8bb",
+    "fcc82909",
+    "b91ae062",
+    "662c240a",
+    "e6721834",
+    "eb281b96",
+    "67a3c6ac",
+    "54d9e175",
+    "8731374e",
+    "3345333e",
+    "94f9d214",
+    "72322fa7",
+    "272f95fa",
+    "941d9a10",
+    "2bee17df",
+    "40853293",
+    "6ecd11f4",
+    "776ffc46",
+    "97999447",
+    "a68b268e",
+    "8d5021e8"
+  ],
+  "curriculum_held_disjoint": true,
+  "holed_skeleton_inventory": {
+    "PRIM_CROP": {
+      "arity": 0,
+      "hole_positions": [],
+      "fill_domain_size": 1,
+      "fill_domain_example": [
+        "prim",
+        "crop"
+      ]
+    },
+    "PRIM_DOWN2": {
+      "arity": 0,
+      "hole_positions": [],
+      "fill_domain_size": 1,
+      "fill_domain_example": [
+        "prim",
+        "down2"
+      ]
+    },
+    "PRIM_FLIP_H": {
+      "arity": 0,
+      "hole_positions": [],
+      "fill_domain_size": 1,
+      "fill_domain_example": [
+        "prim",
+        "flip_h"
+      ]
+    },
+    "PRIM_FLIP_V": {
+      "arity": 0,
+      "hole_positions": [],
+      "fill_domain_size": 1,
+      "fill_domain_example": [
+        "prim",
+        "flip_v"
+      ]
+    },
+    "PRIM_ID": {
+      "arity": 0,
+      "hole_positions": [],
+      "fill_domain_size": 1,
+      "fill_domain_example": [
+        "prim",
+        "id"
+      ]
+    },
+    "PRIM_ROT_180": {
+      "arity": 0,
+      "hole_positions": [],
+      "fill_domain_size": 1,
+      "fill_domain_example": [
+        "prim",
+        "rot_180"
+      ]
+    },
+    "PRIM_ROT_270": {
+      "arity": 0,
+      "hole_positions": [],
+      "fill_domain_size": 1,
+      "fill_domain_example": [
+        "prim",
+        "rot_270"
+      ]
+    },
+    "PRIM_ROT_90": {
+      "arity": 0,
+      "hole_positions": [],
+      "fill_domain_size": 1,
+      "fill_domain_example": [
+        "prim",
+        "rot_90"
+      ]
+    },
+    "PRIM_TR": {
+      "arity": 0,
+      "hole_positions": [],
+      "fill_domain_size": 1,
+      "fill_domain_example": [
+        "prim",
+        "tr"
+      ]
+    },
+    "PRIM_UP2": {
+      "arity": 0,
+      "hole_positions": [],
+      "fill_domain_size": 1,
+      "fill_domain_example": [
+        "prim",
+        "up2"
+      ]
+    },
+    "MAP_DELETE": {
+      "arity": 1,
+      "hole_positions": [
+        "predicate"
+      ],
+      "fill_domain_size": 16,
+      "fill_domain_example": [
+        "map_apply",
+        "all",
+        "delete"
+      ]
+    },
+    "MAP_KEEPONLY": {
+      "arity": 1,
+      "hole_positions": [
+        "predicate"
+      ],
+      "fill_domain_size": 16,
+      "fill_domain_example": [
+        "map_apply",
+        "all",
+        "keep_only"
+      ]
+    },
+    "MAP_TRANSLATE": {
+      "arity": 2,
+      "hole_positions": [
+        "predicate",
+        "direction"
+      ],
+      "fill_domain_size": 128,
+      "fill_domain_example": [
+        "map_apply",
+        "all",
+        "translate_+0_+1"
+      ]
+    },
+    "MAP_RECOLOR": {
+      "arity": 2,
+      "hole_positions": [
+        "predicate",
+        "transform_param"
+      ],
+      "fill_domain_size": 160,
+      "fill_domain_example": [
+        "map_apply",
+        "all",
+        "recolor_0"
+      ]
+    }
+  },
+  "skeleton_grammar": {
+    "n_skeleton_types": 14,
+    "skeleton_names": [
+      "PRIM_CROP",
+      "PRIM_DOWN2",
+      "PRIM_FLIP_H",
+      "PRIM_FLIP_V",
+      "PRIM_ID",
+      "PRIM_ROT_180",
+      "PRIM_ROT_270",
+      "PRIM_ROT_90",
+      "PRIM_TR",
+      "PRIM_UP2",
+      "MAP_DELETE",
+      "MAP_KEEPONLY",
+      "MAP_TRANSLATE",
+      "MAP_RECOLOR"
+    ],
+    "total_concrete_fills": 330,
+    "depth1_skeleton_pairs": 196,
+    "depth2_skeleton_triples": 2744,
+    "family_sizes": {
+      "PRIM_CROP": 1,
+      "PRIM_DOWN2": 1,
+      "PRIM_FLIP_H": 1,
+      "PRIM_FLIP_V": 1,
+      "PRIM_ID": 1,
+      "PRIM_ROT_180": 1,
+      "PRIM_ROT_270": 1,
+      "PRIM_ROT_90": 1,
+      "PRIM_TR": 1,
+      "PRIM_UP2": 1,
+      "MAP_DELETE": 16,
+      "MAP_KEEPONLY": 16,
+      "MAP_TRANSLATE": 128,
+      "MAP_RECOLOR": 160
+    }
+  },
+  "skeleton_depth_coverage": {
+    "depth_0_skeletons_tried": 14,
+    "depth_0_skeleton_names": [
+      "PRIM_CROP",
+      "PRIM_DOWN2",
+      "PRIM_FLIP_H",
+      "PRIM_FLIP_V",
+      "PRIM_ID",
+      "PRIM_ROT_180",
+      "PRIM_ROT_270",
+      "PRIM_ROT_90",
+      "PRIM_TR",
+      "PRIM_UP2",
+      "MAP_DELETE",
+      "MAP_KEEPONLY",
+      "MAP_TRANSLATE",
+      "MAP_RECOLOR"
+    ],
+    "depth_1_skeleton_pairs": 196,
+    "depth_2_skeleton_triples": 2744,
+    "note": "Skeleton-depth counts PAIRS tried (14^2=196), independent of concrete fills attempted within each pair. fill_attempt_coverage tracks concrete programs."
+  },
+  "fill_attempt_coverage": {
+    "n_leaves": 330,
+    "depth_1_covered_concrete": 2670,
+    "depth_1_total_concrete": 108900,
+    "depth_1_coverage_fraction": 0.024517906336088153,
+    "note": "Concrete fills within budget; different block from flat Stage 1c."
+  },
+  "max_depth_reached": 1,
+  "solved_programs": [
+    {
+      "prog_str": "('map_apply', 'non_bg', 'recolor_5')",
+      "hash": "f6abc11011bf",
+      "task_id": "9565186b",
+      "depth": 0,
+      "skeleton_body": "MAP_RECOLOR",
+      "fills": {
+        "predicate": "non_bg",
+        "transform": "recolor_5"
+      },
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('prim', 'up2')",
+      "hash": "fa140b8edb78",
+      "task_id": "c59eb873",
+      "depth": 0,
+      "skeleton_body": "PRIM_UP2",
+      "fills": {
+        "prim_name": "up2"
+      },
+      "prog_type": "prim"
+    },
+    {
+      "prog_str": "('compose', ('prim', 'crop'), ('map_apply', 'smallest', 'keep_only'))",
+      "hash": "f52ac6426261",
+      "task_id": "23b5c85d",
+      "depth": 1,
+      "skeleton_body": "COMPOSE(PRIM_CROP,MAP_KEEPONLY)",
+      "fills": {
+        "left_fills": {
+          "prim_name": "crop"
+        },
+        "right_fills": {
+          "predicate": "smallest",
+          "transform": "keep_only"
+        }
+      },
+      "prog_type": "compose_map_apply"
+    },
+    {
+      "prog_str": "('map_apply', 'all', 'delete')",
+      "hash": "b16a64b9f3aa",
+      "task_id": "5582e5ca",
+      "depth": 0,
+      "skeleton_body": "MAP_DELETE",
+      "fills": {
+        "predicate": "all",
+        "transform": "delete"
+      },
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('map_apply', 'all', 'translate_+1_+0')",
+      "hash": "3f56bada5afd",
+      "task_id": "25ff71a9",
+      "depth": 0,
+      "skeleton_body": "MAP_TRANSLATE",
+      "fills": {
+        "predicate": "all",
+        "transform": "translate_+1_+0"
+      },
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('map_apply', 'color_7', 'recolor_5')",
+      "hash": "6f87412bf72c",
+      "task_id": "c8f0f002",
+      "depth": 0,
+      "skeleton_body": "MAP_RECOLOR",
+      "fills": {
+        "predicate": "color_7",
+        "transform": "recolor_5"
+      },
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('prim', 'rot_90')",
+      "hash": "29d62e98f95c",
+      "task_id": "ed36ccf7",
+      "depth": 0,
+      "skeleton_body": "PRIM_ROT_90",
+      "fills": {
+        "prim_name": "rot_90"
+      },
+      "prog_type": "prim"
+    },
+    {
+      "prog_str": "('prim', 'tr')",
+      "hash": "ec6abf48fe05",
+      "task_id": "9dfd6313",
+      "depth": 0,
+      "skeleton_body": "PRIM_TR",
+      "fills": {
+        "prim_name": "tr"
+      },
+      "prog_type": "prim"
+    },
+    {
+      "prog_str": "('compose', ('prim', 'crop'), ('map_apply', 'unique_color', 'keep_only'))",
+      "hash": "a294cf61a798",
+      "task_id": "1f85a75f",
+      "depth": 1,
+      "skeleton_body": "COMPOSE(PRIM_CROP,MAP_KEEPONLY)",
+      "fills": {
+        "left_fills": {
+          "prim_name": "crop"
+        },
+        "right_fills": {
+          "predicate": "unique_color",
+          "transform": "keep_only"
+        }
+      },
+      "prog_type": "compose_map_apply"
+    },
+    {
+      "prog_str": "('prim', 'rot_180')",
+      "hash": "2b240309a3dd",
+      "task_id": "6150a2bd",
+      "depth": 0,
+      "skeleton_body": "PRIM_ROT_180",
+      "fills": {
+        "prim_name": "rot_180"
+      },
+      "prog_type": "prim"
+    },
+    {
+      "prog_str": "('map_apply', 'color_6', 'recolor_2')",
+      "hash": "fd2e05e6b3df",
+      "task_id": "b1948b0a",
+      "depth": 0,
+      "skeleton_body": "MAP_RECOLOR",
+      "fills": {
+        "predicate": "color_6",
+        "transform": "recolor_2"
+      },
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('map_apply', 'non_bg', 'recolor_5')",
+      "hash": "f6abc11011bf",
+      "task_id": "9565186b",
+      "depth": 0,
+      "skeleton_body": "MAP_RECOLOR",
+      "fills": {
+        "predicate": "non_bg",
+        "transform": "recolor_5"
+      },
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('prim', 'up2')",
+      "hash": "fa140b8edb78",
+      "task_id": "c59eb873",
+      "depth": 0,
+      "skeleton_body": "PRIM_UP2",
+      "fills": {
+        "prim_name": "up2"
+      },
+      "prog_type": "prim"
+    },
+    {
+      "prog_str": "('compose', ('prim', 'crop'), ('map_apply', 'smallest', 'keep_only'))",
+      "hash": "f52ac6426261",
+      "task_id": "23b5c85d",
+      "depth": 1,
+      "skeleton_body": "COMPOSE(PRIM_CROP,MAP_KEEPONLY)",
+      "fills": {
+        "left_fills": {
+          "prim_name": "crop"
+        },
+        "right_fills": {
+          "predicate": "smallest",
+          "transform": "keep_only"
+        }
+      },
+      "prog_type": "compose_map_apply"
+    },
+    {
+      "prog_str": "('map_apply', 'all', 'delete')",
+      "hash": "b16a64b9f3aa",
+      "task_id": "5582e5ca",
+      "depth": 0,
+      "skeleton_body": "MAP_DELETE",
+      "fills": {
+        "predicate": "all",
+        "transform": "delete"
+      },
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('map_apply', 'all', 'translate_+1_+0')",
+      "hash": "3f56bada5afd",
+      "task_id": "25ff71a9",
+      "depth": 0,
+      "skeleton_body": "MAP_TRANSLATE",
+      "fills": {
+        "predicate": "all",
+        "transform": "translate_+1_+0"
+      },
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('map_apply', 'color_7', 'recolor_5')",
+      "hash": "6f87412bf72c",
+      "task_id": "c8f0f002",
+      "depth": 0,
+      "skeleton_body": "MAP_RECOLOR",
+      "fills": {
+        "predicate": "color_7",
+        "transform": "recolor_5"
+      },
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('prim', 'rot_90')",
+      "hash": "29d62e98f95c",
+      "task_id": "ed36ccf7",
+      "depth": 0,
+      "skeleton_body": "PRIM_ROT_90",
+      "fills": {
+        "prim_name": "rot_90"
+      },
+      "prog_type": "prim"
+    },
+    {
+      "prog_str": "('prim', 'tr')",
+      "hash": "ec6abf48fe05",
+      "task_id": "9dfd6313",
+      "depth": 0,
+      "skeleton_body": "PRIM_TR",
+      "fills": {
+        "prim_name": "tr"
+      },
+      "prog_type": "prim"
+    },
+    {
+      "prog_str": "('compose', ('prim', 'crop'), ('map_apply', 'unique_color', 'keep_only'))",
+      "hash": "a294cf61a798",
+      "task_id": "1f85a75f",
+      "depth": 1,
+      "skeleton_body": "COMPOSE(PRIM_CROP,MAP_KEEPONLY)",
+      "fills": {
+        "left_fills": {
+          "prim_name": "crop"
+        },
+        "right_fills": {
+          "predicate": "unique_color",
+          "transform": "keep_only"
+        }
+      },
+      "prog_type": "compose_map_apply"
+    },
+    {
+      "prog_str": "('prim', 'rot_180')",
+      "hash": "2b240309a3dd",
+      "task_id": "6150a2bd",
+      "depth": 0,
+      "skeleton_body": "PRIM_ROT_180",
+      "fills": {
+        "prim_name": "rot_180"
+      },
+      "prog_type": "prim"
+    },
+    {
+      "prog_str": "('map_apply', 'color_6', 'recolor_2')",
+      "hash": "fd2e05e6b3df",
+      "task_id": "b1948b0a",
+      "depth": 0,
+      "skeleton_body": "MAP_RECOLOR",
+      "fills": {
+        "predicate": "color_6",
+        "transform": "recolor_2"
+      },
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('map_apply', 'non_bg', 'recolor_5')",
+      "hash": "f6abc11011bf",
+      "task_id": "9565186b",
+      "depth": 0,
+      "skeleton_body": "MAP_RECOLOR",
+      "fills": {
+        "predicate": "non_bg",
+        "transform": "recolor_5"
+      },
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('prim', 'up2')",
+      "hash": "fa140b8edb78",
+      "task_id": "c59eb873",
+      "depth": 0,
+      "skeleton_body": "PRIM_UP2",
+      "fills": {
+        "prim_name": "up2"
+      },
+      "prog_type": "prim"
+    },
+    {
+      "prog_str": "('compose', ('prim', 'crop'), ('map_apply', 'smallest', 'keep_only'))",
+      "hash": "f52ac6426261",
+      "task_id": "23b5c85d",
+      "depth": 1,
+      "skeleton_body": "COMPOSE(PRIM_CROP,MAP_KEEPONLY)",
+      "fills": {
+        "left_fills": {
+          "prim_name": "crop"
+        },
+        "right_fills": {
+          "predicate": "smallest",
+          "transform": "keep_only"
+        }
+      },
+      "prog_type": "compose_map_apply"
+    },
+    {
+      "prog_str": "('map_apply', 'all', 'delete')",
+      "hash": "b16a64b9f3aa",
+      "task_id": "5582e5ca",
+      "depth": 0,
+      "skeleton_body": "MAP_DELETE",
+      "fills": {
+        "predicate": "all",
+        "transform": "delete"
+      },
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('map_apply', 'all', 'translate_+1_+0')",
+      "hash": "3f56bada5afd",
+      "task_id": "25ff71a9",
+      "depth": 0,
+      "skeleton_body": "MAP_TRANSLATE",
+      "fills": {
+        "predicate": "all",
+        "transform": "translate_+1_+0"
+      },
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('map_apply', 'color_7', 'recolor_5')",
+      "hash": "6f87412bf72c",
+      "task_id": "c8f0f002",
+      "depth": 0,
+      "skeleton_body": "MAP_RECOLOR",
+      "fills": {
+        "predicate": "color_7",
+        "transform": "recolor_5"
+      },
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('prim', 'rot_90')",
+      "hash": "29d62e98f95c",
+      "task_id": "ed36ccf7",
+      "depth": 0,
+      "skeleton_body": "PRIM_ROT_90",
+      "fills": {
+        "prim_name": "rot_90"
+      },
+      "prog_type": "prim"
+    },
+    {
+      "prog_str": "('prim', 'tr')",
+      "hash": "ec6abf48fe05",
+      "task_id": "9dfd6313",
+      "depth": 0,
+      "skeleton_body": "PRIM_TR",
+      "fills": {
+        "prim_name": "tr"
+      },
+      "prog_type": "prim"
+    },
+    {
+      "prog_str": "('compose', ('prim', 'crop'), ('map_apply', 'unique_color', 'keep_only'))",
+      "hash": "a294cf61a798",
+      "task_id": "1f85a75f",
+      "depth": 1,
+      "skeleton_body": "COMPOSE(PRIM_CROP,MAP_KEEPONLY)",
+      "fills": {
+        "left_fills": {
+          "prim_name": "crop"
+        },
+        "right_fills": {
+          "predicate": "unique_color",
+          "transform": "keep_only"
+        }
+      },
+      "prog_type": "compose_map_apply"
+    },
+    {
+      "prog_str": "('prim', 'rot_180')",
+      "hash": "2b240309a3dd",
+      "task_id": "6150a2bd",
+      "depth": 0,
+      "skeleton_body": "PRIM_ROT_180",
+      "fills": {
+        "prim_name": "rot_180"
+      },
+      "prog_type": "prim"
+    },
+    {
+      "prog_str": "('map_apply', 'color_6', 'recolor_2')",
+      "hash": "fd2e05e6b3df",
+      "task_id": "b1948b0a",
+      "depth": 0,
+      "skeleton_body": "MAP_RECOLOR",
+      "fills": {
+        "predicate": "color_6",
+        "transform": "recolor_2"
+      },
+      "prog_type": "map_apply"
+    }
+  ],
+  "program_type_breakdown": {
+    "map_apply": 15,
+    "prim": 12,
+    "compose_map_apply": 6
+  },
+  "skeleton_type_breakdown": {
+    "MAP_RECOLOR": 9,
+    "COMPOSE(PRIM_CROP,MAP_KEEPONLY)": 6,
+    "PRIM_UP2": 3,
+    "MAP_DELETE": 3,
+    "MAP_TRANSLATE": 3,
+    "PRIM_ROT_90": 3,
+    "PRIM_TR": 3,
+    "PRIM_ROT_180": 3
+  },
+  "depth_distribution_all_solves": {
+    "0": 27,
+    "1": 6
+  },
+  "abstraction_funnel": {
+    "total_unique_skeletons": 8,
+    "concrete_unique_programs": 11,
+    "concrete_occ_ge2_count": 11,
+    "per_candidate": [
+      {
+        "skel_type": "COMPOSE(PRIM_CROP,MAP_KEEPONLY)",
+        "unique_task_count": 2,
+        "is_compose": true,
+        "skeleton_bits": 3.81,
+        "fill_bits_per_task": 4.0,
+        "total_fill_bits": 8.0,
+        "concrete_baseline_bits": 16.73,
+        "net_gain": 4.93,
+        "decision": "COMPOSE_ACCEPTED",
+        "reason": "net_gain=4.93b > 0: compresses 2 tasks. skeleton=3.8b + fills=8.0b < concrete=16.7b.",
+        "task_ids_sample": [
+          "1f85a75f",
+          "23b5c85d"
+        ]
+      },
+      {
+        "skel_type": "MAP_DELETE",
+        "unique_task_count": 1,
+        "is_compose": false,
+        "skeleton_bits": 3.81,
+        "fill_bits_per_task": 4.0,
+        "total_fill_bits": 4.0,
+        "concrete_baseline_bits": 8.37,
+        "net_gain": 0.56,
+        "decision": "LEAF_REJECTED_NOT_COMPOSE",
+        "reason": "Leaf skeleton: concrete representation is already minimal; no structure to share.",
+        "task_ids_sample": [
+          "5582e5ca"
+        ]
+      },
+      {
+        "skel_type": "MAP_RECOLOR",
+        "unique_task_count": 3,
+        "is_compose": false,
+        "skeleton_bits": 3.81,
+        "fill_bits_per_task": 7.32,
+        "total_fill_bits": 21.97,
+        "concrete_baseline_bits": 25.1,
+        "net_gain": -0.67,
+        "decision": "LEAF_REJECTED_NOT_COMPOSE",
+        "reason": "Leaf skeleton: concrete representation is already minimal; no structure to share.",
+        "task_ids_sample": [
+          "9565186b",
+          "b1948b0a",
+          "c8f0f002"
+        ]
+      },
+      {
+        "skel_type": "MAP_TRANSLATE",
+        "unique_task_count": 1,
+        "is_compose": false,
+        "skeleton_bits": 3.81,
+        "fill_bits_per_task": 7.0,
+        "total_fill_bits": 7.0,
+        "concrete_baseline_bits": 8.37,
+        "net_gain": -2.44,
+        "decision": "LEAF_REJECTED_NOT_COMPOSE",
+        "reason": "Leaf skeleton: concrete representation is already minimal; no structure to share.",
+        "task_ids_sample": [
+          "25ff71a9"
+        ]
+      },
+      {
+        "skel_type": "PRIM_ROT_180",
+        "unique_task_count": 1,
+        "is_compose": false,
+        "skeleton_bits": 3.81,
+        "fill_bits_per_task": 0.0,
+        "total_fill_bits": 0.0,
+        "concrete_baseline_bits": 8.37,
+        "net_gain": 4.56,
+        "decision": "LEAF_REJECTED_NOT_COMPOSE",
+        "reason": "Leaf skeleton: concrete representation is already minimal; no structure to share.",
+        "task_ids_sample": [
+          "6150a2bd"
+        ]
+      },
+      {
+        "skel_type": "PRIM_ROT_90",
+        "unique_task_count": 1,
+        "is_compose": false,
+        "skeleton_bits": 3.81,
+        "fill_bits_per_task": 0.0,
+        "total_fill_bits": 0.0,
+        "concrete_baseline_bits": 8.37,
+        "net_gain": 4.56,
+        "decision": "LEAF_REJECTED_NOT_COMPOSE",
+        "reason": "Leaf skeleton: concrete representation is already minimal; no structure to share.",
+        "task_ids_sample": [
+          "ed36ccf7"
+        ]
+      },
+      {
+        "skel_type": "PRIM_TR",
+        "unique_task_count": 1,
+        "is_compose": false,
+        "skeleton_bits": 3.81,
+        "fill_bits_per_task": 0.0,
+        "total_fill_bits": 0.0,
+        "concrete_baseline_bits": 8.37,
+        "net_gain": 4.56,
+        "decision": "LEAF_REJECTED_NOT_COMPOSE",
+        "reason": "Leaf skeleton: concrete representation is already minimal; no structure to share.",
+        "task_ids_sample": [
+          "9dfd6313"
+        ]
+      },
+      {
+        "skel_type": "PRIM_UP2",
+        "unique_task_count": 1,
+        "is_compose": false,
+        "skeleton_bits": 3.81,
+        "fill_bits_per_task": 0.0,
+        "total_fill_bits": 0.0,
+        "concrete_baseline_bits": 8.37,
+        "net_gain": 4.56,
+        "decision": "LEAF_REJECTED_NOT_COMPOSE",
+        "reason": "Leaf skeleton: concrete representation is already minimal; no structure to share.",
+        "task_ids_sample": [
+          "c59eb873"
+        ]
+      }
+    ],
+    "accepted_skeleton_macros": 1,
+    "note": "1 skeleton macro(s) accepted: net_gain>0 after fill-cost charging. | Concrete-level: 11 unique programs, 11 with occ>=2 (concrete grouping, for comparison)."
+  },
+  "held_out_transfer": {
+    "baseline": {
+      "mean_cost": 2886.995,
+      "solved": 8
+    },
+    "with_library": {
+      "mean_cost": 2892.015,
+      "solved": 8,
+      "new_solves": 0
+    },
+    "delta_pct": 0.17388322459858718,
+    "verdict": "HOLLOW: delta=+0.2% >= -5%.",
+    "selected_macro_counts": 0,
+    "selected_holed_counts": 0,
+    "macro_usage_map": {}
+  },
+  "library_final": {
+    "skel_macro_COMPOSE(PRIM_CROP,MAP_KEEPONLY)": {
+      "skel_type": "COMPOSE(PRIM_CROP,MAP_KEEPONLY)",
+      "occurrences": 2,
+      "source_task_ids": [
+        "1f85a75f",
+        "23b5c85d"
+      ],
+      "source_depths": [
+        1
+      ],
+      "net_gain": 4.93,
+      "skeleton_bits": 3.81,
+      "fill_bits_per_task": 4.0,
+      "total_fill_bits": 8.0,
+      "concrete_baseline_bits": 16.73
+    }
+  },
+  "iterations": [
+    {
+      "iteration": 1,
+      "library_size": 1,
+      "new_macros": 1,
+      "skeleton_macros_formed": 1,
+      "arc": {
+        "solved": 11,
+        "n": 200,
+        "solve_rate": 0.055,
+        "mean_cost": 2844.13,
+        "depth_distribution": {
+          "0": 9,
+          "1": 2
+        },
+        "skeleton_distribution": {
+          "MAP_RECOLOR": 3,
+          "COMPOSE(PRIM_CROP,MAP_KEEPONLY)": 2,
+          "PRIM_UP2": 1,
+          "MAP_DELETE": 1,
+          "MAP_TRANSLATE": 1,
+          "PRIM_ROT_90": 1,
+          "PRIM_TR": 1,
+          "PRIM_ROT_180": 1
+        }
+      },
+      "mbpp": {
+        "solved": 4,
+        "n": 50,
+        "solve_rate": 0.08
+      },
+      "transfer": {
+        "baseline": {
+          "mean_cost": 2886.995,
+          "solved": 8
+        },
+        "with_library": {
+          "mean_cost": 2892.015,
+          "solved": 8,
+          "new_solves": 0
+        },
+        "delta_pct": 0.17388322459858718,
+        "verdict": "HOLLOW: delta=+0.2% >= -5%.",
+        "selected_macro_counts": 0,
+        "selected_holed_counts": 0,
+        "macro_usage_map": {}
+      },
+      "dream_sleep_active_macros": 0,
+      "elapsed_sec": 53.110063314437866
+    },
+    {
+      "iteration": 2,
+      "library_size": 1,
+      "new_macros": 0,
+      "skeleton_macros_formed": 1,
+      "arc": {
+        "solved": 11,
+        "n": 200,
+        "solve_rate": 0.055,
+        "mean_cost": 2847.505,
+        "depth_distribution": {
+          "0": 9,
+          "1": 2
+        },
+        "skeleton_distribution": {
+          "MAP_RECOLOR": 3,
+          "COMPOSE(PRIM_CROP,MAP_KEEPONLY)": 2,
+          "PRIM_UP2": 1,
+          "MAP_DELETE": 1,
+          "MAP_TRANSLATE": 1,
+          "PRIM_ROT_90": 1,
+          "PRIM_TR": 1,
+          "PRIM_ROT_180": 1
+        }
+      },
+      "mbpp": {
+        "solved": 4,
+        "n": 50,
+        "solve_rate": 0.08
+      },
+      "transfer": {
+        "baseline": {
+          "mean_cost": 2886.995,
+          "solved": 8
+        },
+        "with_library": {
+          "mean_cost": 2892.015,
+          "solved": 8,
+          "new_solves": 0
+        },
+        "delta_pct": 0.17388322459858718,
+        "verdict": "HOLLOW: delta=+0.2% >= -5%.",
+        "selected_macro_counts": 0,
+        "selected_holed_counts": 0,
+        "macro_usage_map": {}
+      },
+      "dream_sleep_active_macros": 0,
+      "elapsed_sec": 53.23556041717529
+    },
+    {
+      "iteration": 3,
+      "library_size": 1,
+      "new_macros": 0,
+      "skeleton_macros_formed": 1,
+      "arc": {
+        "solved": 11,
+        "n": 200,
+        "solve_rate": 0.055,
+        "mean_cost": 2847.505,
+        "depth_distribution": {
+          "0": 9,
+          "1": 2
+        },
+        "skeleton_distribution": {
+          "MAP_RECOLOR": 3,
+          "COMPOSE(PRIM_CROP,MAP_KEEPONLY)": 2,
+          "PRIM_UP2": 1,
+          "MAP_DELETE": 1,
+          "MAP_TRANSLATE": 1,
+          "PRIM_ROT_90": 1,
+          "PRIM_TR": 1,
+          "PRIM_ROT_180": 1
+        }
+      },
+      "mbpp": {
+        "solved": 4,
+        "n": 50,
+        "solve_rate": 0.08
+      },
+      "transfer": {
+        "baseline": {
+          "mean_cost": 2886.995,
+          "solved": 8
+        },
+        "with_library": {
+          "mean_cost": 2892.015,
+          "solved": 8,
+          "new_solves": 0
+        },
+        "delta_pct": 0.17388322459858718,
+        "verdict": "HOLLOW: delta=+0.2% >= -5%.",
+        "selected_macro_counts": 0,
+        "selected_holed_counts": 0,
+        "macro_usage_map": {}
+      },
+      "dream_sleep_active_macros": 0,
+      "elapsed_sec": 54.21700978279114
+    }
+  ],
+  "claim_scope": "Stage 1c-HOLED: TWO-VARIABLE CHANGE from Stage 1c (both deliberate). (1) Representation: concrete-330 \u2192 holed skeleton grammar (14 types). (2) Search order: skeleton-pair priority (small-fill pairs first) vs lex concrete order. Concrete coverage: 330 depth-0 programs (100%) + 2,670/108,900 depth-1 programs (2.45%) \u2014 same ~2.45% budget, different program block. Depth-1 solves: 6. Skeleton macros formed: 1. Kai classification: HOLED_HOLLOW. The skeleton-pair ordering tests a DIFFERENT 2.45% block of concrete depth-1 programs than flat Stage 1c: specifically, small-fill skeleton pairs (PRIM\u00d7PRIM, MAP_DELETE\u00d7PRIM, etc.) get full coverage before budget exhaustion.",
+  "kai_classification": "HOLED_HOLLOW",
+  "kai_reason": "1 skeleton macro(s) formed with net_gain>0 (non-tautological). Transfer delta=+0.2% >= -5%: HOLLOW. Stage 2 proposer DEFERRED.",
+  "verdict": "HOLED_HOLLOW: 1 skeleton macro(s) formed with net_gain>0 (non-tautological). Transfer delta=+0.2% >= -5%: HOLLOW. Stage 2 proposer DEFERRED.",
+  "total_elapsed_sec": 163.36264324188232
+}

@@ -709,19 +709,69 @@ Artifacts: `stage1b_object_centric.py`, `stage1b_result.json`. Commits: 2698a9eb
 
 ---
 
-### Stage 1c-HOLED — Holed Skeleton Grammar BFS: PRE-REGISTERED (Leo #11766, 2026-05-30)
+### Stage 1c-HOLED — Holed Skeleton Grammar BFS: PRE-REGISTERED (Leo #11766/#11769/#11785, 2026-05-30)
 
 **Variables changed (explicit — two-variable change, both deliberate):**
-1. Representation: concrete-330 → holed skeleton grammar (~14 skeleton types). Deliberate fix for branching-bound root cause.
-2. Depth tractability: depth-1 now 14²=196 (tractable), depth-2 now 14³=2,744 (tractable).
+1. Representation: concrete-330 → holed skeleton grammar (~14 skeleton types). Root-cause fix for branching-bound (flat-330 depth-1 = 108,900 @ 2.45% coverage).
+2. Search order: skeleton-pair priority (small-fill pairs first) within same BUDGET=3000.
 
-**Holed skeleton grammar (~14 types):** MAP_RECOLOR (pred×color holes), MAP_DELETE (pred hole), MAP_KEEPONLY (pred hole), MAP_TRANSLATE (pred×dir holes), PRIM_UP2/ROT90/ROT180/TR/FLIPH/FLIPV/INVERT/CROP/UP1/DOWN1 (10 whole-grid skeletons, no holes). BFS over skeleton types at each depth. `try_fill_skeleton(sk_name, task_io)` enumerates concrete instantiations and returns first that solves all examples. Abstraction funnel groups by SKELETON TYPE — anti-unification collapses MAP_RECOLOR(non_bg→5) and MAP_RECOLOR(color_7→5) to same skeleton → occ counts at skeleton level. MDL: skel_leaf body_size=1; compose_skel body_size=3; occ≥2 compose → savings=1>0 → MACRO FORMS.
+**Holed skeleton grammar (~14 types):**
+- MAP_RECOLOR: map_apply(pred, recolor_X) — 16 preds × 10 colors = 160 fills
+- MAP_DELETE: map_apply(pred, delete) — 16 fills
+- MAP_KEEPONLY: map_apply(pred, keep_only) — 16 fills
+- MAP_TRANSLATE: map_apply(pred, translate_*) — 16 preds × 8 dirs = 128 fills
+- PRIM_*: 10 whole-grid primitives, 1 fill each. Total 14 skeleton types, 330 concrete fills.
 
-**Required result fields (Kai #11748 schema):** `max_depth_reached`, `depth_budget_by_level`, `skeleton_coverage`, `program_type_breakdown`, `abstraction_funnel` (by skeleton type), `library_final`, transfer delta, `kai_classification` ∈ {DEPTH_STARVATION | FORMATION_NEGATIVE_DEPTH2 | HOLLOW_DEPTH2 | TRANSFER_GENUINE_DEPTH2}.
+**Abstraction funnel (anti-unification + NON-TAUTOLOGY MDL):**
+- Groups solved programs by SKELETON TYPE: MAP_RECOLOR(non_bg→5) and MAP_RECOLOR(color_7→5) both count as skeleton "MAP_RECOLOR" → occ=2 at skeleton level.
+- **NON-TAUTOLOGY MDL guard (Kai #11768):** Skeleton macro forms only if it net-compresses INCLUDING fill costs: cost(skeleton) + sum_task(cost(fills)) < cost(concrete programs stored separately). Per-candidate report: skeleton_bits, total_fill_bits, concrete_baseline_bits, net_gain. Without this guard, "skeletons repeat" is tautological (any two MAP_RECOLOR tasks share the skeleton by construction).
+- **MDL discipline:** `occ>=2` is only a candidate threshold. Macro formation is accepted only when the artifact records positive net gain after charging skeleton storage plus all parameter/fill costs. Hand-parameterized primitive skeleton repeats are not evidence of learned abstraction by themselves.
+
+**Acceptance = held-out transfer (Kai #11769):** Skeleton forming (occ>=2, net_gain>0) is NECESSARY, not sufficient. Acceptance requires HOLED_TRANSFER_GENUINE: holed library reduces held-out search cost. Formation-without-transfer = HOLED_HOLLOW.
+
+**Required result fields (Kai holed gate):**
+
+- `grammar_mode`: `holed_object_centric`
+- `holed_skeleton_inventory`: skeleton names, arities, fill domains, concrete expansion counts
+- `curriculum_ids`, `held_task_ids`, `curriculum_held_disjoint`
+- `depth_budget_by_level`: skeleton-depth coverage and fill-attempt coverage recorded separately
+- `max_depth_reached`
+- `solved_programs`: task IDs, skeleton bodies, fills, hashes, and depth
+- `program_type_breakdown`: holed map-apply, holed transform, whole-grid, compose
+- `abstraction_funnel`: skeleton repeats via anti-unification, occurrence>=2 candidates, MDL gains, accepted/rejected macros and reasons
+- `library_final`: macro skeletons, fills/variants, occurrences, source task IDs, source depths
+- per-candidate MDL accounting for every accepted macro: `skeleton_bits`, `total_fill_bits`, `concrete_baseline_bits`, `net_gain`
+- `transfer`: baseline, with-library, selected macro counts, selected holed counts, new solves, aggregate cost delta
+- `claim_scope`: must say depth plus representation changed; must not claim pure depth isolation
+- `kai_classification`: one of `HOLED_INSTRUMENTATION_INCOMPLETE`, `HOLED_DEPTH_STARVATION`, `HOLED_FORMATION_NEGATIVE`, `HOLED_HOLLOW`, `HOLED_TRANSFER_GENUINE`
+
+**Kai 5-label holed classification:**
+- `HOLED_INSTRUMENTATION_INCOMPLETE`: required fields missing or malformed
+- `HOLED_DEPTH_STARVATION`: zero depth-1 compose solves; fill coverage insufficient to test skeleton formation
+- `HOLED_FORMATION_NEGATIVE`: depth-1 solves found but no skeleton macro nets positive gain (tautology guard triggered or savings<0)
+- `HOLED_HOLLOW`: skeleton macro formed with net_gain>0 but held-out transfer not improved
+- `HOLED_TRANSFER_GENUINE`: skeleton macro formed + held-out search cost reduced
+
+**Stage 2 discipline:** Stage 2 proposer fires ONLY if holed pivot yields HOLED_DEPTH_STARVATION, HOLED_FORMATION_NEGATIVE, or HOLED_HOLLOW. Any-to-any escalation remains premature.
+
+**Result (2026-05-30): CLOSED: HOLED_HOLLOW**
+
+| Iter | ARC solved | ARC rate | Depth-0 | Depth-1 | Library | Transfer delta |
+|------|-----------|----------|---------|---------|---------|----------------|
+| 1    | 11/200    | 5.5%     | 9       | 2       | 1       | +0.2% (HOLLOW) |
+| 2    | 11/200    | 5.5%     | 9       | 2       | 1       | +0.2% (HOLLOW) |
+| 3    | 11/200    | 5.5%     | 9       | 2       | 1       | +0.2% (HOLLOW) |
+
+- **2 depth-1 solves**: skeleton-pair ordering yields 2 compose solves (vs 0 in flat Stage 1c). Same BUDGET=3000.
+- **1 skeleton macro formed**: COMPOSE(PRIM_CROP,MAP_KEEPONLY) — occ=2 tasks, net_gain>0 after fill-cost charging (non-tautological MDL passed).
+- **Transfer: HOLED_HOLLOW** — macro formed with net_gain>0 but held-out delta=+0.2% (new_solves=0, macro_usage_map empty). Macro found in curriculum but never retrieved on held-out tasks.
+- MBPP: 4/50 (8.0%) flat, unchanged. Elapsed: 163.4s.
+
+**Interpretation:** Skeleton-pair ordering is not a free lunch — the budget covers the same ~2.45% of concrete depth-1 space, just different programs. The holed representation found 2 depth-1 solves vs 0 for flat at same budget (different concrete block). Anti-unification at skeleton level found one non-tautological macro, but that macro does not transfer. Stage 2 proposer condition satisfied (HOLED_HOLLOW).
 
 **Result path:** `incoming/arc-agi1-visa/03_R4_transfer_wall/stage1c_holed_result.json`
 
-**Status:** RUNNING
+**Status:** CLOSED: HOLED_HOLLOW. Stage 2 proposer condition met.
 
 ---
 
