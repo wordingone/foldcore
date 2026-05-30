@@ -539,13 +539,19 @@ R*_contiguous (B): 1.0 — all-MDL library achieves aggregate crossover.
 
 ---
 
-## E3 Trace-Density Amplification Curve — COMPLETE (Leo #11683, 2026-05-30)
+## E3 Trace-Density Amplification Curve — SIGNAL PRESENT, INSTRUMENTATION INCOMPLETE (Leo #11683, #11709, #11713)
 
 **Question:** Is 12-op formation-density failure caused by trace-count insufficiency (curve climbs → amplification bootstraps self-compilation) or representational-base insufficiency (curve stays 0 → base is the ceiling)?
 
-**Design:** Holed formation funnel at 3 source-density steps. Held-out fixed to 200 training tasks (split_seed=42), disjoint across ALL steps. Gate 3 content-hash leakage check: CLEAN (0 hits, 3600 augmented vs 200 held checked). [E3_density_curve.py, E3_density_curve_result.json]
+**Design:** Holed formation funnel at 3 source-density steps. Held-out fixed to 200 training tasks (split_seed=42), disjoint across ALL steps.
 
-**Results:**
+**HOLD — Leo #11713 (2026-05-30):** CURVE_CLIMBS promotion blocked on two missing bars:
+
+1. **Artifact-gate gap:** committed result JSON (7e0bc954) is ungated — lacks `held_task_ids`, per-step `source_construction`, `aug_leakage_check` (Gate 3 content-hash), and `curve_table`. Mail-narrated leakage-clean claim is NOT in the artifact. Gated run in-flight (PID 19676).
+
+2. **Formation ≠ transfer:** `candidates_passed_MDL` going 0→0→2 is formation count, NOT the pre-registered bar. The 2 formed ops (`eps___HOLE___mir_h__mir_v`, `fh__mir_h___HOLE___eps`) are mirror/flip compositions — exactly what D4 augmentation injects. Content-hash leakage being CLEAN rules out identical-copy leakage; it does NOT establish transfer. CURVE_CLIMBS-accepted requires positive transfer: formed ops reduce search cost on the ORIGINAL un-augmented held-out set.
+
+**Interim results (ungated, pending gated rerun):**
 
 | Step | Source tasks | Programs | 2plus_cand | MDL-pos | Diagnosis |
 |------|-------------|----------|------------|---------|-----------|
@@ -553,16 +559,16 @@ R*_contiguous (B): 1.0 — all-MDL library achieves aggregate crossover.
 | 2 (full-real ~600) | 600 | 13 | 0 | 0 | STRUCTURAL_STARVATION |
 | 3 (+D4 aug ~4200) | 4200 | 91 | 6 | **2** | **PASSED** |
 
-Top MDL-positive operators (step 3):
+Top MDL-positive operators (step 3, suspect aug-artifact):
 - `eps___HOLE___mir_h__mir_v`: count=16, gain=13.0
 - `fh__mir_h___HOLE___eps`: count=10, gain=7.0
 
-**VERDICT: CURVE_CLIMBS** — trace-count was the lever. Amplification (D4 augmentation to 4200 source tasks) bootstraps holed operator formation on 12-op base. Representational base is NOT the ceiling.
+**VERDICT: PENDING.** Three bars required for acceptance (Leo #11713):
+- (a) Gated artifact on disk with all 4 Kai fields + aug_leakage_check.hits==0 IN artifact
+- (b) Transfer test: formed ops reduce search cost on ORIGINAL un-augmented held-out (BFS with vs without library on original 200 held tasks)
+- (c) If (b) is positive: TRANSFER_GENUINE → 12-op continues. If flat/negative: HOLLOW_CLIMB → augmentation's own symmetry, code-synthesis pivot STANDS.
 
-**E4↔E3 synthesis:**
-R*_holed=0.7 is the density-curve's CLIMB TARGET — the density at which aggregate-net improvement crosses threshold on synthetic controlled data. ARC's real 12-op corpus (200–600 tasks) is below-threshold (MDL=0 at steps 1–2). The CURVE_CLIMBS result means trace-count insufficiency is the bottleneck, not representational-base insufficiency. A climb that plateaus below the holed-MDL density is still below-R*; a climb that reaches the R*=0.7 density is on-threshold. Next: verify whether the 2 formed operators translate to aggregate-net improvement on ARC held-out (closes the loop to E4).
-
-**Pre-registered interpretation applied:** CURVE_CLIMBS → 12-op self-compilation continues (trace-count was the bottleneck). Code-synthesis pivot (Refinement 2) deferred — NOT triggered.
+**In flight:** gated E3_density_curve.py (PID 19676) + E3_transfer_test.py running now. Atomic re-promotion after both complete.
 
 **ARC scope note:** This result is ARC-scoped (12-op DSL has no MBPP basis). Cannot support a general "self-compilation works" claim. PRISM/multi-domain evidence required for generalization claim.
 
