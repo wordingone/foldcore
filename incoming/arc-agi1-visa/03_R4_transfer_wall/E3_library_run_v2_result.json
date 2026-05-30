@@ -1,0 +1,157 @@
+{
+  "experiment": "E3-library-run-v2",
+  "config": {
+    "max_length": 5,
+    "budget": 10000,
+    "split_seed": 42,
+    "n_source": 200
+  },
+  "seed_ops": [
+    "crop",
+    "down2",
+    "dup_h",
+    "dup_v",
+    "fh",
+    "fv",
+    "id",
+    "mir_h",
+    "mir_v",
+    "rot",
+    "tr",
+    "up2"
+  ],
+  "added_ops": [],
+  "added_ops_detail": {},
+  "source_solved": 15,
+  "source_total": 200,
+  "mdl_candidates": [
+    {
+      "sub": [
+        "fv",
+        "mir_v"
+      ],
+      "count": 2,
+      "mdl_gain": 0
+    },
+    {
+      "sub": [
+        "crop",
+        "down2"
+      ],
+      "count": 1,
+      "mdl_gain": -1
+    },
+    {
+      "sub": [
+        "crop",
+        "down2",
+        "up2"
+      ],
+      "count": 1,
+      "mdl_gain": -1
+    },
+    {
+      "sub": [
+        "crop",
+        "down2",
+        "up2",
+        "up2"
+      ],
+      "count": 1,
+      "mdl_gain": -1
+    },
+    {
+      "sub": [
+        "crop",
+        "dup_h"
+      ],
+      "count": 1,
+      "mdl_gain": -1
+    },
+    {
+      "sub": [
+        "crop",
+        "fh"
+      ],
+      "count": 1,
+      "mdl_gain": -1
+    },
+    {
+      "sub": [
+        "crop",
+        "fv"
+      ],
+      "count": 1,
+      "mdl_gain": -1
+    },
+    {
+      "sub": [
+        "crop",
+        "fv",
+        "mir_v"
+      ],
+      "count": 1,
+      "mdl_gain": -1
+    },
+    {
+      "sub": [
+        "crop",
+        "up2"
+      ],
+      "count": 1,
+      "mdl_gain": -1
+    },
+    {
+      "sub": [
+        "down2",
+        "up2"
+      ],
+      "count": 1,
+      "mdl_gain": -1
+    },
+    {
+      "sub": [
+        "down2",
+        "up2",
+        "up2"
+      ],
+      "count": 1,
+      "mdl_gain": -1
+    },
+    {
+      "sub": [
+        "fh",
+        "fv"
+      ],
+      "count": 1,
+      "mdl_gain": -1
+    },
+    {
+      "sub": [
+        "mir_h",
+        "mir_v"
+      ],
+      "count": 1,
+      "mdl_gain": -1
+    },
+    {
+      "sub": [
+        "up2",
+        "up2"
+      ],
+      "count": 1,
+      "mdl_gain": -1
+    }
+  ],
+  "aggregate": {
+    "baseline_mean_cost": 9602.59,
+    "withlib_mean_cost": 9602.59,
+    "r6_mean_cost": 9602.59,
+    "baseline_solved": 8,
+    "withlib_solved": 8,
+    "delta": 0.0,
+    "delta_pct": 0.0
+  },
+  "compound_applicable_count": 0,
+  "verdict": "NO_APPLICABLE_TASKS"
+}

@@ -1,0 +1,187 @@
+{
+  "experiment": "E3-seed-baseline-v2",
+  "seed_ops": [
+    "crop",
+    "down2",
+    "dup_h",
+    "dup_v",
+    "fh",
+    "fv",
+    "id",
+    "mir_h",
+    "mir_v",
+    "rot",
+    "tr",
+    "up2"
+  ],
+  "config": {
+    "max_length": 5,
+    "budget": 10000
+  },
+  "n_tasks": 400,
+  "n_solved": 23,
+  "solve_rate_pct": 5.75,
+  "median_cost_all": 10001.0,
+  "median_cost_solved": 12.0,
+  "solved_tasks": [
+    "1cf80156",
+    "28bf18c6",
+    "3af2c5a8",
+    "3c9b0459",
+    "46f33fce",
+    "4c4377d9",
+    "6150a2bd",
+    "62c24649",
+    "67a3c6ac",
+    "67e8384a",
+    "68b16354",
+    "6d0aefbc",
+    "6fa7a44f",
+    "7468f01a",
+    "74dd1130",
+    "8be77c9e",
+    "9dfd6313",
+    "a416b8f3",
+    "c59eb873",
+    "c9e6f938",
+    "ed36ccf7",
+    "f25fbde4",
+    "f25ffba3"
+  ],
+  "solved_programs": {
+    "1cf80156": [
+      "crop"
+    ],
+    "28bf18c6": [
+      "crop",
+      "dup_h"
+    ],
+    "3af2c5a8": [
+      "mir_h",
+      "mir_v"
+    ],
+    "3c9b0459": [
+      "fh",
+      "fv"
+    ],
+    "46f33fce": [
+      "crop",
+      "down2",
+      "up2",
+      "up2"
+    ],
+    "4c4377d9": [
+      "fv",
+      "mir_v"
+    ],
+    "6150a2bd": [
+      "fh",
+      "fv"
+    ],
+    "62c24649": [
+      "mir_h",
+      "mir_v"
+    ],
+    "67a3c6ac": [
+      "fh"
+    ],
+    "67e8384a": [
+      "mir_h",
+      "mir_v"
+    ],
+    "68b16354": [
+      "fv"
+    ],
+    "6d0aefbc": [
+      "mir_h"
+    ],
+    "6fa7a44f": [
+      "mir_v"
+    ],
+    "7468f01a": [
+      "crop",
+      "fh"
+    ],
+    "74dd1130": [
+      "tr"
+    ],
+    "8be77c9e": [
+      "mir_v"
+    ],
+    "9dfd6313": [
+      "tr"
+    ],
+    "a416b8f3": [
+      "dup_h"
+    ],
+    "c59eb873": [
+      "up2"
+    ],
+    "c9e6f938": [
+      "mir_h"
+    ],
+    "ed36ccf7": [
+      "rot"
+    ],
+    "f25fbde4": [
+      "crop",
+      "up2"
+    ],
+    "f25ffba3": [
+      "crop",
+      "fv",
+      "mir_v"
+    ]
+  },
+  "solved_costs": {
+    "1cf80156": 1,
+    "28bf18c6": 15,
+    "3af2c5a8": 105,
+    "3c9b0459": 66,
+    "46f33fce": 2172,
+    "4c4377d9": 81,
+    "6150a2bd": 66,
+    "62c24649": 105,
+    "67a3c6ac": 5,
+    "67e8384a": 105,
+    "68b16354": 6,
+    "6d0aefbc": 8,
+    "6fa7a44f": 9,
+    "7468f01a": 17,
+    "74dd1130": 11,
+    "8be77c9e": 9,
+    "9dfd6313": 11,
+    "a416b8f3": 3,
+    "c59eb873": 12,
+    "c9e6f938": 8,
+    "ed36ccf7": 10,
+    "f25fbde4": 24,
+    "f25ffba3": 225
+  },
+  "mdl_candidates": [
+    {
+      "sub": [
+        "mir_h",
+        "mir_v"
+      ],
+      "count": 3,
+      "mdl_gain": 1
+    },
+    {
+      "sub": [
+        "fh",
+        "fv"
+      ],
+      "count": 2,
+      "mdl_gain": 0
+    },
+    {
+      "sub": [
+        "fv",
+        "mir_v"
+      ],
+      "count": 2,
+      "mdl_gain": 0
+    }
+  ]
+}
