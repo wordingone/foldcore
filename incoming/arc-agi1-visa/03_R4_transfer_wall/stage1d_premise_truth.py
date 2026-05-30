@@ -56,9 +56,10 @@ from collections import deque
 
 DATA_PATH       = "B:/M/the-search/incoming/arc-agi1-visa/ARC-AGI/data"
 S1C_RESULT_PATH = "incoming/arc-agi1-visa/03_R4_transfer_wall/stage1c_holed_result.json"
-RESULT_PATH     = "incoming/arc-agi1-visa/03_R4_transfer_wall/stage1d_premise_truth_result.json"
+RESULT_PATH     = "incoming/arc-agi1-visa/03_R4_transfer_wall/stage1d_premise_truth_b30000_minimality_result.json"
+BASE_ARTIFACT   = "stage1d_premise_truth_result.json"  # original artifact; do NOT overwrite
 
-BUDGET_POINTS   = [3000, 6000, 10000]  # coverage curve points (Leo #11818)
+BUDGET_POINTS   = [3000, 6000, 10000, 30000]  # Leo #11818 curve + #11832 confirmatory point
 N_HELD          = 200
 SPLIT_SEED      = 42
 COVERAGE_THRESHOLD = 5  # min held solves at top budget for test to be conclusive
@@ -770,27 +771,74 @@ def check_exact_subprogram_hits(prog, s1c_library):
     return [name for name, info in s1c_library.items()
             if info.get('skel_type') == sk]
 
-def check_near_miss_hits(task_io, s1c_library, skel_concrete_cache):
-    """Exhaustively check if any concrete program with s1c macro's skeleton solves this task."""
-    hits = []
+def check_near_miss_hits_detailed(task_io, task_id, s1c_library, skel_concrete_cache,
+                                   bfs_depth, bfs_cost, bfs_skeleton):
+    """Minimality-aware near-miss with full dominance evidence (Leo #11832, Kai run card).
+
+    Returns (raw_hits, dominated_hits, non_dominated_hits, dominance_entries).
+    Dominance: depth-first only unless a globally comparable near-miss cost is
+    available. The concrete-program list index is preserved for audit, but it is
+    not comparable to BFS nodes searched. Raw hits are preserved for audit.
+    """
+    raw_hits, dominated_hits, non_dominated_hits, dominance_entries = [], [], [], []
+
     for macro_name, macro_info in s1c_library.items():
         sk = macro_info.get('skel_type')
         if not sk:
             continue
-        for prog in skel_concrete_cache.get(sk, []):
+        macro_depth = 1 if sk.startswith('COMPOSE(') else 0
+
+        near_miss_candidate_index = None
+        for j, prog in enumerate(skel_concrete_cache.get(sk, [])):
             if task_io_match(prog, task_io):
-                hits.append(macro_name)
+                near_miss_candidate_index = j
                 break
-    return hits
+        if near_miss_candidate_index is None:
+            continue
+
+        raw_hits.append(macro_name)
+
+        if bfs_depth is not None and macro_depth > bfs_depth:
+            verdict = 'DOMINATED'
+            reason = (f"macro_depth ({macro_depth}) > bfs_depth ({bfs_depth}); "
+                      f"over-expressive alternative to simpler BFS solution ({bfs_skeleton})")
+            dominated_hits.append(macro_name)
+        else:
+            verdict = 'NON_DOMINATED'
+            reason = (f"macro_depth ({macro_depth}) <= bfs_depth ({bfs_depth}); "
+                      "near-miss concrete candidate index is not comparable to bfs_cost")
+            non_dominated_hits.append(macro_name)
+
+        dominance_entries.append({
+            'task_id': task_id,
+            'macro_name': macro_name,
+            'near_miss_skeleton': sk,
+            'near_miss_depth': macro_depth,
+            'near_miss_candidate_index': near_miss_candidate_index,
+            'near_miss_cost_unknown': True,
+            'best_solution_skeleton': bfs_skeleton,
+            'best_solution_depth': bfs_depth,
+            'best_solution_cost': bfs_cost,
+            'dominance_verdict': verdict,
+            'dominance_reason': reason,
+        })
+
+    return raw_hits, dominated_hits, non_dominated_hits, dominance_entries
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 def main():
+    import subprocess
     t0 = time.time()
-    print("STAGE 1d: PREMISE-TRUTH — SUBPROGRAM CONTAINMENT (Leo #11818, 2026-05-30)")
-    print("PREMISE: Do Stage 1c accepted macros appear as subprograms of HELD solutions?")
-    print("FIXED Stage 1c library — NOT re-learning. Budget curve for held coverage.")
+    print("STAGE 1d B30000+MINIMALITY: SUBPROGRAM CONTAINMENT FOLLOW-UP (Leo #11832, Kai #11845)")
+    print("PREMISE: Minimality-aware near-miss. Does B30000 confirm budget saturation?")
+    print("FIXED Stage 1c library — NOT re-learning. Budget curve: 3000/6000/10000/30000.")
     print("=" * 70)
     sys.stdout.flush()
+
+    base_commit = subprocess.check_output(
+        ['git', 'rev-parse', 'HEAD'],
+        cwd=os.path.dirname(os.path.abspath(__file__)),
+        text=True).strip()
 
     # Load Stage 1c fixed library
     with open(S1C_RESULT_PATH) as f:
@@ -823,45 +871,7 @@ def main():
     s1c_src = [info.get('source_task_ids', []) for info in s1c_library.values()]
     print(f"Stage 1c source tasks: {s1c_src}")
 
-def main():
-    t0 = time.time()
-    print("STAGE 1d: PREMISE-TRUTH — SUBPROGRAM CONTAINMENT (Leo #11818, 2026-05-30)")
-    print("PREMISE: Do Stage 1c accepted macros appear as subprograms of HELD solutions?")
-    print("FIXED Stage 1c library — NOT re-learning. Budget curve for held coverage.")
-    print("=" * 70)
-    sys.stdout.flush()
-
-    # Load Stage 1c fixed library
-    with open(S1C_RESULT_PATH) as f:
-        s1c_result = json.load(f)
-    s1c_library = s1c_result.get('library_final', {})
-    print(f"\nStage 1c library: {len(s1c_library)} macro(s)")
-    for name, info in s1c_library.items():
-        print(f"  {name}: skel_type={info.get('skel_type')}, "
-              f"occ={info.get('occurrences')}, net_gain={info.get('net_gain')}")
-    sys.stdout.flush()
-
-    # Pre-compute concrete programs for near-miss exhaustive check
-    skel_concrete_cache = {}
-    for name, info in s1c_library.items():
-        sk = info.get('skel_type')
-        if sk:
-            progs = concrete_programs_for_skeleton(sk)
-            skel_concrete_cache[sk] = progs
-            print(f"  Near-miss candidates for {sk}: {len(progs)} programs")
-    sys.stdout.flush()
-
-    # Load held tasks — same split as Stage 1c (SPLIT_SEED=42)
-    all_arc = load_arc()
-    training = [t for t in all_arc if t['split_dir'] == 'training']
-    rng = np.random.default_rng(SPLIT_SEED)
-    idx = rng.permutation(len(training))
-    held_tasks = [training[i] for i in idx[:N_HELD]]
-    held_ids   = [t['id'] for t in held_tasks]
-    print(f"\nHeld tasks: {len(held_tasks)}")
-    s1c_src = [info.get('source_task_ids', []) for info in s1c_library.values()]
-    print(f"Stage 1c source tasks: {s1c_src}")
-
+    dominance_table = []
     # Coverage curve: enumerate HELD tasks WITHOUT library at each budget
     budget_results = []
     for budget in BUDGET_POINTS:
@@ -877,25 +887,37 @@ def main():
         d0_count = 0
         d1_count = 0
         exact_hits_total = 0
-        near_miss_hits_total = 0
+        raw_nm_total = 0
+        dom_nm_total = 0
+        nondom_nm_total = 0
 
         for i, task in enumerate(held_tasks):
             prog, cost, depth, sk = search_task_holed(task['io'], {}, budget)
             exact_hits = check_exact_subprogram_hits(prog, s1c_library)
-            near_miss_hits = (check_near_miss_hits(task['io'], s1c_library, skel_concrete_cache)
-                              if prog is not None and not exact_hits else [])
+            # near_miss_cost (index in skel list) != bfs nodes — pass bfs_cost=None, depth-only dominance
+            raw_nm, dom_nm, nondom_nm, dom_entries = (
+                check_near_miss_hits_detailed(task['io'], task['id'], s1c_library,
+                                              skel_concrete_cache,
+                                              bfs_depth=depth, bfs_cost=None,
+                                              bfs_skeleton=sk)
+                if prog is not None and not exact_hits else ([], [], [], []))
+            dominance_table.extend(dom_entries)
             per_task[task['id']] = {
                 'solved': prog is not None,
                 'depth': depth if prog is not None else -1,
                 'skeleton_type': sk,
                 'exact_subprogram_hits': exact_hits,
-                'near_miss_hits': near_miss_hits,
+                'raw_near_miss_hits': raw_nm,
+                'dominated_near_miss_hits': dom_nm,
+                'non_dominated_near_miss_hits': nondom_nm,
             }
             if prog is not None:
                 if depth == 0: d0_count += 1
                 elif depth == 1: d1_count += 1
                 if exact_hits: exact_hits_total += 1
-                if near_miss_hits: near_miss_hits_total += 1
+                if raw_nm: raw_nm_total += 1
+                if dom_nm: dom_nm_total += 1
+                if nondom_nm: nondom_nm_total += 1
             if (i + 1) % 50 == 0:
                 print(f"  ... {i+1}/{len(held_tasks)} tasks, elapsed {time.time()-t_b:.0f}s")
                 sys.stdout.flush()
@@ -907,7 +929,7 @@ def main():
               f"— depth-0={d0_count}, depth-1={d1_count}")
         print(f"  Exact subprogram hits: {exact_hits_total} tasks "
               f"({exact_hits_total/max(n_solved,1)*100:.0f}% of solved)")
-        print(f"  Near-miss hits: {near_miss_hits_total} tasks")
+        print(f"  Near-miss (raw/dom/nondom): {raw_nm_total}/{dom_nm_total}/{nondom_nm_total}")
         print(f"  Elapsed: {elapsed_b:.0f}s")
         sys.stdout.flush()
 
@@ -918,23 +940,43 @@ def main():
             'depth_1': d1_count,
             'coverage_pct': coverage_pct,
             'exact_subprogram_hits_total': exact_hits_total,
-            'near_miss_hits_total': near_miss_hits_total,
+            'raw_near_miss_hits_total': raw_nm_total,
+            'dominated_near_miss_hits_total': dom_nm_total,
+            'non_dominated_near_miss_hits_total': nondom_nm_total,
             'elapsed_sec': elapsed_b,
             'per_task': per_task,
         })
 
-    # ── PREMISE_* classification ───────────────────────────────────────────────
+    # ── PREMISE_* classification (Leo #11832, Kai #11845) ─────────────────────
     top = budget_results[-1]
-    n_solved_top  = top['held_solved']
-    exact_top     = top['exact_subprogram_hits_total']
-    near_miss_top = top['near_miss_hits_total']
+    n_solved_top    = top['held_solved']
+    exact_top       = top['exact_subprogram_hits_total']
+    nondom_nm_top   = top['non_dominated_near_miss_hits_total']
+    raw_nm_top_val  = top['raw_near_miss_hits_total']
+    dom_nm_top_val  = top['dominated_near_miss_hits_total']
+
+    # Budget-saturation: curve flat means representational ceiling, not search-depth ceiling
+    curve_solved = [b['held_solved'] for b in budget_results]
+    curve_is_flat = len(curve_solved) >= 2 and (max(curve_solved) == min(curve_solved))
+    # Coverage increase at B30000 vs earlier budgets
+    prev_solved = curve_solved[:-1]
+    coverage_increased_at_top = (n_solved_top > max(prev_solved)) if prev_solved else False
+    coverage_saturation = curve_is_flat
 
     if n_solved_top < COVERAGE_THRESHOLD:
-        premise_class = "PREMISE_INSTRUMENTATION_INCOMPLETE"
+        premise_class = "PREMISE_30000_INSTRUMENTATION_INCOMPLETE"
         premise_reason = (
             f"At max budget={BUDGET_POINTS[-1]}, only {n_solved_top}/{N_HELD} held tasks solved "
             f"({n_solved_top/N_HELD*100:.1f}%): fewer than threshold={COVERAGE_THRESHOLD}. "
             f"Insufficient held coverage to make subprogram test conclusive."
+        )
+    elif coverage_increased_at_top:
+        premise_class = "PREMISE_30000_COVERAGE_INCREASED"
+        premise_reason = (
+            f"Coverage increased at B{BUDGET_POINTS[-1]}: {n_solved_top}/{N_HELD} "
+            f"({n_solved_top/N_HELD*100:.1f}%) vs prior max {max(prev_solved)}/{N_HELD}. "
+            f"Gate: exact_hits={exact_top}, non_dominated_near_miss={nondom_nm_top}. "
+            f"Budget not yet saturated; inspect exact and non-dominated near-miss before branching."
         )
     elif exact_top > 0:
         premise_class = "PREMISE_SELECTION_BOTTLENECK"
@@ -944,25 +986,35 @@ def main():
             f"because the proposer couldn't SELECT these macros within transfer budget. "
             f"Stage 2 proposer warranted."
         )
-    elif near_miss_top > 0:
-        premise_class = "PREMISE_NEAR_MISS_SEMANTIC"
+    elif nondom_nm_top > 0:
+        premise_class = "PREMISE_NONDOMINATED_NEAR_MISS"
         premise_reason = (
             f"No exact subprogram hits at max budget (adequate coverage: "
             f"{n_solved_top}/{N_HELD} = {n_solved_top/N_HELD*100:.1f}%). "
-            f"But {near_miss_top} held tasks have semantic near-misses "
-            f"(a concrete program with Stage 1c macro skeleton solves the task "
-            f"exhaustively, though not found by BFS within budget). "
-            f"Exact-match proposer inadequate; semantic-abstraction fork warranted."
+            f"Non-dominated semantic near-misses: {nondom_nm_top} held tasks "
+            f"(raw={raw_nm_top_val}, dominated={dom_nm_top_val}). "
+            f"Macro depth <= BFS solution depth; concrete program with Stage 1c macro "
+            f"skeleton solves the task. See dominance_table for per-candidate evidence."
+        )
+    elif curve_is_flat:
+        premise_class = "PREMISE_BUDGET_SATURATED_FIXED_GRAMMAR"
+        premise_reason = (
+            f"Coverage flat at {n_solved_top}/{N_HELD} = {n_solved_top/N_HELD*100:.1f}% "
+            f"across all {len(BUDGET_POINTS)} budget points "
+            f"({BUDGET_POINTS[0]}→{BUDGET_POINTS[-1]}). Grammar is budget-saturated: "
+            f"additional budget ({BUDGET_POINTS[-1]//BUDGET_POINTS[0]}×) finds no new held tasks. "
+            f"Exact hits=0. Non-dominated near-miss=0 (raw={raw_nm_top_val}, "
+            f"all dominated by simpler BFS solutions). "
+            f"Fixed holed grammar representationally bound. More budget is the wrong lever. "
+            f"Move to net-free matched-eval gate (Kai #11845)."
         )
     else:
-        premise_class = "PREMISE_FALSE_EXACT"
+        premise_class = "PREMISE_BUDGET_SATURATED_FIXED_GRAMMAR"
         premise_reason = (
             f"Adequate held coverage ({n_solved_top}/{N_HELD} = "
             f"{n_solved_top/N_HELD*100:.1f}% at max budget={BUDGET_POINTS[-1]}). "
-            f"Stage 1c macros appear as exact subprograms in 0 held solutions. "
-            f"Near-miss hits = 0. "
-            f"Exact macro-reuse premise FALSE. "
-            f"Holed skeleton macro direction KILLED with mechanism."
+            f"Stage 1c macros: exact hits=0, non-dominated near-miss=0. "
+            f"Fixed holed grammar premise FALSE with mechanism evidence."
         )
 
     total = time.time() - t0
@@ -973,10 +1025,12 @@ def main():
     sys.stdout.flush()
 
     result = {
-        'experiment': 'stage1d-premise-truth-subprogram-containment',
-        'note': ('Leo #11818: subprogram containment of FIXED Stage 1c macro library. '
-                 'NOT re-learning a library. Budget curve: 3000/6000/10000. '
-                 'PREMISE_* labels (not HOLED_*).'),
+        'experiment': 'stage1d-premise-truth-b30000-minimality-follow-up',
+        'note': ('Leo #11832, Kai #11845: minimality-aware near-miss follow-up. '
+                 'B30000 confirm point. Original artifact preserved as base_artifact. '
+                 'PREMISE_* labels per run card.'),
+        'base_artifact': BASE_ARTIFACT,
+        'base_commit': base_commit,
         'config': {
             'budget_points': BUDGET_POINTS,
             'n_held': N_HELD,
@@ -999,9 +1053,13 @@ def main():
             'budgets': BUDGET_POINTS,
             'coverage_pcts': [b['coverage_pct'] for b in budget_results],
             'exact_hits_per_budget': [b['exact_subprogram_hits_total'] for b in budget_results],
-            'near_miss_per_budget': [b['near_miss_hits_total'] for b in budget_results],
+            'raw_near_miss_per_budget': [b['raw_near_miss_hits_total'] for b in budget_results],
+            'dominated_near_miss_per_budget': [b['dominated_near_miss_hits_total'] for b in budget_results],
+            'non_dominated_near_miss_per_budget': [b['non_dominated_near_miss_hits_total'] for b in budget_results],
         },
-        'premise_classification': premise_class,
+        'coverage_saturation': coverage_saturation,
+        'dominance_table': dominance_table,
+        'premise_classification_corrected': premise_class,
         'premise_reason': premise_reason,
         'total_elapsed_sec': total,
     }
