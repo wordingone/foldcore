@@ -327,6 +327,19 @@ Scale eliminates the format wall (100% vs 83% parse) but does NOT move the solve
 
 ---
 
+## CLOSED: 12-op Self-Compilation (Leo #11683, 2026-05-30)
+
+**3 convergent 12-op negatives — common attributed cause: trace-starvation:**
+1. **Solved-only contiguous** (E3 v1): 7 source programs, 0 MDL-positive compounds.
+2. **Full-corpus contiguous** (E3 v2 v3, 28 programs): 3 MDL-positive compounds but n_applicable=0 on held-out.
+3. **Holed-formation-density** (E3 v2 v3 funnel): 4 skeletons with ≥2 variants, 0 passed MDL. DENSITY_THRESHOLD — count too low for MDL gain.
+
+**Attribution:** NOT mechanism-dead. NOT no-skeletons. Cause = trace-starvation under 12-op base + weak search. 15 source solves (7.5%) too sparse for MDL-positive formation at any pattern type.
+
+**Next (Leo #11683):** Trace-density amplification curve — attack the attributed cause directly. See "Next Experiment" below.
+
+---
+
 ## Current Direction: E3 — Self-Compilation (search-cost-reduction) (Leo #11615, 2026-05-30)
 
 **Right question (per Leo #11615 + the-search#3 comment 4580884142):**
@@ -463,12 +476,13 @@ This does NOT claim "ARC cannot self-compile." It is scoped to: this DSL + this 
 
 **5-item accept bar (Kai, #11638 + #11640):** A green run without all 5 items is a smoke-test, NOT R*. Label accordingly.
 
-**Output:** held-out search-cost-reduction curve vs rho with confidence bands. R* = rho where >10% cost reduction on applicable (planted-motif) tasks. ARC's rho-axis location UNMEASURED — requires ARC-derived program sampling.
+**Output:** held-out search-cost-reduction curve vs rho with confidence bands. **Accepted R* = aggregate-net crossover over ALL held-out tasks, overhead included** (not motif-subset). Script-reported motif-subset threshold = 0.1; NOT accepted R*. ARC's rho-axis location UNMEASURED — requires ARC-derived program sampling.
 
 **Pre-registered outcomes:**
-- monotone reduction-vs-rho -> MECHANISM_WORKS, R* located.
-- flat even at high rho -> MECHANISM_FLAT; mechanism/instrument broken.
+- aggregate-net negative at some rho AND variance band excludes 0 -> R* located (AGGREGATE crossover).
+- flat at all rho even at high density -> MECHANISM_FLAT; mechanism/instrument broken.
 - threshold curve -> R* characterized as design requirement on eventual medium.
+- NO prediction that holed lowers R* until a result exists.
 
 **Config (base):** motif=mir_h__mir_v, program_length=4, budget=35000, n_source=100, n_held=100, n_pairs=3, rho=[0.0,0.1,0.2,0.3,0.5,0.7,1.0], multi_seed_per_rho=3+, master_seed=42.
 
@@ -486,14 +500,56 @@ This does NOT claim "ARC cannot self-compile." It is scoped to: this DSL + this 
   - dist_in_lib=0 always: distractor design bug, not real signal.
 - Artifacts: `E4_rstar_grade.py`, `E4_rstar_grade_result.json`.
 
-**E4-holed (Leo #11672 exact spec) — PENDING 2026-05-30.** `E4_holed_operators.py`, writing `E4_holed_result.json`.
-- R* definition: aggregate_delta(X) = mean_cost_X(all_held) - mean_cost_A(all_held). R*_X = min rho where aggregate_delta(X) < -5% AND variance band excludes 0. Overhead included.
-- Conditions: A=seed, B=seed+all-MDL (distractor CAN enter), C=B+holed ops, P=seed+planted-motif-only (attribution control).
-- Distractor: dup_h__fv (genuinely non-compressible by BFS — no single-op equivalent). Independent roll.
-- Holed selection evidence: reports # tasks that actually SELECTED a holed op during search.
-- N_SEEDS=5 for variance band.
+**E4-holed result (auto-emitted from E4_holed_result.json)**
 
-**Non-memory-heavy.** No model load.
+**Config:** MOTIF=mir_h__mir_v, DISTRACTOR=dup_h__fv (independent roll, rho_d=0.4), N_SEEDS=5, prog_len=4, budget=35000, n_source=100, n_held=100
+
+**R* definition (aggregate-net):** min rho where aggregate_delta < -5.0% AND variance band (mean+std) excludes 0. ALL held tasks, overhead included.
+
+**R* results:**
+- R*_contiguous (B): 1.0 — aggregate-net crossover for all-MDL library
+- R*_holed (C): 0.7 — aggregate-net crossover with holed operators
+- Planted-only P: mechanism signal confirmed; R*_P NOT reported as design threshold (isolated condition, overhead not included).
+
+**Key signal (NOT accepted as R*):** script-reported motif-subset threshold = 0.1 from prior E4_rstar_grade run. NOT accepted — was motif-subset, not aggregate-net.
+
+**Distractor load-bearing check:**
+
+| rho | AGG B | AGG C | Planted P | dist_in_lib | holed_sel |
+|-----|-------|-------|-----------|-------------|-----------|
+| 0.0 | +58.3% | +53.5% | +0.0% | 1.00 | 27.2 |
+| 0.05 | +11.7% | +11.3% | +20.6% | 1.00 | 29.6 |
+| 0.1 | +68.8% | +64.3% | +5.7% | 1.00 | 19.0 |
+| 0.2 | +43.7% | +43.0% | -26.9% | 1.00 | 16.0 |
+| 0.3 | +60.1% | +60.4% | -30.4% | 1.00 | 11.2 |
+| 0.5 | -20.0% | -24.6% | -70.2% | 1.00 | 41.2 |
+| 0.7 | -24.7% | -29.2% | -76.7% | 1.00 | 53.6 | R*_C
+| 1.0 | -85.6% | -91.3% | -94.1% | 1.00 | 81.6 | R*_B
+
+**Verdict:**
+R* found: aggregate-net crossover at rho=0.7. Mechanism achieves net aggregate improvement at sufficient density.
+
+**Artifacts:** `E4_holed_operators.py`, `E4_holed_result.json`.
+<!-- /E4-HOLED-RESULT -->
+
+---
+
+## Next Experiment: Trace-Density Amplification Curve (Leo #11683, 2026-05-30)
+
+**Question:** Is 12-op formation-density failure caused by trace-count insufficiency (curve climbs → amplification bootstraps self-compilation) or representational-base insufficiency (curve stays 0 → base is the ceiling)?
+
+**Design:** Rerun holed formation funnel at 3 source-density steps. ALL augmentation SOURCE-ONLY; held-out stays original 200 tasks, disjoint (NO augmented copies of source in held-out).
+- **Step 1 (real-200, DONE):** 200 source tasks (training-only). Formation funnel: 4 skeletons, 0 MDL-positive. DENSITY_THRESHOLD. [E3_full_corpus_v2_result.json]
+- **Step 2 (full-real):** All training+evaluation tasks MINUS the disjoint held-out 200. ~600 source tasks. Rerun holed funnel.
+- **Step 3 (+aug):** Step 2 source + D4 symmetry (4 rotations) + color-permutation augmentation. Source-only augmentation.
+
+**Report at each step:** candidates_passed_MDL, gain_distribution, diagnosis → candidates_passed_MDL vs trace-count CURVE.
+
+**Pre-registered if amplification fails (MDL-negative even at max density):** representational base IS the ceiling → code-synthesis pivot (Refinement 2). Do NOT build code-synthesis until curve lands.
+
+**Status:** PENDING — build `E3_density_curve.py`.
+
+**E4_holed continues in parallel** — R* is the design target regardless of base; R* + amplification curve together calibrate how far ARC is below threshold.
 
 ---
 

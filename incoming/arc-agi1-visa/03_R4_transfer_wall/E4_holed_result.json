@@ -1,0 +1,2373 @@
+{
+  "experiment": "E4-holed-operators-v2",
+  "spec": "Leo #11672 aggregate-net R*",
+  "motif": [
+    "mir_h",
+    "mir_v"
+  ],
+  "motif_name": "mir_h__mir_v",
+  "distractor": [
+    "dup_h",
+    "fv"
+  ],
+  "distractor_name": "dup_h__fv",
+  "kai_fix_1": "distractor roll independent of rho",
+  "kai_fix_2": "B = all-MDL (distractor can enter); planted_only = attribution control",
+  "r_star_definition": "min rho where aggregate_delta < -5.0% AND variance band excludes 0",
+  "framing": "rho=0 = synthetic calibration. ARC rho-axis UNMEASURED.",
+  "conditions": {
+    "A": "seed-only baseline",
+    "B": "seed + all-MDL-learned contiguous (distractor can enter)",
+    "C": "seed + all-MDL-learned contiguous + executable holed ops",
+    "P": "seed + planted-motif-only (attribution control)"
+  },
+  "config": {
+    "program_length": 4,
+    "budget": 35000,
+    "n_source": 100,
+    "n_held": 100,
+    "n_seeds": 5,
+    "rho_d": 0.4,
+    "aggregate_margin_pct": 5.0,
+    "clean_pad": [
+      "crop",
+      "down2",
+      "dup_v",
+      "fh",
+      "id",
+      "rot",
+      "tr",
+      "up2"
+    ],
+    "master_seed": 42
+  },
+  "rho_values": [
+    0.0,
+    0.05,
+    0.1,
+    0.2,
+    0.3,
+    0.5,
+    0.7,
+    1.0
+  ],
+  "curve": [
+    {
+      "rho": 0.0,
+      "n_seeds": 5,
+      "agg_delta_B_mean": 58.333304488164096,
+      "agg_delta_B_std": 49.988079696277204,
+      "agg_delta_C_mean": 53.498984724344425,
+      "agg_delta_C_std": 44.80222584241485,
+      "agg_delta_P_mean": 0.0,
+      "agg_delta_P_std": 0.0,
+      "holed_contribution_mean": -2.3159755223132703,
+      "motif_in_lib_fraction": 0.0,
+      "distractor_in_lib_fraction": 1.0,
+      "n_lib_total_mean": 52.2,
+      "n_lib_motif_mean": 0.0,
+      "n_lib_dist_mean": 1.0,
+      "n_holed_ops_mean": 10.6,
+      "selected_holed_count_mean": 27.2,
+      "obs_source_motif_density": 0.0,
+      "obs_source_dist_density": 0.43200000000000005,
+      "obs_held_motif_density": 0.0,
+      "motif_partition_B_mean": NaN,
+      "motif_partition_C_mean": NaN,
+      "n_motif_applicable_mean": 0.0,
+      "motif_fraction_mean": NaN,
+      "per_seed": [
+        {
+          "rho": 0.0,
+          "rng_seed": 42,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 0,
+          "obs_source_dist": 45,
+          "obs_held_motif": 0,
+          "source_solved": 100,
+          "n_lib_total": 49,
+          "motif_in_lib": false,
+          "distractor_in_lib": true,
+          "n_lib_motif": 0,
+          "n_lib_dist": 1,
+          "n_lib_other": 48,
+          "motif_count_in_solved": 0,
+          "motif_gain": -2,
+          "n_holed_ops": 13,
+          "holed_top3": [
+            {
+              "name": "eps___H___up2__up2",
+              "count": 7,
+              "gain": 4.0
+            },
+            {
+              "name": "dup_h__fv___H___eps",
+              "count": 6,
+              "gain": 3.0
+            },
+            {
+              "name": "dup_h___H___fv__up2",
+              "count": 3,
+              "gain": 2.0
+            }
+          ],
+          "agg_delta_B": 126.28921147439668,
+          "agg_delta_C": 103.39317746725155,
+          "agg_delta_P": 0.0,
+          "holed_contribution_pct": -10.118040474826477,
+          "motif_fraction_of_B": null,
+          "selected_holed_count": 34,
+          "selected_holed_ops": {
+            "dup_v___H___rot": 9,
+            "eps___H___fv__rot": 6,
+            "eps___H___fv__up2": 6,
+            "dup_h__fv___H___eps": 5,
+            "dup_h__dup_v___H___eps": 2
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": null,
+          "motif_partition_C_pct": null,
+          "n_motif_applicable": 0
+        },
+        {
+          "rho": 0.0,
+          "rng_seed": 1042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 0,
+          "obs_source_dist": 50,
+          "obs_held_motif": 0,
+          "source_solved": 100,
+          "n_lib_total": 56,
+          "motif_in_lib": false,
+          "distractor_in_lib": true,
+          "n_lib_motif": 0,
+          "n_lib_dist": 1,
+          "n_lib_other": 55,
+          "motif_count_in_solved": 0,
+          "motif_gain": -2,
+          "n_holed_ops": 11,
+          "holed_top3": [
+            {
+              "name": "dup_h___H___fv__up2",
+              "count": 6,
+              "gain": 8.0
+            },
+            {
+              "name": "eps___H___fh__fv__up2",
+              "count": 5,
+              "gain": 6.0
+            },
+            {
+              "name": "dup_h__fv___H___eps",
+              "count": 7,
+              "gain": 4.0
+            }
+          ],
+          "agg_delta_B": 101.04666435284427,
+          "agg_delta_C": 99.88362834568505,
+          "agg_delta_P": 0.0,
+          "holed_contribution_pct": -0.5784905762564887,
+          "motif_fraction_of_B": null,
+          "selected_holed_count": 32,
+          "selected_holed_ops": {
+            "eps___H___fh__fv__up2": 9,
+            "dup_v___H___up2": 6,
+            "dup_h___H___fv": 5,
+            "dup_h___H___fv__up2": 4,
+            "eps___H___fh__fv": 4
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": null,
+          "motif_partition_C_pct": null,
+          "n_motif_applicable": 0
+        },
+        {
+          "rho": 0.0,
+          "rng_seed": 2042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 0,
+          "obs_source_dist": 40,
+          "obs_held_motif": 0,
+          "source_solved": 100,
+          "n_lib_total": 53,
+          "motif_in_lib": false,
+          "distractor_in_lib": true,
+          "n_lib_motif": 0,
+          "n_lib_dist": 1,
+          "n_lib_other": 52,
+          "motif_count_in_solved": 0,
+          "motif_gain": -2,
+          "n_holed_ops": 11,
+          "holed_top3": [
+            {
+              "name": "dup_h__dup_v__fv___H___eps",
+              "count": 5,
+              "gain": 6.0
+            },
+            {
+              "name": "dup_h___H___fv__up2",
+              "count": 4,
+              "gain": 4.0
+            },
+            {
+              "name": "dup_h___H___fv",
+              "count": 6,
+              "gain": 3.0
+            }
+          ],
+          "agg_delta_B": 15.09176740172441,
+          "agg_delta_C": 10.439221771825126,
+          "agg_delta_P": 0.0,
+          "holed_contribution_pct": -4.042466055508306,
+          "motif_fraction_of_B": null,
+          "selected_holed_count": 34,
+          "selected_holed_ops": {
+            "eps___H___tr__up2": 15,
+            "eps___H___dup_v__fh__fv": 6,
+            "dup_v___H___up2": 5,
+            "dup_v__down2___H___eps": 3,
+            "dup_h___H___fv": 2
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": null,
+          "motif_partition_C_pct": null,
+          "n_motif_applicable": 0
+        },
+        {
+          "rho": 0.0,
+          "rng_seed": 3042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 0,
+          "obs_source_dist": 37,
+          "obs_held_motif": 0,
+          "source_solved": 100,
+          "n_lib_total": 46,
+          "motif_in_lib": false,
+          "distractor_in_lib": true,
+          "n_lib_motif": 0,
+          "n_lib_dist": 1,
+          "n_lib_other": 45,
+          "motif_count_in_solved": 0,
+          "motif_gain": -2,
+          "n_holed_ops": 9,
+          "holed_top3": [
+            {
+              "name": "dup_h__fv___H___eps",
+              "count": 9,
+              "gain": 6.0
+            },
+            {
+              "name": "dup_h__fv___H___up2",
+              "count": 4,
+              "gain": 4.0
+            },
+            {
+              "name": "dup_h___H___up2__up2",
+              "count": 4,
+              "gain": 4.0
+            }
+          ],
+          "agg_delta_B": 55.51057306815503,
+          "agg_delta_C": 59.485103372376386,
+          "agg_delta_P": 0.0,
+          "holed_contribution_pct": 2.555794262605836,
+          "motif_fraction_of_B": null,
+          "selected_holed_count": 16,
+          "selected_holed_ops": {
+            "eps___H___fh__fv": 6,
+            "eps___H___dup_v__fv__tr": 5,
+            "dup_h__fv___H___eps": 3,
+            "dup_h___H___up2": 2
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": null,
+          "motif_partition_C_pct": null,
+          "n_motif_applicable": 0
+        },
+        {
+          "rho": 0.0,
+          "rng_seed": 4042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 0,
+          "obs_source_dist": 44,
+          "obs_held_motif": 0,
+          "source_solved": 100,
+          "n_lib_total": 57,
+          "motif_in_lib": false,
+          "distractor_in_lib": true,
+          "n_lib_motif": 0,
+          "n_lib_dist": 1,
+          "n_lib_other": 56,
+          "motif_count_in_solved": 0,
+          "motif_gain": -2,
+          "n_holed_ops": 9,
+          "holed_top3": [
+            {
+              "name": "dup_h__fv___H___eps",
+              "count": 8,
+              "gain": 5.0
+            },
+            {
+              "name": "dup_h__fv__down2___H___eps",
+              "count": 4,
+              "gain": 4.0
+            },
+            {
+              "name": "eps___H___dup_v__fv__rot",
+              "count": 3,
+              "gain": 2.0
+            }
+          ],
+          "agg_delta_B": -6.271693856299897,
+          "agg_delta_C": -5.706207335415949,
+          "agg_delta_P": 0.0,
+          "holed_contribution_pct": 0.6033252324190823,
+          "motif_fraction_of_B": null,
+          "selected_holed_count": 20,
+          "selected_holed_ops": {
+            "eps___H___fv__tr": 6,
+            "dup_h___H___fv": 5,
+            "dup_v___H___up2": 4,
+            "dup_h__fv___H___eps": 2,
+            "eps___H___dup_v__fv__rot": 2
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": null,
+          "motif_partition_C_pct": null,
+          "n_motif_applicable": 0
+        }
+      ]
+    },
+    {
+      "rho": 0.05,
+      "n_seeds": 5,
+      "agg_delta_B_mean": 11.740326820957419,
+      "agg_delta_B_std": 37.14038291272355,
+      "agg_delta_C_mean": 11.325441310747143,
+      "agg_delta_C_std": 36.79982727424223,
+      "agg_delta_P_mean": 20.64394780850224,
+      "agg_delta_P_std": 18.416753078106073,
+      "holed_contribution_mean": -0.34403068543078,
+      "motif_in_lib_fraction": 0.8,
+      "distractor_in_lib_fraction": 1.0,
+      "n_lib_total_mean": 51.2,
+      "n_lib_motif_mean": 0.8,
+      "n_lib_dist_mean": 1.0,
+      "n_holed_ops_mean": 7.6,
+      "selected_holed_count_mean": 29.6,
+      "obs_source_motif_density": 0.042,
+      "obs_source_dist_density": 0.396,
+      "obs_held_motif_density": 0.07200000000000001,
+      "motif_partition_B_mean": 95.71038177812991,
+      "motif_partition_C_mean": 97.36001248346022,
+      "n_motif_applicable_mean": 7.2,
+      "motif_fraction_mean": -1.7277391876373227,
+      "per_seed": [
+        {
+          "rho": 0.05,
+          "rng_seed": 542,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 3,
+          "obs_source_dist": 35,
+          "obs_held_motif": 4,
+          "source_solved": 100,
+          "n_lib_total": 58,
+          "motif_in_lib": false,
+          "distractor_in_lib": true,
+          "n_lib_motif": 0,
+          "n_lib_dist": 1,
+          "n_lib_other": 57,
+          "motif_count_in_solved": 2,
+          "motif_gain": 0,
+          "n_holed_ops": 8,
+          "holed_top3": [
+            {
+              "name": "dup_h__fv___H___eps",
+              "count": 6,
+              "gain": 3.0
+            },
+            {
+              "name": "eps___H___rot__up2__up2",
+              "count": 3,
+              "gain": 2.0
+            },
+            {
+              "name": "dup_h___H___up2",
+              "count": 5,
+              "gain": 2.0
+            }
+          ],
+          "agg_delta_B": 2.586876150250549,
+          "agg_delta_C": 4.567885819141261,
+          "agg_delta_P": 0.0,
+          "holed_contribution_pct": 1.9310556508117953,
+          "motif_fraction_of_B": null,
+          "selected_holed_count": 33,
+          "selected_holed_ops": {
+            "fh__down2___H___eps": 8,
+            "eps___H___fv__up2": 8,
+            "dup_h__fv___H___eps": 5,
+            "eps___H___tr__up2": 4,
+            "dup_h___H___up2": 3
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": 432.2434932243493,
+          "motif_partition_C_pct": 433.36201333620136,
+          "n_motif_applicable": 4
+        },
+        {
+          "rho": 0.05,
+          "rng_seed": 1542,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 4,
+          "obs_source_dist": 42,
+          "obs_held_motif": 10,
+          "source_solved": 100,
+          "n_lib_total": 49,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 47,
+          "motif_count_in_solved": 4,
+          "motif_gain": 2,
+          "n_holed_ops": 8,
+          "holed_top3": [
+            {
+              "name": "dup_h__fv___H___eps",
+              "count": 11,
+              "gain": 8.0
+            },
+            {
+              "name": "dup_h__fv___H___up2",
+              "count": 4,
+              "gain": 4.0
+            },
+            {
+              "name": "eps___H___fv__tr",
+              "count": 4,
+              "gain": 1.0
+            }
+          ],
+          "agg_delta_B": -36.88649686919065,
+          "agg_delta_C": -37.286346628377444,
+          "agg_delta_P": -3.3333491815203753,
+          "holed_contribution_pct": -0.6335407469904992,
+          "motif_fraction_of_B": 0.09036773519972145,
+          "selected_holed_count": 33,
+          "selected_holed_ops": {
+            "dup_v___H___up2": 9,
+            "eps___H___fv__tr": 8,
+            "fh__down2___H___eps": 7,
+            "dup_v___H___tr": 3,
+            "dup_h__fv___H___eps": 3
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": -36.27959638186954,
+          "motif_partition_C_pct": -35.11502619038732,
+          "n_motif_applicable": 10
+        },
+        {
+          "rho": 0.05,
+          "rng_seed": 2542,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 5,
+          "obs_source_dist": 42,
+          "obs_held_motif": 7,
+          "source_solved": 100,
+          "n_lib_total": 43,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 41,
+          "motif_count_in_solved": 5,
+          "motif_gain": 3,
+          "n_holed_ops": 7,
+          "holed_top3": [
+            {
+              "name": "dup_h__dup_v__fv___H___eps",
+              "count": 5,
+              "gain": 6.0
+            },
+            {
+              "name": "dup_h__dup_v___H___fv",
+              "count": 4,
+              "gain": 4.0
+            },
+            {
+              "name": "dup_h__fv___H___eps",
+              "count": 6,
+              "gain": 3.0
+            }
+          ],
+          "agg_delta_B": 75.78974868070432,
+          "agg_delta_C": 74.42447358796176,
+          "agg_delta_P": 38.1817231830294,
+          "holed_contribution_pct": -0.7766522809145091,
+          "motif_fraction_of_B": 0.503784797385801,
+          "selected_holed_count": 20,
+          "selected_holed_ops": {
+            "eps___H___rot__up2": 8,
+            "dup_h__fv___H___eps": 4,
+            "dup_v___H___up2": 3,
+            "dup_h___H___tr": 2,
+            "dup_h__dup_v__fv___H___eps": 1
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": 166.0744342622031,
+          "motif_partition_C_pct": 167.29006919768094,
+          "n_motif_applicable": 7
+        },
+        {
+          "rho": 0.05,
+          "rng_seed": 3542,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 5,
+          "obs_source_dist": 44,
+          "obs_held_motif": 5,
+          "source_solved": 100,
+          "n_lib_total": 53,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 51,
+          "motif_count_in_solved": 5,
+          "motif_gain": 3,
+          "n_holed_ops": 8,
+          "holed_top3": [
+            {
+              "name": "dup_h___H___fv__up2",
+              "count": 8,
+              "gain": 12.0
+            },
+            {
+              "name": "dup_h__dup_v__fv___H___eps",
+              "count": 6,
+              "gain": 8.0
+            },
+            {
+              "name": "dup_v___H___up2",
+              "count": 6,
+              "gain": 3.0
+            }
+          ],
+          "agg_delta_B": -4.175229429759198,
+          "agg_delta_C": -5.7871205584751895,
+          "agg_delta_P": 37.384892932779024,
+          "holed_contribution_pct": -1.6821236504129742,
+          "motif_fraction_of_B": -8.953973323313914,
+          "selected_holed_count": 32,
+          "selected_holed_ops": {
+            "eps___H___tr__up2": 9,
+            "eps___H___fv__tr": 8,
+            "eps___H___fv__down2": 5,
+            "dup_v___H___up2": 5,
+            "dup_h___H___fv": 2
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": -34.929827307351175,
+          "motif_partition_C_pct": -32.21683101163458,
+          "n_motif_applicable": 5
+        },
+        {
+          "rho": 0.05,
+          "rng_seed": 4542,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 4,
+          "obs_source_dist": 35,
+          "obs_held_motif": 10,
+          "source_solved": 100,
+          "n_lib_total": 53,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 51,
+          "motif_count_in_solved": 4,
+          "motif_gain": 2,
+          "n_holed_ops": 7,
+          "holed_top3": [
+            {
+              "name": "dup_v___H___rot",
+              "count": 5,
+              "gain": 2.0
+            },
+            {
+              "name": "eps___H___fh__up2",
+              "count": 5,
+              "gain": 2.0
+            },
+            {
+              "name": "eps___H___fv__tr",
+              "count": 5,
+              "gain": 2.0
+            }
+          ],
+          "agg_delta_B": 21.38673557278208,
+          "agg_delta_C": 20.708314333485333,
+          "agg_delta_P": 30.98647210822314,
+          "holed_contribution_pct": -0.558892399647713,
+          "motif_fraction_of_B": 1.4488640401791009,
+          "selected_holed_count": 30,
+          "selected_holed_ops": {
+            "eps___H___fh__up2": 8,
+            "eps___H___down2__fh": 7,
+            "crop___H___up2": 5,
+            "eps___H___fv__tr": 4,
+            "dup_h___H___tr": 3
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": -48.556594906682186,
+          "motif_partition_C_pct": -46.52016291455937,
+          "n_motif_applicable": 10
+        }
+      ]
+    },
+    {
+      "rho": 0.1,
+      "n_seeds": 5,
+      "agg_delta_B_mean": 68.77602453132332,
+      "agg_delta_B_std": 54.74601478480554,
+      "agg_delta_C_mean": 64.30404138912373,
+      "agg_delta_C_std": 44.35799776693011,
+      "agg_delta_P_mean": 5.712867426416511,
+      "agg_delta_P_std": 14.395478065479304,
+      "holed_contribution_mean": -1.3579586105074601,
+      "motif_in_lib_fraction": 1.0,
+      "distractor_in_lib_fraction": 1.0,
+      "n_lib_total_mean": 54.8,
+      "n_lib_motif_mean": 1.0,
+      "n_lib_dist_mean": 1.0,
+      "n_holed_ops_mean": 9.0,
+      "selected_holed_count_mean": 19.0,
+      "obs_source_motif_density": 0.07400000000000001,
+      "obs_source_dist_density": 0.446,
+      "obs_held_motif_density": 0.106,
+      "motif_partition_B_mean": -7.031146508448818,
+      "motif_partition_C_mean": -5.243782661791047,
+      "n_motif_applicable_mean": 10.6,
+      "motif_fraction_mean": 0.1611394091998484,
+      "per_seed": [
+        {
+          "rho": 0.1,
+          "rng_seed": 1042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 9,
+          "obs_source_dist": 43,
+          "obs_held_motif": 11,
+          "source_solved": 100,
+          "n_lib_total": 58,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 56,
+          "motif_count_in_solved": 9,
+          "motif_gain": 7,
+          "n_holed_ops": 10,
+          "holed_top3": [
+            {
+              "name": "dup_h__fv__down2___H___eps",
+              "count": 5,
+              "gain": 6.0
+            },
+            {
+              "name": "dup_h___H___fv",
+              "count": 8,
+              "gain": 5.0
+            },
+            {
+              "name": "eps___H___fh__fv__up2",
+              "count": 3,
+              "gain": 2.0
+            }
+          ],
+          "agg_delta_B": 43.2911776779338,
+          "agg_delta_C": 44.76334538583953,
+          "agg_delta_P": 1.6605466926835837,
+          "holed_contribution_pct": 1.0273959163170656,
+          "motif_fraction_of_B": 0.038357623464006396,
+          "selected_holed_count": 23,
+          "selected_holed_ops": {
+            "eps___H___fh__fv__up2": 7,
+            "eps___H___dup_v__rot": 6,
+            "dup_h___H___fv": 4,
+            "down2__dup_v__fh___H___eps": 3,
+            "dup_h___H___fv__up2": 1
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": -14.050050168211067,
+          "motif_partition_C_pct": -11.940034232426376,
+          "n_motif_applicable": 11
+        },
+        {
+          "rho": 0.1,
+          "rng_seed": 2042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 5,
+          "obs_source_dist": 41,
+          "obs_held_motif": 13,
+          "source_solved": 100,
+          "n_lib_total": 47,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 45,
+          "motif_count_in_solved": 5,
+          "motif_gain": 3,
+          "n_holed_ops": 10,
+          "holed_top3": [
+            {
+              "name": "dup_h__fv___H___eps",
+              "count": 7,
+              "gain": 4.0
+            },
+            {
+              "name": "crop__dup_h__fv___H___eps",
+              "count": 4,
+              "gain": 4.0
+            },
+            {
+              "name": "dup_h__dup_v__fv___H___eps",
+              "count": 3,
+              "gain": 2.0
+            }
+          ],
+          "agg_delta_B": 31.78665785997358,
+          "agg_delta_C": 28.48919345369148,
+          "agg_delta_P": -17.397346983707617,
+          "holed_contribution_pct": -2.502123097913095,
+          "motif_fraction_of_B": -0.5473160173160173,
+          "selected_holed_count": 29,
+          "selected_holed_ops": {
+            "dup_v___H___up2": 7,
+            "fh__down2___H___eps": 7,
+            "eps___H___down2__crop": 6,
+            "eps___H___fv__rot": 2,
+            "eps___H___fh__fv": 2
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": 30.81402379468479,
+          "motif_partition_C_pct": 32.02329237323609,
+          "n_motif_applicable": 13
+        },
+        {
+          "rho": 0.1,
+          "rng_seed": 3042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 5,
+          "obs_source_dist": 42,
+          "obs_held_motif": 8,
+          "source_solved": 100,
+          "n_lib_total": 53,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 51,
+          "motif_count_in_solved": 4,
+          "motif_gain": 2,
+          "n_holed_ops": 8,
+          "holed_top3": [
+            {
+              "name": "dup_h__fv___H___eps",
+              "count": 9,
+              "gain": 6.0
+            },
+            {
+              "name": "dup_h__dup_v__fv___H___eps",
+              "count": 5,
+              "gain": 6.0
+            },
+            {
+              "name": "dup_h___H___rot",
+              "count": 7,
+              "gain": 4.0
+            }
+          ],
+          "agg_delta_B": 72.7182650268148,
+          "agg_delta_C": 77.65206405826181,
+          "agg_delta_P": 16.6406569315944,
+          "holed_contribution_pct": 2.8565589346795677,
+          "motif_fraction_of_B": 0.22883737566425946,
+          "selected_holed_count": 8,
+          "selected_holed_ops": {
+            "dup_h___H___rot": 3,
+            "dup_h___H___fv__up2": 2,
+            "eps___H___up2__up2": 2,
+            "eps___H___dup_h__dup_v__fv": 1
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": -76.3787057698438,
+          "motif_partition_C_pct": -74.72107108702582,
+          "n_motif_applicable": 8
+        },
+        {
+          "rho": 0.1,
+          "rng_seed": 4042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 10,
+          "obs_source_dist": 49,
+          "obs_held_motif": 10,
+          "source_solved": 100,
+          "n_lib_total": 58,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 56,
+          "motif_count_in_solved": 9,
+          "motif_gain": 7,
+          "n_holed_ops": 6,
+          "holed_top3": [
+            {
+              "name": "dup_h___H___fv",
+              "count": 9,
+              "gain": 6.0
+            },
+            {
+              "name": "dup_h__dup_v___H___fv",
+              "count": 4,
+              "gain": 4.0
+            },
+            {
+              "name": "eps___H___dup_h__fv",
+              "count": 5,
+              "gain": 2.0
+            }
+          ],
+          "agg_delta_B": 23.07734331931125,
+          "agg_delta_C": 25.67085011596779,
+          "agg_delta_P": 24.657187271851363,
+          "holed_contribution_pct": 2.1072170772552026,
+          "motif_fraction_of_B": 1.0684586579434423,
+          "selected_holed_count": 8,
+          "selected_holed_ops": {
+            "dup_h___H___fv": 4,
+            "dup_v___H___up2": 3,
+            "dup_h__dup_v___H___fv": 1
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": -20.43597357456898,
+          "motif_partition_C_pct": -18.640517459659787,
+          "n_motif_applicable": 10
+        },
+        {
+          "rho": 0.1,
+          "rng_seed": 5042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 8,
+          "obs_source_dist": 48,
+          "obs_held_motif": 11,
+          "source_solved": 100,
+          "n_lib_total": 58,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 56,
+          "motif_count_in_solved": 7,
+          "motif_gain": 5,
+          "n_holed_ops": 11,
+          "holed_top3": [
+            {
+              "name": "dup_h___H___fv__up2",
+              "count": 6,
+              "gain": 8.0
+            },
+            {
+              "name": "dup_h__dup_v__fv___H___eps",
+              "count": 5,
+              "gain": 6.0
+            },
+            {
+              "name": "dup_h__fv___H___up2",
+              "count": 3,
+              "gain": 2.0
+            }
+          ],
+          "agg_delta_B": 173.00667877258317,
+          "agg_delta_C": 144.94475393185803,
+          "agg_delta_P": 3.003293219660827,
+          "holed_contribution_pct": -10.27884188287604,
+          "motif_fraction_of_B": 0.017359406243551142,
+          "selected_holed_count": 27,
+          "selected_holed_ops": {
+            "eps___H___fv__up2": 8,
+            "dup_v___H___up2": 6,
+            "eps___H___rot__up2": 4,
+            "dup_h___H___fv": 4,
+            "eps___H___fh__fv": 3
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": 44.89497317569498,
+          "motif_partition_C_pct": 47.059417096920654,
+          "n_motif_applicable": 11
+        }
+      ]
+    },
+    {
+      "rho": 0.2,
+      "n_seeds": 5,
+      "agg_delta_B_mean": 43.74220472886691,
+      "agg_delta_B_std": 26.007842141545364,
+      "agg_delta_C_mean": 42.98080084435266,
+      "agg_delta_C_std": 28.647758419034943,
+      "agg_delta_P_mean": -26.85673555357347,
+      "agg_delta_P_std": 28.233447708299455,
+      "holed_contribution_mean": -0.9693444121345912,
+      "motif_in_lib_fraction": 1.0,
+      "distractor_in_lib_fraction": 1.0,
+      "n_lib_total_mean": 53.0,
+      "n_lib_motif_mean": 1.0,
+      "n_lib_dist_mean": 1.0,
+      "n_holed_ops_mean": 6.8,
+      "selected_holed_count_mean": 16.0,
+      "obs_source_motif_density": 0.114,
+      "obs_source_dist_density": 0.42200000000000004,
+      "obs_held_motif_density": 0.23800000000000002,
+      "motif_partition_B_mean": -31.508365888954796,
+      "motif_partition_C_mean": -32.64913934573025,
+      "n_motif_applicable_mean": 23.8,
+      "motif_fraction_mean": -1.9105562594751788,
+      "per_seed": [
+        {
+          "rho": 0.2,
+          "rng_seed": 2042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 6,
+          "obs_source_dist": 38,
+          "obs_held_motif": 32,
+          "source_solved": 100,
+          "n_lib_total": 54,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 52,
+          "motif_count_in_solved": 4,
+          "motif_gain": 2,
+          "n_holed_ops": 7,
+          "holed_top3": [
+            {
+              "name": "dup_h___H___fv",
+              "count": 7,
+              "gain": 4.0
+            },
+            {
+              "name": "dup_h__dup_v___H___eps",
+              "count": 6,
+              "gain": 3.0
+            },
+            {
+              "name": "eps___H___dup_h__fv__rot",
+              "count": 3,
+              "gain": 2.0
+            }
+          ],
+          "agg_delta_B": 56.555424439700694,
+          "agg_delta_C": 58.12660488016158,
+          "agg_delta_P": -66.0054891873616,
+          "holed_contribution_pct": 1.0035937407368773,
+          "motif_fraction_of_B": -1.16709387015098,
+          "selected_holed_count": 14,
+          "selected_holed_ops": {
+            "eps___H___dup_v__tr": 6,
+            "crop___H___tr": 4,
+            "dup_h___H___fv": 3,
+            "dup_h__dup_v___H___eps": 1
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": 33.29022673713348,
+          "motif_partition_C_pct": 34.60319665692315,
+          "n_motif_applicable": 32
+        },
+        {
+          "rho": 0.2,
+          "rng_seed": 3042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 9,
+          "obs_source_dist": 45,
+          "obs_held_motif": 16,
+          "source_solved": 100,
+          "n_lib_total": 60,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 58,
+          "motif_count_in_solved": 8,
+          "motif_gain": 6,
+          "n_holed_ops": 6,
+          "holed_top3": [
+            {
+              "name": "dup_h__dup_v__fv___H___eps",
+              "count": 7,
+              "gain": 10.0
+            },
+            {
+              "name": "dup_h__fv___H___eps",
+              "count": 6,
+              "gain": 3.0
+            },
+            {
+              "name": "dup_h___H___fv__up2",
+              "count": 3,
+              "gain": 2.0
+            }
+          ],
+          "agg_delta_B": 46.590292600057815,
+          "agg_delta_C": 48.80191977951047,
+          "agg_delta_P": -34.513659817288314,
+          "holed_contribution_pct": 1.5087132580372387,
+          "motif_fraction_of_B": -0.7407907933431929,
+          "selected_holed_count": 7,
+          "selected_holed_ops": {
+            "dup_h___H___rot": 3,
+            "eps___H___up2__up2": 2,
+            "dup_h___H___fv__up2": 1,
+            "eps___H___dup_h__dup_v__fv": 1
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": -79.2569462551592,
+          "motif_partition_C_pct": -78.46327022506566,
+          "n_motif_applicable": 16
+        },
+        {
+          "rho": 0.2,
+          "rng_seed": 4042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 19,
+          "obs_source_dist": 45,
+          "obs_held_motif": 31,
+          "source_solved": 100,
+          "n_lib_total": 53,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 51,
+          "motif_count_in_solved": 17,
+          "motif_gain": 15,
+          "n_holed_ops": 10,
+          "holed_top3": [
+            {
+              "name": "dup_h___H___fv",
+              "count": 7,
+              "gain": 4.0
+            },
+            {
+              "name": "dup_h___H___fv__up2",
+              "count": 3,
+              "gain": 2.0
+            },
+            {
+              "name": "dup_h__dup_v__fv___H___eps",
+              "count": 3,
+              "gain": 2.0
+            }
+          ],
+          "agg_delta_B": 3.1069980581262144,
+          "agg_delta_C": -4.853059466837835,
+          "agg_delta_P": -21.20583049635594,
+          "holed_contribution_pct": -7.720191330249568,
+          "motif_fraction_of_B": -6.825183054393304,
+          "selected_holed_count": 38,
+          "selected_holed_ops": {
+            "eps___H___mir_h__mir_v__rot": 12,
+            "mir_h__mir_v___H___eps": 10,
+            "eps___H___tr__up2": 8,
+            "eps___H___dup_v__fh__fv": 3,
+            "dup_h__dup_v___H___fv": 2
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": -75.51640862517684,
+          "motif_partition_C_pct": -86.76602761994826,
+          "n_motif_applicable": 31
+        },
+        {
+          "rho": 0.2,
+          "rng_seed": 5042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 15,
+          "obs_source_dist": 46,
+          "obs_held_motif": 16,
+          "source_solved": 100,
+          "n_lib_total": 52,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 50,
+          "motif_count_in_solved": 11,
+          "motif_gain": 9,
+          "n_holed_ops": 8,
+          "holed_top3": [
+            {
+              "name": "dup_h__dup_v__fv___H___eps",
+              "count": 6,
+              "gain": 8.0
+            },
+            {
+              "name": "dup_h___H___fv__up2",
+              "count": 6,
+              "gain": 8.0
+            },
+            {
+              "name": "eps___H___dup_h__dup_v__fv",
+              "count": 3,
+              "gain": 2.0
+            }
+          ],
+          "agg_delta_B": 81.19594442932123,
+          "agg_delta_C": 80.8191374032313,
+          "agg_delta_P": 21.24876427353613,
+          "holed_contribution_pct": -0.20795555180702233,
+          "motif_fraction_of_B": 0.2616973596757973,
+          "selected_holed_count": 18,
+          "selected_holed_ops": {
+            "eps___H___rot__up2": 8,
+            "dup_v___H___up2": 6,
+            "dup_h___H___fv__up2": 4
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": -49.582883154147254,
+          "motif_partition_C_pct": -46.63561168281408,
+          "n_motif_applicable": 16
+        },
+        {
+          "rho": 0.2,
+          "rng_seed": 6042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 8,
+          "obs_source_dist": 37,
+          "obs_held_motif": 24,
+          "source_solved": 100,
+          "n_lib_total": 46,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 44,
+          "motif_count_in_solved": 7,
+          "motif_gain": 5,
+          "n_holed_ops": 3,
+          "holed_top3": [
+            {
+              "name": "dup_h__fv___H___up2",
+              "count": 4,
+              "gain": 4.0
+            },
+            {
+              "name": "dup_h__fv__rot___H___eps",
+              "count": 4,
+              "gain": 4.0
+            },
+            {
+              "name": "down2__dup_h__fv___H___eps",
+              "count": 3,
+              "gain": 2.0
+            }
+          ],
+          "agg_delta_B": 31.26236411712859,
+          "agg_delta_C": 32.00940162569777,
+          "agg_delta_P": -33.80746254039761,
+          "holed_contribution_pct": 0.5691178226095174,
+          "motif_fraction_of_B": -1.0814109391642126,
+          "selected_holed_count": 3,
+          "selected_holed_ops": {
+            "dup_h__fv__rot___H___eps": 2,
+            "dup_h__fv___H___up2": 1
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": 13.524181852575813,
+          "motif_partition_C_pct": 14.0160161422536,
+          "n_motif_applicable": 24
+        }
+      ]
+    },
+    {
+      "rho": 0.3,
+      "n_seeds": 5,
+      "agg_delta_B_mean": 60.118789947295205,
+      "agg_delta_B_std": 63.34115597602966,
+      "agg_delta_C_mean": 60.43747610771159,
+      "agg_delta_C_std": 62.96555493566709,
+      "agg_delta_P_mean": -30.38904159464849,
+      "agg_delta_P_std": 7.125541300083514,
+      "holed_contribution_mean": 0.33598077543672916,
+      "motif_in_lib_fraction": 1.0,
+      "distractor_in_lib_fraction": 1.0,
+      "n_lib_total_mean": 53.8,
+      "n_lib_motif_mean": 1.0,
+      "n_lib_dist_mean": 1.0,
+      "n_holed_ops_mean": 6.2,
+      "selected_holed_count_mean": 11.2,
+      "obs_source_motif_density": 0.166,
+      "obs_source_dist_density": 0.41600000000000004,
+      "obs_held_motif_density": 0.32799999999999996,
+      "motif_partition_B_mean": 0.7077007094941422,
+      "motif_partition_C_mean": 1.012994960886053,
+      "n_motif_applicable_mean": 32.8,
+      "motif_fraction_mean": -3.8730601062884054,
+      "per_seed": [
+        {
+          "rho": 0.3,
+          "rng_seed": 3042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 19,
+          "obs_source_dist": 42,
+          "obs_held_motif": 25,
+          "source_solved": 100,
+          "n_lib_total": 49,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 47,
+          "motif_count_in_solved": 14,
+          "motif_gain": 12,
+          "n_holed_ops": 6,
+          "holed_top3": [
+            {
+              "name": "eps___H___dup_h__dup_v__fv",
+              "count": 4,
+              "gain": 4.0
+            },
+            {
+              "name": "dup_h___H___fv",
+              "count": 5,
+              "gain": 2.0
+            },
+            {
+              "name": "dup_h__fv___H___up2",
+              "count": 3,
+              "gain": 2.0
+            }
+          ],
+          "agg_delta_B": 137.04240083675273,
+          "agg_delta_C": 139.50518947622496,
+          "agg_delta_P": -37.48410974334219,
+          "holed_contribution_pct": 1.0389654470165002,
+          "motif_fraction_of_B": -0.27352198673163863,
+          "selected_holed_count": 3,
+          "selected_holed_ops": {
+            "dup_h___H___fv": 2,
+            "dup_h__fh__fv___H___eps": 1
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": 0.003076430847984601,
+          "motif_partition_C_pct": 1.0109151766486633,
+          "n_motif_applicable": 25
+        },
+        {
+          "rho": 0.3,
+          "rng_seed": 4042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 17,
+          "obs_source_dist": 35,
+          "obs_held_motif": 40,
+          "source_solved": 100,
+          "n_lib_total": 52,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 50,
+          "motif_count_in_solved": 14,
+          "motif_gain": 12,
+          "n_holed_ops": 8,
+          "holed_top3": [
+            {
+              "name": "dup_h___H___down2__tr",
+              "count": 4,
+              "gain": 4.0
+            },
+            {
+              "name": "dup_h___H___fv",
+              "count": 5,
+              "gain": 2.0
+            },
+            {
+              "name": "dup_h__dup_v__fv___H___eps",
+              "count": 3,
+              "gain": 2.0
+            }
+          ],
+          "agg_delta_B": 20.05211367148972,
+          "agg_delta_C": 20.149584100281935,
+          "agg_delta_P": -32.478622521493975,
+          "holed_contribution_pct": 0.08119009804269639,
+          "motif_fraction_of_B": -1.6197106725797379,
+          "selected_holed_count": 13,
+          "selected_holed_ops": {
+            "eps___H___tr__up2": 7,
+            "eps___H___fv__tr": 3,
+            "dup_h___H___fv": 1,
+            "dup_h__fv___H___eps": 1,
+            "dup_v___H___up2": 1
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": -25.09010330107212,
+          "motif_partition_C_pct": -22.51441978688044,
+          "n_motif_applicable": 40
+        },
+        {
+          "rho": 0.3,
+          "rng_seed": 5042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 16,
+          "obs_source_dist": 48,
+          "obs_held_motif": 39,
+          "source_solved": 100,
+          "n_lib_total": 59,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 57,
+          "motif_count_in_solved": 14,
+          "motif_gain": 12,
+          "n_holed_ops": 4,
+          "holed_top3": [
+            {
+              "name": "down2__dup_h__fv___H___eps",
+              "count": 4,
+              "gain": 4.0
+            },
+            {
+              "name": "dup_h__fv___H___up2",
+              "count": 3,
+              "gain": 2.0
+            },
+            {
+              "name": "eps___H___dup_v__rot",
+              "count": 4,
+              "gain": 1.0
+            }
+          ],
+          "agg_delta_B": 4.246938921154486,
+          "agg_delta_C": 5.161439412218476,
+          "agg_delta_P": -29.251101920417057,
+          "holed_contribution_pct": 0.8772444548761835,
+          "motif_fraction_of_B": -6.887573017524219,
+          "selected_holed_count": 2,
+          "selected_holed_ops": {
+            "eps___H___dup_v__rot": 2
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": 9.153614594178629,
+          "motif_partition_C_pct": 10.212869494364226,
+          "n_motif_applicable": 39
+        },
+        {
+          "rho": 0.3,
+          "rng_seed": 6042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 14,
+          "obs_source_dist": 38,
+          "obs_held_motif": 30,
+          "source_solved": 100,
+          "n_lib_total": 56,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 54,
+          "motif_count_in_solved": 12,
+          "motif_gain": 10,
+          "n_holed_ops": 4,
+          "holed_top3": [
+            {
+              "name": "dup_h__dup_v__fv___H___eps",
+              "count": 5,
+              "gain": 6.0
+            },
+            {
+              "name": "dup_h__fv___H___up2",
+              "count": 3,
+              "gain": 2.0
+            },
+            {
+              "name": "dup_h__fv__rot___H___eps",
+              "count": 3,
+              "gain": 2.0
+            }
+          ],
+          "agg_delta_B": 1.6722840246474457,
+          "agg_delta_C": 2.515404656548534,
+          "agg_delta_P": -17.269240312642154,
+          "holed_contribution_pct": 0.82925316372031,
+          "motif_fraction_of_B": -10.326738794435885,
+          "selected_holed_count": 6,
+          "selected_holed_ops": {
+            "dup_h__fv__rot___H___eps": 3,
+            "dup_h__fv___H___up2": 2,
+            "dup_h__dup_v__fv___H___eps": 1
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": -24.700035094708284,
+          "motif_partition_C_pct": -23.26968860560188,
+          "n_motif_applicable": 30
+        },
+        {
+          "rho": 0.3,
+          "rng_seed": 7042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 17,
+          "obs_source_dist": 45,
+          "obs_held_motif": 30,
+          "source_solved": 100,
+          "n_lib_total": 53,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 51,
+          "motif_count_in_solved": 15,
+          "motif_gain": 13,
+          "n_holed_ops": 9,
+          "holed_top3": [
+            {
+              "name": "dup_h___H___fv__up2",
+              "count": 4,
+              "gain": 4.0
+            },
+            {
+              "name": "dup_h__fv___H___eps",
+              "count": 6,
+              "gain": 3.0
+            },
+            {
+              "name": "eps___H___dup_v__tr",
+              "count": 6,
+              "gain": 3.0
+            }
+          ],
+          "agg_delta_B": 137.5802122824316,
+          "agg_delta_C": 134.85576289328407,
+          "agg_delta_P": -35.46213347534708,
+          "holed_contribution_pct": -1.1467492864720443,
+          "motif_fraction_of_B": -0.2577560601705471,
+          "selected_holed_count": 32,
+          "selected_holed_ops": {
+            "eps___H___mir_h__mir_v": 15,
+            "eps___H___dup_v__tr": 7,
+            "eps___H___dup_v__fh__up2": 6,
+            "down2__dup_v___H___eps": 3,
+            "dup_h__fv___H___eps": 1
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": 44.1719509182245,
+          "motif_partition_C_pct": 39.625298525899694,
+          "n_motif_applicable": 30
+        }
+      ]
+    },
+    {
+      "rho": 0.5,
+      "n_seeds": 5,
+      "agg_delta_B_mean": -19.955066819911337,
+      "agg_delta_B_std": 29.446526080565988,
+      "agg_delta_C_mean": -24.60358663186309,
+      "agg_delta_C_std": 27.3691532482902,
+      "agg_delta_P_mean": -70.1986246047193,
+      "agg_delta_P_std": 7.176662611916884,
+      "holed_contribution_mean": -5.28828875454615,
+      "motif_in_lib_fraction": 1.0,
+      "distractor_in_lib_fraction": 1.0,
+      "n_lib_total_mean": 63.6,
+      "n_lib_motif_mean": 1.0,
+      "n_lib_dist_mean": 1.0,
+      "n_holed_ops_mean": 8.6,
+      "selected_holed_count_mean": 41.2,
+      "obs_source_motif_density": 0.38,
+      "obs_source_dist_density": 0.39799999999999996,
+      "obs_held_motif_density": 0.584,
+      "motif_partition_B_mean": -73.66746268964417,
+      "motif_partition_C_mean": -79.57638395837789,
+      "n_motif_applicable_mean": 58.4,
+      "motif_fraction_mean": 760.4114670412057,
+      "per_seed": [
+        {
+          "rho": 0.5,
+          "rng_seed": 5042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 37,
+          "obs_source_dist": 42,
+          "obs_held_motif": 61,
+          "source_solved": 100,
+          "n_lib_total": 73,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 71,
+          "motif_count_in_solved": 30,
+          "motif_gain": 28,
+          "n_holed_ops": 8,
+          "holed_top3": [
+            {
+              "name": "eps___H___fv__mir_h__mir_v",
+              "count": 5,
+              "gain": 6.0
+            },
+            {
+              "name": "mir_h__mir_v___H___eps",
+              "count": 7,
+              "gain": 4.0
+            },
+            {
+              "name": "mir_h__mir_v___H___up2",
+              "count": 4,
+              "gain": 4.0
+            }
+          ],
+          "agg_delta_B": -14.985998168991333,
+          "agg_delta_C": -24.546286822122898,
+          "agg_delta_P": -67.64957725240993,
+          "holed_contribution_pct": -11.245545965634655,
+          "motif_fraction_of_B": 4.514185607762104,
+          "selected_holed_count": 41,
+          "selected_holed_ops": {
+            "eps___H___fv__mir_h__mir_v": 20,
+            "mir_h__mir_v___H___up2": 6,
+            "mir_h__mir_v___H___eps": 5,
+            "mir_h___H___mir_v__rot": 4,
+            "eps___H___tr__up2": 3
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": -60.36379073445157,
+          "motif_partition_C_pct": -69.0858890934073,
+          "n_motif_applicable": 61
+        },
+        {
+          "rho": 0.5,
+          "rng_seed": 6042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 35,
+          "obs_source_dist": 44,
+          "obs_held_motif": 51,
+          "source_solved": 100,
+          "n_lib_total": 59,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 57,
+          "motif_count_in_solved": 27,
+          "motif_gain": 25,
+          "n_holed_ops": 8,
+          "holed_top3": [
+            {
+              "name": "mir_h__mir_v___H___eps",
+              "count": 6,
+              "gain": 3.0
+            },
+            {
+              "name": "dup_h__fv___H___eps",
+              "count": 6,
+              "gain": 3.0
+            },
+            {
+              "name": "crop__dup_h___H___fv",
+              "count": 3,
+              "gain": 2.0
+            }
+          ],
+          "agg_delta_B": 21.183485827208862,
+          "agg_delta_C": 15.529544035839796,
+          "agg_delta_P": -57.67130988387934,
+          "holed_contribution_pct": -4.665604189196883,
+          "motif_fraction_of_B": -2.722465525943051,
+          "selected_holed_count": 38,
+          "selected_holed_ops": {
+            "mir_h__mir_v___H___eps": 22,
+            "eps___H___mir_h__mir_v__rot": 7,
+            "mir_h__mir_v__down2___H___eps": 3,
+            "eps___H___fv__tr": 3,
+            "dup_v__mir_h__mir_v___H___eps": 3
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": -71.88681665199834,
+          "motif_partition_C_pct": -79.88112033470287,
+          "n_motif_applicable": 51
+        },
+        {
+          "rho": 0.5,
+          "rng_seed": 7042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 39,
+          "obs_source_dist": 39,
+          "obs_held_motif": 58,
+          "source_solved": 100,
+          "n_lib_total": 62,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 60,
+          "motif_count_in_solved": 30,
+          "motif_gain": 28,
+          "n_holed_ops": 8,
+          "holed_top3": [
+            {
+              "name": "mir_h__mir_v___H___eps",
+              "count": 9,
+              "gain": 6.0
+            },
+            {
+              "name": "eps___H___mir_v__rot__mir_v",
+              "count": 5,
+              "gain": 6.0
+            },
+            {
+              "name": "eps___H___mir_h__mir_v",
+              "count": 6,
+              "gain": 3.0
+            }
+          ],
+          "agg_delta_B": -48.50044860236409,
+          "agg_delta_C": -50.07796099337114,
+          "agg_delta_P": -77.72609413971425,
+          "holed_contribution_pct": -3.063157538648904,
+          "motif_fraction_of_B": 1.6025850560055561,
+          "selected_holed_count": 36,
+          "selected_holed_ops": {
+            "mir_h__mir_v___H___eps": 20,
+            "eps___H___mir_v__rot__mir_v": 7,
+            "eps___H___mir_h__mir_v": 6,
+            "dup_h__fv___H___eps": 3
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": -68.2080943617308,
+          "motif_partition_C_pct": -71.28478274276107,
+          "n_motif_applicable": 58
+        },
+        {
+          "rho": 0.5,
+          "rng_seed": 8042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 38,
+          "obs_source_dist": 39,
+          "obs_held_motif": 61,
+          "source_solved": 100,
+          "n_lib_total": 63,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 61,
+          "motif_count_in_solved": 34,
+          "motif_gain": 32,
+          "n_holed_ops": 10,
+          "holed_top3": [
+            {
+              "name": "mir_h__mir_v___H___up2",
+              "count": 6,
+              "gain": 8.0
+            },
+            {
+              "name": "dup_h__dup_v__fv___H___eps",
+              "count": 6,
+              "gain": 8.0
+            },
+            {
+              "name": "mir_h__mir_v___H___eps",
+              "count": 7,
+              "gain": 4.0
+            }
+          ],
+          "agg_delta_B": -0.018923612700792986,
+          "agg_delta_C": -5.717983231237395,
+          "agg_delta_P": -71.85936703567711,
+          "holed_contribution_pct": -5.7001382906301306,
+          "motif_fraction_of_B": 3797.338709678088,
+          "selected_holed_count": 49,
+          "selected_holed_ops": {
+            "mir_h__mir_v___H___eps": 23,
+            "eps___H___mir_h__mir_v__rot": 14,
+            "mir_h__mir_v___H___up2": 8,
+            "mir_h__mir_v__down2___H___eps": 3,
+            "dup_h__fv___H___eps": 1
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": -84.23371450278155,
+          "motif_partition_C_pct": -92.36785396038725,
+          "n_motif_applicable": 61
+        },
+        {
+          "rho": 0.5,
+          "rng_seed": 9042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 41,
+          "obs_source_dist": 35,
+          "obs_held_motif": 61,
+          "source_solved": 100,
+          "n_lib_total": 61,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 59,
+          "motif_count_in_solved": 36,
+          "motif_gain": 34,
+          "n_holed_ops": 9,
+          "holed_top3": [
+            {
+              "name": "mir_h__mir_v___H___eps",
+              "count": 11,
+              "gain": 8.0
+            },
+            {
+              "name": "mir_h__mir_v___H___up2",
+              "count": 4,
+              "gain": 4.0
+            },
+            {
+              "name": "eps___H___dup_v__fh__fv",
+              "count": 4,
+              "gain": 4.0
+            }
+          ],
+          "agg_delta_B": -57.453449542709336,
+          "agg_delta_C": -58.205246148423825,
+          "agg_delta_P": -76.08677471191584,
+          "holed_contribution_pct": -1.7669977886201742,
+          "motif_fraction_of_B": 1.3243203901160885,
+          "selected_holed_count": 42,
+          "selected_holed_ops": {
+            "mir_h__mir_v___H___eps": 24,
+            "eps___H___mir_h__mir_v": 9,
+            "mir_h__mir_v___H___up2": 4,
+            "eps___H___dup_v__fh__fv": 2,
+            "mir_h__mir_v__down2___H___eps": 1
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": -83.6448971972586,
+          "motif_partition_C_pct": -85.26227366063095,
+          "n_motif_applicable": 61
+        }
+      ]
+    },
+    {
+      "rho": 0.7,
+      "n_seeds": 5,
+      "agg_delta_B_mean": -24.73162081919692,
+      "agg_delta_B_std": 30.512369320802247,
+      "agg_delta_C_mean": -29.191174100884574,
+      "agg_delta_C_std": 28.580777747447456,
+      "agg_delta_P_mean": -76.7424048551979,
+      "agg_delta_P_std": 5.554531880510644,
+      "holed_contribution_mean": -6.1772698200824365,
+      "motif_in_lib_fraction": 1.0,
+      "distractor_in_lib_fraction": 1.0,
+      "n_lib_total_mean": 55.4,
+      "n_lib_motif_mean": 1.0,
+      "n_lib_dist_mean": 1.0,
+      "n_holed_ops_mean": 8.8,
+      "selected_holed_count_mean": 53.6,
+      "obs_source_motif_density": 0.496,
+      "obs_source_dist_density": 0.41200000000000003,
+      "obs_held_motif_density": 0.7240000000000001,
+      "motif_partition_B_mean": -77.59907726601921,
+      "motif_partition_C_mean": -83.4145968066052,
+      "n_motif_applicable_mean": 72.4,
+      "motif_fraction_mean": -9.206703158380336,
+      "per_seed": [
+        {
+          "rho": 0.7,
+          "rng_seed": 7042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 55,
+          "obs_source_dist": 40,
+          "obs_held_motif": 72,
+          "source_solved": 100,
+          "n_lib_total": 54,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 52,
+          "motif_count_in_solved": 48,
+          "motif_gain": 46,
+          "n_holed_ops": 9,
+          "holed_top3": [
+            {
+              "name": "mir_h__mir_v___H___eps",
+              "count": 12,
+              "gain": 9.0
+            },
+            {
+              "name": "mir_h__mir_v___H___up2",
+              "count": 6,
+              "gain": 8.0
+            },
+            {
+              "name": "eps___H___mir_h__mir_v__rot",
+              "count": 4,
+              "gain": 4.0
+            }
+          ],
+          "agg_delta_B": 9.588793535976107,
+          "agg_delta_C": 0.3683333214439375,
+          "agg_delta_P": -72.16574761677164,
+          "holed_contribution_pct": -8.413688952151162,
+          "motif_fraction_of_B": -7.526050836949782,
+          "selected_holed_count": 58,
+          "selected_holed_ops": {
+            "mir_h__mir_v___H___eps": 23,
+            "eps___H___mir_h__mir_v__rot": 15,
+            "eps___H___mir_h__mir_v": 7,
+            "mir_h__mir_v___H___up2": 7,
+            "down2__mir_h__mir_v___H___eps": 5
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": -78.65826628543564,
+          "motif_partition_C_pct": -90.00903207216791,
+          "n_motif_applicable": 72
+        },
+        {
+          "rho": 0.7,
+          "rng_seed": 8042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 46,
+          "obs_source_dist": 38,
+          "obs_held_motif": 79,
+          "source_solved": 100,
+          "n_lib_total": 54,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 52,
+          "motif_count_in_solved": 40,
+          "motif_gain": 38,
+          "n_holed_ops": 8,
+          "holed_top3": [
+            {
+              "name": "mir_h__mir_v___H___up2",
+              "count": 5,
+              "gain": 6.0
+            },
+            {
+              "name": "mir_h__mir_v___H___eps",
+              "count": 9,
+              "gain": 6.0
+            },
+            {
+              "name": "eps___H___mir_h__mir_v",
+              "count": 8,
+              "gain": 5.0
+            }
+          ],
+          "agg_delta_B": -15.323713633436755,
+          "agg_delta_C": -18.600606841109098,
+          "agg_delta_P": -81.193291576421,
+          "holed_contribution_pct": -3.8699066152791435,
+          "motif_fraction_of_B": 5.298538821507018,
+          "selected_holed_count": 61,
+          "selected_holed_ops": {
+            "mir_h__mir_v___H___eps": 28,
+            "eps___H___mir_h__mir_v": 14,
+            "mir_h__mir_v___H___up2": 11,
+            "eps___H___mir_h__mir_v__up2": 5,
+            "dup_v__mir_h__mir_v___H___eps": 3
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": -84.99224219287348,
+          "motif_partition_C_pct": -89.01750438542706,
+          "n_motif_applicable": 79
+        },
+        {
+          "rho": 0.7,
+          "rng_seed": 9042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 49,
+          "obs_source_dist": 43,
+          "obs_held_motif": 72,
+          "source_solved": 100,
+          "n_lib_total": 54,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 52,
+          "motif_count_in_solved": 39,
+          "motif_gain": 37,
+          "n_holed_ops": 7,
+          "holed_top3": [
+            {
+              "name": "mir_h__mir_v___H___eps",
+              "count": 15,
+              "gain": 12.0
+            },
+            {
+              "name": "eps___H___dup_h__mir_v",
+              "count": 7,
+              "gain": 4.0
+            },
+            {
+              "name": "dup_h__fv___H___eps",
+              "count": 6,
+              "gain": 3.0
+            }
+          ],
+          "agg_delta_B": -71.05137314541734,
+          "agg_delta_C": -73.9893563528371,
+          "agg_delta_P": -80.2275679902471,
+          "holed_contribution_pct": -10.148955327581202,
+          "motif_fraction_of_B": 1.1291487333545165,
+          "selected_holed_count": 49,
+          "selected_holed_ops": {
+            "mir_h__mir_v___H___eps": 23,
+            "eps___H___mir_h__mir_v__up2": 11,
+            "eps___H___mir_h__mir_v": 9,
+            "dup_v___H___mir_h__mir_v": 5,
+            "mir_h__mir_v___H___up2": 1
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": -88.38484949142196,
+          "motif_partition_C_pct": -92.14913501333166,
+          "n_motif_applicable": 72
+        },
+        {
+          "rho": 0.7,
+          "rng_seed": 10042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 48,
+          "obs_source_dist": 44,
+          "obs_held_motif": 72,
+          "source_solved": 100,
+          "n_lib_total": 59,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 57,
+          "motif_count_in_solved": 35,
+          "motif_gain": 33,
+          "n_holed_ops": 9,
+          "holed_top3": [
+            {
+              "name": "mir_h__mir_v___H___up2",
+              "count": 6,
+              "gain": 8.0
+            },
+            {
+              "name": "mir_h__mir_v___H___eps",
+              "count": 8,
+              "gain": 5.0
+            },
+            {
+              "name": "dup_h__dup_v__fv___H___eps",
+              "count": 4,
+              "gain": 4.0
+            }
+          ],
+          "agg_delta_B": -48.33316066080208,
+          "agg_delta_C": -50.11255109537176,
+          "agg_delta_P": -81.9807580010172,
+          "holed_contribution_pct": -3.4439699763474945,
+          "motif_fraction_of_B": 1.696159673404167,
+          "selected_holed_count": 49,
+          "selected_holed_ops": {
+            "mir_h__mir_v___H___eps": 23,
+            "mir_h__mir_v___H___up2": 13,
+            "eps___H___mir_h__mir_v": 11,
+            "dup_v___H___up2": 2
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": -81.52732890216883,
+          "motif_partition_C_pct": -84.17383173770759,
+          "n_motif_applicable": 72
+        },
+        {
+          "rho": 0.7,
+          "rng_seed": 11042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 50,
+          "obs_source_dist": 41,
+          "obs_held_motif": 67,
+          "source_solved": 100,
+          "n_lib_total": 56,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 54,
+          "motif_count_in_solved": 36,
+          "motif_gain": 34,
+          "n_holed_ops": 11,
+          "holed_top3": [
+            {
+              "name": "mir_h__mir_v___H___up2",
+              "count": 5,
+              "gain": 6.0
+            },
+            {
+              "name": "dup_h__dup_v__fv___H___eps",
+              "count": 5,
+              "gain": 6.0
+            },
+            {
+              "name": "dup_h___H___fv__up2",
+              "count": 5,
+              "gain": 6.0
+            }
+          ],
+          "agg_delta_B": 1.4613498076954725,
+          "agg_delta_C": -3.621689536548845,
+          "agg_delta_P": -68.14465909153257,
+          "holed_contribution_pct": -5.009828229053176,
+          "motif_fraction_of_B": -46.631312183217595,
+          "selected_holed_count": 51,
+          "selected_holed_ops": {
+            "eps___H___fv__mir_h__mir_v": 21,
+            "mir_h__mir_v___H___up2": 10,
+            "eps___H___mir_h__mir_v": 10,
+            "eps___H___fh__mir_h__mir_v": 4,
+            "eps___H___dup_v__rot": 2
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": -54.43269945819612,
+          "motif_partition_C_pct": -61.72348082439179,
+          "n_motif_applicable": 67
+        }
+      ]
+    },
+    {
+      "rho": 1.0,
+      "n_seeds": 5,
+      "agg_delta_B_mean": -85.57564766400677,
+      "agg_delta_B_std": 4.79161023579048,
+      "agg_delta_C_mean": -91.2692584706381,
+      "agg_delta_C_std": 3.5290326593730117,
+      "agg_delta_P_mean": -94.1162455406926,
+      "agg_delta_P_std": 0.3205165781085359,
+      "holed_contribution_mean": -40.638179655136405,
+      "motif_in_lib_fraction": 1.0,
+      "distractor_in_lib_fraction": 1.0,
+      "n_lib_total_mean": 55.4,
+      "n_lib_motif_mean": 1.0,
+      "n_lib_dist_mean": 1.0,
+      "n_holed_ops_mean": 12.8,
+      "selected_holed_count_mean": 81.6,
+      "obs_source_motif_density": 0.6920000000000001,
+      "obs_source_dist_density": 0.414,
+      "obs_held_motif_density": 1.0,
+      "motif_partition_B_mean": -85.57564766400677,
+      "motif_partition_C_mean": -91.2692584706381,
+      "n_motif_applicable_mean": 100.0,
+      "motif_fraction_mean": 1.1034118833970556,
+      "per_seed": [
+        {
+          "rho": 1.0,
+          "rng_seed": 10042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 71,
+          "obs_source_dist": 40,
+          "obs_held_motif": 100,
+          "source_solved": 100,
+          "n_lib_total": 58,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 56,
+          "motif_count_in_solved": 62,
+          "motif_gain": 60,
+          "n_holed_ops": 11,
+          "holed_top3": [
+            {
+              "name": "mir_h__mir_v___H___eps",
+              "count": 15,
+              "gain": 12.0
+            },
+            {
+              "name": "eps___H___fv__mir_h__mir_v",
+              "count": 8,
+              "gain": 12.0
+            },
+            {
+              "name": "eps___H___mir_h__mir_v",
+              "count": 13,
+              "gain": 10.0
+            }
+          ],
+          "agg_delta_B": -89.50974915208845,
+          "agg_delta_C": -94.52398737077326,
+          "agg_delta_P": -93.55147832673208,
+          "holed_contribution_pct": -47.79903065600254,
+          "motif_fraction_of_B": 1.0451540666009043,
+          "selected_holed_count": 85,
+          "selected_holed_ops": {
+            "mir_h__mir_v___H___eps": 39,
+            "eps___H___mir_h__mir_v": 13,
+            "mir_h__mir_v___H___up2": 10,
+            "eps___H___mir_h__mir_v__up2": 9,
+            "eps___H___mir_h__mir_v__down2": 6
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": -89.50974915208845,
+          "motif_partition_C_pct": -94.52398737077326,
+          "n_motif_applicable": 100
+        },
+        {
+          "rho": 1.0,
+          "rng_seed": 11042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 64,
+          "obs_source_dist": 44,
+          "obs_held_motif": 100,
+          "source_solved": 100,
+          "n_lib_total": 58,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 56,
+          "motif_count_in_solved": 50,
+          "motif_gain": 48,
+          "n_holed_ops": 13,
+          "holed_top3": [
+            {
+              "name": "mir_h__mir_v___H___eps",
+              "count": 16,
+              "gain": 13.0
+            },
+            {
+              "name": "dup_h__fv__mir_v___H___eps",
+              "count": 6,
+              "gain": 8.0
+            },
+            {
+              "name": "mir_h__mir_v___H___up2",
+              "count": 5,
+              "gain": 6.0
+            }
+          ],
+          "agg_delta_B": -88.95026576989862,
+          "agg_delta_C": -94.38016090263193,
+          "agg_delta_P": -94.35760268727111,
+          "holed_contribution_pct": -49.140504374678336,
+          "motif_fraction_of_B": 1.0607905650485687,
+          "selected_holed_count": 86,
+          "selected_holed_ops": {
+            "mir_h__mir_v___H___eps": 36,
+            "fh__mir_h__mir_v___H___eps": 13,
+            "mir_h__mir_v___H___up2": 10,
+            "eps___H___mir_h__mir_v__up2": 9,
+            "eps___H___mir_h__mir_v__down2": 8
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": -88.95026576989862,
+          "motif_partition_C_pct": -94.38016090263193,
+          "n_motif_applicable": 100
+        },
+        {
+          "rho": 1.0,
+          "rng_seed": 12042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 74,
+          "obs_source_dist": 39,
+          "obs_held_motif": 100,
+          "source_solved": 100,
+          "n_lib_total": 55,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 53,
+          "motif_count_in_solved": 56,
+          "motif_gain": 54,
+          "n_holed_ops": 14,
+          "holed_top3": [
+            {
+              "name": "mir_h__mir_v___H___eps",
+              "count": 15,
+              "gain": 12.0
+            },
+            {
+              "name": "dup_v__mir_h__mir_v___H___eps",
+              "count": 7,
+              "gain": 10.0
+            },
+            {
+              "name": "fv__mir_h__dup_h___H___eps",
+              "count": 7,
+              "gain": 10.0
+            }
+          ],
+          "agg_delta_B": -80.62587697555811,
+          "agg_delta_C": -88.13068721275113,
+          "agg_delta_P": -93.98321248225044,
+          "holed_contribution_pct": -38.73625777912701,
+          "motif_fraction_of_B": 1.1656705763428983,
+          "selected_holed_count": 83,
+          "selected_holed_ops": {
+            "mir_h__mir_v___H___eps": 42,
+            "eps___H___mir_h__mir_v__rot": 15,
+            "eps___H___mir_h__mir_v__up2": 13,
+            "eps___H___mir_h__mir_v": 4,
+            "dup_v__mir_h__mir_v___H___eps": 4
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": -80.62587697555811,
+          "motif_partition_C_pct": -88.13068721275113,
+          "n_motif_applicable": 100
+        },
+        {
+          "rho": 1.0,
+          "rng_seed": 13042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 66,
+          "obs_source_dist": 47,
+          "obs_held_motif": 100,
+          "source_solved": 100,
+          "n_lib_total": 57,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 55,
+          "motif_count_in_solved": 51,
+          "motif_gain": 49,
+          "n_holed_ops": 10,
+          "holed_top3": [
+            {
+              "name": "eps___H___mir_h__mir_v__rot",
+              "count": 9,
+              "gain": 14.0
+            },
+            {
+              "name": "mir_h__mir_v___H___eps",
+              "count": 12,
+              "gain": 9.0
+            },
+            {
+              "name": "fv__mir_h__dup_h___H___eps",
+              "count": 4,
+              "gain": 4.0
+            }
+          ],
+          "agg_delta_B": -78.88936417415864,
+          "agg_delta_C": -85.98545627074573,
+          "agg_delta_P": -94.42982267708476,
+          "holed_contribution_pct": -33.61382459120833,
+          "motif_fraction_of_B": 1.1969905406845276,
+          "selected_holed_count": 74,
+          "selected_holed_ops": {
+            "eps___H___mir_h__mir_v__rot": 43,
+            "mir_h__mir_v___H___eps": 14,
+            "mir_h__mir_v___H___up2": 8,
+            "eps___H___mir_h__mir_v": 7,
+            "crop__mir_h__mir_v___H___eps": 2
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": -78.88936417415864,
+          "motif_partition_C_pct": -85.98545627074573,
+          "n_motif_applicable": 100
+        },
+        {
+          "rho": 1.0,
+          "rng_seed": 14042,
+          "n_source": 100,
+          "n_held": 100,
+          "obs_source_motif": 71,
+          "obs_source_dist": 37,
+          "obs_held_motif": 100,
+          "source_solved": 100,
+          "n_lib_total": 49,
+          "motif_in_lib": true,
+          "distractor_in_lib": true,
+          "n_lib_motif": 1,
+          "n_lib_dist": 1,
+          "n_lib_other": 47,
+          "motif_count_in_solved": 60,
+          "motif_gain": 58,
+          "n_holed_ops": 16,
+          "holed_top3": [
+            {
+              "name": "mir_h__mir_v___H___eps",
+              "count": 17,
+              "gain": 14.0
+            },
+            {
+              "name": "dup_v__mir_h__mir_v___H___eps",
+              "count": 6,
+              "gain": 8.0
+            },
+            {
+              "name": "mir_h__mir_v___H___up2",
+              "count": 6,
+              "gain": 8.0
+            }
+          ],
+          "agg_delta_B": -89.90298224832999,
+          "agg_delta_C": -93.32600059628851,
+          "agg_delta_P": -94.25911153012464,
+          "holed_contribution_pct": -33.901280874665815,
+          "motif_fraction_of_B": 1.0484536683083787,
+          "selected_holed_count": 80,
+          "selected_holed_ops": {
+            "mir_h__mir_v___H___eps": 44,
+            "mir_h__mir_v___H___up2": 10,
+            "eps___H___mir_h__mir_v": 9,
+            "eps___H___mir_v__rot__mir_v": 6,
+            "eps___H___mir_h__mir_v__up2": 6
+          },
+          "holed_new_solves": 0,
+          "motif_partition_B_pct": -89.90298224832999,
+          "motif_partition_C_pct": -93.32600059628851,
+          "n_motif_applicable": 100
+        }
+      ]
+    }
+  ],
+  "r_star_contiguous": 1.0,
+  "r_star_holed": 0.7,
+  "verdict": "HOLED_LOWERS_RSTAR_1.0_to_0.7"
+}
