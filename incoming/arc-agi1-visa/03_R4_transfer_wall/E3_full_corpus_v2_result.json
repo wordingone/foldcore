@@ -1,0 +1,64 @@
+{
+  "experiment": "E3-full-corpus-v2-executable-holes-with-funnel",
+  "note": "v2: holed operators EXECUTABLE. Formation funnel instruments all 3 failure causes. Training-only corpus (400 tasks). Source/held-out DISJOINT.",
+  "corpus_metadata": {
+    "total_loaded": 400,
+    "training_only": true,
+    "dir_counts": {
+      "training": 400
+    },
+    "n_source": 200,
+    "n_held": 200,
+    "source_held_disjoint": true
+  },
+  "config": {
+    "budget": 10000,
+    "max_length": 5,
+    "split_seed": 42
+  },
+  "source_solved": 15,
+  "source_partials": 13,
+  "partial_struct_gate": "INFORMATIVE",
+  "contiguous_compounds": 3,
+  "executable_holed_ops": 0,
+  "formation_funnel": {
+    "total_pairs_checked": 34,
+    "candidates_2plus_variants": 4,
+    "candidates_passed_MDL": 0,
+    "gain_distribution": {
+      "n": 4,
+      "min": -2.0,
+      "max": 0.0,
+      "mean": -1.0,
+      "n_positive": 0
+    },
+    "diagnosis": "DENSITY_THRESHOLD"
+  },
+  "holed_ops_detail": [],
+  "held_out": {
+    "baseline": {
+      "mean_cost": 9602.59,
+      "solved": 8
+    },
+    "r6_contiguous": {
+      "mean_cost": 9603.7,
+      "solved": 8,
+      "delta": 1.110000000000582,
+      "delta_pct": 0.011559381375239201
+    },
+    "with_holed": {
+      "mean_cost": 9603.7,
+      "solved": 8,
+      "delta": 1.110000000000582,
+      "delta_pct": 0.011559381375239201
+    },
+    "holed_only_contribution": 0.0,
+    "holed_selection": {
+      "tasks_selected_holed": 0,
+      "selected_ops": {}
+    },
+    "new_solves_from_holed": 0,
+    "new_solve_ids": []
+  },
+  "verdict": "NO_EXECUTABLE_HOLED_OPS_FORMED"
+}

@@ -1,0 +1,125 @@
+{
+  "experiment": "E3-full-corpus",
+  "config": {
+    "budget": 10000,
+    "max_length": 5,
+    "split_seed": 42,
+    "n_source": 200,
+    "n_held": 200
+  },
+  "source_solved": 15,
+  "source_partials": 13,
+  "failed_inert": false,
+  "partial_score_distribution": {
+    "0.0": 172,
+    "0.25": 1,
+    "0.3333333333333333": 7,
+    "0.4": 1,
+    "0.5": 1,
+    "0.6666666666666666": 2,
+    "0.75": 1,
+    "1.0": 15
+  },
+  "mdl": {
+    "solved_contiguous_positive": [],
+    "full_contiguous_positive": [
+      [
+        [
+          "down2",
+          "down2"
+        ],
+        9,
+        7
+      ],
+      [
+        [
+          "crop",
+          "down2"
+        ],
+        3,
+        1
+      ],
+      [
+        [
+          "down2",
+          "down2",
+          "down2"
+        ],
+        3,
+        3
+      ]
+    ],
+    "solved_noncontiguous_positive": [],
+    "full_noncontiguous_positive": [
+      [
+        [
+          "down2",
+          "down2"
+        ],
+        6,
+        4
+      ],
+      [
+        [
+          "crop",
+          "down2"
+        ],
+        4,
+        2
+      ],
+      [
+        [
+          "down2",
+          "down2",
+          "down2"
+        ],
+        3,
+        3
+      ]
+    ],
+    "all_positive_compounds": {
+      "down2__down2": {
+        "ops": [
+          "down2",
+          "down2"
+        ],
+        "count": 9,
+        "gain": 7,
+        "type": "contiguous",
+        "corpus": "full"
+      },
+      "crop__down2": {
+        "ops": [
+          "crop",
+          "down2"
+        ],
+        "count": 3,
+        "gain": 1,
+        "type": "contiguous",
+        "corpus": "full"
+      },
+      "down2__down2__down2": {
+        "ops": [
+          "down2",
+          "down2",
+          "down2"
+        ],
+        "count": 3,
+        "gain": 3,
+        "type": "contiguous",
+        "corpus": "full"
+      }
+    }
+  },
+  "aggregate": {
+    "baseline_mean": 9602.59,
+    "withlib_mean": 9603.7,
+    "delta": 1.110000000000582,
+    "delta_pct": 0.011559381375239201,
+    "baseline_solved": 8,
+    "withlib_solved": 8
+  },
+  "n_applicable": 0,
+  "verdict": "NO_APPLICABLE_TASKS",
+  "scope_note": "Library formed but no held-out task applicable."
+}

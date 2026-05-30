@@ -393,26 +393,105 @@ Pre-registered outcomes (same partition logic as budget=3000 run):
 
 **Non-memory-heavy.** No model load. Runs alongside Archie's WEB-CAD.
 
----
+**E3 Library run v2 — budget=10000 result (DONE — 2026-05-30):** NO_APPLICABLE_TASKS.
+- Seed baseline: 23/400 — identical to budget=3000. **PREDICTION FALSIFIED (per Leo #11633): budget=10000 was expected to yield ~35 solves; it yielded 23.** The 377 failures ALL hit the budget cap regardless of 3000 vs 10000: median solved cost = 12 nodes; all failures are vocabulary-bound (K1, not depth-bound). Budget is not the bottleneck.
+- Source 200 tasks (seed=42 split): 15 solved. Candidates: fv__mir_v (count=2, MDL_gain=0), mir_h__mir_v (count=1, MDL_gain=-1). 0 ops added. Library=seed.
+- Artifacts: `E3_seed_baseline_v2.py`, `E3_seed_baseline_v2_result.json`, `E3_library_run_v2.py`, `E3_library_run_v2_result.json`. Commit: ad098f91.
+
+**Reuse-sparsity evidence (DONE — 2026-05-30, Leo #11623):** `E3_reuse_sparsity_analysis.py`, result `E3_reuse_sparsity_result.json`. Commit: a7e11b57.
+
+**Exact scope of the reuse-sparsity claim (per Leo #11633):**
+> "No contiguous-subsequence compound achieves MDL-positive count on a 200/200 split of the 23 programs solved by the 12-op seed DSL under solved-only contiguous MDL."
+This does NOT claim "ARC cannot self-compile." It is scoped to: this DSL + this abstraction engine + the 23 solved traces. Full-corpus (failed+solved) with anti-unification with holes and non-contiguous extraction is the next test.
 
 ---
 
-## E4 — Controlled-Reuse Characterization (PRE-REGISTERED 2026-05-30, Leo #11627)
+## E3 Full-Corpus Engine (PRE-REGISTERED 2026-05-30, Leo #11633)
 
-**Question:** What reuse density R* does trace->operator compilation require? Where is ARC on the axis?
+**Engine upgrade (spec-completion, not a parameter variant):**
+- (a) Ingest failed/partial traces (the 377) via partial-match BFS scan.
+- (b) Anti-unification with holes: LCS-based non-contiguous pattern extraction.
+- (c) Non-contiguous motif MDL over full corpus (solved + failed partial programs).
+- MDL criterion unchanged but applied over full corpus.
+- R2-native: failures are part of the system's own history.
 
-**Design:** Synthetic generator over 12-op seed DSL. Plant MOTIF [mir_h, mir_v] with probability rho. Generate tasks with length-4 ground-truth programs. Sweep rho from ~0 (ARC-like) to 1.0. At each rho: source/held-out split (100/100), MDL library (same criterion), held-out search-cost WITH vs WITHOUT + R6 ablation + compound-applicability partition.
-
-**Output:** held-out search-cost-reduction curve vs rho. R* = rho where >10% cost reduction on applicable tasks. ARC location: rho~0 (mir_h__mir_v appears 3/400 ~ 0.75%).
-
-**Consistency check (rho=0 FIRST):** Should replicate ARC null — no applicable tasks, no MDL-positive compounds. Confirms axis calibration.
+**Two extra gates (Leo #11638):**
+- Failed traces must expose meaningful partial structure (energy/progress evidence). If inert: say so explicitly; full corpus = solved-only; negative stands.
+- Report solved-only vs failed-derived MDL contribution SEPARATELY.
 
 **Pre-registered outcomes:**
-- monotone reduction-vs-rho -> MECHANISM_WORKS, R* located; ARC < R* confirmed.
-- flat even at high rho -> MECHANISM_FLAT; mechanism/instrument broken (debug).
+- KILL (scoped negative, strong): full-corpus MDL still no positive compounds on held-out → ARC corpus (including failures) is below R* → reuse-sparsity is a full-corpus property, not a solved-traces artifact → forward = richer-reuse seed domain.
+- FORWARD: richer abstraction yields compounds + held-out reduction → solved-only was engine artifact → continue on ARC.
+
+**Artifacts:** `E3_full_corpus.py`, `E3_full_corpus_result.json`.
+
+**E3 Full-Corpus v1 result (DONE — 2026-05-30, Leo #11651 + #11660):** SCOPED CONTIGUOUS NEGATIVE.
+- Failed traces NOT inert: source_partials=13 (13/185 failed tasks show partial structure). Partial-structure gate: INFORMATIVE.
+- Contiguous MDL-positive compounds (full corpus): 3 — down2__down2 (count=9, gain=7), crop__down2 (count=3, gain=1), down2__down2__down2 (count=3, gain=3). All from partial-match programs, none from solved-only corpus.
+- Held-out: baseline 8/200, with-lib 8/200. Cost: 9602.6 → 9603.7 (+0.0%). **n_applicable=0.**
+- Classification: **valid scoped negative for executable CONTIGUOUS compounds under this DSL/split.** Explicitly NOT a kill for holed/non-contiguous (holed operators were informational-only in v1 — untested).
+- Key point: contiguous compounds transferred zero held-out benefit despite forming from failed traces. This is because ARC vocabulary-bound failures produce partial programs that share down2-heavy subsequences — not semantically generalizing operators.
+- Artifacts: `E3_full_corpus.py`, `E3_full_corpus_result.json`. Commit: pending.
+
+**Contiguous results are now complete.** Solved-only contiguous (0 MDL-positive under any split) + full-corpus contiguous (3 MDL-positive compounds but n_applicable=0 on held-out) both flat. Contiguous extraction is the degenerate special case. The core mechanism — anti-unification WITH HOLES — remains untested.
+
+**E3 Full-Corpus v2 result (2026-05-30) — FORMATION NEGATIVE (density), confirmed by v3:**
+- STALE prior runs archived: first run had wrong DATA_PATH (0 tasks). Second run loaded training+evaluation (800 tasks = eval leakage risk). Results below are v3 (training-only, 400 tasks, confirmed disjoint).
+- **v3 findings (2026-05-30, training-only, source/held DISJOINT):** 15/200 source solved, 13 partials = 28 total programs. Contiguous MDL-positive: 3 (down2__down2 gain=7, crop__down2 gain=1, down2__down2__down2 gain=3). Formation funnel for holed ops: total_pairs_checked=34, candidates_2plus_variants=4, candidates_passed_MDL=0, gain_distribution n=4 min=-2.0 max=0.0 mean=-1.0. **DIAGNOSIS: DENSITY_THRESHOLD** — 4 candidates exist with >=2 variants, none pass MDL (count too low). Held: R6+holed == R6 == baseline (+0.0%), holed-selection=0 tasks.
+- **NOT a kill for holed mechanism.** Pre-registered kill required holed ops executable + selected + flat — holed ops never formed. Cause: count too low for MDL gain (28 programs, 4 candidates).
+- Consistent with K1 bootstrap trap: solve-rate 7.5% too low to generate programs dense enough for any reuse pattern.
+- Artifacts: `E3_full_corpus_v2.py`, `E3_full_corpus_v2_result.json` (v3 result).
+
+---
+
+---
+
+## E4 — Controlled-Reuse Characterization R*-Grade (PRE-REGISTERED 2026-05-30, Leo #11627 + Kai review #11638)
+
+**Question:** What reuse density R* does trace->operator compilation require? What is R* under rigorous measurement with distractors?
+
+**Design (R*-grade per Kai review #11638):**
+- Generator: NON_MOTIF_PAD for padding (excludes mir_h/mir_v from non-planted positions); MOTIF [mir_h, mir_v] planted at rate rho. **Framing correction (Kai review, Leo #11646):**
+  - rho=0 is a **synthetic low-reuse calibration point** — it does NOT replicate the ARC null. ARC-null claims require directly sampling ARC-derived programs, not a synthetic rho=0 draw.
+  - "3/400 tasks" is the contiguous-subsequence solved-motif count (mir_h__mir_v across the 23 solved), NOT a rho-axis location for ARC. ARC's position on the rho-axis is **UNMEASURED** until ARC-derived programs are sampled. Drop the "ARC sits at rho~0" framing.
+- Distractors: recurring motifs that are source-only, semantically canceling, or non-transferable. Required — else the positive is hollow.
+- Measured densities: report OBSERVED source/held motif density alongside injected rho.
+- Attribution: planted compound added to library? Cost reduction from tasks using planted compound vs all-learned-compounds ablation.
+- Multi-seed per rho: confidence bands. Single seed = one-draw point estimate, too weak for R*.
+- Search-order accounting: program-length reduction AND node-count reduction reported separately (macro-prior + dimension effect).
+- Library restricted to planted MOTIF compound only — isolates motif signal from spurious co-occurrences.
+
+**5-item accept bar (Kai, #11638 + #11640):** A green run without all 5 items is a smoke-test, NOT R*. Label accordingly.
+
+**Output:** held-out search-cost-reduction curve vs rho with confidence bands. R* = rho where >10% cost reduction on applicable (planted-motif) tasks. ARC's rho-axis location UNMEASURED — requires ARC-derived program sampling.
+
+**Pre-registered outcomes:**
+- monotone reduction-vs-rho -> MECHANISM_WORKS, R* located.
+- flat even at high rho -> MECHANISM_FLAT; mechanism/instrument broken.
 - threshold curve -> R* characterized as design requirement on eventual medium.
 
-**Config:** motif=mir_h__mir_v, program_length=4, budget=35000, n_source=100, n_held=100, n_pairs=3, rho=[0.0,0.1,0.2,0.3,0.5,0.7,1.0], master_seed=42.
+**Config (base):** motif=mir_h__mir_v, program_length=4, budget=35000, n_source=100, n_held=100, n_pairs=3, rho=[0.0,0.1,0.2,0.3,0.5,0.7,1.0], multi_seed_per_rho=3+, master_seed=42.
+
+**Note:** Smoke-test run (before Kai review) showed consistency-check FAIL due to PAD_OPS including motif ops + 58 spurious compounds from general MDL. Fixed: NON_MOTIF_PAD (after MOTIF def) + motif-specific library + NameError from definition-order corrected.
+
+**E4 R*-grade (contiguous) result (DONE — 2026-05-30, `E4_rstar_grade.py`) — NOT ACCEPTED:**
+- Config: MOTIF=mir_h__mir_v, DISTRACTOR_S=rot__rot (source-only), CLEAN_PAD (8 ops), program_length=4, budget=35000, n_source=50, n_held=50, n_seeds=3.
+- Script-reported R*=0.1 (motif-applicable subset first >10% reduction). **NOT ACCEPTED** — three blocking issues (Leo #11665):
+  1. R* must be AGGREGATE-NET crossover (all held tasks, overhead included), not motif-subset.
+  2. Distractor (rot__rot) never enters library (BFS compresses to fh+fv) — concentration test untested.
+  3. Planted-only ablation missing — general MDL has 21-33 compounds; improvement from coincidental compounds not isolated.
+- Key findings (not final):
+  - MOTIF-applicable: strong synthetic signal at sufficient rho — **NOT monotone** (−98.3% @0.1, −79.9% @0.2, −94% @1.0). Per claim-hygiene: "strong synthetic signal at sufficient rho," NOT "clear and monotone."
+  - Aggregate: +118% at rho=0 (coincidental compounds carry search overhead exceeding motif benefit). This is the R* evidence — net gain requires overhead < benefit.
+  - dist_in_lib=0 always: distractor design bug, not real signal.
+- Artifacts: `E4_rstar_grade.py`, `E4_rstar_grade_result.json`.
+
+**E4-holed (Leo #11672 exact spec) — PENDING 2026-05-30.** `E4_holed_operators.py`, writing `E4_holed_result.json`.
+- R* definition: aggregate_delta(X) = mean_cost_X(all_held) - mean_cost_A(all_held). R*_X = min rho where aggregate_delta(X) < -5% AND variance band excludes 0. Overhead included.
+- Conditions: A=seed, B=seed+all-MDL (distractor CAN enter), C=B+holed ops, P=seed+planted-motif-only (attribution control).
+- Distractor: dup_h__fv (genuinely non-compressible by BFS — no single-op equivalent). Independent roll.
+- Holed selection evidence: reports # tasks that actually SELECTED a holed op during search.
+- N_SEEDS=5 for variance band.
 
 **Non-memory-heavy.** No model load.
 
