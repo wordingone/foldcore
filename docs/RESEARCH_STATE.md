@@ -767,19 +767,32 @@ Artifacts: `stage1b_object_centric.py`, `stage1b_result.json`. Commits: 2698a9eb
 - **Transfer: HOLED_HOLLOW** — macro formed with net_gain>0 but held-out delta=+0.2% (new_solves=0, macro_usage_map empty). Macro found in curriculum but never retrieved on held-out tasks.
 - MBPP: 4/50 (8.0%) flat, unchanged. Elapsed: 163.4s.
 
-**Interpretation:** Skeleton-pair ordering is not a free lunch — the budget covers the same ~2.45% of concrete depth-1 space, just different programs. The holed representation found 2 depth-1 solves vs 0 for flat at same budget (different concrete block). Anti-unification at skeleton level found one non-tautological macro, but that macro does not transfer. Stage 2 proposer condition satisfied (HOLED_HOLLOW).
+**Interpretation:** Skeleton-pair ordering is not a free lunch — the budget covers the same ~2.45% of concrete depth-1 space, just different programs. The holed representation found 2 depth-1 solves per iteration vs 0 for flat at the same budget (different concrete block). Anti-unification at skeleton level found one non-tautological macro, but that macro does not transfer at the Stage 1c budget.
 
 **Result path:** `incoming/arc-agi1-visa/03_R4_transfer_wall/stage1c_holed_result.json`
 
 **Status:** CLOSED: HOLED_HOLLOW.
 
-**Next step (Leo #11809 — HOLD PATH 3):** Three formation-without-transfer results (12-op HOLLOW, Stage 1b vacuous, Stage 1c-HOLED HOLLOW) at BUDGET=3000 with coverage 11/200. Coverage-confounded: too few solves to determine if shared macro structure is absent or merely under-sampled. PATH 3 (Stage 2 proposer) is DEFERRED pending premise-truth diagnostic.
+**Stage 2 status:** NOT YET SATISFIED. `HOLED_HOLLOW` opens the Stage 2 question, but Path 3 / Stage 2 proposer is deferred until the premise-truth coverage diagnostic distinguishes selection bottleneck from false shared-macro premise.
+
+**Next step (Leo #11809 / Kai #11812-#11817 — HOLD PATH 3):** Three formation-without-transfer results (12-op HOLLOW, Stage 1b vacuous, Stage 1c-HOLED HOLLOW) at BUDGET=3000 with coverage 11/200. Coverage-confounded: too few solves to determine whether shared macro structure is absent or merely under-sampled. Run Stage 1d premise-truth before any memory-heavy proposer.
 
 **Premise-truth/coverage diagnostic (Stage 1d):**
-- Same holed skeleton grammar, BUDGET raised substantially (target ~10K, sized to fit 5-min cap).
-- Measure: (1) curriculum solve coverage — does 11/200 rise? (2) recurring depth-2 skeleton count (was 1, occ=2) — does it rise with coverage? (3) `macro_usage_map` per held task with `is_cheaper` gate — do formed skeletons appear in cheaper held solutions?
-- Discriminator: coverage↑ AND skeletons↑ AND held-usage non-empty → coverage-bound, structure IS there → PATH 3 warranted. Coverage↑ AND skeletons~1 AND held-usage empty → premise sparse/false, shared-macro direction KILLED with mechanism. Coverage flat → enumerator-reach is binding, macro question moot.
-- Gate: same 5-label Kai schema. Fire after Kai's gate on 8c22183b.
+- Same holed skeleton grammar, same split, same Stage 1c accepted macro library as the premise under test.
+- Budget curve required: `3000`, `6000`, `10000` or an explicitly justified equivalent curve. A single `10000` run is not the claimed curve.
+- Required base fields: `stage`, `base_artifact`, script/result hash, `accepted_stage1c_macro_library`, `curriculum_ids`, `held_task_ids`, and `curriculum_held_disjoint`.
+- Required per-budget fields: curriculum coverage, held coverage, depth distribution, accepted macro count, recurring skeleton count, held macro-subprogram hits, near-miss hits if measured, and transfer with `is_cheaper` attribution.
+- Required premise table: per held task, transfer-budget solved/cost, deep-budget solved/cost, solution hash/body/skeleton/fills, and whether each accepted Stage 1c macro occurs as an exact subprogram.
+- Discriminator: coverage↑ + accepted Stage 1c macro hits in deeper held solutions -> `PREMISE_SELECTION_BOTTLENECK`, Stage 2 proposer warranted. Coverage↑ + deeper held solutions but no Stage 1c macro hits -> `PREMISE_FALSE_EXACT`, exact macro-reuse premise is false. Exact hits absent but semantic near-misses exist -> `PREMISE_NEAR_MISS_SEMANTIC`, semantic abstraction fork. Coverage remains too low -> `PREMISE_COVERAGE_STILL_TOO_LOW`.
+- Gate labels: `PREMISE_INSTRUMENTATION_INCOMPLETE`, `PREMISE_COVERAGE_STILL_TOO_LOW`, `PREMISE_SELECTION_BOTTLENECK`, `PREMISE_FALSE_EXACT`, `PREMISE_NEAR_MISS_SEMANTIC`.
+
+**Stage 1d result (2026-05-30, Leo #11818):** PREMISE_NEAR_MISS_SEMANTIC.
+- Budget curve (HELD tasks, no library): B3000=8/200 (4.0%), B6000=8/200 (4.0%), B10000=8/200 (4.0%). Coverage FLAT — grammar ceiling at B3000, depth-1 enumeration past 8.9% finds no new held solutions.
+- Exact subprogram hits: **0** at all budgets. Stage 1c macro `COMPOSE(PRIM_CROP,MAP_KEEPONLY)` does not appear as BFS solution skeleton for any held task.
+- Near-miss hits: **1** (stable across all budgets). One held task is solvable by a concrete program with that skeleton (exhaustive check), but BFS found a different depth-0 solution first.
+- Classification: `PREMISE_NEAR_MISS_SEMANTIC` — exact-match proposer inadequate; semantic-abstraction fork warranted.
+- Result path: `incoming/arc-agi1-visa/03_R4_transfer_wall/stage1d_premise_truth_result.json`
+- Script: `incoming/arc-agi1-visa/03_R4_transfer_wall/stage1d_premise_truth.py`
 
 ---
 
