@@ -1,0 +1,61 @@
+{
+  "experiment": "E3-transfer-test",
+  "note": "Leo #11709 DECIDER: do holed ops from step-3 (augmented source) transfer to original (un-augmented) held-out? Transfer genuine = structure generalizes; hollow = aug artifact.",
+  "config": {
+    "budget": 10000,
+    "max_length": 5,
+    "split_seed": 42,
+    "n_held": 200,
+    "transfer_margin_pct": 5.0
+  },
+  "source_ops": [
+    {
+      "name": "eps___HOLE___mir_h__mir_v",
+      "count": 16,
+      "gain": 13,
+      "hole_variants": [
+        "fh",
+        "fv"
+      ]
+    },
+    {
+      "name": "fh__mir_h___HOLE___eps",
+      "count": 10,
+      "gain": 7,
+      "hole_variants": [
+        "dup_h",
+        "mir_v"
+      ]
+    }
+  ],
+  "library_size": 24,
+  "baseline": {
+    "mean_cost": 9264.665,
+    "solved": 15,
+    "n_held": 200
+  },
+  "with_library": {
+    "mean_cost": 9311.54,
+    "solved": 14,
+    "new_solves": 0,
+    "n_held": 200
+  },
+  "delta_pct": 0.5059546135775012,
+  "verdict": "HOLLOW_CLIMB: delta=+0.5% >= -5.0%. Holed ops do NOT lower cost on original held-out. Augmentation injected its own symmetry. Code-synthesis pivot STANDS.",
+  "aug_origin_analysis": {
+    "eps___HOLE___mir_h__mir_v": {
+      "prefix": "eps",
+      "suffix": "mir_h__mir_v",
+      "count": 16,
+      "gain": 13,
+      "aug_overlap_note": "OVERLAP: op contains D4 aug transforms (mir_h, mir_v, rot, fh, fv, tr)"
+    },
+    "fh__mir_h___HOLE___eps": {
+      "prefix": "fh__mir_h",
+      "suffix": "eps",
+      "count": 10,
+      "gain": 7,
+      "aug_overlap_note": "OVERLAP: op contains D4 aug transforms (mir_h, mir_v, rot, fh, fv, tr)"
+    }
+  }
+}
