@@ -675,29 +675,53 @@ Artifacts: `stage1b_object_centric.py`, `stage1b_result.json`. Commits: 2698a9eb
 
 ---
 
-### Stage 1c — Depth-2 Flat BFS (Object-Centric, N_CURRICULUM=200): IN PROGRESS (2026-05-30, Leo #11745/#11749/#11752)
+### Stage 1c — Depth-2 Flat BFS (Object-Centric, N_CURRICULUM=200): CLOSED: SINGLE_ARM_N200_DEPTH_STARVATION_SIGNAL (2026-05-30, Leo #11745/#11749/#11752/#11766)
 
-**Design:** Isolates DEPTH as the one variable changed from Stage 1b. Grammar PRESERVED EXACTLY (same predicates, transforms, whole-grid prims). Only change: budget increased to reach depth-2 flat BFS (all compose(depth-0, depth-0) pairs = 330² ≈ 108,900 programs). N_CURRICULUM=200 (doubled from 1b). N_HELD=200 (same). N_ITERATIONS=3.
+**Leo #11766 reclassification: SINGLE_ARM_N200_DEPTH_STARVATION_SIGNAL.** Kai original: DEPTH_STARVATION. Two-arm flat plan (Leo #11759) SUPERSEDED by holed grammar pivot (#11766). Stage 1c-HOLED is the decisive test.
 
-**One-variable discipline (Leo+Kai):** Do NOT modify combinators. Any grammar change adds a DSL confound and makes the depth-vs-structure discrimination uninterpretable. If grammar needs changing, that is a SEPARATE flagged experiment.
+**Result: Structure-absence NOT established. Flat-330 is BRANCHING-BOUND.**
 
-**Pre-registered outcomes (Kai gate, #11748):**
-- `DEPTH_STARVATION`: depth-2 not reached / yield too low to test macro formation.
-- `FORMATION_NEGATIVE_DEPTH2`: enough depth-2 solves, no MDL-positive reusable chunks → structure-absence argument strengthens → Stage 2 (proposer).
-- `HOLLOW_DEPTH2`: macros form but don't reduce original-held cost → mechanism forms but doesn't generalize.
-- `TRANSFER_GENUINE_DEPTH2`: macros reduce held cost by pre-registered margin → net-free bootstrap revives (was depth-starved, not structure-absent).
+| Iter | ARC solved | ARC rate | Depth-0 solves | Depth-1 solves | Library | Transfer delta |
+|------|-----------|----------|----------------|----------------|---------|----------------|
+| 1    | 9/200     | 4.5%     | 9              | 0              | 0       | +0.0% (VACUOUS; empty library) |
+| 2    | 9/200     | 4.5%     | 9              | 0              | 0       | +0.0% (VACUOUS; empty library) |
+| 3    | 9/200     | 4.5%     | 9              | 0              | 0       | +0.0% (VACUOUS; empty library) |
 
-**Intractability pre-registration:** Full depth-2 flat BFS (108,900+ programs) may be intractable within the 5-min cap. If so, report max budget reached, fraction of depth-2 space covered, and classify as DEPTH_STARVATION (that intractability IS the Stage 2 argument).
+- MBPP: 4/50 (8.0%) flat across all iterations.
+- Grammar: 16 predicates × 20 transforms = 320 map_apply + 10 whole-grid prims = 330 depth-0 leaves. PRESERVED EXACTLY from Stage 1b (one-variable discipline).
+- Depth budget: 330 depth-0 (100%) + 2,670/108,900 depth-1 programs evaluated (2.45%). Zero depth-1 solves. Full depth-1 estimated intractable (~41× budget).
+- Augmentation: CLEAN (no D4 augmentation). Elapsed: 241.2s.
 
-**Required Kai gate fields in result JSON:**
-- `max_depth_reached`, `depth_budget_by_level` (programs evaluated per depth level)
-- `solved_programs` (bodies or hashes) + `depth_distribution` (how many solved at each depth)
-- `program_type_breakdown` (map_apply vs whole-grid vs composition solves)
-- `abstraction_funnel` (repeated subprograms, occurrence≥2 candidates, MDL gains, accepted/rejected macros + explicit reasons)
-- `library_final` (macro bodies, occurrences, source task IDs, source-program depths)
-- `transfer` (baseline, with-library, selected macro counts, new solves, aggregate cost delta)
-- `claim_scope` (explicit statement of what the evidence supports)
-- `kai_classification` (one of the four above)
+**Solved programs (9 unique, all depth-0):** map_apply × 5 (`non_bg→recolor_5`, `all→delete`, `all→translate_+1_+0`, `color_7→recolor_5`, `color_6→recolor_2`), prim × 4 (`up2`, `rot_90`, `tr`, `rot_180`). Zero depth-1 solves from 2,670 depth-1 programs evaluated.
+
+**Abstraction funnel — STRUCTURAL FINDING:**
+- 9 unique depth-0 programs each appear 3× (occ≥2). Repetitions detected.
+- ALL 9 REJECTED by MDL: body_size=1 → savings = occ*(1-1)-1 = -1. Always negative.
+- Structural barrier: depth-0 programs (body_size=1) CANNOT form macros by MDL construction. Macro formation requires depth-1 compose programs (body_size≥2).
+
+**Branching-bound analysis (Leo #11766):**
+- Depth-1: 330² = 108,900 programs. 2.45% coverage. Intractable at flat-330.
+- Depth-2: 330³ ≈ 36M programs. Completely intractable at any reasonable budget.
+- Root cause: 330 concrete ops bloated by enumerated variants (72 recolor variants). Skeleton-level shared structure hidden behind concrete enumeration.
+- Fix: HOLED grammar — ~14 skeleton types collapse depth-1 to 14²=196 (tractable), depth-2 to 14³=2,744 (tractable).
+
+**Claim scope:** 330 depth-0 programs (100%) and 2,670/108,900 depth-1 programs evaluated (2.45%), zero depth-1 solves. Structure-absence cannot be claimed. N_CURRICULUM confound: changed 100→200 from Stage 1b (two-variable change). The branching-bound fact holds independent of N: no corpus-size variation fixes a 41× budget deficit on flat-330.
+
+---
+
+### Stage 1c-HOLED — Holed Skeleton Grammar BFS: PRE-REGISTERED (Leo #11766, 2026-05-30)
+
+**Variables changed (explicit — two-variable change, both deliberate):**
+1. Representation: concrete-330 → holed skeleton grammar (~14 skeleton types). Deliberate fix for branching-bound root cause.
+2. Depth tractability: depth-1 now 14²=196 (tractable), depth-2 now 14³=2,744 (tractable).
+
+**Holed skeleton grammar (~14 types):** MAP_RECOLOR (pred×color holes), MAP_DELETE (pred hole), MAP_KEEPONLY (pred hole), MAP_TRANSLATE (pred×dir holes), PRIM_UP2/ROT90/ROT180/TR/FLIPH/FLIPV/INVERT/CROP/UP1/DOWN1 (10 whole-grid skeletons, no holes). BFS over skeleton types at each depth. `try_fill_skeleton(sk_name, task_io)` enumerates concrete instantiations and returns first that solves all examples. Abstraction funnel groups by SKELETON TYPE — anti-unification collapses MAP_RECOLOR(non_bg→5) and MAP_RECOLOR(color_7→5) to same skeleton → occ counts at skeleton level. MDL: skel_leaf body_size=1; compose_skel body_size=3; occ≥2 compose → savings=1>0 → MACRO FORMS.
+
+**Required result fields (Kai #11748 schema):** `max_depth_reached`, `depth_budget_by_level`, `skeleton_coverage`, `program_type_breakdown`, `abstraction_funnel` (by skeleton type), `library_final`, transfer delta, `kai_classification` ∈ {DEPTH_STARVATION | FORMATION_NEGATIVE_DEPTH2 | HOLLOW_DEPTH2 | TRANSFER_GENUINE_DEPTH2}.
+
+**Result path:** `incoming/arc-agi1-visa/03_R4_transfer_wall/stage1c_holed_result.json`
+
+**Status:** RUNNING
 
 ---
 

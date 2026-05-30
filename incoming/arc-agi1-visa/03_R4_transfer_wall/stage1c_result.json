@@ -1,0 +1,783 @@
+{
+  "experiment": "stage1c-depth2-flat-bfs-object-centric",
+  "note": "Leo #11745/#11749/#11752: one-variable discipline \u2014 grammar preserved from Stage 1b, only depth budget increased. Kai binding gate schema (#11748). PRISM multi-domain (ARC+MBPP).",
+  "config": {
+    "n_iterations": 3,
+    "n_curriculum": 200,
+    "n_held": 200,
+    "n_mbpp": 50,
+    "split_seed": 42,
+    "budget": 3000,
+    "mdl_min_occ": 2,
+    "n_dreams": 30,
+    "transfer_margin_pct": 5.0
+  },
+  "grammar": {
+    "predicates": [
+      "all",
+      "bg_obj",
+      "color_1",
+      "color_2",
+      "color_3",
+      "color_4",
+      "color_5",
+      "color_6",
+      "color_7",
+      "color_8",
+      "color_9",
+      "largest",
+      "most_common_c",
+      "non_bg",
+      "smallest",
+      "unique_color"
+    ],
+    "transforms": [
+      "delete",
+      "keep_only",
+      "recolor_0",
+      "recolor_1",
+      "recolor_2",
+      "recolor_3",
+      "recolor_4",
+      "recolor_5",
+      "recolor_6",
+      "recolor_7",
+      "recolor_8",
+      "recolor_9",
+      "translate_+0_+1",
+      "translate_+0_-1",
+      "translate_+1_+0",
+      "translate_+1_+1",
+      "translate_+1_-1",
+      "translate_-1_+0",
+      "translate_-1_+1",
+      "translate_-1_-1"
+    ],
+    "n_map_apply_ops": 320,
+    "whole_grid_prims": [
+      "crop",
+      "down2",
+      "flip_h",
+      "flip_v",
+      "id",
+      "rot_180",
+      "rot_270",
+      "rot_90",
+      "tr",
+      "up2"
+    ],
+    "n_leaves": 330,
+    "preserved_from_stage1b": true
+  },
+  "depth_budget_by_level": {
+    "depth_0": 330,
+    "depth_1_covered": 2670,
+    "depth_1_total": 108900,
+    "depth_1_coverage_fraction": 0.024517906336088153
+  },
+  "max_depth_reached": 1,
+  "held_task_ids": [
+    "c1d99e64",
+    "25d487eb",
+    "3618c87e",
+    "ae4f1146",
+    "97a05b5b",
+    "22eb0ac0",
+    "dae9d2b5",
+    "68b16354",
+    "a61f2674",
+    "f8a8fe49",
+    "56ff96f3",
+    "a79310a0",
+    "868de0fa",
+    "1f0c79e5",
+    "ecdecbb3",
+    "a1570a43",
+    "d9f24cd1",
+    "e5062a87",
+    "673ef223",
+    "a8d7556c",
+    "e9afcf9a",
+    "9af7a82c",
+    "264363fd",
+    "c8cbb738",
+    "aedd82e4",
+    "44d8ac46",
+    "e98196ab",
+    "f25fbde4",
+    "1b60fb0c",
+    "e26a3af2",
+    "846bdb03",
+    "5ad4f10b",
+    "2bcee788",
+    "ff28f65a",
+    "7f4411dc",
+    "e21d9049",
+    "ac0a08a4",
+    "ea786f4a",
+    "447fd412",
+    "29623171",
+    "ae3edfdc",
+    "234bbc79",
+    "42a50994",
+    "6430c8c4",
+    "f76d97a5",
+    "25d8a9c8",
+    "3906de3d",
+    "dbc1a6ce",
+    "b782dc8a",
+    "a48eeaf7",
+    "e179c5f4",
+    "83302e8f",
+    "7468f01a",
+    "017c7c7b",
+    "007bbfb7",
+    "7e0986d6",
+    "855e0971",
+    "46f33fce",
+    "a3325580",
+    "6d58a25d",
+    "67385a82",
+    "95990924",
+    "27a28665",
+    "3aa6fb7a",
+    "3bd67248",
+    "06df4c85",
+    "681b3aeb",
+    "23581191",
+    "b7249182",
+    "ef135b50",
+    "2dc579da",
+    "bb43febb",
+    "c9e6f938",
+    "fcb5c309",
+    "d06dbe63",
+    "bdad9b1f",
+    "9edfc990",
+    "3c9b0459",
+    "be94b721",
+    "a416b8f3",
+    "ce9e57f2",
+    "73251a56",
+    "60b61512",
+    "b60334d2",
+    "75b8110e",
+    "3af2c5a8",
+    "a2fd1cf0",
+    "bc1d5164",
+    "d511f180",
+    "6e02f1e3",
+    "d631b094",
+    "a740d043",
+    "1a07d186",
+    "6455b5f5",
+    "f8c80d96",
+    "a3df8b1e",
+    "963e52fc",
+    "321b1fc6",
+    "82819916",
+    "67a423a3",
+    "28bf18c6",
+    "74dd1130",
+    "d406998b",
+    "c9f8e694",
+    "11852cab",
+    "ded97339",
+    "543a7ed5",
+    "d22278a0",
+    "4c4377d9",
+    "6fa7a44f",
+    "e9614598",
+    "d037b0a7",
+    "3631a71a",
+    "d9fac9be",
+    "025d127b",
+    "a9f96cdd",
+    "e8593010",
+    "e509e548",
+    "d364b489",
+    "995c5fa3",
+    "a61ba2ce",
+    "9f236235",
+    "57aa92db",
+    "623ea044",
+    "508bd3b6",
+    "a5313dff",
+    "db93a21d",
+    "ba26e723",
+    "8d510a79",
+    "239be575",
+    "6773b310",
+    "5521c0d9",
+    "1bfc4729",
+    "e8dc4411",
+    "7fe24cdd",
+    "d2abd087",
+    "feca6190",
+    "a699fb00",
+    "c444b776",
+    "f9012d9b",
+    "8e5a5113",
+    "8efcae92",
+    "2013d3e2",
+    "d13f3404",
+    "1caeab9d",
+    "3eda0437",
+    "444801d8",
+    "50cb2852",
+    "5bd6f4ac",
+    "0a938d79",
+    "6e82a1ae",
+    "31aa019c",
+    "47c1f68c",
+    "3bdb4ada",
+    "9172f3a0",
+    "834ec97d",
+    "1cf80156",
+    "90c28cc7",
+    "d687bc17",
+    "f8ff0b80",
+    "780d0b14",
+    "1b2d62fb",
+    "9ecd008a",
+    "a87f7484",
+    "f15e1fac",
+    "760b3cac",
+    "f25ffba3",
+    "913fb3ed",
+    "7837ac64",
+    "22168020",
+    "ce602527",
+    "6a1e5592",
+    "eb5a1d5d",
+    "c3f564a4",
+    "4612dd53",
+    "36d67576",
+    "caa06a1f",
+    "794b24be",
+    "5c0a986e",
+    "6d75e8bb",
+    "fcc82909",
+    "b91ae062",
+    "662c240a",
+    "e6721834",
+    "eb281b96",
+    "67a3c6ac",
+    "54d9e175",
+    "8731374e",
+    "3345333e",
+    "94f9d214",
+    "72322fa7",
+    "272f95fa",
+    "941d9a10",
+    "2bee17df",
+    "40853293",
+    "6ecd11f4",
+    "776ffc46",
+    "97999447",
+    "a68b268e",
+    "8d5021e8"
+  ],
+  "source_construction": "curriculum=200 RANDOM training tasks (no sorting); held=200 from training (split_seed=42); NO augmentation. Same split as Stage 1b.",
+  "aug_leakage_check": {
+    "hits": 0,
+    "verdict": "CLEAN: no augmentation applied."
+  },
+  "augmentation_status": {
+    "curriculum_augmented": false,
+    "held_augmented": false,
+    "note": "No D4 augmentation applied anywhere. Stage 1c source is raw ARC training split only."
+  },
+  "solved_programs": [
+    {
+      "prog_str": "('map_apply', 'non_bg', 'recolor_5')",
+      "hash": "f6abc11011bf",
+      "task_id": "9565186b",
+      "depth": 0,
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('prim', 'up2')",
+      "hash": "fa140b8edb78",
+      "task_id": "c59eb873",
+      "depth": 0,
+      "prog_type": "prim"
+    },
+    {
+      "prog_str": "('map_apply', 'all', 'delete')",
+      "hash": "b16a64b9f3aa",
+      "task_id": "5582e5ca",
+      "depth": 0,
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('map_apply', 'all', 'translate_+1_+0')",
+      "hash": "3f56bada5afd",
+      "task_id": "25ff71a9",
+      "depth": 0,
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('map_apply', 'color_7', 'recolor_5')",
+      "hash": "6f87412bf72c",
+      "task_id": "c8f0f002",
+      "depth": 0,
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('prim', 'rot_90')",
+      "hash": "29d62e98f95c",
+      "task_id": "ed36ccf7",
+      "depth": 0,
+      "prog_type": "prim"
+    },
+    {
+      "prog_str": "('prim', 'tr')",
+      "hash": "ec6abf48fe05",
+      "task_id": "9dfd6313",
+      "depth": 0,
+      "prog_type": "prim"
+    },
+    {
+      "prog_str": "('prim', 'rot_180')",
+      "hash": "2b240309a3dd",
+      "task_id": "6150a2bd",
+      "depth": 0,
+      "prog_type": "prim"
+    },
+    {
+      "prog_str": "('map_apply', 'color_6', 'recolor_2')",
+      "hash": "fd2e05e6b3df",
+      "task_id": "b1948b0a",
+      "depth": 0,
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('map_apply', 'non_bg', 'recolor_5')",
+      "hash": "f6abc11011bf",
+      "task_id": "9565186b",
+      "depth": 0,
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('prim', 'up2')",
+      "hash": "fa140b8edb78",
+      "task_id": "c59eb873",
+      "depth": 0,
+      "prog_type": "prim"
+    },
+    {
+      "prog_str": "('map_apply', 'all', 'delete')",
+      "hash": "b16a64b9f3aa",
+      "task_id": "5582e5ca",
+      "depth": 0,
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('map_apply', 'all', 'translate_+1_+0')",
+      "hash": "3f56bada5afd",
+      "task_id": "25ff71a9",
+      "depth": 0,
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('map_apply', 'color_7', 'recolor_5')",
+      "hash": "6f87412bf72c",
+      "task_id": "c8f0f002",
+      "depth": 0,
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('prim', 'rot_90')",
+      "hash": "29d62e98f95c",
+      "task_id": "ed36ccf7",
+      "depth": 0,
+      "prog_type": "prim"
+    },
+    {
+      "prog_str": "('prim', 'tr')",
+      "hash": "ec6abf48fe05",
+      "task_id": "9dfd6313",
+      "depth": 0,
+      "prog_type": "prim"
+    },
+    {
+      "prog_str": "('prim', 'rot_180')",
+      "hash": "2b240309a3dd",
+      "task_id": "6150a2bd",
+      "depth": 0,
+      "prog_type": "prim"
+    },
+    {
+      "prog_str": "('map_apply', 'color_6', 'recolor_2')",
+      "hash": "fd2e05e6b3df",
+      "task_id": "b1948b0a",
+      "depth": 0,
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('map_apply', 'non_bg', 'recolor_5')",
+      "hash": "f6abc11011bf",
+      "task_id": "9565186b",
+      "depth": 0,
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('prim', 'up2')",
+      "hash": "fa140b8edb78",
+      "task_id": "c59eb873",
+      "depth": 0,
+      "prog_type": "prim"
+    },
+    {
+      "prog_str": "('map_apply', 'all', 'delete')",
+      "hash": "b16a64b9f3aa",
+      "task_id": "5582e5ca",
+      "depth": 0,
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('map_apply', 'all', 'translate_+1_+0')",
+      "hash": "3f56bada5afd",
+      "task_id": "25ff71a9",
+      "depth": 0,
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('map_apply', 'color_7', 'recolor_5')",
+      "hash": "6f87412bf72c",
+      "task_id": "c8f0f002",
+      "depth": 0,
+      "prog_type": "map_apply"
+    },
+    {
+      "prog_str": "('prim', 'rot_90')",
+      "hash": "29d62e98f95c",
+      "task_id": "ed36ccf7",
+      "depth": 0,
+      "prog_type": "prim"
+    },
+    {
+      "prog_str": "('prim', 'tr')",
+      "hash": "ec6abf48fe05",
+      "task_id": "9dfd6313",
+      "depth": 0,
+      "prog_type": "prim"
+    },
+    {
+      "prog_str": "('prim', 'rot_180')",
+      "hash": "2b240309a3dd",
+      "task_id": "6150a2bd",
+      "depth": 0,
+      "prog_type": "prim"
+    },
+    {
+      "prog_str": "('map_apply', 'color_6', 'recolor_2')",
+      "hash": "fd2e05e6b3df",
+      "task_id": "b1948b0a",
+      "depth": 0,
+      "prog_type": "map_apply"
+    }
+  ],
+  "program_type_breakdown": {
+    "map_apply": 15,
+    "prim": 12
+  },
+  "depth_distribution_all_solves": {
+    "0": 27
+  },
+  "abstraction_funnel": {
+    "total_unique_programs": 9,
+    "occurrence_distribution": {
+      "3": 9
+    },
+    "occurrence_ge2_candidates": [
+      {
+        "prog_str": "('map_apply', 'non_bg', 'recolor_5')",
+        "prog_hash": "f6abc11011bf",
+        "occurrences": 3,
+        "body_size": 1,
+        "mdl_savings": -1,
+        "decision": "REJECTED",
+        "reason": "body_size=1: savings=occ*(1-1)-1=-1 (depth-0 programs cannot compress)",
+        "source_task_ids": [
+          "9565186b",
+          "9565186b",
+          "9565186b"
+        ],
+        "source_depths": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "prog_str": "('prim', 'up2')",
+        "prog_hash": "fa140b8edb78",
+        "occurrences": 3,
+        "body_size": 1,
+        "mdl_savings": -1,
+        "decision": "REJECTED",
+        "reason": "body_size=1: savings=occ*(1-1)-1=-1 (depth-0 programs cannot compress)",
+        "source_task_ids": [
+          "c59eb873",
+          "c59eb873",
+          "c59eb873"
+        ],
+        "source_depths": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "prog_str": "('map_apply', 'all', 'delete')",
+        "prog_hash": "b16a64b9f3aa",
+        "occurrences": 3,
+        "body_size": 1,
+        "mdl_savings": -1,
+        "decision": "REJECTED",
+        "reason": "body_size=1: savings=occ*(1-1)-1=-1 (depth-0 programs cannot compress)",
+        "source_task_ids": [
+          "5582e5ca",
+          "5582e5ca",
+          "5582e5ca"
+        ],
+        "source_depths": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "prog_str": "('map_apply', 'all', 'translate_+1_+0')",
+        "prog_hash": "3f56bada5afd",
+        "occurrences": 3,
+        "body_size": 1,
+        "mdl_savings": -1,
+        "decision": "REJECTED",
+        "reason": "body_size=1: savings=occ*(1-1)-1=-1 (depth-0 programs cannot compress)",
+        "source_task_ids": [
+          "25ff71a9",
+          "25ff71a9",
+          "25ff71a9"
+        ],
+        "source_depths": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "prog_str": "('map_apply', 'color_7', 'recolor_5')",
+        "prog_hash": "6f87412bf72c",
+        "occurrences": 3,
+        "body_size": 1,
+        "mdl_savings": -1,
+        "decision": "REJECTED",
+        "reason": "body_size=1: savings=occ*(1-1)-1=-1 (depth-0 programs cannot compress)",
+        "source_task_ids": [
+          "c8f0f002",
+          "c8f0f002",
+          "c8f0f002"
+        ],
+        "source_depths": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "prog_str": "('prim', 'rot_90')",
+        "prog_hash": "29d62e98f95c",
+        "occurrences": 3,
+        "body_size": 1,
+        "mdl_savings": -1,
+        "decision": "REJECTED",
+        "reason": "body_size=1: savings=occ*(1-1)-1=-1 (depth-0 programs cannot compress)",
+        "source_task_ids": [
+          "ed36ccf7",
+          "ed36ccf7",
+          "ed36ccf7"
+        ],
+        "source_depths": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "prog_str": "('prim', 'tr')",
+        "prog_hash": "ec6abf48fe05",
+        "occurrences": 3,
+        "body_size": 1,
+        "mdl_savings": -1,
+        "decision": "REJECTED",
+        "reason": "body_size=1: savings=occ*(1-1)-1=-1 (depth-0 programs cannot compress)",
+        "source_task_ids": [
+          "9dfd6313",
+          "9dfd6313",
+          "9dfd6313"
+        ],
+        "source_depths": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "prog_str": "('prim', 'rot_180')",
+        "prog_hash": "2b240309a3dd",
+        "occurrences": 3,
+        "body_size": 1,
+        "mdl_savings": -1,
+        "decision": "REJECTED",
+        "reason": "body_size=1: savings=occ*(1-1)-1=-1 (depth-0 programs cannot compress)",
+        "source_task_ids": [
+          "6150a2bd",
+          "6150a2bd",
+          "6150a2bd"
+        ],
+        "source_depths": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "prog_str": "('map_apply', 'color_6', 'recolor_2')",
+        "prog_hash": "fd2e05e6b3df",
+        "occurrences": 3,
+        "body_size": 1,
+        "mdl_savings": -1,
+        "decision": "REJECTED",
+        "reason": "body_size=1: savings=occ*(1-1)-1=-1 (depth-0 programs cannot compress)",
+        "source_task_ids": [
+          "b1948b0a",
+          "b1948b0a",
+          "b1948b0a"
+        ],
+        "source_depths": [
+          0,
+          0,
+          0
+        ]
+      }
+    ],
+    "accepted_macros": 0,
+    "note": "All solved programs at depth-0 (body_size=1). MDL savings = occ*(1-1)-1 = -1 for all: depth-0 programs structurally cannot compress. Macro formation requires depth-1 compose solutions (body_size>=2)."
+  },
+  "library_final": {},
+  "iterations": [
+    {
+      "iteration": 1,
+      "library_size": 0,
+      "new_macros": 0,
+      "arc": {
+        "solved": 9,
+        "n": 200,
+        "solve_rate": 0.045,
+        "mean_cost": 2875.505,
+        "depth_distribution": {
+          "0": 9
+        }
+      },
+      "mbpp": {
+        "solved": 4,
+        "n": 50,
+        "solve_rate": 0.08
+      },
+      "transfer": {
+        "baseline": {
+          "mean_cost": 2934.09,
+          "solved": 5
+        },
+        "with_library": {
+          "mean_cost": 2934.09,
+          "solved": 5,
+          "new_solves": 0
+        },
+        "selected_macro_counts_per_task": 0,
+        "delta_pct": 0.0,
+        "verdict": "VACUOUS: library empty (delta=+0.0% is a no-op comparison)."
+      },
+      "dream_sleep_active_macros": 0,
+      "elapsed_sec": 86.23936939239502
+    },
+    {
+      "iteration": 2,
+      "library_size": 0,
+      "new_macros": 0,
+      "arc": {
+        "solved": 9,
+        "n": 200,
+        "solve_rate": 0.045,
+        "mean_cost": 2875.505,
+        "depth_distribution": {
+          "0": 9
+        }
+      },
+      "mbpp": {
+        "solved": 4,
+        "n": 50,
+        "solve_rate": 0.08
+      },
+      "transfer": {
+        "baseline": {
+          "mean_cost": 2934.09,
+          "solved": 5
+        },
+        "with_library": {
+          "mean_cost": 2934.09,
+          "solved": 5,
+          "new_solves": 0
+        },
+        "selected_macro_counts_per_task": 0,
+        "delta_pct": 0.0,
+        "verdict": "VACUOUS: library empty (delta=+0.0% is a no-op comparison)."
+      },
+      "dream_sleep_active_macros": 0,
+      "elapsed_sec": 76.55998516082764
+    },
+    {
+      "iteration": 3,
+      "library_size": 0,
+      "new_macros": 0,
+      "arc": {
+        "solved": 9,
+        "n": 200,
+        "solve_rate": 0.045,
+        "mean_cost": 2875.505,
+        "depth_distribution": {
+          "0": 9
+        }
+      },
+      "mbpp": {
+        "solved": 4,
+        "n": 50,
+        "solve_rate": 0.08
+      },
+      "transfer": {
+        "baseline": {
+          "mean_cost": 2934.09,
+          "solved": 5
+        },
+        "with_library": {
+          "mean_cost": 2934.09,
+          "solved": 5,
+          "new_solves": 0
+        },
+        "selected_macro_counts_per_task": 0,
+        "delta_pct": 0.0,
+        "verdict": "VACUOUS: library empty (delta=+0.0% is a no-op comparison)."
+      },
+      "dream_sleep_active_macros": 0,
+      "elapsed_sec": 75.80963563919067
+    }
+  ],
+  "claim_scope": "Stage 1c searched 330 depth-0 programs (100%) and 2,670/108,900 depth-1 compose programs (2.45%). Structure-absence cannot be claimed from this coverage: zero depth-1 programs evaluated. Full depth-1 flat BFS requires budget=109,230 (~36x this budget); estimated intractable. Any-to-any escalation remains premature: gated on Stage 2 (proposer) providing deeper solves with still-zero reuse/transfer.",
+  "kai_classification": "DEPTH_STARVATION",
+  "kai_reason": "Compose coverage 2.45% < 10% of depth-1 space. Zero depth-1 solves: yield too low to test macro formation at depth-1. Full depth-1 flat BFS intractable at ~41x this budget.",
+  "verdict": "DEPTH_STARVATION: compose coverage 2.45% (2,670/108,900 depth-1 programs). Full depth-1 intractable (~41x budget needed). This intractability is the pre-registered Stage 2 (proposer) argument.",
+  "total_elapsed_sec": 241.16899919509888
+}
