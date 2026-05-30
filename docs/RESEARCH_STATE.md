@@ -771,7 +771,15 @@ Artifacts: `stage1b_object_centric.py`, `stage1b_result.json`. Commits: 2698a9eb
 
 **Result path:** `incoming/arc-agi1-visa/03_R4_transfer_wall/stage1c_holed_result.json`
 
-**Status:** CLOSED: HOLED_HOLLOW. Stage 2 proposer condition met.
+**Status:** CLOSED: HOLED_HOLLOW.
+
+**Next step (Leo #11809 — HOLD PATH 3):** Three formation-without-transfer results (12-op HOLLOW, Stage 1b vacuous, Stage 1c-HOLED HOLLOW) at BUDGET=3000 with coverage 11/200. Coverage-confounded: too few solves to determine if shared macro structure is absent or merely under-sampled. PATH 3 (Stage 2 proposer) is DEFERRED pending premise-truth diagnostic.
+
+**Premise-truth/coverage diagnostic (Stage 1d):**
+- Same holed skeleton grammar, BUDGET raised substantially (target ~10K, sized to fit 5-min cap).
+- Measure: (1) curriculum solve coverage — does 11/200 rise? (2) recurring depth-2 skeleton count (was 1, occ=2) — does it rise with coverage? (3) `macro_usage_map` per held task with `is_cheaper` gate — do formed skeletons appear in cheaper held solutions?
+- Discriminator: coverage↑ AND skeletons↑ AND held-usage non-empty → coverage-bound, structure IS there → PATH 3 warranted. Coverage↑ AND skeletons~1 AND held-usage empty → premise sparse/false, shared-macro direction KILLED with mechanism. Coverage flat → enumerator-reach is binding, macro question moot.
+- Gate: same 5-label Kai schema. Fire after Kai's gate on 8c22183b.
 
 ---
 

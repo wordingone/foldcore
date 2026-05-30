@@ -581,16 +581,24 @@ def transfer_test(library, held_tasks, dl_weights=None, budget=BUDGET):
 
         prog_l, cl, _, _ = search_task_holed(task['io'], library, budget, dl_weights)
         lib_costs.append(cl)
+        is_cheaper = cl < cb  # library solution cost strictly cheaper than baseline
+        new_solve  = prog_l is not None and prog_b is None
         if prog_l:
             lib_solved += 1
-            if not prog_b: lib_new += 1
-            # Trace which macros appear in the solution and record usage map
-            macros_used = prog_macro_names(prog_l) if prog_l else []
-            if macros_used:
-                macro_usage_map[task['id']] = macros_used
-                selected_macro_count += 1
-                if any(m in holed_macro_keys for m in macros_used):
-                    selected_holed_count += 1
+            if new_solve: lib_new += 1
+        macros_used = prog_macro_names(prog_l) if prog_l else []
+        holed_macros = [m for m in macros_used if m in holed_macro_keys]
+        # Attribution gate: only record usage when library solution is actually CHEAPER
+        # "used somewhere" ≠ "used in a cheaper solution" — path-(ii) requires is_cheaper
+        macro_usage_map[task['id']] = {
+            'baseline_cost': cb, 'library_cost': cl,
+            'is_cheaper': is_cheaper, 'new_solve': new_solve,
+            'macros_used': macros_used, 'holed_macros_used': holed_macros,
+        }
+        if macros_used and is_cheaper:
+            selected_macro_count += 1
+            if holed_macros:
+                selected_holed_count += 1
 
     bl_mean  = float(np.mean(bl_costs))
     lib_mean = float(np.mean(lib_costs))
