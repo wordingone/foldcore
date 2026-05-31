@@ -37,6 +37,14 @@ S1D_PATH = (
 OUT_DIR = "B:/M/the-search/incoming/arc-agi1-visa/05_F2_energy_search"
 RESULT_PATH = os.path.join(OUT_DIR, "stagef2_energy_search_result.json")
 TEMP_PATH = os.path.join(OUT_DIR, "stagef2_energy_search_TEMP.json")
+MEASURE_TEMP_PATH = os.path.join(OUT_DIR, "stagef2_measurement_smoke_TEMP.json")
+
+# Stage 1k armseed7 canonical solved task IDs (D=10/200); used for --measure-smoke targeting
+S1K_SOLVED_IDS = [
+    "1cf80156", "3618c87e", "3c9b0459", "67a3c6ac", "68b16354",
+    "74dd1130", "a1570a43", "a740d043", "a79310a0", "f25fbde4",
+]
+
 F1_RESULT_PATH = (
     "B:/M/the-search/incoming/arc-agi1-visa/04_F1_energy_probe/"
     "stagef1_energy_probe_result.json"
@@ -971,6 +979,146 @@ def run_arm_energy(held_tasks, leaves, n_leaves, model, n_tasks):
     return arm_energy_per_task
 
 
+def run_arm_energy_measured(held_tasks, leaves, n_leaves, model):
+    """Measurement variant of the energy arm for --measure-smoke.
+
+    Collects per-batch pair0-pass rate and solution energy-rank vs stream-position.
+    Returns (arm_energy_per_task, measurements) where measurements = {
+      task_id: {
+        "pair0_pass_count": int,
+        "pair0_total": int,
+        "pair0_pass_rate": float,
+        "solved": bool,
+        "solution": {   # only if solved
+          "energy_rank_in_batch": int,   # 0-indexed; 0 = lowest energy (best rank)
+          "stream_position_in_batch": int,  # 0-indexed; position in original draw order
+          "batch_num": int,
+          "batch_size": int,
+        } | None,
+      }
+    }
+    """
+    arm_energy_per_task = {}
+    measurements = {}
+    t_start = time.time()
+    n_tasks = len(held_tasks)
+
+    for task_num, task in enumerate(held_tasks):
+        rng = random.Random((ARM_D_SEED, task["id"]))
+        t_task = time.time()
+        n_evals = 0
+        solved = False
+        pair0_pass = 0
+        pair0_total = 0
+        solution_info = None
+
+        if not task["io"]:
+            arm_energy_per_task[task["id"]] = {"solved": False, "n_evals": 0,
+                                                "time_limit_hit": False, "budget_exhausted": True}
+            measurements[task["id"]] = {"pair0_pass_count": 0, "pair0_total": 0,
+                                         "pair0_pass_rate": 0.0, "solved": False, "solution": None}
+            continue
+        inp0 = np.array(task["io"][0]["input"], dtype=np.int64)
+        expected0 = np.array(task["io"][0]["output"], dtype=np.int64)
+
+        batch_num = 0
+        while time.time() - t_task < TIME_PER_TASK_D and n_evals < BUDGET_B:
+            remaining = min(BATCH_SIZE_ENERGY, BUDGET_B - n_evals)
+            if remaining <= 0:
+                break
+            tuples = []
+            for _ in range(remaining):
+                i = rng.randrange(n_leaves)
+                j = rng.randrange(n_leaves)
+                k = rng.randrange(n_leaves)
+                l = rng.randrange(n_leaves)
+                tuples.append((i, j, k, l))
+
+            progs = [tuple_to_prog(tup, leaves) for tup in tuples]
+            out0_cache = [eval_program(prog, inp0) for prog in progs]
+            energies = [score_output_arr(o, task["io"], model) for o in out0_cache]
+            n_evals += len(tuples)
+
+            # Measure pair0-pass rate for this batch
+            batch_pair0 = sum(
+                1 for o in out0_cache
+                if o is not None and o.shape == expected0.shape and np.array_equal(o, expected0)
+            )
+            pair0_pass += batch_pair0
+            pair0_total += len(tuples)
+
+            order = sorted(range(len(progs)), key=lambda idx: energies[idx])
+
+            for energy_rank, pos in enumerate(order):
+                prog = progs[pos]
+                out0 = out0_cache[pos]
+
+                if (out0 is None
+                        or out0.shape != expected0.shape
+                        or not np.array_equal(out0, expected0)):
+                    continue
+
+                ok = True
+                for pair in task["io"][1:]:
+                    inp = np.array(pair["input"], dtype=np.int64)
+                    out = np.array(pair["output"], dtype=np.int64)
+                    r = eval_program(prog, inp)
+                    if r is None or r.shape != out.shape or not np.array_equal(r, out):
+                        ok = False
+                        break
+                if ok:
+                    # pos = index in progs (= stream position within batch, 0-indexed)
+                    solution_info = {
+                        "energy_rank_in_batch": energy_rank,
+                        "stream_position_in_batch": pos,
+                        "batch_num": batch_num,
+                        "batch_size": len(tuples),
+                    }
+                    arm_energy_per_task[task["id"]] = {
+                        "solved": True,
+                        "n_evals": n_evals,
+                        "time_limit_hit": False,
+                        "budget_exhausted": False,
+                    }
+                    solved = True
+                    break
+            if solved:
+                break
+            batch_num += 1
+
+        if not solved:
+            time_hit = (time.time() - t_task) >= TIME_PER_TASK_D
+            arm_energy_per_task[task["id"]] = {
+                "solved": False,
+                "n_evals": n_evals,
+                "time_limit_hit": time_hit,
+                "budget_exhausted": n_evals >= BUDGET_B,
+            }
+
+        pair0_rate = pair0_pass / pair0_total if pair0_total > 0 else 0.0
+        measurements[task["id"]] = {
+            "pair0_pass_count": pair0_pass,
+            "pair0_total": pair0_total,
+            "pair0_pass_rate": pair0_rate,
+            "solved": solved,
+            "solution": solution_info,
+        }
+
+        _OBJ_CACHE.clear()
+        gc.collect()
+
+        elapsed = time.time() - t_start
+        n_so_far = sum(1 for r in arm_energy_per_task.values() if r.get("solved"))
+        print(f"  Measure {task_num+1}/{n_tasks} ({task['id']}): "
+              f"solved={solved}, pair0_rate={pair0_rate:.4f} ({pair0_pass}/{pair0_total}), "
+              f"rank={solution_info['energy_rank_in_batch'] if solution_info else 'N/A'}/"
+              f"{solution_info['batch_size'] if solution_info else '?'}, "
+              f"stream={solution_info['stream_position_in_batch'] if solution_info else 'N/A'}, "
+              f"{elapsed:.0f}s")
+
+    return arm_energy_per_task, measurements
+
+
 # ---------------------------------------------------------------------------
 # Gate
 # ---------------------------------------------------------------------------
@@ -1111,6 +1259,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--smoke", action="store_true", help="3 tasks, TEMP path")
     parser.add_argument("--test-gate", action="store_true", help="Gate injection tests only")
+    parser.add_argument("--measure-smoke", action="store_true",
+                        help="Measurement smoke: run on Stage1k solved tasks, collect pair0-pass + rank")
     args = parser.parse_args()
 
     n_tasks = 3 if args.smoke else N_HELD
@@ -1157,6 +1307,47 @@ def main():
         ok = run_gate_injection_tests(held_ids_set, leaves, n_leaves, space_hash, held_ids)
         print(f"\nGate injection tests: {'ALL PASSED' if ok else 'SOME MISSED'}")
         sys.exit(0 if ok else 1)
+
+    if args.measure_smoke:
+        # Target: first 3 Stage 1k armseed7 solved task IDs (known to solve within B=300K)
+        target_ids = S1K_SOLVED_IDS[:3]
+        measure_tasks = [t for t in held_tasks if t["id"] in set(target_ids)]
+        assert len(measure_tasks) == 3, f"Expected 3 measure tasks, got {len(measure_tasks)}"
+        print(f"\nMEASURE-SMOKE: targeting {len(measure_tasks)} Stage1k-solved tasks")
+        print(f"  Tasks: {[t['id'] for t in measure_tasks]}")
+
+        print(f"\nLoading frozen E_theta (5 epochs for measurement smoke)...")
+        model, wh = load_and_verify_energy_model(held_ids_set, n_epochs=5)
+        print(f"  Hash (5-epoch smoke, not canonical): {wh}")
+
+        print(f"\n=== Measurement smoke: pair0-pass rate + solution rank ===")
+        _, measurements = run_arm_energy_measured(measure_tasks, leaves, n_leaves, model)
+
+        print(f"\n--- Pair0-pass rate summary ---")
+        for tid, m in measurements.items():
+            print(f"  {tid}: pair0_rate={m['pair0_pass_rate']:.6f} "
+                  f"({m['pair0_pass_count']}/{m['pair0_total']}), solved={m['solved']}")
+
+        print(f"\n--- Solution rank summary ---")
+        for tid, m in measurements.items():
+            if m["solution"]:
+                s = m["solution"]
+                print(f"  {tid}: energy_rank={s['energy_rank_in_batch']}/{s['batch_size']} "
+                      f"(stream_pos={s['stream_position_in_batch']}, batch={s['batch_num']})")
+            else:
+                print(f"  {tid}: not solved in measurement smoke")
+
+        artifact = {
+            "stage": "F2_measurement_smoke",
+            "target_task_ids": [t["id"] for t in measure_tasks],
+            "n_tasks": len(measure_tasks),
+            "measurements": measurements,
+        }
+        os.makedirs(OUT_DIR, exist_ok=True)
+        with open(MEASURE_TEMP_PATH, "w") as f:
+            json.dump(artifact, f, indent=2)
+        print(f"\nArtifact written: {MEASURE_TEMP_PATH}")
+        sys.exit(0)
 
     # Load and verify E_theta
     print(f"\nLoading frozen E_theta (F1 deterministic re-train)...")
