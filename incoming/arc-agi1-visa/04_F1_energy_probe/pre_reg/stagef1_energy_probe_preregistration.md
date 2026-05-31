@@ -84,9 +84,11 @@ Training samples: 200 tasks × 18 candidates = 3600 samples (single training set
 
 | Verdict | Condition |
 |---------|-----------|
-| PASS | median_spearman_rho ≥ 0.50 AND strict_minimal_fraction ≥ 0.50 |
-| MARGINAL | 0.20 ≤ median_spearman_rho < 0.50 |
-| FAIL | median_spearman_rho < 0.20 |
+| PASS | median_spearman_rho_nearmiss_only ≥ 0.50 AND strict_minimal_fraction_nearmiss_only ≥ 0.50 |
+| MARGINAL | 0.20 ≤ median_spearman_rho_nearmiss_only < 0.50 |
+| FAIL | median_spearman_rho_nearmiss_only < 0.20 |
+
+Full-sweep (all 18 candidates) rho and strict_min reported as secondary fields; not used for verdict.
 
 `strict_minimal_fraction` = fraction of held tasks where E_theta(true_target) < E_theta(c)
 for ALL other candidates c in the sweep.
