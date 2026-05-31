@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Research workflow + Leo 4-layer gate
+    url: https://github.com/wordingone/the-search/blob/main/docs/RESEARCH_WORKFLOW.md
+    about: How stages, PRs, and the L1–L4 gate work before you file.
+  - name: Stage map (roadmap + status)
+    url: https://github.com/wordingone/the-search/blob/main/docs/STAGE_MAP.md
+    about: The stage ladder, each stage's status/result/verdict, and the naming scheme.
+  - name: Glossary
+    url: https://github.com/wordingone/the-search/blob/main/docs/GLOSSARY.md
+    about: F1/F2/RHAE/R1–R6/reach-D/EBM and the rest of the vocabulary.
