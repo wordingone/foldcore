@@ -60,14 +60,14 @@ S1D_PATHS  = {
     42: "B:/M/the-search/incoming/arc-agi1-visa/03_R4_transfer_wall/stage1d_premise_truth_b30000_minimality_result.json",
 }
 TEMP_PATH   = "B:/M/the-search/incoming/arc-agi1-visa/03_R4_transfer_wall/stage1k_time_wall_TEMP.json"
-RESULT_TMPL     = "B:/M/the-search/incoming/arc-agi1-visa/03_R4_transfer_wall/stage1k_time_wall_seed{seed}_result.json"
-CHECKPOINT_TMPL = "B:/M/the-search/incoming/arc-agi1-visa/03_R4_transfer_wall/stage1k_time_wall_seed{seed}_checkpoint.jsonl"
+RESULT_TMPL     = "B:/M/the-search/incoming/arc-agi1-visa/03_R4_transfer_wall/stage1k_time_wall_seed{seed}_armseed{arm_seed}_result.json"
+CHECKPOINT_TMPL = "B:/M/the-search/incoming/arc-agi1-visa/03_R4_transfer_wall/stage1k_time_wall_seed{seed}_armseed{arm_seed}_checkpoint.jsonl"
 
 # -- Constants ----------------------------------------------------------------
 N_HELD              = 200
 BUDGET_B            = 300_000     # unchanged from Stage 1j
 TIME_PER_TASK_D     = 600.0       # ONE variable changed from Stage 1j (was 120.0, x5)
-ARM_D_SEED          = 0           # random arm seed, same across stages
+ARM_D_SEED          = 0           # set from --arm-seed CLI arg in main(); default 0 for backward compat
 MAX_DEPTH           = 3           # unchanged from Stage 1j
 PREV_SPACE_HASH     = "4978b6739bf55beb"   # Stage 1j hash (time wall NOT in space descriptor)
 PREV_N_LEAVES       = 1370
@@ -656,11 +656,15 @@ def run_gate_tests(actual_n_leaves, stage1d_held_id_set, space_hash, held_task_i
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--seed', type=int, choices=[1, 42], default=42)
+    parser.add_argument('--arm-seed', type=int, default=0,
+                        help='Per-task search RNG seed (default 0; prior gated runs used 0)')
     parser.add_argument('--smoke', action='store_true',
                         help='Smoke mode: 3 tasks only, write to TEMP path')
     parser.add_argument('--test-gate', action='store_true',
                         help='Run gate violation injection tests before main run')
     args = parser.parse_args()
+    global ARM_D_SEED
+    ARM_D_SEED = args.arm_seed
 
     if args.smoke:
         n_tasks     = 3
@@ -668,8 +672,8 @@ def main():
         print(f"SMOKE MODE: {n_tasks} tasks x {TIME_PER_TASK_D:.0f}s (B={BUDGET_B}) -> {result_path}")
     else:
         n_tasks     = N_HELD
-        result_path = RESULT_TMPL.format(seed=args.seed)
-        print(f"CANONICAL MODE: seed={args.seed} -> {result_path}")
+        result_path = RESULT_TMPL.format(seed=args.seed, arm_seed=args.arm_seed)
+        print(f"CANONICAL MODE: seed={args.seed} arm_seed={args.arm_seed} -> {result_path}")
 
     all_tasks = []
     for split in ['training', 'evaluation']:
@@ -720,7 +724,7 @@ def main():
 
     print(f"\n=== Arm D (reach LB): {TIME_PER_TASK_D:.0f}s/task OR {BUDGET_B} evals, "
           f"seed={ARM_D_SEED}, depth={MAX_DEPTH} ===")
-    checkpoint_path = None if args.smoke else CHECKPOINT_TMPL.format(seed=args.seed)
+    checkpoint_path = None if args.smoke else CHECKPOINT_TMPL.format(seed=args.seed, arm_seed=args.arm_seed)
     arm_d_per_task = {}
     n_evals_total  = 0
     t_d            = time.time()
