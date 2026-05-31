@@ -1,0 +1,36 @@
+CANONICAL MODE: seed=1 -> B:/M/the-search/incoming/arc-agi1-visa/03_R4_transfer_wall/stage1k_time_wall_seed1_result.json
+
+Loaded 200 held tasks from Stage 1d seed=1
+  Running on 200 tasks (full)
+
+Grammar (Stage 1g/1h/1i/1j leaf SET, depth-3): 1370 leaves
+  space_hash=4978b6739bf55beb
+  prev_space_hash (Stage 1j)=4978b6739bf55beb
+  Time wall NOT in space descriptor -- hash MUST equal Stage 1j hash
+  space_hash MATCHES Stage 1j hash (depth+grammar+budget unchanged; time-wall-only stage)
+  Depth-3 space size (4-tuple): 1370^4 = 3,522,753,610,000
+
+ONE VARIABLE: TIME_PER_TASK_D = 600s (was 120.0s in Stage 1j, x5)
+  Budget B=300000 at ~10K evals/s = ~30s << 600s wall
+  Advisory: time_limit_hit >= 10 -> wall still insufficient
+
+=== Arm D (reach LB): 600s/task OR 300000 evals, seed=0, depth=3 ===
+  50/200 tasks, 1 solved, time_hit=1 budget_ex=48, elapsed 2849s
+  100/200 tasks, 5 solved, time_hit=2 budget_ex=93, elapsed 5775s
+  150/200 tasks, 8 solved, time_hit=3 budget_ex=139, elapsed 9579s
+  200/200 tasks, 10 solved, time_hit=4 budget_ex=186, elapsed 11813s
+
+Arm D done: 10/200 solved in 11813s, 56,442,698 evals
+  time_limit_hit: 4/200 tasks
+  budget_exhausted: 186/200 tasks
+  min_evals_unsolved: 22516  median: 300000  max: 300000
+  Solutions using MAP_RELATE: 9/10
+  REACH_DIAGNOSTIC (set-diff vs 1j_solved_ids is authoritative)
+
+Fail-closed gate: PASSED
+Artifact written: B:/M/the-search/incoming/arc-agi1-visa/03_R4_transfer_wall/stage1k_time_wall_seed1_result.json
+
+Summary: D=10/200 (full)
+  time_limit_hit=4/200 budget_exhausted=186/200
+  space_hash=4978b6739bf55beb (matches Stage 1j: True)
+  n_leaves=1370 max_depth=3 budget=300000 time_wall=600s

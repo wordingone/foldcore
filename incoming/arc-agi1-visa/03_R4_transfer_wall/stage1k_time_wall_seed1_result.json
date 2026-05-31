@@ -1,0 +1,1541 @@
+{
+  "experiment": "stage1k_time_wall",
+  "spec": "pre_reg/stage1k_time_wall_preregistration.md",
+  "leo_review": "mail TBD (PR pending)",
+  "tracking_issue": "#10 (wordingone/the-search)",
+  "seed": 1,
+  "smoke": false,
+  "n_tasks": 200,
+  "n_solved": 10,
+  "n_held_full": 200,
+  "n_leaves": 1370,
+  "n_leaves_asserted": true,
+  "leaf_set_unchanged": true,
+  "prev_n_leaves": 1370,
+  "space_hash": "4978b6739bf55beb",
+  "prev_space_hash": "4978b6739bf55beb",
+  "grammar_unchanged": true,
+  "max_depth": 3,
+  "time_limit_s": 600.0,
+  "candidate_eval_budget": 300000,
+  "candidate_eval_budget_asserted": true,
+  "search_algorithm": "random_budget_and_time_limited",
+  "arm_d_seed": 0,
+  "per_task_seeding": true,
+  "per_task_seed_formula": "(ARM_D_SEED, task_id)",
+  "time_limit_hit_count": 4,
+  "budget_exhausted_count": 186,
+  "min_evals_unsolved": 22516,
+  "median_evals_unsolved": 300000,
+  "max_evals_unsolved": 300000,
+  "held_task_ids": [
+    "007bbfb7",
+    "00d62c1b",
+    "045e512c",
+    "0520fde7",
+    "05269061",
+    "05f2a901",
+    "06df4c85",
+    "08ed6ac7",
+    "09629e4f",
+    "0b148d64",
+    "0ca9ddb6",
+    "0d3d703e",
+    "0dfd9992",
+    "0e206a2e",
+    "10fcaaa3",
+    "137eaa0f",
+    "150deff5",
+    "178fcbfb",
+    "1a07d186",
+    "1bfc4729",
+    "1caeab9d",
+    "1e0a9b12",
+    "1e32b0e9",
+    "1f85a75f",
+    "2204b7a8",
+    "228f6490",
+    "234bbc79",
+    "25d8a9c8",
+    "272f95fa",
+    "29c11459",
+    "2bcee788",
+    "2dd70a9a",
+    "31aa019c",
+    "32597951",
+    "3428a4f5",
+    "39a8645d",
+    "3aa6fb7a",
+    "3ac3eb23",
+    "3af2c5a8",
+    "3bd67248",
+    "3bdb4ada",
+    "3de23699",
+    "3e980e27",
+    "3eda0437",
+    "3f7978a0",
+    "41e4d17e",
+    "42a50994",
+    "445eab21",
+    "44d8ac46",
+    "4522001f",
+    "46442a0e",
+    "46f33fce",
+    "47c1f68c",
+    "484b58aa",
+    "48d8fb45",
+    "4938f0c2",
+    "49d1d64f",
+    "4c4377d9",
+    "50cb2852",
+    "5117e062",
+    "5168d44c",
+    "539a4f51",
+    "53b68214",
+    "5521c0d9",
+    "5582e5ca",
+    "56dc2b01",
+    "5ad4f10b",
+    "5bd6f4ac",
+    "5c0a986e",
+    "60b61512",
+    "623ea044",
+    "62c24649",
+    "63613498",
+    "662c240a",
+    "673ef223",
+    "67a3c6ac",
+    "67a423a3",
+    "67e8384a",
+    "681b3aeb",
+    "6855a6e4",
+    "6aa20dc0",
+    "6c434453",
+    "6cf79266",
+    "6d0aefbc",
+    "6d75e8bb",
+    "6e02f1e3",
+    "6e19193c",
+    "6fa7a44f",
+    "7468f01a",
+    "74dd1130",
+    "776ffc46",
+    "77fdfe62",
+    "7837ac64",
+    "794b24be",
+    "7b6016b9",
+    "7df24a62",
+    "7e0986d6",
+    "7f4411dc",
+    "7fe24cdd",
+    "834ec97d",
+    "846bdb03",
+    "868de0fa",
+    "8731374e",
+    "88a62173",
+    "8a004b2b",
+    "8be77c9e",
+    "8d5021e8",
+    "8e1813be",
+    "90c28cc7",
+    "91413438",
+    "91714a58",
+    "928ad970",
+    "941d9a10",
+    "94f9d214",
+    "9565186b",
+    "95990924",
+    "963e52fc",
+    "97a05b5b",
+    "98cf29f8",
+    "995c5fa3",
+    "99b1bc43",
+    "99fa7670",
+    "9aec4887",
+    "9af7a82c",
+    "9ecd008a",
+    "9edfc990",
+    "a1570a43",
+    "a48eeaf7",
+    "a5313dff",
+    "a61ba2ce",
+    "a61f2674",
+    "a64e4611",
+    "a78176bb",
+    "a79310a0",
+    "a85d4709",
+    "a87f7484",
+    "a8c38be5",
+    "a8d7556c",
+    "a9f96cdd",
+    "aba27056",
+    "ae3edfdc",
+    "af902bf9",
+    "b190f7f5",
+    "b230c067",
+    "b27ca6d3",
+    "b2862040",
+    "b527c5c6",
+    "b60334d2",
+    "b7249182",
+    "b775ac94",
+    "b782dc8a",
+    "b8cdaf2b",
+    "b91ae062",
+    "b94a9452",
+    "b9b7f026",
+    "bbc9ae5d",
+    "bd4472b8",
+    "be94b721",
+    "beb8660c",
+    "c8f0f002",
+    "c909285e",
+    "c9e6f938",
+    "c9f8e694",
+    "cbded52d",
+    "cce03e0d",
+    "cdecee7f",
+    "ce22a75a",
+    "ce602527",
+    "ce9e57f2",
+    "cf98881b",
+    "d037b0a7",
+    "d06dbe63",
+    "d364b489",
+    "d4f3cd78",
+    "d5d6de2d",
+    "d8c310e9",
+    "d9fac9be",
+    "dae9d2b5",
+    "db3e9e38",
+    "db93a21d",
+    "dc0a314f",
+    "dc433765",
+    "de1cd16c",
+    "ded97339",
+    "e21d9049",
+    "e3497940",
+    "e509e548",
+    "e8593010",
+    "e9614598",
+    "ea32f347",
+    "ed36ccf7",
+    "ef135b50",
+    "f1cefba8",
+    "f5b8619d",
+    "f9012d9b",
+    "fafffa47",
+    "fcb5c309",
+    "fcc82909",
+    "feca6190",
+    "ff28f65a"
+  ],
+  "held_task_ids_match_stage1d": true,
+  "stage1d_result_path": "B:/M/the-search/incoming/arc-agi1-visa/03_R4_transfer_wall/stage1d_seed1_b30000_result.json",
+  "arm_d_per_task": {
+    "007bbfb7": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "00d62c1b": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "045e512c": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "0520fde7": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "05269061": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "05f2a901": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "06df4c85": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "08ed6ac7": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "09629e4f": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "0b148d64": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "0ca9ddb6": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "0d3d703e": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "0dfd9992": {
+      "solved": false,
+      "n_evals": 72292,
+      "time_limit_hit": true,
+      "budget_exhausted": false
+    },
+    "0e206a2e": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "10fcaaa3": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "137eaa0f": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "150deff5": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "178fcbfb": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "1a07d186": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "1bfc4729": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "1caeab9d": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "1e0a9b12": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "1e32b0e9": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "1f85a75f": {
+      "solved": true,
+      "n_evals": 5949,
+      "time_limit_hit": false,
+      "budget_exhausted": false,
+      "prog_tuple": [
+        0,
+        613,
+        432,
+        423
+      ],
+      "prog_str": "('compose', ('prim', 'crop'), ('compose', ('map_relate', 'color_5', 'all', 'adjacent_up'), ('compose', ('map_relate', 'color_2', 'all', 'adjacent_right'), ('map_relate', 'color_1', 'smallest', 'adjacent_left'))))",
+      "prog_hash": "0dee91eaca93",
+      "skeleton_type": "COMPOSE(PRIM_CROP,COMPOSE(MAP_RELATE,COMPOSE(MAP_RELATE,MAP_RELATE)))",
+      "used_relate": true
+    },
+    "2204b7a8": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "228f6490": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "234bbc79": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "25d8a9c8": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "272f95fa": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "29c11459": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "2bcee788": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "2dd70a9a": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "31aa019c": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "32597951": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "3428a4f5": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "39a8645d": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "3aa6fb7a": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "3ac3eb23": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "3af2c5a8": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "3bd67248": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "3bdb4ada": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "3de23699": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "3e980e27": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "3eda0437": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "3f7978a0": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "41e4d17e": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "42a50994": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "445eab21": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "44d8ac46": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "4522001f": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "46442a0e": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "46f33fce": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "47c1f68c": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "484b58aa": {
+      "solved": false,
+      "n_evals": 22516,
+      "time_limit_hit": true,
+      "budget_exhausted": false
+    },
+    "48d8fb45": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "4938f0c2": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "49d1d64f": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "4c4377d9": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "50cb2852": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "5117e062": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "5168d44c": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "539a4f51": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "53b68214": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "5521c0d9": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "5582e5ca": {
+      "solved": true,
+      "n_evals": 31,
+      "time_limit_hit": false,
+      "budget_exhausted": false,
+      "prog_tuple": [
+        27,
+        708,
+        964,
+        860
+      ],
+      "prog_str": "('compose', ('map_apply', 'bg_obj', 'keep_only'), ('compose', ('map_relate', 'color_6', 'color_9', 'adjacent_right'), ('compose', ('map_relate', 'largest', 'smallest', 'adjacent_right'), ('map_relate', 'color_9', 'color_1', 'adjacent_right'))))",
+      "prog_hash": "5dbaee4f1b01",
+      "skeleton_type": "COMPOSE(MAP_KEEPONLY,COMPOSE(MAP_RELATE,COMPOSE(MAP_RELATE,MAP_RELATE)))",
+      "used_relate": true
+    },
+    "56dc2b01": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "5ad4f10b": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "5bd6f4ac": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "5c0a986e": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "60b61512": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "623ea044": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "62c24649": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "63613498": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "662c240a": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "673ef223": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "67a3c6ac": {
+      "solved": true,
+      "n_evals": 414,
+      "time_limit_hit": false,
+      "budget_exhausted": false,
+      "prog_tuple": [
+        804,
+        1106,
+        635,
+        2
+      ],
+      "prog_str": "('compose', ('map_relate', 'color_8', 'color_2', 'adjacent_right'), ('compose', ('map_relate', 'smallest', 'color_3', 'adjacent_down'), ('compose', ('map_relate', 'color_5', 'color_6', 'adjacent_left'), ('prim', 'flip_h'))))",
+      "prog_hash": "9f023409b2e9",
+      "skeleton_type": "COMPOSE(MAP_RELATE,COMPOSE(MAP_RELATE,COMPOSE(MAP_RELATE,PRIM_FLIP_H)))",
+      "used_relate": true
+    },
+    "67a423a3": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "67e8384a": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "681b3aeb": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "6855a6e4": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "6aa20dc0": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "6c434453": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "6cf79266": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "6d0aefbc": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "6d75e8bb": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "6e02f1e3": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "6e19193c": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "6fa7a44f": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "7468f01a": {
+      "solved": true,
+      "n_evals": 9765,
+      "time_limit_hit": false,
+      "budget_exhausted": false,
+      "prog_tuple": [
+        0,
+        2,
+        510,
+        821
+      ],
+      "prog_str": "('compose', ('prim', 'crop'), ('compose', ('prim', 'flip_h'), ('compose', ('map_relate', 'color_3', 'color_5', 'adjacent_down'), ('map_relate', 'color_8', 'color_6', 'adjacent_up'))))",
+      "prog_hash": "c1560fd36098",
+      "skeleton_type": "COMPOSE(PRIM_CROP,COMPOSE(PRIM_FLIP_H,COMPOSE(MAP_RELATE,MAP_RELATE)))",
+      "used_relate": true
+    },
+    "74dd1130": {
+      "solved": true,
+      "n_evals": 1988,
+      "time_limit_hit": false,
+      "budget_exhausted": false,
+      "prog_tuple": [
+        8,
+        504,
+        79,
+        866
+      ],
+      "prog_str": "('compose', ('prim', 'tr'), ('compose', ('map_relate', 'color_3', 'color_2', 'adjacent_right'), ('compose', ('map_apply', 'color_3', 'translate_-1_+0'), ('map_relate', 'color_9', 'color_3', 'adjacent_down'))))",
+      "prog_hash": "b5415ff6ed1f",
+      "skeleton_type": "COMPOSE(PRIM_TR,COMPOSE(MAP_RELATE,COMPOSE(MAP_TRANSLATE,MAP_RELATE)))",
+      "used_relate": true
+    },
+    "776ffc46": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "77fdfe62": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "7837ac64": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "794b24be": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "7b6016b9": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "7df24a62": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "7e0986d6": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "7f4411dc": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "7fe24cdd": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "834ec97d": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "846bdb03": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "868de0fa": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "8731374e": {
+      "solved": false,
+      "n_evals": 118632,
+      "time_limit_hit": true,
+      "budget_exhausted": false
+    },
+    "88a62173": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "8a004b2b": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "8be77c9e": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "8d5021e8": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "8e1813be": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "90c28cc7": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "91413438": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "91714a58": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "928ad970": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "941d9a10": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "94f9d214": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "9565186b": {
+      "solved": true,
+      "n_evals": 310,
+      "time_limit_hit": false,
+      "budget_exhausted": false,
+      "prog_tuple": [
+        1118,
+        462,
+        1345,
+        280
+      ],
+      "prog_str": "('compose', ('map_relate', 'smallest', 'color_6', 'adjacent_down'), ('compose', ('map_relate', 'color_2', 'color_8', 'adjacent_down'), ('compose', ('map_apply', 'non_bg', 'recolor_5'), ('map_relate', 'all', 'color_7', 'adjacent_right'))))",
+      "prog_hash": "3c9b068e16f3",
+      "skeleton_type": "COMPOSE(MAP_RELATE,COMPOSE(MAP_RELATE,COMPOSE(MAP_RECOLOR,MAP_RELATE)))",
+      "used_relate": true
+    },
+    "95990924": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "963e52fc": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "97a05b5b": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "98cf29f8": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "995c5fa3": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "99b1bc43": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "99fa7670": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "9aec4887": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "9af7a82c": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "9ecd008a": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "9edfc990": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "a1570a43": {
+      "solved": true,
+      "n_evals": 129121,
+      "time_limit_hit": false,
+      "budget_exhausted": false,
+      "prog_tuple": [
+        68,
+        521,
+        859,
+        476
+      ],
+      "prog_str": "('compose', ('map_apply', 'color_2', 'translate_+1_+0'), ('compose', ('map_relate', 'color_3', 'color_7', 'adjacent_up'), ('compose', ('map_relate', 'color_9', 'color_1', 'adjacent_left'), ('map_relate', 'color_2', 'most_common_c', 'adjacent_right'))))",
+      "prog_hash": "6862cbe34657",
+      "skeleton_type": "COMPOSE(MAP_TRANSLATE,COMPOSE(MAP_RELATE,COMPOSE(MAP_RELATE,MAP_RELATE)))",
+      "used_relate": true
+    },
+    "a48eeaf7": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "a5313dff": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "a61ba2ce": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "a61f2674": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "a64e4611": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "a78176bb": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "a79310a0": {
+      "solved": true,
+      "n_evals": 25190,
+      "time_limit_hit": false,
+      "budget_exhausted": false,
+      "prog_tuple": [
+        184,
+        1342,
+        106,
+        116
+      ],
+      "prog_str": "('compose', ('map_apply', 'color_1', 'geom_rot_90'), ('compose', ('map_apply', 'non_bg', 'recolor_2'), ('compose', ('map_apply', 'color_7', 'translate_+0_+1'), ('map_apply', 'color_8', 'translate_+1_+0'))))",
+      "prog_hash": "551151a11516",
+      "skeleton_type": "COMPOSE(MAP_GEOM,COMPOSE(MAP_RECOLOR,COMPOSE(MAP_TRANSLATE,MAP_TRANSLATE)))",
+      "used_relate": false
+    },
+    "a85d4709": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "a87f7484": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "a8c38be5": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "a8d7556c": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "a9f96cdd": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "aba27056": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "ae3edfdc": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "af902bf9": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "b190f7f5": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "b230c067": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "b27ca6d3": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "b2862040": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "b527c5c6": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "b60334d2": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "b7249182": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "b775ac94": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "b782dc8a": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "b8cdaf2b": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "b91ae062": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "b94a9452": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "b9b7f026": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "bbc9ae5d": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "bd4472b8": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "be94b721": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "beb8660c": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "c8f0f002": {
+      "solved": true,
+      "n_evals": 184,
+      "time_limit_hit": false,
+      "budget_exhausted": false,
+      "prog_tuple": [
+        1170,
+        1295,
+        383,
+        812
+      ],
+      "prog_str": "('compose', ('map_relate', 'unique_color', 'color_4', 'adjacent_down'), ('compose', ('map_apply', 'color_7', 'recolor_5'), ('compose', ('map_relate', 'color_1', 'color_3', 'adjacent_left'), ('map_relate', 'color_8', 'color_4', 'adjacent_right'))))",
+      "prog_hash": "92c0e9adbb64",
+      "skeleton_type": "COMPOSE(MAP_RELATE,COMPOSE(MAP_RECOLOR,COMPOSE(MAP_RELATE,MAP_RELATE)))",
+      "used_relate": true
+    },
+    "c909285e": {
+      "solved": false,
+      "n_evals": 255401,
+      "time_limit_hit": true,
+      "budget_exhausted": false
+    },
+    "c9e6f938": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "c9f8e694": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "cbded52d": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "cce03e0d": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "cdecee7f": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "ce22a75a": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "ce602527": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "ce9e57f2": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "cf98881b": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "d037b0a7": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "d06dbe63": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "d364b489": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "d4f3cd78": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "d5d6de2d": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "d8c310e9": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "d9fac9be": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "dae9d2b5": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "db3e9e38": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "db93a21d": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "dc0a314f": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "dc433765": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "de1cd16c": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "ded97339": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "e21d9049": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "e3497940": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "e509e548": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "e8593010": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "e9614598": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "ea32f347": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "ed36ccf7": {
+      "solved": true,
+      "n_evals": 905,
+      "time_limit_hit": false,
+      "budget_exhausted": false,
+      "prog_tuple": [
+        7,
+        369,
+        359,
+        899
+      ],
+      "prog_str": "('compose', ('prim', 'rot_90'), ('compose', ('map_relate', 'bg_obj', 'unique_color', 'adjacent_up'), ('compose', ('map_relate', 'bg_obj', 'non_bg', 'adjacent_left'), ('map_relate', 'color_9', 'non_bg', 'adjacent_left'))))",
+      "prog_hash": "bc32f6e57e40",
+      "skeleton_type": "COMPOSE(PRIM_ROT_90,COMPOSE(MAP_RELATE,COMPOSE(MAP_RELATE,MAP_RELATE)))",
+      "used_relate": true
+    },
+    "ef135b50": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "f1cefba8": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "f5b8619d": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "f9012d9b": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "fafffa47": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "fcb5c309": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "fcc82909": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "feca6190": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    },
+    "ff28f65a": {
+      "solved": false,
+      "n_evals": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true
+    }
+  },
+  "relate_solutions": 9,
+  "evals_total": 56442698,
+  "elapsed_s": 11812.82387137413,
+  "r1_r6_note": "Pure reach/measurement run. R1: no external reward. R5: fixed ground truth = 200 held ARC tasks. R2/R3/R4/R6: N/A."
+}
