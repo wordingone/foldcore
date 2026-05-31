@@ -885,6 +885,10 @@ def run_arm_energy(held_tasks, leaves, n_leaves, model, n_tasks):
 
     Pair_0 result cached: evaluated once for scoring, reused for check_prog's first
     pair comparison — same grammar-eval cost as BFS, plus small feature+MLP overhead.
+
+    Per-task result records include:
+      pair0_pass_count, pair0_total, pair0_pass_rate — L3 gate fields
+      energy_rank_in_batch, stream_position_in_batch — solution rank drift (solved tasks only)
     """
     arm_energy_per_task = {}
     t_start = time.time()
@@ -894,11 +898,14 @@ def run_arm_energy(held_tasks, leaves, n_leaves, model, n_tasks):
         t_task = time.time()
         n_evals = 0
         solved = False
+        pair0_pass = 0
 
         # Pre-cache pair_0 input/output arrays (constant per task)
         if not task["io"]:
             arm_energy_per_task[task["id"]] = {"solved": False, "n_evals": 0,
-                                                "time_limit_hit": False, "budget_exhausted": True}
+                                                "time_limit_hit": False, "budget_exhausted": True,
+                                                "pair0_pass_count": 0, "pair0_total": 0,
+                                                "pair0_pass_rate": 0.0}
             continue
         inp0 = np.array(task["io"][0]["input"], dtype=np.int64)
         expected0 = np.array(task["io"][0]["output"], dtype=np.int64)
@@ -922,11 +929,16 @@ def run_arm_energy(held_tasks, leaves, n_leaves, model, n_tasks):
             energies = [score_output_arr(o, task["io"], model) for o in out0_cache]
             n_evals += len(tuples)  # count at scoring phase — symmetric with BFS (1 per program)
 
+            # Accumulate pair_0-pass count (marginal cost: one array_equal per cached out0)
+            for o in out0_cache:
+                if o is not None and o.shape == expected0.shape and np.array_equal(o, expected0):
+                    pair0_pass += 1
+
             # Sort by energy ascending
             order = sorted(range(len(progs)), key=lambda idx: energies[idx])
 
-            # Check in energy order, reusing cached pair_0 result
-            for pos in order:
+            # Check in energy order; enumerate gives energy_rank, pos is stream index
+            for energy_rank, pos in enumerate(order):
                 prog = progs[pos]
                 out0 = out0_cache[pos]
 
@@ -946,13 +958,18 @@ def run_arm_energy(held_tasks, leaves, n_leaves, model, n_tasks):
                         ok = False
                         break
                 if ok:
+                    pair0_rate = pair0_pass / n_evals if n_evals > 0 else 0.0
                     arm_energy_per_task[task["id"]] = {
                         "solved": True,
                         "n_evals": n_evals,
                         "time_limit_hit": False,
                         "budget_exhausted": False,
-                        "batch_energy_rank": pos,
+                        "energy_rank_in_batch": energy_rank,
+                        "stream_position_in_batch": pos,
                         "batch_size": len(progs),
+                        "pair0_pass_count": pair0_pass,
+                        "pair0_total": n_evals,
+                        "pair0_pass_rate": pair0_rate,
                     }
                     solved = True
                     break
@@ -961,11 +978,15 @@ def run_arm_energy(held_tasks, leaves, n_leaves, model, n_tasks):
 
         if not solved:
             time_hit = (time.time() - t_task) >= TIME_PER_TASK_D
+            pair0_rate = pair0_pass / n_evals if n_evals > 0 else 0.0
             arm_energy_per_task[task["id"]] = {
                 "solved": False,
                 "n_evals": n_evals,
                 "time_limit_hit": time_hit,
                 "budget_exhausted": n_evals >= BUDGET_B,
+                "pair0_pass_count": pair0_pass,
+                "pair0_total": n_evals,
+                "pair0_pass_rate": pair0_rate,
             }
 
         _OBJ_CACHE.clear()
@@ -1397,6 +1418,36 @@ def main():
     print(f"\nVerdict: {verdict} "
           f"(energy={arm_energy_n_solved} vs bfs={arm_bfs_n_solved})")
 
+    # Pair0 distribution and rank-drift summary (L3 gate fields)
+    pair0_rates = {tid: r.get("pair0_pass_rate", 0.0)
+                   for tid, r in arm_energy_per_task.items()}
+    sorted_rates = sorted(pair0_rates.values())
+    pair0_summary = {
+        "n_tasks": len(sorted_rates),
+        "min": round(sorted_rates[0], 8) if sorted_rates else None,
+        "max": round(sorted_rates[-1], 8) if sorted_rates else None,
+        "median": round(sorted_rates[len(sorted_rates) // 2], 8) if sorted_rates else None,
+        "mean": round(sum(sorted_rates) / len(sorted_rates), 8) if sorted_rates else None,
+    }
+    rank_drift_solved = [
+        {
+            "task_id": tid,
+            "energy_rank_in_batch": r["energy_rank_in_batch"],
+            "stream_position_in_batch": r["stream_position_in_batch"],
+            "batch_size": r["batch_size"],
+            "rank_drift": r["energy_rank_in_batch"] - r["stream_position_in_batch"],
+        }
+        for tid, r in arm_energy_per_task.items()
+        if r.get("solved") and "energy_rank_in_batch" in r
+    ]
+    if rank_drift_solved:
+        drifts = [x["rank_drift"] for x in rank_drift_solved]
+        print(f"  Rank drift (energy_rank - stream_pos): "
+              f"min={min(drifts)}, max={max(drifts)}, "
+              f"median={sorted(drifts)[len(drifts)//2]}")
+    print(f"  Pair0 pass rate: min={pair0_summary['min']:.6f}, "
+          f"max={pair0_summary['max']:.6f}, median={pair0_summary['median']:.6f}")
+
     # Build artifact
     artifact = {
         "stage": "F2_energy_search",
@@ -1420,6 +1471,8 @@ def main():
         "arm_energy_budget_exhausted": arm_energy_n_budget,
         "arm_energy_elapsed_s": round(arm_energy_elapsed, 1),
         "verdict": verdict,
+        "pair0_distribution_summary": pair0_summary,
+        "rank_drift_solved": rank_drift_solved,
         "gate_violations": [],
         "arm_bfs_per_task": arm_bfs_per_task,
         "arm_energy_per_task": arm_energy_per_task,
