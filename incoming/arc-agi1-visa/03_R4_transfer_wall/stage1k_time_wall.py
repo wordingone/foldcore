@@ -50,7 +50,7 @@ Usage:
 """
 
 import numpy as np
-import json, os, sys, time, collections, hashlib, heapq, math, random, argparse
+import json, os, sys, time, collections, hashlib, heapq, math, random, argparse, gc
 from collections import deque
 
 # -- Paths -------------------------------------------------------------------
@@ -60,7 +60,8 @@ S1D_PATHS  = {
     42: "B:/M/the-search/incoming/arc-agi1-visa/03_R4_transfer_wall/stage1d_premise_truth_b30000_minimality_result.json",
 }
 TEMP_PATH   = "B:/M/the-search/incoming/arc-agi1-visa/03_R4_transfer_wall/stage1k_time_wall_TEMP.json"
-RESULT_TMPL = "B:/M/the-search/incoming/arc-agi1-visa/03_R4_transfer_wall/stage1k_time_wall_seed{seed}_result.json"
+RESULT_TMPL     = "B:/M/the-search/incoming/arc-agi1-visa/03_R4_transfer_wall/stage1k_time_wall_seed{seed}_result.json"
+CHECKPOINT_TMPL = "B:/M/the-search/incoming/arc-agi1-visa/03_R4_transfer_wall/stage1k_time_wall_seed{seed}_checkpoint.jsonl"
 
 # -- Constants ----------------------------------------------------------------
 N_HELD              = 200
@@ -685,11 +686,23 @@ def main():
     print(f"\n=== Arm D (reach LB): {TIME_PER_TASK_D:.0f}s/task OR {BUDGET_B} evals, "
           f"seed={ARM_D_SEED}, depth={MAX_DEPTH} ===")
     rng_d = random.Random(ARM_D_SEED)
+    checkpoint_path = None if args.smoke else CHECKPOINT_TMPL.format(seed=args.seed)
     arm_d_per_task = {}
     n_evals_total  = 0
-    t_d            = time.time()
+    if checkpoint_path and os.path.exists(checkpoint_path):
+        with open(checkpoint_path) as _cpf:
+            for _line in _cpf:
+                _line = _line.strip()
+                if _line:
+                    _rec = json.loads(_line)
+                    arm_d_per_task[_rec['task_id']] = _rec['result']
+                    n_evals_total += _rec['result'].get('n_evals', 0)
+        print(f"Checkpoint: resumed {len(arm_d_per_task)}/{N_HELD} completed tasks")
+    t_d = time.time()
 
     for task_num, task in enumerate(held_tasks):
+        if task['id'] in arm_d_per_task:
+            continue
         t_task           = time.time()
         n_evals          = 0
         solved           = False
@@ -731,6 +744,12 @@ def main():
             }
 
         n_evals_total += n_evals
+        _OBJ_CACHE.clear()
+        gc.collect()
+        if checkpoint_path:
+            with open(checkpoint_path, 'a') as _cpf:
+                _cpf.write(json.dumps({'task_id': task['id'],
+                                       'result': arm_d_per_task[task['id']]}) + '\n')
         if (task_num + 1) % 50 == 0 or (args.smoke and (task_num + 1) % 1 == 0):
             elapsed = time.time() - t_d
             n_solved_so_far = sum(1 for r in arm_d_per_task.values() if r.get('solved'))
