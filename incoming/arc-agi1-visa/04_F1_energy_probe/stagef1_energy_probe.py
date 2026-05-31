@@ -369,19 +369,28 @@ def run_gate_injection_tests(held_ids_set, all_train_ids, all_train_tasks):
 
     # Test 2: sparse-energy substitution
     wrong_fn = "pass_fraction_proxy"
-    t2_ok = wrong_fn != ENERGY_FN_NAME
+    violations_before = len(GATE_VIOLATIONS)
+    assert_gate(wrong_fn == ENERGY_FN_NAME,
+                f"energy_fn_name mismatch: got {wrong_fn!r}, expected {ENERGY_FN_NAME!r}")
+    t2_ok = len(GATE_VIOLATIONS) > violations_before
     print(f"  [2] sparse-energy substitution: energy_fn_name={wrong_fn!r} -> {'CAUGHT' if t2_ok else 'MISSED'}")
     caught_all &= t2_ok
 
     # Test 3: wrong eval hash
     wrong_hash = "0000000000000000"
-    t3_ok = wrong_hash != EVAL_SPLIT_HASH
+    violations_before = len(GATE_VIOLATIONS)
+    assert_gate(wrong_hash == EVAL_SPLIT_HASH,
+                f"eval_split_hash mismatch: got {wrong_hash!r}, expected {EVAL_SPLIT_HASH!r}")
+    t3_ok = len(GATE_VIOLATIONS) > violations_before
     print(f"  [3] wrong eval hash: {wrong_hash!r} -> {'CAUGHT' if t3_ok else 'MISSED'}")
     caught_all &= t3_ok
 
     # Test 4: wrong candidate count
     wrong_n = N_CANDIDATES_PER_TASK - 1
-    t4_ok = wrong_n != N_CANDIDATES_PER_TASK
+    violations_before = len(GATE_VIOLATIONS)
+    assert_gate(wrong_n == N_CANDIDATES_PER_TASK,
+                f"n_candidates_per_task mismatch: got {wrong_n}, expected {N_CANDIDATES_PER_TASK}")
+    t4_ok = len(GATE_VIOLATIONS) > violations_before
     print(f"  [4] wrong n_candidates: {wrong_n} -> {'CAUGHT' if t4_ok else 'MISSED'}")
     caught_all &= t4_ok
 
@@ -521,9 +530,9 @@ def run_probe(smoke=False, test_gate=False, override_n_held=None, override_n_tra
     median_rho_nm = float(np.median(rhos_nm)) if rhos_nm else 0.0
     strict_min_frac_nm = sum(per_task_strict_min_nm.values()) / max(len(per_task_strict_min_nm), 1)
 
-    if median_rho >= PASS_MEDIAN_RHO and strict_min_frac >= PASS_STRICT_MIN_FRAC:
+    if median_rho_nm >= PASS_MEDIAN_RHO and strict_min_frac_nm >= PASS_STRICT_MIN_FRAC:
         verdict = "PASS"
-    elif median_rho < MARGINAL_MEDIAN_RHO:
+    elif median_rho_nm < MARGINAL_MEDIAN_RHO:
         verdict = "FAIL"
     else:
         verdict = "MARGINAL"
