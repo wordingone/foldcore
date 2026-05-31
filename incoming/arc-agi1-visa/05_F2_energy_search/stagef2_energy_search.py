@@ -37,6 +37,10 @@ S1D_PATH = (
 OUT_DIR = "B:/M/the-search/incoming/arc-agi1-visa/05_F2_energy_search"
 RESULT_PATH = os.path.join(OUT_DIR, "stagef2_energy_search_result.json")
 TEMP_PATH = os.path.join(OUT_DIR, "stagef2_energy_search_TEMP.json")
+F1_RESULT_PATH = (
+    "B:/M/the-search/incoming/arc-agi1-visa/04_F1_energy_probe/"
+    "stagef1_energy_probe_result.json"
+)
 
 # ---------------------------------------------------------------------------
 # Frozen constants (pre-registered)
@@ -51,6 +55,7 @@ MAX_DEPTH = 3
 N_HELD = 200
 BFS_EXPECTED_N_SOLVED = 10            # Stage 1k armseed7 canonical result
 BATCH_SIZE_ENERGY = 500               # programs per energy-ranking batch
+FROZEN_LINK_TOL = 1e-4               # max tolerated |computed - f1_energy| for behavioral link
 
 # E_theta training constants (deterministic; must match F1 exactly)
 TRAIN_N_EPOCHS = 100
@@ -593,6 +598,51 @@ def compute_frozen_hash(model):
     return hashlib.sha256(wb).hexdigest()[:16]
 
 
+def verify_behavioral_frozen_link(model, held_ids_set):
+    """Re-score F1's per_candidate_records with model; return max|computed - f1_energy|.
+
+    Caller asserts return value < FROZEN_LINK_TOL (1e-4). Returning the diff (rather than
+    asserting internally) lets gate injection tests detect that a perturbed model fails.
+    """
+    with open(F1_RESULT_PATH) as f:
+        f1_result = json.load(f)
+    records = f1_result["per_candidate_records"]
+
+    # Load only held tasks (need train examples for build_feature)
+    train_dir = os.path.join(DATA_PATH, "training")
+    task_lookup = {}
+    for fn in sorted(os.listdir(train_dir)):
+        if fn.endswith(".json"):
+            tid = fn[:-5]
+            if tid not in held_ids_set:
+                continue
+            with open(os.path.join(train_dir, fn)) as f_t:
+                dat = json.load(f_t)
+            task_lookup[tid] = {"id": tid, "train": dat.get("train", []),
+                                "test": dat.get("test", [])}
+
+    max_diff = 0.0
+    n_checked = 0
+    for rec in records:
+        tid = rec["task_id"]
+        task = task_lookup.get(tid)
+        if task is None or not task["test"]:
+            continue
+        cands = _generate_f1_candidates(task)
+        cidx = rec["candidate_idx"]
+        if cidx >= len(cands):
+            continue
+        cand_grid = cands[cidx]["grid"]
+        computed = model.score_one(build_feature(cand_grid, task["train"]))
+        diff = abs(computed - rec["energy"])
+        if diff > max_diff:
+            max_diff = diff
+        n_checked += 1
+
+    print(f"  Frozen-link: {n_checked}/{len(records)} records, max_diff={max_diff:.2e}")
+    return max_diff
+
+
 # ---------------------------------------------------------------------------
 # Feature extraction (must match F1 exactly)
 # ---------------------------------------------------------------------------
@@ -715,6 +765,17 @@ def load_and_verify_energy_model(held_ids_set, rng_seed=TRAIN_RNG_SEED, n_epochs
                       batch_size=TRAIN_BATCH_SIZE, rng_seed=rng_seed)
     wh = compute_frozen_hash(model)
     print(f"  frozen_energy_hash computed: {wh}")
+
+    # Behavioral frozen-link: assert model reproduces F1's recorded energies (canonical only)
+    if n_epochs == TRAIN_N_EPOCHS:
+        max_diff = verify_behavioral_frozen_link(model, held_ids_set)
+        if max_diff >= FROZEN_LINK_TOL:
+            raise AssertionError(
+                f"FATAL: frozen-link broken — max|computed-f1| = {max_diff:.2e} >= "
+                f"{FROZEN_LINK_TOL:.2e}. Model is NOT behaviorally identical to F1's E_theta."
+            )
+        print(f"  Frozen-link PASSED (max_diff={max_diff:.2e} < {FROZEN_LINK_TOL:.2e})")
+
     return model, wh
 
 
@@ -851,6 +912,7 @@ def run_arm_energy(held_tasks, leaves, n_leaves, model, n_tasks):
             progs = [tuple_to_prog(tup, leaves) for tup in tuples]
             out0_cache = [eval_program(prog, inp0) for prog in progs]
             energies = [score_output_arr(o, task["io"], model) for o in out0_cache]
+            n_evals += len(tuples)  # count at scoring phase — symmetric with BFS (1 per program)
 
             # Sort by energy ascending
             order = sorted(range(len(progs)), key=lambda idx: energies[idx])
@@ -859,7 +921,6 @@ def run_arm_energy(held_tasks, leaves, n_leaves, model, n_tasks):
             for pos in order:
                 prog = progs[pos]
                 out0 = out0_cache[pos]
-                n_evals += 1
 
                 # Pair_0 check via cached result (no re-eval)
                 if (out0 is None
@@ -1029,6 +1090,15 @@ def run_gate_injection_tests(stage1d_held_id_set, leaves, n_leaves, space_hash, 
         "space_hash mismatch",
         {**good, "space_hash": "0000000000000000"},
     )
+
+    # Test 7: F1 frozen-link — untrained perturbed model (rng_seed=1) fails behavioral link
+    print("  [running] 'F1 frozen-link: perturbed model' ...")
+    perturbed = MLP(rng_seed=1)  # untrained, random weights — energies will diverge from F1's
+    perturbed_diff = verify_behavioral_frozen_link(perturbed, stage1d_held_id_set)
+    caught_7 = perturbed_diff >= FROZEN_LINK_TOL
+    print(f"  [{'OK' if caught_7 else 'FAIL'}] 'F1 frozen-link: perturbed model' -> "
+          f"{'CAUGHT' if caught_7 else 'MISSED'} (max_diff={perturbed_diff:.2e})")
+    caught_all &= caught_7
 
     return caught_all
 

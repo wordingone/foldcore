@@ -50,8 +50,9 @@ F1 interpretation contract (locked, Leo mail #12210):
   4. Score output_candidate with frozen E_theta using task_train_examples
   5. Sort batch by energy ascending (lowest = most likely correct)
   6. Check exact match (`check_prog` over all training pairs) in energy-sorted order
-- n_evals counted as programs evaluated (grammar interpreter calls, across all training pairs)
-- `n_evals_per_task` = number of check_prog calls until solve or budget exhausted
+- n_evals counted at scoring phase: `n_evals += len(batch)` per batch, symmetric with BFS
+  (BFS counts `n_evals += 1` per program sampled; energy arm counts all scored programs per batch)
+- `n_evals_per_task` = total programs scored across all batches until solve or budget exhausted
 
 ### BFS arm (arm_bfs)
 - Exact Stage 1k armseed7 replay: same rng, same budget, random order
@@ -86,10 +87,14 @@ All assertions run before artifact write. Any hard violation → abort without w
 
 ### Gate injection tests (--test-gate flag)
 
-1. **Retrained-energy**: re-train MLP with rng_seed=1 (perturbed) → different weights → hash mismatch → gate fires
-2. **Budget-overrun**: inject per-task n_evals = BUDGET_B + 1 → gate fires
-3. **Wrong-hash constant**: use wrong FROZEN_ENERGY_HASH string → gate fires on hash comparison
+1. **Wrong frozen_energy_hash**: inject "0000000000000000" constant → gate fires on hash comparison
+2. **Budget-overrun (BFS arm)**: inject per-task n_evals = BUDGET_B + 1 → gate fires
+3. **Budget-overrun (energy arm)**: inject per-task n_evals = BUDGET_B + 1 → gate fires
 4. **BFS-not-10**: inject arm_bfs_n_solved = 9 → gate fires (baseline must reproduce 10)
+5. **eval_split_hash mismatch**: inject wrong hash → gate fires
+6. **space_hash mismatch**: inject wrong hash → gate fires
+7. **F1 frozen-link (behavioral)**: use untrained MLP (rng_seed=1) → energies diverge from F1's
+   per_candidate_records by >1e-4 → frozen-link check fires
 
 ---
 
