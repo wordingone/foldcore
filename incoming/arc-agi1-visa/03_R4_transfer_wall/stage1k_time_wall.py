@@ -689,20 +689,9 @@ def main():
     checkpoint_path = None if args.smoke else CHECKPOINT_TMPL.format(seed=args.seed)
     arm_d_per_task = {}
     n_evals_total  = 0
-    if checkpoint_path and os.path.exists(checkpoint_path):
-        with open(checkpoint_path) as _cpf:
-            for _line in _cpf:
-                _line = _line.strip()
-                if _line:
-                    _rec = json.loads(_line)
-                    arm_d_per_task[_rec['task_id']] = _rec['result']
-                    n_evals_total += _rec['result'].get('n_evals', 0)
-        print(f"Checkpoint: resumed {len(arm_d_per_task)}/{N_HELD} completed tasks")
-    t_d = time.time()
+    t_d            = time.time()
 
     for task_num, task in enumerate(held_tasks):
-        if task['id'] in arm_d_per_task:
-            continue
         t_task           = time.time()
         n_evals          = 0
         solved           = False
