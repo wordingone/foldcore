@@ -534,6 +534,22 @@ def check_gate_violations(artifact, stage1d_held_id_set, actual_n_leaves):
                 violations.append(
                     f"arm_d[{tid}]: unsolved, not time-limited, n_evals={rec.get('n_evals')} < {BUDGET_B}")
 
+    # Solve reproducibility: re-run per-task RNG and verify prog_tuple at n_evals
+    # (per-task seed = (ARM_D_SEED, task_id) -- wall-invariant; catches shared-RNG bugs)
+    for tid, rec in artifact.get('arm_d_per_task', {}).items():
+        if rec.get('solved') and 'prog_tuple' in rec:
+            n_ev = rec['n_evals']
+            rng_check = random.Random((ARM_D_SEED, tid))
+            for _step in range(n_ev - 1):
+                for _d in range(4):
+                    rng_check.randrange(actual_n_leaves)
+            actual_tup = [rng_check.randrange(actual_n_leaves) for _ in range(4)]
+            if actual_tup != list(rec['prog_tuple']):
+                violations.append(
+                    f"arm_d[{tid}]: solve not reproducible at n_evals={n_ev} -- "
+                    f"rng replay {actual_tup} != prog_tuple {rec['prog_tuple']}")
+                break
+
     return violations
 
 def check_gate_advisory(artifact):
@@ -615,6 +631,25 @@ def run_gate_tests(actual_n_leaves, stage1d_held_id_set, space_hash, held_task_i
     else:
         print(f"  WARN: Advisory did not fire at time_limit_hit=23")
 
+    # Reproducibility check: inject a solve with wrong prog_tuple, gate must catch it
+    first_tid = list(held_task_ids)[0]
+    rng_probe = random.Random((ARM_D_SEED, first_tid))
+    correct_tup = [rng_probe.randrange(actual_n_leaves) for _ in range(4)]
+    wrong_tup = [(x + 1) % actual_n_leaves for x in correct_tup]
+    repro_per_task = dict(dummy_per_task)
+    repro_per_task[first_tid] = {
+        'solved': True, 'n_evals': 1, 'time_limit_hit': False, 'budget_exhausted': False,
+        'prog_tuple': wrong_tup, 'prog_str': 'fake', 'prog_hash': 'fake',
+        'skeleton_type': 'FAKE', 'used_relate': False,
+    }
+    repro_artifact = {**good_artifact, 'arm_d_per_task': repro_per_task}
+    repro_viols = check_gate_violations(repro_artifact, stage1d_held_id_set, actual_n_leaves)
+    if any('not reproducible' in v for v in repro_viols):
+        print(f"  [OK] Gate caught 'solve not reproducible (wrong prog_tuple)': {[v for v in repro_viols if 'not reproducible' in v][0][:80]}...")
+    else:
+        print(f"  FAIL: Gate MISSED 'solve not reproducible'")
+        all_caught = False
+
     return all_caught
 
 # -- Main ---------------------------------------------------------------------
@@ -685,13 +720,13 @@ def main():
 
     print(f"\n=== Arm D (reach LB): {TIME_PER_TASK_D:.0f}s/task OR {BUDGET_B} evals, "
           f"seed={ARM_D_SEED}, depth={MAX_DEPTH} ===")
-    rng_d = random.Random(ARM_D_SEED)
     checkpoint_path = None if args.smoke else CHECKPOINT_TMPL.format(seed=args.seed)
     arm_d_per_task = {}
     n_evals_total  = 0
     t_d            = time.time()
 
     for task_num, task in enumerate(held_tasks):
+        rng_d            = random.Random((ARM_D_SEED, task['id']))
         t_task           = time.time()
         n_evals          = 0
         solved           = False
@@ -794,6 +829,8 @@ def main():
         'candidate_eval_budget_asserted': True,
         'search_algorithm':               'random_budget_and_time_limited',
         'arm_d_seed':                     ARM_D_SEED,
+        'per_task_seeding':               True,
+        'per_task_seed_formula':          '(ARM_D_SEED, task_id)',
         'time_limit_hit_count':           time_limit_count,
         'budget_exhausted_count':         budget_ex_count,
         'min_evals_unsolved':             min_evals_unsolved,
