@@ -468,6 +468,8 @@ def run_probe(smoke=False, test_gate=False, override_n_held=None, override_n_tra
     print(f"\nEvaluating on {n_held} held tasks...")
     per_task_rho = {}
     per_task_strict_min = {}
+    per_task_rho_nm = {}        # near-miss-only cut (excludes random_far)
+    per_task_strict_min_nm = {} # strict-minimal over near-miss candidates only
     per_candidate_records = []
 
     for task in held_tasks:
@@ -481,14 +483,23 @@ def run_probe(smoke=False, test_gate=False, override_n_held=None, override_n_tra
         dists = [hamming_distance(c["grid"], target) for c in candidates]
         energies = model.predict(feats)
 
-        # Spearman rho over candidate sweep
+        # Spearman rho over full candidate sweep
         rho, _ = spearmanr(energies, dists)
         per_task_rho[task["id"]] = float(rho) if not math.isnan(rho) else 0.0
 
-        # Strict minimal: E_theta(true_target) < all others
+        # Strict minimal (full): E_theta(true_target) < all others
         true_energy = energies[0]
         others = energies[1:]
         per_task_strict_min[task["id"]] = all(true_energy < e for e in others)
+
+        # Near-miss-only cut (exclude random_far candidates)
+        nm_indices = [i for i, c in enumerate(candidates) if c["candidate_type"] != "random_far"]
+        nm_energies = [energies[i] for i in nm_indices]
+        nm_dists = [dists[i] for i in nm_indices]
+        rho_nm, _ = spearmanr(nm_energies, nm_dists)
+        per_task_rho_nm[task["id"]] = float(rho_nm) if not math.isnan(rho_nm) else 0.0
+        nm_others = [nm_energies[i] for i in range(len(nm_indices)) if nm_indices[i] != 0]
+        per_task_strict_min_nm[task["id"]] = all(true_energy < e for e in nm_others)
 
         for cand, dist, energy in zip(candidates, dists, energies):
             per_candidate_records.append({
@@ -500,10 +511,15 @@ def run_probe(smoke=False, test_gate=False, override_n_held=None, override_n_tra
                 "energy": float(energy),
             })
 
-    # Aggregate
+    # Aggregate — full sweep
     rhos = list(per_task_rho.values())
     median_rho = float(np.median(rhos)) if rhos else 0.0
     strict_min_frac = sum(per_task_strict_min.values()) / max(len(per_task_strict_min), 1)
+
+    # Aggregate — near-miss-only cut (excludes random_far)
+    rhos_nm = list(per_task_rho_nm.values())
+    median_rho_nm = float(np.median(rhos_nm)) if rhos_nm else 0.0
+    strict_min_frac_nm = sum(per_task_strict_min_nm.values()) / max(len(per_task_strict_min_nm), 1)
 
     if median_rho >= PASS_MEDIAN_RHO and strict_min_frac >= PASS_STRICT_MIN_FRAC:
         verdict = "PASS"
@@ -512,8 +528,10 @@ def run_probe(smoke=False, test_gate=False, override_n_held=None, override_n_tra
     else:
         verdict = "MARGINAL"
 
-    print(f"\nmedian_spearman_rho = {median_rho:.4f}")
-    print(f"strict_minimal_fraction = {strict_min_frac:.4f}")
+    print(f"\nmedian_spearman_rho (full) = {median_rho:.4f}")
+    print(f"strict_minimal_fraction (full) = {strict_min_frac:.4f}")
+    print(f"median_spearman_rho (near-miss only) = {median_rho_nm:.4f}")
+    print(f"strict_minimal_fraction (near-miss only) = {strict_min_frac_nm:.4f}")
     print(f"verdict = {verdict}")
 
     # Gate checks
@@ -547,6 +565,8 @@ def run_probe(smoke=False, test_gate=False, override_n_held=None, override_n_tra
         "distance_metric": DISTANCE_METRIC,
         "median_spearman_rho": median_rho,
         "strict_minimal_fraction": strict_min_frac,
+        "median_spearman_rho_nearmiss_only": median_rho_nm,
+        "strict_minimal_fraction_nearmiss_only": strict_min_frac_nm,
         "verdict": verdict,
         "runtime_s": round(time.time() - t0, 1),
         "gate_violations": GATE_VIOLATIONS,
