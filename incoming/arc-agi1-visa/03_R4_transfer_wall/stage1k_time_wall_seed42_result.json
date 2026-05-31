@@ -21,9 +21,11 @@
   "candidate_eval_budget_asserted": true,
   "search_algorithm": "random_budget_and_time_limited",
   "arm_d_seed": 0,
-  "time_limit_hit_count": 3,
-  "budget_exhausted_count": 187,
-  "min_evals_unsolved": 103573,
+  "per_task_seeding": true,
+  "per_task_seed_formula": "(ARM_D_SEED, task_id)",
+  "time_limit_hit_count": 5,
+  "budget_exhausted_count": 185,
+  "min_evals_unsolved": 83171,
   "median_evals_unsolved": 300000,
   "max_evals_unsolved": 300000,
   "held_task_ids": [
@@ -299,18 +301,18 @@
     },
     "1cf80156": {
       "solved": true,
-      "n_evals": 425,
+      "n_evals": 493,
       "time_limit_hit": false,
       "budget_exhausted": false,
       "prog_tuple": [
-        0,
-        655,
-        35,
-        805
+        865,
+        1151,
+        574,
+        0
       ],
-      "prog_str": "('compose', ('prim', 'crop'), ('compose', ('map_relate', 'color_5', 'most_common_c', 'adjacent_left'), ('compose', ('map_apply', 'color_8', 'keep_only'), ('map_relate', 'color_8', 'color_2', 'adjacent_up'))))",
-      "prog_hash": "31e4d73f5829",
-      "skeleton_type": "COMPOSE(PRIM_CROP,COMPOSE(MAP_RELATE,COMPOSE(MAP_KEEPONLY,MAP_RELATE)))",
+      "prog_str": "('compose', ('map_relate', 'color_9', 'color_2', 'adjacent_up'), ('compose', ('map_relate', 'unique_color', 'all', 'adjacent_left'), ('compose', ('map_relate', 'color_4', 'color_6', 'adjacent_down'), ('prim', 'crop'))))",
+      "prog_hash": "b9a1eb8ad20e",
+      "skeleton_type": "COMPOSE(MAP_RELATE,COMPOSE(MAP_RELATE,COMPOSE(MAP_RELATE,PRIM_CROP)))",
       "used_relate": true
     },
     "1f0c79e5": {
@@ -435,23 +437,23 @@
     },
     "3618c87e": {
       "solved": true,
-      "n_evals": 74652,
+      "n_evals": 182349,
       "time_limit_hit": false,
       "budget_exhausted": false,
       "prog_tuple": [
-        157,
-        103,
-        949,
-        158
+        559,
+        61,
+        158,
+        886
       ],
-      "prog_str": "('compose', ('map_apply', 'smallest', 'translate_+1_+1'), ('compose', ('map_apply', 'color_6', 'translate_-1_+0'), ('compose', ('map_relate', 'largest', 'color_8', 'adjacent_up'), ('map_apply', 'smallest', 'translate_+1_-1'))))",
-      "prog_hash": "b83a622ff136",
-      "skeleton_type": "COMPOSE(MAP_TRANSLATE,COMPOSE(MAP_TRANSLATE,COMPOSE(MAP_RELATE,MAP_TRANSLATE)))",
+      "prog_str": "('compose', ('map_relate', 'color_4', 'color_1', 'adjacent_left'), ('compose', ('map_apply', 'color_1', 'translate_+1_+1'), ('compose', ('map_apply', 'smallest', 'translate_+1_-1'), ('map_relate', 'color_9', 'color_8', 'adjacent_down'))))",
+      "prog_hash": "ec895ccf9a1f",
+      "skeleton_type": "COMPOSE(MAP_RELATE,COMPOSE(MAP_TRANSLATE,COMPOSE(MAP_TRANSLATE,MAP_RELATE)))",
       "used_relate": true
     },
     "3631a71a": {
       "solved": false,
-      "n_evals": 103573,
+      "n_evals": 140362,
       "time_limit_hit": true,
       "budget_exhausted": false
     },
@@ -493,18 +495,18 @@
     },
     "3c9b0459": {
       "solved": true,
-      "n_evals": 1260,
+      "n_evals": 10442,
       "time_limit_hit": false,
       "budget_exhausted": false,
       "prog_tuple": [
-        1125,
-        680,
-        779,
-        5
+        5,
+        806,
+        1287,
+        806
       ],
-      "prog_str": "('compose', ('map_relate', 'smallest', 'color_7', 'adjacent_up'), ('compose', ('map_relate', 'color_6', 'color_1', 'adjacent_right'), ('compose', ('map_relate', 'color_7', 'non_bg', 'adjacent_left'), ('prim', 'rot_180'))))",
-      "prog_hash": "f3e811dd9723",
-      "skeleton_type": "COMPOSE(MAP_RELATE,COMPOSE(MAP_RELATE,COMPOSE(MAP_RELATE,PRIM_ROT_180)))",
+      "prog_str": "('compose', ('prim', 'rot_180'), ('compose', ('map_relate', 'color_8', 'color_3', 'adjacent_down'), ('compose', ('map_apply', 'color_6', 'recolor_7'), ('map_relate', 'color_8', 'color_3', 'adjacent_down'))))",
+      "prog_hash": "578e4efaea1a",
+      "skeleton_type": "COMPOSE(PRIM_ROT_180,COMPOSE(MAP_RELATE,COMPOSE(MAP_RECOLOR,MAP_RELATE)))",
       "used_relate": true
     },
     "3eda0437": {
@@ -647,17 +649,17 @@
     },
     "6455b5f5": {
       "solved": true,
-      "n_evals": 73975,
+      "n_evals": 243025,
       "time_limit_hit": false,
       "budget_exhausted": false,
       "prog_tuple": [
         1358,
-        644,
-        503,
+        863,
+        548,
         1321
       ],
-      "prog_str": "('compose', ('map_apply', 'smallest', 'recolor_8'), ('compose', ('map_relate', 'color_5', 'color_8', 'adjacent_right'), ('compose', ('map_relate', 'color_3', 'color_2', 'adjacent_left'), ('map_apply', 'largest', 'recolor_1'))))",
-      "prog_hash": "d7c9eab3c407",
+      "prog_str": "('compose', ('map_apply', 'smallest', 'recolor_8'), ('compose', ('map_relate', 'color_9', 'color_2', 'adjacent_left'), ('compose', ('map_relate', 'color_3', 'unique_color', 'adjacent_right'), ('map_apply', 'largest', 'recolor_1'))))",
+      "prog_hash": "626fc4f31227",
       "skeleton_type": "COMPOSE(MAP_RECOLOR,COMPOSE(MAP_RELATE,COMPOSE(MAP_RELATE,MAP_RECOLOR)))",
       "used_relate": true
     },
@@ -687,18 +689,18 @@
     },
     "67a3c6ac": {
       "solved": true,
-      "n_evals": 8157,
+      "n_evals": 1711,
       "time_limit_hit": false,
       "budget_exhausted": false,
       "prog_tuple": [
-        2,
-        806,
-        694,
-        764
+        868,
+        815,
+        199,
+        2
       ],
-      "prog_str": "('compose', ('prim', 'flip_h'), ('compose', ('map_relate', 'color_8', 'color_3', 'adjacent_down'), ('compose', ('map_relate', 'color_6', 'color_5', 'adjacent_down'), ('map_relate', 'color_7', 'color_8', 'adjacent_right'))))",
-      "prog_hash": "451b251c054f",
-      "skeleton_type": "COMPOSE(PRIM_FLIP_H,COMPOSE(MAP_RELATE,COMPOSE(MAP_RELATE,MAP_RELATE)))",
+      "prog_str": "('compose', ('map_relate', 'color_9', 'color_3', 'adjacent_right'), ('compose', ('map_relate', 'color_8', 'color_5', 'adjacent_left'), ('compose', ('map_apply', 'color_4', 'geom_rot_90'), ('prim', 'flip_h'))))",
+      "prog_hash": "811dd4f4140c",
+      "skeleton_type": "COMPOSE(MAP_RELATE,COMPOSE(MAP_RELATE,COMPOSE(MAP_GEOM,PRIM_FLIP_H)))",
       "used_relate": true
     },
     "67a423a3": {
@@ -715,17 +717,17 @@
     },
     "68b16354": {
       "solved": true,
-      "n_evals": 198,
+      "n_evals": 2304,
       "time_limit_hit": false,
       "budget_exhausted": false,
       "prog_tuple": [
-        635,
+        1059,
         3,
-        698,
-        336
+        705,
+        641
       ],
-      "prog_str": "('compose', ('map_relate', 'color_5', 'color_6', 'adjacent_left'), ('compose', ('prim', 'flip_v'), ('compose', ('map_relate', 'color_6', 'color_7', 'adjacent_down'), ('map_relate', 'bg_obj', 'color_6', 'adjacent_right'))))",
-      "prog_hash": "9293b6ebbacc",
+      "prog_str": "('compose', ('map_relate', 'non_bg', 'color_6', 'adjacent_left'), ('compose', ('prim', 'flip_v'), ('compose', ('map_relate', 'color_6', 'color_8', 'adjacent_up'), ('map_relate', 'color_5', 'color_7', 'adjacent_up'))))",
+      "prog_hash": "5f7d923330be",
       "skeleton_type": "COMPOSE(MAP_RELATE,COMPOSE(PRIM_FLIP_V,COMPOSE(MAP_RELATE,MAP_RELATE)))",
       "used_relate": true
     },
@@ -784,25 +786,35 @@
       "budget_exhausted": true
     },
     "7468f01a": {
-      "solved": false,
-      "n_evals": 300000,
-      "time_limit_hit": false,
-      "budget_exhausted": true
-    },
-    "74dd1130": {
       "solved": true,
-      "n_evals": 500,
+      "n_evals": 255922,
       "time_limit_hit": false,
       "budget_exhausted": false,
       "prog_tuple": [
-        8,
-        802,
-        480,
-        609
+        868,
+        0,
+        2,
+        761
       ],
-      "prog_str": "('compose', ('prim', 'tr'), ('compose', ('map_relate', 'color_8', 'color_2', 'adjacent_down'), ('compose', ('map_relate', 'color_2', 'non_bg', 'adjacent_right'), ('map_relate', 'color_4', 'unique_color', 'adjacent_up'))))",
-      "prog_hash": "639de645532f",
-      "skeleton_type": "COMPOSE(PRIM_TR,COMPOSE(MAP_RELATE,COMPOSE(MAP_RELATE,MAP_RELATE)))",
+      "prog_str": "('compose', ('map_relate', 'color_9', 'color_3', 'adjacent_right'), ('compose', ('prim', 'crop'), ('compose', ('prim', 'flip_h'), ('map_relate', 'color_7', 'color_6', 'adjacent_up'))))",
+      "prog_hash": "1dbd180002a5",
+      "skeleton_type": "COMPOSE(MAP_RELATE,COMPOSE(PRIM_CROP,COMPOSE(PRIM_FLIP_H,MAP_RELATE)))",
+      "used_relate": true
+    },
+    "74dd1130": {
+      "solved": true,
+      "n_evals": 5471,
+      "time_limit_hit": false,
+      "budget_exhausted": false,
+      "prog_tuple": [
+        529,
+        8,
+        989,
+        464
+      ],
+      "prog_str": "('compose', ('map_relate', 'color_3', 'color_9', 'adjacent_up'), ('compose', ('prim', 'tr'), ('compose', ('map_relate', 'most_common_c', 'color_3', 'adjacent_up'), ('map_relate', 'color_2', 'color_8', 'adjacent_right'))))",
+      "prog_hash": "49788263bc56",
+      "skeleton_type": "COMPOSE(MAP_RELATE,COMPOSE(PRIM_TR,COMPOSE(MAP_RELATE,MAP_RELATE)))",
       "used_relate": true
     },
     "75b8110e": {
@@ -831,9 +843,9 @@
     },
     "7837ac64": {
       "solved": false,
-      "n_evals": 300000,
-      "time_limit_hit": false,
-      "budget_exhausted": true
+      "n_evals": 252728,
+      "time_limit_hit": true,
+      "budget_exhausted": false
     },
     "794b24be": {
       "solved": false,
@@ -897,7 +909,7 @@
     },
     "8731374e": {
       "solved": false,
-      "n_evals": 119871,
+      "n_evals": 83171,
       "time_limit_hit": true,
       "budget_exhausted": false
     },
@@ -993,9 +1005,9 @@
     },
     "9ecd008a": {
       "solved": false,
-      "n_evals": 300000,
-      "time_limit_hit": false,
-      "budget_exhausted": true
+      "n_evals": 282654,
+      "time_limit_hit": true,
+      "budget_exhausted": false
     },
     "9edfc990": {
       "solved": false,
@@ -1011,17 +1023,17 @@
     },
     "a1570a43": {
       "solved": true,
-      "n_evals": 244611,
+      "n_evals": 262881,
       "time_limit_hit": false,
       "budget_exhausted": false,
       "prog_tuple": [
-        282,
-        457,
+        665,
+        407,
         66,
         442
       ],
-      "prog_str": "('compose', ('map_relate', 'all', 'color_8', 'adjacent_down'), ('compose', ('map_relate', 'color_2', 'color_6', 'adjacent_up'), ('compose', ('map_apply', 'color_2', 'translate_+0_+1'), ('map_relate', 'color_2', 'color_3', 'adjacent_down'))))",
-      "prog_hash": "b49472266a61",
+      "prog_str": "('compose', ('map_relate', 'color_5', 'smallest', 'adjacent_up'), ('compose', ('map_relate', 'color_1', 'color_9', 'adjacent_left'), ('compose', ('map_apply', 'color_2', 'translate_+0_+1'), ('map_relate', 'color_2', 'color_3', 'adjacent_down'))))",
+      "prog_hash": "3e6d1383c3bd",
       "skeleton_type": "COMPOSE(MAP_RELATE,COMPOSE(MAP_RELATE,COMPOSE(MAP_TRANSLATE,MAP_RELATE)))",
       "used_relate": true
     },
@@ -1086,35 +1098,25 @@
       "budget_exhausted": true
     },
     "a740d043": {
-      "solved": true,
-      "n_evals": 84692,
+      "solved": false,
+      "n_evals": 300000,
       "time_limit_hit": false,
-      "budget_exhausted": false,
-      "prog_tuple": [
-        0,
-        439,
-        153,
-        1230
-      ],
-      "prog_str": "('compose', ('prim', 'crop'), ('compose', ('map_relate', 'color_2', 'color_1', 'adjacent_left'), ('compose', ('map_apply', 'non_bg', 'translate_-1_-1'), ('map_apply', 'color_1', 'recolor_0'))))",
-      "prog_hash": "910b2dc4e7cd",
-      "skeleton_type": "COMPOSE(PRIM_CROP,COMPOSE(MAP_RELATE,COMPOSE(MAP_TRANSLATE,MAP_RECOLOR)))",
-      "used_relate": true
+      "budget_exhausted": true
     },
     "a79310a0": {
       "solved": true,
-      "n_evals": 15939,
+      "n_evals": 58177,
       "time_limit_hit": false,
       "budget_exhausted": false,
       "prog_tuple": [
-        79,
-        635,
-        1302,
-        164
+        1281,
+        68,
+        1342,
+        630
       ],
-      "prog_str": "('compose', ('map_apply', 'color_3', 'translate_-1_+0'), ('compose', ('map_relate', 'color_5', 'color_6', 'adjacent_left'), ('compose', ('map_apply', 'color_8', 'recolor_2'), ('map_apply', 'unique_color', 'translate_+1_+0'))))",
-      "prog_hash": "c47c07c1f3c6",
-      "skeleton_type": "COMPOSE(MAP_TRANSLATE,COMPOSE(MAP_RELATE,COMPOSE(MAP_RECOLOR,MAP_TRANSLATE)))",
+      "prog_str": "('compose', ('map_apply', 'color_6', 'recolor_1'), ('compose', ('map_apply', 'color_2', 'translate_+1_+0'), ('compose', ('map_apply', 'non_bg', 'recolor_2'), ('map_relate', 'color_5', 'color_4', 'adjacent_down'))))",
+      "prog_hash": "7cb369cb40fe",
+      "skeleton_type": "COMPOSE(MAP_RECOLOR,COMPOSE(MAP_TRANSLATE,COMPOSE(MAP_RECOLOR,MAP_RELATE)))",
       "used_relate": true
     },
     "a87f7484": {
@@ -1221,7 +1223,7 @@
     },
     "c3f564a4": {
       "solved": false,
-      "n_evals": 203489,
+      "n_evals": 152555,
       "time_limit_hit": true,
       "budget_exhausted": false
     },
@@ -1533,7 +1535,7 @@
     }
   },
   "relate_solutions": 10,
-  "evals_total": 57031342,
-  "elapsed_s": 11486.210510492325,
+  "evals_total": 57434245,
+  "elapsed_s": 12730.118845462799,
   "r1_r6_note": "Pure reach/measurement run. R1: no external reward. R5: fixed ground truth = 200 held ARC tasks. R2/R3/R4/R6: N/A."
 }
