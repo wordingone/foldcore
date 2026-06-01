@@ -1,0 +1,381 @@
+{
+  "experiment": "stage_f3_chunking",
+  "spec": "https://github.com/wordingone/the-search/issues/22",
+  "part": "A",
+  "smoke": false,
+  "seed": 42,
+  "n_tasks": 10,
+  "n_tasks_run": 10,
+  "n_solved": 9,
+  "n_baseline_leaves": 1370,
+  "baseline_space_hash": "4978b6739bf55beb",
+  "prev_space_hash": "4978b6739bf55beb",
+  "k_chunks": 3,
+  "min_occ": 2,
+  "n_candidates": 5007,
+  "candidate_seed": 42,
+  "budget_b": 300000,
+  "time_limit_s": 600.0,
+  "arm_d_seed": 0,
+  "task_order": "_det_seed(task_id)",
+  "task_ids": [
+    "67a3c6ac",
+    "a79310a0",
+    "a1570a43",
+    "74dd1130",
+    "3618c87e",
+    "6455b5f5",
+    "3c9b0459",
+    "1cf80156",
+    "68b16354",
+    "7468f01a"
+  ],
+  "task_ids_run": [
+    "67a3c6ac",
+    "a79310a0",
+    "a1570a43",
+    "74dd1130",
+    "3618c87e",
+    "6455b5f5",
+    "3c9b0459",
+    "1cf80156",
+    "68b16354",
+    "7468f01a"
+  ],
+  "per_task": {
+    "67a3c6ac": {
+      "solved": true,
+      "n_evals": 4931,
+      "n_evals_off": 4931,
+      "time_limit_hit": false,
+      "budget_exhausted": false,
+      "prog_hash": "b9a27d9f36ba",
+      "used_chunk": false,
+      "chunks_available": 0,
+      "formation_count": 4952,
+      "promoted_count": 0,
+      "scan_ms": 1675.6,
+      "baseline_evals": 1711
+    },
+    "a79310a0": {
+      "solved": true,
+      "n_evals": 19400,
+      "n_evals_off": 19400,
+      "time_limit_hit": false,
+      "budget_exhausted": false,
+      "prog_hash": "c30180a55394",
+      "used_chunk": false,
+      "chunks_available": 0,
+      "formation_count": 4754,
+      "promoted_count": 3,
+      "scan_ms": 395.7,
+      "baseline_evals": 58177
+    },
+    "a1570a43": {
+      "solved": true,
+      "n_evals": 1641,
+      "n_evals_off": 1638,
+      "time_limit_hit": false,
+      "budget_exhausted": false,
+      "prog_hash": "64da6f766061",
+      "used_chunk": false,
+      "chunks_available": 3,
+      "formation_count": 4936,
+      "promoted_count": 3,
+      "scan_ms": 1271.6,
+      "baseline_evals": 262881
+    },
+    "74dd1130": {
+      "solved": true,
+      "n_evals": 1562,
+      "n_evals_off": 6134,
+      "time_limit_hit": false,
+      "budget_exhausted": false,
+      "prog_hash": "dbaab8f03dae",
+      "used_chunk": false,
+      "chunks_available": 6,
+      "formation_count": 4970,
+      "promoted_count": 3,
+      "scan_ms": 877.3,
+      "baseline_evals": 5471
+    },
+    "3618c87e": {
+      "solved": true,
+      "n_evals": 45442,
+      "n_evals_off": 45154,
+      "time_limit_hit": false,
+      "budget_exhausted": false,
+      "prog_hash": "a8241d892d01",
+      "used_chunk": false,
+      "chunks_available": 9,
+      "formation_count": 4886,
+      "promoted_count": 3,
+      "scan_ms": 584.2,
+      "baseline_evals": 182349
+    },
+    "6455b5f5": {
+      "solved": false,
+      "n_evals": 300000,
+      "n_evals_off": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": true,
+      "chunks_available": 12,
+      "formation_count": 4925,
+      "promoted_count": 3,
+      "scan_ms": 1958.5,
+      "baseline_evals": 243025
+    },
+    "3c9b0459": {
+      "solved": true,
+      "n_evals": 16254,
+      "n_evals_off": 15458,
+      "time_limit_hit": false,
+      "budget_exhausted": false,
+      "prog_hash": "fe612af286b5",
+      "used_chunk": false,
+      "chunks_available": 15,
+      "formation_count": 4969,
+      "promoted_count": 3,
+      "scan_ms": 894.8,
+      "baseline_evals": 10442
+    },
+    "1cf80156": {
+      "solved": true,
+      "n_evals": 2003,
+      "n_evals_off": 1978,
+      "time_limit_hit": false,
+      "budget_exhausted": false,
+      "prog_hash": "f2d78e0b1246",
+      "used_chunk": false,
+      "chunks_available": 18,
+      "formation_count": 7,
+      "promoted_count": 3,
+      "scan_ms": 827.2,
+      "baseline_evals": 493
+    },
+    "68b16354": {
+      "solved": true,
+      "n_evals": 3749,
+      "n_evals_off": 3697,
+      "time_limit_hit": false,
+      "budget_exhausted": false,
+      "prog_hash": "51f58aaf54fe",
+      "used_chunk": true,
+      "chunks_available": 21,
+      "formation_count": 4961,
+      "promoted_count": 3,
+      "scan_ms": 2631.0,
+      "baseline_evals": 2304
+    },
+    "7468f01a": {
+      "solved": true,
+      "n_evals": 94132,
+      "n_evals_off": 300000,
+      "time_limit_hit": false,
+      "budget_exhausted": false,
+      "prog_hash": "549e66699a53",
+      "used_chunk": true,
+      "chunks_available": 24,
+      "formation_count": 7,
+      "promoted_count": 3,
+      "scan_ms": 1287.2,
+      "baseline_evals": 255922
+    }
+  },
+  "total_formation_count": 39367,
+  "total_promoted_count": 27,
+  "final_chunk_pairs": [
+    [
+      0,
+      1071
+    ],
+    [
+      2,
+      98
+    ],
+    [
+      2,
+      437
+    ],
+    [
+      2,
+      761
+    ],
+    [
+      2,
+      951
+    ],
+    [
+      2,
+      1284
+    ],
+    [
+      2,
+      1346
+    ],
+    [
+      3,
+      242
+    ],
+    [
+      3,
+      1064
+    ],
+    [
+      3,
+      1173
+    ],
+    [
+      4,
+      799
+    ],
+    [
+      4,
+      874
+    ],
+    [
+      4,
+      1246
+    ],
+    [
+      5,
+      90
+    ],
+    [
+      5,
+      579
+    ],
+    [
+      10,
+      186
+    ],
+    [
+      10,
+      928
+    ],
+    [
+      11,
+      218
+    ],
+    [
+      11,
+      674
+    ],
+    [
+      11,
+      676
+    ],
+    [
+      11,
+      1245
+    ],
+    [
+      12,
+      371
+    ],
+    [
+      12,
+      720
+    ],
+    [
+      12,
+      1313
+    ],
+    [
+      13,
+      501
+    ],
+    [
+      13,
+      502
+    ],
+    [
+      13,
+      534
+    ]
+  ],
+  "final_chunk_count": 27,
+  "elapsed_s": 211.83205890655518,
+  "off_evals": {
+    "67a3c6ac": {
+      "n_evals": 4931,
+      "solved": true,
+      "budget_exhausted": false
+    },
+    "a79310a0": {
+      "n_evals": 19400,
+      "solved": true,
+      "budget_exhausted": false
+    },
+    "a1570a43": {
+      "n_evals": 1638,
+      "solved": true,
+      "budget_exhausted": false
+    },
+    "74dd1130": {
+      "n_evals": 6134,
+      "solved": true,
+      "budget_exhausted": false
+    },
+    "3618c87e": {
+      "n_evals": 45154,
+      "solved": true,
+      "budget_exhausted": false
+    },
+    "6455b5f5": {
+      "n_evals": 300000,
+      "solved": false,
+      "budget_exhausted": true
+    },
+    "3c9b0459": {
+      "n_evals": 15458,
+      "solved": true,
+      "budget_exhausted": false
+    },
+    "1cf80156": {
+      "n_evals": 1978,
+      "solved": true,
+      "budget_exhausted": false
+    },
+    "68b16354": {
+      "n_evals": 3697,
+      "solved": true,
+      "budget_exhausted": false
+    },
+    "7468f01a": {
+      "n_evals": 300000,
+      "solved": false,
+      "budget_exhausted": true
+    }
+  },
+  "part_a_metrics": {
+    "reductions_per_task": {
+      "1cf80156": -0.012639029322548028,
+      "3618c87e": -0.006378172476414049,
+      "3c9b0459": -0.05149437184629318,
+      "6455b5f5": 0.0,
+      "67a3c6ac": 0.0,
+      "68b16354": -0.014065458479848527,
+      "7468f01a": 0.6862266666666667,
+      "74dd1130": 0.7453537658950115,
+      "a1570a43": -0.0018315018315018315,
+      "a79310a0": 0.0
+    },
+    "median_reduction": 0.0,
+    "tasks_positive": 2,
+    "part_a_gate_pass": false,
+    "verdict": "FAIL",
+    "stage1k_crossref": {
+      "1cf80156": -3.0628803245436105,
+      "3618c87e": 0.7507965494738112,
+      "3c9b0459": -0.5565983528059759,
+      "6455b5f5": -0.23444090114185784,
+      "67a3c6ac": -1.8819403857393338,
+      "68b16354": -0.6271701388888888,
+      "7468f01a": 0.632184806308172,
+      "74dd1130": 0.7144946079327362,
+      "a1570a43": 0.9937576317801591,
+      "a79310a0": 0.6665348849201574
+    }
+  }
+}
