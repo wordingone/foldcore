@@ -806,7 +806,7 @@ Artifacts: `stage1b_object_centric.py`, `stage1b_result.json`. Commits: 2698a9eb
 
 ### Stage 1e — Four-Arm Cross-Tier Best-First Proposer Probe (TWO-SEED COMPLETE — 2026-05-30)
 
-**Verdict: DRAFT — NO-GO neural (Leo #12000, pending Kai co-gate close)**
+**Verdict: NO-GO neural (Leo #12000)**
 
 **Pre-reg refs:** `kai-index/the-search-stage1e-final-signoff.md`, `kai-index/the-search-stage1e-v3-adjudication.md`
 
@@ -844,7 +844,7 @@ Two B1 counts appear in seed-1 artifact — both correct, different metrics:
 - Tail `new_solves_vs_fixed_holed_b30000.B1=1` (L10054): tasks B1 solved that Stage 1d fixed-holed BFS missed
 No contradiction. Instrumentation is unambiguous.
 
-**Co-gate:** OPEN. Kai #11999 notified. Reach diagnostic HELD pending Kai co-gate close + build-gate on spec.
+**Gate:** Leo-owned (2026-05-31 pivot). Kai co-gate (#11999) moot — Leo absorbs the-search gate; Kai is failover-only. Reach diagnostic HELD pending Leo reframe design.
 
 **Artifacts:**
 - Seed-1: `incoming/arc-agi1-visa/03_R4_transfer_wall/stage1e_seed1_matched_eval_result.json`
