@@ -50,8 +50,9 @@ S1K_PATHS   = {
     1:  f"{STAGE_DIR}/stage1k_time_wall_seed1_result.json",
     42: f"{STAGE_DIR}/stage1k_time_wall_seed42_result.json",
 }
-TEMP_PATH   = f"{STAGE_DIR}/stage_f3_chunking_TEMP.json"
-RESULT_TMPL = f"{STAGE_DIR}/stage_f3_chunking_seed{{seed}}_part{{part}}_result.json"
+TEMP_PATH        = f"{STAGE_DIR}/stage_f3_chunking_TEMP.json"
+RESULT_TMPL      = f"{STAGE_DIR}/stage_f3_chunking_seed{{seed}}_part{{part}}_result.json"
+CHECKPOINT_TMPL  = f"{STAGE_DIR}/stage_f3_chunking_seed{{seed}}_part{{part}}_checkpoint.jsonl"
 
 # -- Constants ----------------------------------------------------------------
 N_HELD             = 200
@@ -783,6 +784,7 @@ def run_part(part, args, baseline_leaves, baseline_space_hash, stage1d_held_id_s
         part_task_ids = sorted(STAGE1K_SOLVED_SEED42, key=lambda tid: _det_seed(tid))
         part_label = "Part A (10 Stage-1k-solved IDs)"
         result_path = TEMP_PATH if args.smoke else RESULT_TMPL.format(seed=args.seed, part='A')
+        checkpoint_path = None if args.smoke else CHECKPOINT_TMPL.format(seed=args.seed, part='A')
         n_tasks = 3 if args.smoke else len(part_task_ids)
     else:
         # Part B: ALL 200 held tasks in _det_seed order, excluding stage1k solved IDs
@@ -797,6 +799,7 @@ def run_part(part, args, baseline_leaves, baseline_space_hash, stage1d_held_id_s
         part_task_ids = part_b_ids
         part_label = "Part B (190 unsolved held tasks)"
         result_path = TEMP_PATH if args.smoke else RESULT_TMPL.format(seed=args.seed, part='B')
+        checkpoint_path = None if args.smoke else CHECKPOINT_TMPL.format(seed=args.seed, part='B')
         n_tasks = 3 if args.smoke else len(part_task_ids)
 
     task_id_to_task = {t['id']: t for t in all_tasks}
@@ -841,7 +844,11 @@ def run_part(part, args, baseline_leaves, baseline_space_hash, stage1d_held_id_s
             print(f"    [OFF {otid}]: n_evals_off={n_off} solved={off_solved}")
         print()
 
-    for task_num, task in enumerate(run_tasks):
+    # Open checkpoint file for per-task JSONL append (crash-safe partial recovery)
+    _chk_fh = open(checkpoint_path, 'a') if checkpoint_path else None
+
+    try:
+     for task_num, task in enumerate(run_tasks):
         tid = task['id']
         # Grammar for this task: baseline + accumulated chunks
         chunk_leaves = chunks_to_leaves(chunk_pairs, baseline_leaves)
@@ -912,6 +919,13 @@ def run_part(part, args, baseline_leaves, baseline_space_hash, stage1d_held_id_s
 
         _OBJ_CACHE.clear(); gc.collect()
 
+        # Per-task JSONL checkpoint — crash-safe incremental save
+        if _chk_fh is not None:
+            _chk_fh.write(json.dumps({'task_num': task_num, 'tid': tid,
+                                      'record': per_task[tid],
+                                      'chunk_count': len(chunk_pairs)}) + '\n')
+            _chk_fh.flush()
+
         # Progress
         elapsed = time.time() - t_total
         n_solved_so_far = sum(1 for r in per_task.values() if r.get('solved'))
@@ -920,6 +934,27 @@ def run_part(part, args, baseline_leaves, baseline_space_hash, stage1d_held_id_s
               f"evals={n_evals} solved={solved} chunks_avail={len(chunk_leaves)} "
               f"formation={formation_count} promoted={promoted_count} "
               f"baseline={baseline_ev} scan={scan_ms:.0f}ms elapsed={elapsed:.0f}s")
+
+    except Exception as _exc:
+        # Crash: flush partial per_task to a recovery artifact before re-raising
+        if _chk_fh is not None:
+            _chk_fh.close()
+            _chk_fh = None
+        _partial_path = result_path.replace('_result.json', '_partial_crash.json')
+        _partial = {'experiment': 'stage_f3_chunking', 'part': part, 'partial': True,
+                    'crash': str(_exc), 'n_completed': len(per_task),
+                    'per_task': per_task,
+                    'final_chunk_pairs': [list(p) for p in sorted(chunk_pairs)]}
+        try:
+            with open(_partial_path, 'w') as _pf:
+                json.dump(_partial, _pf, indent=2)
+            print(f"\nCRASH: partial artifact written to {_partial_path}")
+        except Exception:
+            pass
+        raise
+    finally:
+        if _chk_fh is not None:
+            _chk_fh.close()
 
     # Aggregate stats
     elapsed_total = time.time() - t_total
