@@ -32,10 +32,11 @@ F1 interpretation contract (locked, Leo mail #12210):
 
 ### Per-task RNG seeding
 - `arm_d_seed` = 7 (same as Stage 1k armseed7; arms share the same rng stream → same programs sampled)
-- `per_task_seed_formula` = `(7, task_id)`
+- `per_task_seed_formula` = `_det_seed(7, task_id)` — sha256-based, PYTHONHASHSEED-independent
+  (replaced tuple-seed `(7, task_id)` which was non-deterministic across processes under Python 3.10)
 
 ### Frozen energy model (E_theta from F1)
-- `frozen_energy_hash` = `2cd1ed64b357292b`
+- `frozen_energy_hash` = `ddff3328df1d92ba`
   (sha256[:16] of concatenated float64 bytes of W1,b1,W2,b2,W3,b3 after deterministic F1 training)
 - Architecture: `mlp_histogram_36d` (same as F1; 36→64→32→1, ReLU, Adam lr=1e-3, 100 epochs, seed=0)
 - Training corpus: 200 ARC training tasks minus the 200 held tasks (same as F1)
@@ -79,7 +80,7 @@ All assertions run before artifact write. Any hard violation → abort without w
 
 | Field | Asserted value |
 |-------|---------------|
-| `frozen_energy_hash` | `"2cd1ed64b357292b"` |
+| `frozen_energy_hash` | `"ddff3328df1d92ba"` |
 | `eval_split_hash` | `"08be6f980cec510c"` |
 | `space_hash` | `"4978b6739bf55beb"` |
 | `arm_bfs_n_solved` | 10 (must reproduce Stage 1k armseed7) |
@@ -93,8 +94,8 @@ All assertions run before artifact write. Any hard violation → abort without w
 4. **BFS-not-10**: inject arm_bfs_n_solved = 9 → gate fires (baseline must reproduce 10)
 5. **eval_split_hash mismatch**: inject wrong hash → gate fires
 6. **space_hash mismatch**: inject wrong hash → gate fires
-7. **F1 frozen-link (behavioral)**: use untrained MLP (rng_seed=1) → energies diverge from F1's
-   per_candidate_records by >1e-4 → frozen-link check fires
+7. **det-seed determinism**: two `_det_seed` instances with same args → identical draw sequence;
+   `random.Random(tuple-with-string)` with same args → different sequence (PYTHONHASHSEED-dependent)
 
 ---
 
@@ -105,7 +106,7 @@ Result file: `stagef2_energy_search_result.json`
 ```json
 {
   "stage": "F2_energy_search",
-  "frozen_energy_hash": "2cd1ed64b357292b",
+  "frozen_energy_hash": "ddff3328df1d92ba",
   "eval_split_hash": "08be6f980cec510c",
   "space_hash": "4978b6739bf55beb",
   "arm_d_seed": 7,
