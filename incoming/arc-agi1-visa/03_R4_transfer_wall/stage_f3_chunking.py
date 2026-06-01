@@ -648,41 +648,37 @@ def run_gate_tests(actual_n_baseline_leaves, stage1d_held_id_set, baseline_space
 # -- Part A metric computation ------------------------------------------------
 
 def compute_part_a_metrics(per_task):
-    """Compute eval-cost reduction vs stage1k baseline and seed-swing estimate."""
-    # Eval-cost reduction: (baseline - enhanced) / baseline
+    """Within-arm eval-cost reduction: (n_evals_off - n_evals_on) / n_evals_off.
+    OFF arm uses same _det_seed RNG, baseline grammar only (no chunks).
+    Seed convention is identical between arms — delta is chunks alone.
+    """
     reductions = {}
     for tid in STAGE1K_SOLVED_SEED42:
-        baseline = STAGE1K_EVALS_SEED42[tid]
-        enhanced = per_task[tid].get('n_evals', BUDGET_B)
-        if baseline > 0:
-            reductions[tid] = (baseline - enhanced) / baseline
-
-    # Seed-swing: median |log(seed42/seed1)| for tasks solved by both seeds
-    import math
-    swings = []
-    for tid, seed1_evals in STAGE1K_EVALS_SEED1.items():
-        seed42_evals = STAGE1K_EVALS_SEED42[tid]
-        swings.append(abs(math.log(seed42_evals / seed1_evals)))
-    swings.sort()
-    seed_swing_log = swings[len(swings) // 2] if swings else 0.0
-    # Convert to fractional reduction: 1 - 1/e^swing
-    seed_swing_frac = 1.0 - (1.0 / (2.718281828 ** seed_swing_log)) if seed_swing_log > 0 else 0.0
+        n_off = per_task[tid].get('n_evals_off')
+        n_on = per_task[tid].get('n_evals', BUDGET_B)
+        if n_off and n_off > 0:
+            reductions[tid] = (n_off - n_on) / n_off
 
     sorted_reductions = sorted(reductions.values())
     median_reduction = sorted_reductions[len(sorted_reductions) // 2] if sorted_reductions else 0.0
+    tasks_positive = sum(1 for r in reductions.values() if r > 0)
+    part_a_gate_pass = (median_reduction > 0 and tasks_positive >= 6)
 
-    tasks_exceeding_swing = sum(1 for r in reductions.values() if r > seed_swing_frac)
-    part_a_gate_pass = (median_reduction > seed_swing_frac and
-                        tasks_exceeding_swing >= 6)
+    # Cross-ref against stage1k (different seed convention — informational only, not gated)
+    stage1k_crossref = {}
+    for tid in STAGE1K_SOLVED_SEED42:
+        s1k = STAGE1K_EVALS_SEED42.get(tid)
+        n_on = per_task[tid].get('n_evals', BUDGET_B)
+        if s1k and s1k > 0:
+            stage1k_crossref[tid] = (s1k - n_on) / s1k
 
     return {
         'reductions_per_task': reductions,
         'median_reduction': median_reduction,
-        'seed_swing_log': seed_swing_log,
-        'seed_swing_frac': seed_swing_frac,
-        'tasks_exceeding_swing': tasks_exceeding_swing,
+        'tasks_positive': tasks_positive,
         'part_a_gate_pass': part_a_gate_pass,
         'verdict': 'PASS' if part_a_gate_pass else 'FAIL',
+        'stage1k_crossref': stage1k_crossref,  # informational only
     }
 
 
@@ -812,6 +808,34 @@ def run_part(part, args, baseline_leaves, baseline_space_hash, stage1d_held_id_s
     per_task = {}
     t_total = time.time()
 
+    # Part A: OFF arm — same _det_seed RNG, baseline grammar only, no chunk promotion
+    off_evals = {}
+    if part == 'A':
+        print(f"\n  [OFF arm] Running {len(run_tasks)} tasks (baseline grammar, no chunks)...")
+        n_base = len(baseline_leaves)
+        for off_task in run_tasks:
+            otid = off_task['id']
+            rng_off = random.Random(_det_seed(ARM_D_SEED, otid))
+            t_off = time.time()
+            n_off = 0; off_solved = False; off_budget_ex = False
+            while time.time() - t_off < TIME_PER_TASK_D:
+                oi = rng_off.randrange(n_base)
+                oj = rng_off.randrange(n_base)
+                ok_ = rng_off.randrange(n_base)
+                ol = rng_off.randrange(n_base)
+                n_off += 1
+                if check_tuple((oi, oj, ok_, ol), off_task['io'], baseline_leaves):
+                    off_solved = True
+                    break
+                if n_off >= BUDGET_B:
+                    off_budget_ex = True
+                    break
+            _OBJ_CACHE.clear(); gc.collect()
+            off_evals[otid] = {'n_evals': n_off, 'solved': off_solved,
+                               'budget_exhausted': off_budget_ex}
+            print(f"    [OFF {otid}]: n_evals_off={n_off} solved={off_solved}")
+        print()
+
     for task_num, task in enumerate(run_tasks):
         tid = task['id']
         # Grammar for this task: baseline + accumulated chunks
@@ -853,6 +877,7 @@ def run_part(part, args, baseline_leaves, baseline_space_hash, stage1d_held_id_s
                 used_chunk = any(idx >= len(baseline_leaves) for idx in tup)
                 per_task[tid] = {
                     'solved': True, 'n_evals': n_evals,
+                    'n_evals_off': off_evals.get(tid, {}).get('n_evals'),
                     'time_limit_hit': False, 'budget_exhausted': False,
                     'prog_hash': prog_hash(prog), 'used_chunk': used_chunk,
                     'chunks_available': len(chunk_leaves),
@@ -871,6 +896,7 @@ def run_part(part, args, baseline_leaves, baseline_space_hash, stage1d_held_id_s
             time_hit = (time.time() - t_task) >= TIME_PER_TASK_D
             per_task[tid] = {
                 'solved': False, 'n_evals': n_evals,
+                'n_evals_off': off_evals.get(tid, {}).get('n_evals'),
                 'time_limit_hit': time_hit, 'budget_exhausted': budget_exhausted,
                 'chunks_available': len(chunk_leaves),
                 'formation_count': formation_count,
@@ -901,19 +927,23 @@ def run_part(part, args, baseline_leaves, baseline_space_hash, stage1d_held_id_s
     print(f"  Total chunks promoted: {total_promoted}")
     print(f"  Final chunk set size: {len(chunk_pairs)}")
 
-    # Part A: compute eval-cost reduction metric
+    # Part A: compute within-arm eval-cost reduction metric
     part_a_metrics = None
     if part == 'A' and not args.smoke:
         part_a_metrics = compute_part_a_metrics(per_task)
-        print(f"\nPart A metrics:")
+        print(f"\nPart A metrics (within-arm: OFF vs ON, same _det_seed RNG):")
         print(f"  Median eval-cost reduction: {part_a_metrics['median_reduction']:.3f}")
-        print(f"  Seed-swing (log): {part_a_metrics['seed_swing_log']:.3f} "
-              f"(frac: {part_a_metrics['seed_swing_frac']:.3f})")
-        print(f"  Tasks exceeding swing: {part_a_metrics['tasks_exceeding_swing']}/10")
+        print(f"  Tasks with positive reduction: {part_a_metrics['tasks_positive']}/10")
         print(f"  Part A gate: {part_a_metrics['verdict']}")
         for tid in sorted(STAGE1K_SOLVED_SEED42, key=lambda t: _det_seed(t)):
             r = part_a_metrics['reductions_per_task'].get(tid, float('nan'))
-            print(f"    {tid}: reduction={r:.3f}")
+            n_off = per_task.get(tid, {}).get('n_evals_off', '?')
+            n_on = per_task.get(tid, {}).get('n_evals', '?')
+            print(f"    {tid}: off={n_off} on={n_on} reduction={r:.3f}")
+        print(f"  Stage-1k cross-ref (different seed convention — informational):")
+        for tid in sorted(STAGE1K_SOLVED_SEED42, key=lambda t: _det_seed(t)):
+            xr = part_a_metrics['stage1k_crossref'].get(tid, float('nan'))
+            print(f"    {tid}: stage1k_reduction={xr:.3f}")
 
     # Full declared task ID set for gate (smoke uses subset but declares full set)
     if part == 'A':
@@ -954,6 +984,8 @@ def run_part(part, args, baseline_leaves, baseline_space_hash, stage1d_held_id_s
         'final_chunk_count': len(chunk_pairs),
         'elapsed_s': elapsed_total,
     }
+    if off_evals:
+        artifact['off_evals'] = off_evals
     if part_a_metrics:
         artifact['part_a_metrics'] = part_a_metrics
 
