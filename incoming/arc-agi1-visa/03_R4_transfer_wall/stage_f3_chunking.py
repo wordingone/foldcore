@@ -691,6 +691,8 @@ def main():
     parser.add_argument('--part-b', action='store_true', help='Run Part B (190 unsolved + carry grammar)')
     parser.add_argument('--smoke', action='store_true', help='3 tasks only, TEMP path')
     parser.add_argument('--test-gate', action='store_true', help='Inject gate violations, check caught')
+    parser.add_argument('--override-part-a-gate', action='store_true',
+                        help='Bypass Part A gate check for Part B (requires Leo override directive)')
     args = parser.parse_args()
 
     if not args.part_a and not args.part_b and not args.test_gate:
@@ -760,8 +762,11 @@ def main():
         with open(part_a_result_path) as f:
             part_a_result = json.load(f)
         if not part_a_result.get('part_a_metrics', {}).get('part_a_gate_pass', False):
-            print("FATAL: Part A gate FAILED -- Part B is not authorized per pre-reg #22")
-            sys.exit(1)
+            if not args.override_part_a_gate:
+                print("FATAL: Part A gate FAILED -- Part B is not authorized per pre-reg #22")
+                print("  To override (requires Leo directive): --override-part-a-gate")
+                sys.exit(1)
+            print("WARNING: Part A gate FAILED -- running Part B under Leo override directive")
         # Recover carry grammar from Part A
         chunk_pairs_list = part_a_result.get('final_chunk_pairs', [])
         chunk_carry = set(tuple(p) for p in chunk_pairs_list)
