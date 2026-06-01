@@ -804,6 +804,54 @@ Artifacts: `stage1b_object_centric.py`, `stage1b_result.json`. Commits: 2698a9eb
 
 ---
 
+### Stage 1e — Four-Arm Cross-Tier Best-First Proposer Probe (TWO-SEED COMPLETE — 2026-05-30)
+
+**Verdict: NO-GO neural (Leo #12000)**
+
+**Pre-reg refs:** `kai-index/the-search-stage1e-final-signoff.md`, `kai-index/the-search-stage1e-v3-adjudication.md`
+
+**Design:** Fixed budget B=30,000 candidate evaluations per arm, shared frozen depth-0/1/2 space (330 leaves, space_hash=8c06343949a9a3ca, composition_tree_canonicalized=true left-linear). Two seeds run with own Control_0 baselines (Stage 1d b30000 fixed-holed BFS).
+
+**Verified two-seed table (artifact n_solved — seed-42 from L246/L255/L641/L654/L667/L680 of stage1e_netfree_matched_eval_result.json; seed-1 from stage1e_seed1_matched_eval_result.json):**
+
+| Arm | Seed-42 | Seed-1 | Pattern |
+|-----|---------|--------|---------|
+| Control_0 (Stage 1d b30000) | 9 | 8 | baseline (seed-swing ±1) |
+| D — random reach LB | 11 | 8 | straddles baseline |
+| A — blind cross-tier | 8 | 8 | = baseline both |
+| B1 — Stage 1c macro prior | 10 | 9 | **+1 both seeds** |
+| B2 — netfree combined | 9 | 7 | −1 seed-1; depth2=False both |
+| C — corpus oracle | 6 | 7 | < baseline both |
+
+**Validity fields:**
+- `candidate_eval_budget_asserted=true` (seed-1 only; seed-42 verified per-task: all unsolved tasks = 30,000 evals)
+- `held_task_ids_match_stage1d_seed1=true` (seed-1); seed-42 equivalently gated by pre-reg
+- `two_seed_status=STAGE1E_SEED1_CONFIRMATORY` (seed-1 artifact)
+- `arm_b2_enters_depth2=false` both seeds
+- `oracle_isolation flags` all set; B2 excludes COMPOSE(MAP_TRANSLATE,MAP_TRANSLATE) skeleton (Stage 1d held solve, excluded by design)
+
+**Outcome labels (seed-1):** STAGE1E_B1_PRIOR_NO_SIGNAL, STAGE1E_B2_PRIOR_NO_SIGNAL, STAGE1E_PRIOR_CLEARS_FIXED_BASELINE, STAGE1E_ORACLE_BELOW_FIXED_BASELINE, STAGE1E_REACH_DIAGNOSTIC_POSITIVE
+
+**Leo #12000 verdict rationale:**
+- C (oracle) BELOW baseline both seeds (6<9, 7<8) → corpus-level learned proposer ceiling is ANTI-MOTIVATED
+- B1 +1 consistent across seeds, but +1 = the baseline's own seed-swing (Control_0 9→8) → NO_SIGNAL label confirmed
+- Reach D = 11/8 straddles baseline 9/8 → random LB barely matches fixed BFS → space holds almost no extra reachable solutions; reach is the binding constraint, not proposal ordering
+- macro_relevant_hits B1=3 both seeds (tasks where prior lands on relevant substructure), zero conversion past +1 → prior finds relevant skeleton, grammar can't compose past it → points to grammar expansion, NOT a proposer upgrade
+
+**Field disambiguation (Leo #12000 flag):**
+Two B1 counts appear in seed-1 artifact — both correct, different metrics:
+- Header `macro_relevant_hits_by_arm.B1=3` (L237): tasks where Stage 1c macro prior landed on macro-relevant candidates (not necessarily solves)
+- Tail `new_solves_vs_fixed_holed_b30000.B1=1` (L10054): tasks B1 solved that Stage 1d fixed-holed BFS missed
+No contradiction. Instrumentation is unambiguous.
+
+**Gate:** Leo-owned (2026-05-31 pivot). Kai co-gate (#11999) moot — Leo absorbs the-search gate; Kai is failover-only. Reach diagnostic HELD pending Leo reframe design.
+
+**Artifacts:**
+- Seed-1: `incoming/arc-agi1-visa/03_R4_transfer_wall/stage1e_seed1_matched_eval_result.json`
+- Seed-42: `incoming/arc-agi1-visa/03_R4_transfer_wall/stage1e_netfree_matched_eval_result.json`
+
+---
+
 ## Mechanism Kill Log
 
 | Kill | Mechanism | Experiment | Status |
